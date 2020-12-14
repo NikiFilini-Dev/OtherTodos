@@ -5,6 +5,7 @@ const Task = types
   .model("Task", {
     id: types.identifier,
     text: types.string,
+    note: types.string,
     status: types.enumeration("TYPE_STATUS", ["active", "done"]),
     project: types.reference(Project),
   })
@@ -16,6 +17,9 @@ const Task = types
   .actions((self) => ({
     changeStatus(value) {
       self.status = value ? "done" : "active"
+    },
+    setNote(value) {
+      self.note = value
     },
   }))
 
