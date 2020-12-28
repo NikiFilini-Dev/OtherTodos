@@ -1,0 +1,64 @@
+$size = 12px
+$borderColor = #F2F2F2
+
+.rectang
+  position absolute
+  text-align center
+  color #161938
+  background white
+  border-radius 8.5px
+  border 1px solid $borderColor
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  cursor auto
+  z-index 100
+
+.tail
+  position absolute
+  left 12px
+  top 0px - $size
+  height $size
+  width $size * 2
+  overflow hidden
+  clip-path: url(#tail)
+
+.tail.right
+  left auto
+  right 8.5px
+
+.tail.center
+  left calc(50% - 12px)
+
+.tail.left
+  left 8.5px
+
+.tail .left
+  position absolute
+  left 0px - $size
+  bottom 0
+  width $size * 2
+  height $size * 2
+  border-radius 50%
+  border 1px solid $borderColor
+  border-left 0
+  border-top 0
+  z-index 2
+
+.tail .middle
+  background white
+  width $size * 2
+  height $size
+  position absolute
+  left 0px
+  z-inde 1
+
+.tail .right
+  position absolute
+  left $size - 1px
+  bottom 0
+  width $size * 2
+  height $size * 2
+  border-radius 50%
+  border 1px solid $borderColor
+  border-right 0
+  border-top 0
+  z-index 2

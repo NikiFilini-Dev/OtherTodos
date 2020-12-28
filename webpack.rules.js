@@ -21,7 +21,14 @@ module.exports = [
     use: {
       loader: "babel-loader",
       options: {
-        presets: ["@babel/preset-react"],
+        presets: [
+          [
+            "@babel/preset-react",
+            {
+              runtime: "automatic",
+            },
+          ],
+        ],
         plugins: ["@babel/plugin-proposal-class-properties"],
       },
     },
@@ -47,7 +54,7 @@ module.exports = [
     test: /\.svg$/,
     use: [
       {
-        loader: "svg-url-loader",
+        loader: "react-svg-loader",
         options: {
           limit: 10000,
         },

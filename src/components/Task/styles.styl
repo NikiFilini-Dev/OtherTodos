@@ -5,6 +5,7 @@
 
   &.active
     background #f7f7f7
+    cursor default
 
 .check
   margin-right 20px
@@ -13,19 +14,65 @@
   text-decoration line-through
   color #BDBECC
 
+.taskText, .taskTextEdit
+  font-size 16px
+  font-weight 400
+
+.taskTextEdit
+  border 0
+  outline none
+  background transparent
+  padding 0
+  width 100%
+
+  &::-webkit-input-placeholder
+    color #9A9A9A
+
 .line
   display flex
   align-items center
-  margin-top 9px
+  margin-top 3px
+
+.line.padding
+  padding-left 15px + 20px
 
 .line.fullOnly
   display none
+  margin-top 16px
+
+.task.active .line.spaceBetween
+  display flex
+  justify-content space-between
 
 .task.active .line.fullOnly
   display flex
 
 .line:first-child
   margin-top 0
+
+.project
+  font-size 14px
+  color var(--brand)
+  display inline-flex
+  align-items center
+  margin-right 17px
+  position relative
+  cursor pointer
+
+.projectIcon, .dateIcon
+  //height 14px
+  margin-right 10px
+
+.date
+  font-size 14px
+  color var(--accent)
+  display inline-flex
+  align-items center
+  margin-right 17px
+
+.project > span, .date > span
+  display inline-flex
+  align-items center
 
 .notes
   width 100%
@@ -34,5 +81,50 @@
   background transparent
   font-size 15px
 
+  &::-webkit-input-placeholder
+    color #9A9A9A
+
   &:focus
     outline none
+
+.priorityWrapper
+  margin-left auto
+  cursor pointer
+
+.tag
+  color #9A9A9A
+  font-size 16px
+  margin-right 25px
+
+.fullDate
+  width 250px
+  height 44px
+  border-radius 8px
+  background #F1F1F1
+  display flex
+  align-items center
+  padding 0 17px
+  color #161938
+  font-size 16px
+  cursor pointer
+  position relative
+
+  & > span
+    display inline-flex
+    align-items center
+
+.fullDateIcon
+  margin-right 12px
+
+.tagsTrigger
+  width 32px
+  height 32px
+  display inline-flex
+  align-items center
+  justify-content center
+  cursor pointer
+
+.tagsTriggerIcon
+  height: 10px
+  width: auto
+  color gray

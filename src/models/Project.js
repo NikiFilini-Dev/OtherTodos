@@ -2,12 +2,12 @@ import { getRoot, types } from "mobx-state-tree"
 
 const Project = types
   .model("Project", {
-    id: types.identifier,
+    id: types.identifierNumber,
     name: types.string,
   })
-  .views((self) => ({
+  .views(self => ({
     get tasks() {
-      return getRoot(self).tasks.filter((task) => task.project.id === self.id)
+      return getRoot(self).tasks.filter(task => task.project.id === self.id)
     },
     get sortedTasks() {
       let tasks = self.tasks

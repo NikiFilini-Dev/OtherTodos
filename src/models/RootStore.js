@@ -1,33 +1,65 @@
-import { types } from "mobx-state-tree"
+import { types, detach } from "mobx-state-tree"
 import { createContext, useContext } from "react"
-import Task from "./Task"
+import TaskList from "./TaskList"
+import Task, { factory as taskFactory } from "./Task"
 import Project from "./Project"
+import Tag from "./Tag"
+import moment from "moment"
 
 const RootStore = types
   .model("Store", {
-    tasks: types.array(Task),
+    tempTask: types.maybeNull(Task),
+    tasks: TaskList,
     projects: types.array(Project),
+    selectedDate: moment().format("YYYY-MM-DD"),
+    screen: types.enumeration(["INBOX", "TODAY", "PROJECT"]),
+    selectedProject: types.maybeNull(types.reference(Project)),
+    tags: types.array(Tag),
   })
-  .views((self) => ({
+  .views(self => ({
     get lastTaskId() {
       return (
-        self.tasks.reduce(
+        self.tasks.all.reduce(
           (maxId, task) =>
             parseInt(task.id) > maxId ? parseInt(task.id) : maxId,
           0,
         ) || 0
       )
     },
+    get lastTagId() {
+      return (
+        self.tags.reduce(
+          (maxId, tag) => (parseInt(tag.id) > maxId ? parseInt(tag.id) : maxId),
+          0,
+        ) || 0
+      )
+    },
   }))
-  .actions((self) => ({
-    addTask(text, project) {
-      console.log(self.lastTaskId)
-      self.tasks.push({
-        id: self.lastTaskId + 1 + "",
-        text,
-        project,
-        status: "active",
-      })
+  .actions(self => ({
+    detachTempTask() {
+      detach(self.tempTask)
+    },
+    setTempTask(task) {
+      self.tempTask = task
+    },
+    createTask(data = {}) {
+      const newId = self.lastTaskId + 1
+      return Task.create(taskFactory(newId, data))
+    },
+    createTag(name) {
+      const newId = self.lastTagId + 1
+      const tag = Tag.create({ id: newId, name })
+      self.tags.push(tag)
+      return tag
+    },
+    selectDate(date) {
+      self.selectedDate = moment(date).format("YYYY-MM-DD")
+    },
+    setScreen(screen) {
+      self.screen = screen
+    },
+    selectProject(project) {
+      self.selectedProject = project
     },
   }))
 

@@ -1,0 +1,21 @@
+{
+  "reporter": "raw",
+  "watch": false,
+  "extends": [],
+  "rules": {
+    "color": false,
+    "colons": ["never"],
+    "depthControl": {
+      "indentPref": 2
+    }
+  },
+  "path": "./src",
+  "excludes": ["node_modules/"],
+  "stylusParserOptions": {},
+  "reportOptions": {
+    "columnSplitter": " | ",
+    "maxWidth": 70,
+    "minWidth": 70,
+    "truncate": false
+  }
+}

@@ -1,0 +1,45 @@
+.wrapper
+  display flex
+  padding 3px
+  border-radius 3px
+  position relative
+
+.priority
+  width 24px
+  height 24px
+  display inline-flex
+  justify-content center
+  align-items center
+  border-radius 50%
+  border 1px solid transparent
+  margin-left 3px
+
+  &:first-child
+    margin-left 0
+
+  &:hover
+    background rgba(0,0,0,.05)
+    border-color rgba(0,0,0,.05)
+
+  &.active
+    background #2f45c524
+
+
+.priorityList
+  display flex
+  flex-direction column
+  padding 8px 0
+
+.priorityElement
+  display flex
+  align-items center
+  font-size: 14px;
+  line-height: 130%;
+  padding 3px 24px 3px 15px
+  cursor pointer
+  &:hover
+    background rgba(0,0,0,.05)
+
+
+.priorityElement > *
+  margin-right 5px

@@ -2,7 +2,7 @@ import React, { forwardRef } from "react"
 import styles from "./styles.styl"
 import classNames from "classnames"
 import PropTypes from "prop-types"
-import checkmark from "../../assets/checkmark.svg"
+import Checkmark from "assets/checkmark.svg"
 
 const Checkbox = forwardRef(({ onChange, checked, className }, ref) => {
   const onClick = (e) => {
@@ -22,7 +22,7 @@ const Checkbox = forwardRef(({ onChange, checked, className }, ref) => {
       }
       onClick={onClick}
     >
-      <img src={checkmark} className={styles.checkmark} />
+      <Checkmark className={styles.checkmark} />
     </div>
   )
 })
