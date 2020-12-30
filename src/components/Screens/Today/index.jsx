@@ -12,7 +12,8 @@ import DateSelector from "components/DateSelector"
 
 import CalendarIcon from "assets/calendar_empty.svg"
 import PlusIcon from "assets/plus.svg"
-import Task from "../../Task"
+import Task from "components/Task"
+import TagsFilter from "components/TagsFilter"
 
 function toTitleCase(str) {
   return str
@@ -29,6 +30,7 @@ const Today = observer(() => {
     createTask,
     setTempTask,
     detachTempTask,
+    setScreen,
   } = useMst()
 
   const today = moment().format("YYYY-MM-DD")
@@ -56,24 +58,30 @@ const Today = observer(() => {
 
   const [selectedTag, setSelectedTag] = React.useState(null)
 
-  let projects = new Set()
-  tasks.forEach(task => {
-    if (task.project) projects.add(task.project)
-  })
-  projects = [...projects]
-
   let tags = new Set()
   tasks.forEach(task => {
     if (task.tags.length) task.tags.forEach(tag => tags.add(tag))
   })
   tags = [...tags]
 
-  const withoutTags = tasks.filter(task => task.tags.length === 0)
+  if (selectedTag)
+    tasks = tasks.filter(task => task.tags.indexOf(selectedTag) >= 0)
+
+  let projects = new Set()
+  tasks.forEach(task => {
+    if (task.project) projects.add(task.project)
+  })
+  projects = [...projects]
+
+  const withoutProject = tasks.filter(task => !task.project)
 
   let expiredTasks = selectedDate === today ? expired() : []
-  expiredTasks = expiredTasks.filter(task => !task.done)
+  expiredTasks = expiredTasks.filter(
+    task => !task.done && (!selectedTag || task.tags.indexOf(selectedTag) >= 0),
+  )
 
   const setDate = date => {
+    if (date === null) return setScreen("INBOX")
     selectDate(date)
     setIsDateSelectorShown(false)
     task.setDate(date)
@@ -122,52 +130,21 @@ const Today = observer(() => {
           </div>
         </div>
       )}
-      <div className={styles.tags}>
-        <span
-          className={classNames({
-            [styles.tag]: true,
-            [styles.selected]: selectedTag === null,
-          })}
-          onClick={() => setSelectedTag(null)}
-        >
-          Все
-        </span>
-        {tags.map(tag => (
-          <span
-            className={classNames({
-              [styles.tag]: true,
-              [styles.selected]: selectedTag === tag,
-            })}
-            key={`tag_${tag.name}`}
-            onClick={() => setSelectedTag(tag)}
-          >
-            {tag.name}
-          </span>
-        ))}
-      </div>
+      <TagsFilter
+        tags={tags}
+        selected={selectedTag}
+        select={tag => setSelectedTag(tag)}
+      />
       <div className={styles.listOfLists}>
-        {selectedTag === null && (
-          <div>
-            {!!expiredTasks.length && <ExpiredTasks tasks={expiredTasks} />}
-            <TaskList tasks={withoutTags} name={"Задачи"} />
-            {projects.map(project => (
-              <TaskList
-                key={`task_list_${project.name}`}
-                tasks={tasks.filter(task => task.project === project)}
-                name={project.name}
-              />
-            ))}
-          </div>
-        )}
-        {selectedTag && (
-          <div>
-            <TaskList
-              key={`task_list_${selectedTag.name}`}
-              tasks={tasks.filter(task => task.tags.indexOf(selectedTag) >= 0)}
-              name={selectedTag.name}
-            />
-          </div>
-        )}
+        {!!expiredTasks.length && <ExpiredTasks tasks={expiredTasks} />}
+        <TaskList tasks={withoutProject} name={"Задачи"} />
+        {projects.map(project => (
+          <TaskList
+            key={`task_list_${project.name}`}
+            tasks={tasks.filter(task => task.project === project)}
+            name={project.name}
+          />
+        ))}
       </div>
     </div>
   )

@@ -32,7 +32,7 @@ const inRefs = (refs, e) => {
   return false
 }
 
-const Task = observer(({ task, active = false, onConfirm }) => {
+const Task = observer(({ task, active = false, onConfirm, expired }) => {
   const { createTag } = useMst()
   const [isActive, setIsActive] = useState(active)
   const [isDone, setIsDone] = useState(task.done)
@@ -138,7 +138,7 @@ const Task = observer(({ task, active = false, onConfirm }) => {
         className={classNames({
           [styles.line]: true,
           [styles.padding]: true,
-          [styles.fullOnly]: true,
+          [styles.fullOnly]: !expired,
         })}
       >
         <span className={styles.project} ref={projectRef}>
@@ -225,15 +225,15 @@ const Task = observer(({ task, active = false, onConfirm }) => {
               : task.date
               ? moment(task.date).format("DD MMM")
               : "Без даты"}
+            {isFullDatePickerOpen && (
+              <DateSelector
+                value={moment(task.date ? task.date : new Date())._d}
+                onSelect={onDateSelect}
+                // onSelect={onDateSelect}
+                triggerRef={fullDateRef}
+              />
+            )}
           </span>
-          {isFullDatePickerOpen && (
-            <DateSelector
-              value={moment(task.date ? task.date : new Date())._d}
-              onSelect={onDateSelect}
-              // onSelect={onDateSelect}
-              triggerRef={fullDateRef}
-            />
-          )}
         </div>
         <div style={{ position: "relative" }} ref={tagsRef}>
           <div
@@ -263,6 +263,7 @@ Task.propTypes = {
     id: PropTypes.string,
     text: PropTypes.text,
   }),
+  expired: PropTypes.bool,
 }
 
 export default Task

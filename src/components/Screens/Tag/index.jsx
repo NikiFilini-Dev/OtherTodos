@@ -18,7 +18,7 @@ const Tag = observer(() => {
   } = useMst()
 
   const tasks = all.filter(task => task.tags.toJSON().includes(selectedTag.id))
-  const [task, setTask] = React.useState(createTask({ tags: [selectedTag.id] }))
+  const [task, setTask] = React.useState(createTask({ tags: [selectedTag] }))
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
   setTempTask(task)
 
@@ -26,6 +26,7 @@ const Tag = observer(() => {
     setTask(createTask(""))
     setIsNewTaskShown(false)
   }
+
   const onConfirm = () => {
     if (!task.text) return
     detachTempTask()

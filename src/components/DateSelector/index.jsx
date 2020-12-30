@@ -71,10 +71,16 @@ const DateSelector = observer(({ value, onSelect, triggerRef, right }) => {
   return (
     <FloatMenu targetBox={box} position={right ? "right" : "left"}>
       <div
-        className={styles.selectToday}
+        className={styles.fixedElement}
         onClick={() => selectDate({ date: new Date() })}
       >
         Сегодня
+      </div>
+      <div
+        className={styles.fixedElement}
+        onClick={() => selectDate({ date: null })}
+      >
+        Без срока
       </div>
       <div className={styles.info}>
         <span className={styles.monthText}>

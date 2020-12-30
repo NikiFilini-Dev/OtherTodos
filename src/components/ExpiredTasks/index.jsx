@@ -47,7 +47,7 @@ const ExpiredTasks = observer(({ tasks }) => {
       </div>
       <div className={styles.tasks}>
         {tasks.map(task => (
-          <Task key={`task_${task.id}`} task={task} />
+          <Task key={`task_${task.id}`} task={task} expired />
         ))}
       </div>
     </div>

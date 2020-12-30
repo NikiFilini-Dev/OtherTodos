@@ -14,7 +14,9 @@ import { observer } from "mobx-react"
 
 const TaskList = observer(({ tasks, name, showHidden }) => {
   if (!showHidden) tasks = tasks.filter(task => !task.done)
+
   tasks.sort((a, b) => b.id - a.id)
+  tasks.sort((a, b) => a.priority - b.priority)
 
   if (!tasks.length) return <div />
 

@@ -3,6 +3,7 @@ import { observer } from "mobx-react"
 import { useMst } from "models/RootStore"
 import styles from "./styles.styl"
 
+import TagsFilter from "components/TagsFilter"
 import TaskList from "components/TaskList"
 import Task from "../../Task"
 import Button from "../../Button"
@@ -17,12 +18,21 @@ const Project = observer(() => {
     detachTempTask,
   } = useMst()
 
-  const tasks = all.filter(task => task.project === selectedProject)
+  let tasks = all.filter(task => task.project === selectedProject)
   const [task, setTask] = React.useState(
     createTask({ project: selectedProject }),
   )
+  const [selectedTag, setSelectedTag] = React.useState(null)
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
   setTempTask(task)
+
+  let tags = new Set()
+  tasks.forEach(task => {
+    if (task.tags.length) task.tags.forEach(tag => tags.add(tag))
+  })
+  tags = [...tags]
+  if (selectedTag)
+    tasks = tasks.filter(task => task.tags.indexOf(selectedTag) >= 0)
 
   const onReject = () => {
     setTask(createTask(""))
@@ -55,6 +65,11 @@ const Project = observer(() => {
           </div>
         </div>
       )}
+      <TagsFilter
+        selected={selectedTag}
+        select={tag => setSelectedTag(tag)}
+        tags={tags}
+      />
       <TaskList tasks={tasks} name={"Задачи"} />
     </div>
   )
