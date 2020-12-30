@@ -10,11 +10,16 @@ import ListIcon from "../../assets/list.svg"
 import DoneIcon from "../../assets/done.svg"
 import TimesIcon from "../../assets/times.svg"
 import PieIcon from "../../assets/pie_chart.svg"
+import { observer } from "mobx-react"
 
-const TaskList = ({ tasks, name }) => {
-  const doneCount = tasks.filter((t) => t.done).length
-  const pendingCount = tasks.filter((t) => !t.done).length
+const TaskList = observer(({ tasks, name }) => {
+  tasks.sort((a, b) => b.id - a.id)
+  tasks.sort((a, b) => 0 - b.done)
+
+  const doneCount = tasks.filter(t => t.done).length
+  const pendingCount = tasks.filter(t => !t.done).length
   const totalCount = tasks.length
+
   let donePercent = Math.abs(doneCount / (totalCount / 100))
   if (isNaN(donePercent)) donePercent = 100.0
   return (
@@ -30,13 +35,13 @@ const TaskList = ({ tasks, name }) => {
         </div>
       </div>
       <div className={styles.tasks}>
-        {tasks.map((task) => (
+        {tasks.map(task => (
           <Task key={`task_${task.id}`} task={task} />
         ))}
       </div>
     </div>
   )
-}
+})
 
 TaskList.propTypes = {
   tasks: PropTypes.object,

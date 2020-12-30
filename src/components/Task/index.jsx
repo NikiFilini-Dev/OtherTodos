@@ -38,7 +38,7 @@ const Task = observer(({ task, active = false }) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
   const [isFullDatePickerOpen, setIsFullDatePickerOpen] = useState(false)
   const [isProjectSelectorOpen, setIsProjectSelectorOpen] = useState(false)
-  const [isTagsSelectorOpen, setIsTagsSelectorOpen] = useState(true)
+  const [isTagsSelectorOpen, setIsTagsSelectorOpen] = useState(false)
 
   const containerRef = useRef(null)
   const checkRef = useRef(null)
@@ -72,6 +72,8 @@ const Task = observer(({ task, active = false }) => {
   }
 
   const onDateSelect = date => {
+    console.log("DATE SELECT", date)
+    if (moment.isDate(date)) date = moment(date).format("YYYY-MM-DD")
     task.setDate(date)
     setIsDatePickerOpen(false)
     setIsFullDatePickerOpen(false)
@@ -214,6 +216,7 @@ const Task = observer(({ task, active = false }) => {
             <DateSelector
               value={moment(task.date ? task.date : new Date())._d}
               onSelect={onDateSelect}
+              // onSelect={onDateSelect}
               triggerRef={fullDateRef}
             />
           )}

@@ -1,6 +1,14 @@
+.screen
+  height: 100%
+  max-height 100%
+  display flex
+  flex-direction column
+
 .info
   margin-bottom 36px
   padding 0 20px
+  display flex
+  align-items flex-end
 
 .title
   font-weight 600
@@ -11,6 +19,23 @@
   font-size 14px
   line-height 17px
   color #9BABC5
+
+.actions
+  display inline-flex
+  align-items center
+  margin-left auto
+
+.actions > *
+  margin-left 12px
+
+.calendar
+  width 32px
+  height 32px
+  display inline-flex
+  align-items center
+  justify-content center
+  color #9BABC5
+  cursor pointer
 
 .tags
   display flex
@@ -25,3 +50,30 @@
 
   &.selected
     color var(--brand)
+
+.listOfLists
+  overflow-y auto
+  height 100%
+
+*::-webkit-scrollbar {
+  width: 3px;
+}
+
+*::-webkit-scrollbar-track {
+  //background white
+  position relative
+}
+
+*::-webkit-scrollbar-thumb {
+  width 3px
+  border-radius 5px
+  background #DCDFE5
+}
+
+.newTaskActions
+  margin 0px 20px
+  margin-top 12px
+  margin-bottom 36px
+
+  & > *
+    margin-right 6px

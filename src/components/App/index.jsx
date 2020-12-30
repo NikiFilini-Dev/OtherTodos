@@ -7,6 +7,7 @@ import classNames from "classnames"
 
 import Today from "components/Screens/Today"
 import Project from "components/Screens/Project"
+import Tag from "components/Screens/Tag"
 import Inbox from "components/Screens/Inbox"
 import Sidebar from "components/Sidebar"
 
@@ -25,6 +26,9 @@ const App = observer(() => {
     case "PROJECT":
       Screen = Project
       break
+    case "TAG":
+      Screen = Tag
+      break
   }
   return (
     <div className={styles.app}>
@@ -34,9 +38,9 @@ const App = observer(() => {
       <div className={styles.main}>
         <Screen />
       </div>
-      <div className={styles.timeline}>
-        <DaySelector />
-      </div>
+      {/*<div className={styles.timeline}>*/}
+      {/*  <DaySelector />*/}
+      {/*</div>*/}
     </div>
   )
 })

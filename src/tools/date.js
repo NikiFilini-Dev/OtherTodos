@@ -12,13 +12,13 @@ export function isToday(date) {
   return isSameDate(date, new Date())
 }
 
-const getDay = (date) => {
+const getDay = date => {
   let d = date.getDay() - 1
   if (d === -1) d = 6
   return d
 }
 
-const getMonthDaysCount = (originalDate) => {
+const getMonthDaysCount = originalDate => {
   const date = new Date(originalDate)
   let c = 28
   const initialMonth = date.getMonth()
@@ -38,7 +38,7 @@ export function buildCalendar(value, tasks = []) {
   const tmpDate = new Date(date)
 
   const daysWithTasks = []
-  tasks.forEach((task) => {
+  tasks.forEach(task => {
     if (!task.date) return
     let d = moment(task.date)._d
     if (
@@ -71,7 +71,10 @@ export function buildCalendar(value, tasks = []) {
       wc = 0
     }
     tmpDate.setMonth(date.getMonth())
+    tmpDate.setFullYear(date.getFullYear())
     tmpDate.setDate(d)
+    // if (i < 0 && tmpDate.getMonth() === 0)
+    //   tmpDate.setFullYear(date.getFullYear() - 1)
     week.push({
       number: tmpDate.getDate(),
       date: new Date(tmpDate),

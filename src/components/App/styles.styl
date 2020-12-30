@@ -1,6 +1,6 @@
-calendarWidth = 346px
+calendarWidth = 0px
 sideBarWidth = 250px
-mainWidth = calc(100% - 346px - 250px - 32px)
+mainWidth = calc(100% - 0px - 250px - 16px)
 
 mainBlockRadius = 8.5px
 mainBlockPadding = 47px 36px
@@ -10,10 +10,9 @@ accent = #FB2B76
 
 @import "../../assets/fonts/Gilroy/stylesheet.css"
 
-:root {
+:root
   --brand #2F45C5
   --accent #FB2B76
-}
 
 *
   box-sizing border-box
@@ -40,14 +39,15 @@ body
   padding: mainBlockPadding
   width 250px
   border-radius 8.5px
+  overflow-y auto
 
 .main
   padding 36px 16px
   background white
   border-radius 8.5px
   margin 0 16px
+  margin-right 0
   width mainWidth
-  overflow scroll
 
 .timeline
   width 346px

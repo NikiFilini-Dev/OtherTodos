@@ -5,7 +5,6 @@ import styles from "./styles.styl"
 
 import TaskList from "components/TaskList"
 import Task from "components/Task"
-import { default as TaskModel } from "models/Task"
 import PlusIcon from "assets/plus.svg"
 import Button from "components/Button"
 
@@ -18,7 +17,7 @@ const Inbox = observer(() => {
   } = useMst()
 
   const [task, setTask] = React.useState(createTask(""))
-  const [isNewTaskShown, setIsNewTaskShown] = React.useState(true)
+  const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
   setTempTask(task)
 
   const inbox = all.filter(task => !task.done)

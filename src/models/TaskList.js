@@ -14,11 +14,12 @@ const TaskList = types
           task.date && moment(task.date).isSame(moment().format("YYYY-MM-DD")),
       )
     },
-    get expired() {
+    expired() {
+      console.log("Updating expired")
       return self.all.filter(
         task =>
           task.date &&
-          moment(task.date).isBefore(moment().format("YYYY-MM-DD")),
+          moment(task.date).isBefore(moment(moment().format("YYYY-MM-DD"))),
       )
     },
     get inbox() {

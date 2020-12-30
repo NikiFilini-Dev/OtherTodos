@@ -5,19 +5,20 @@ import PropTypes from "prop-types"
 import styles from "./styles.styl"
 import Task from "components/Task"
 import Button from "components/Button"
+import { observer } from "mobx-react"
 
 import MoveIcon from "assets/move.svg"
 import DateSelector from "../DateSelector"
 import { useClickOutsideRef } from "../../tools/hooks"
 
-const ExpiredTasks = ({ tasks }) => {
+const ExpiredTasks = observer(({ tasks }) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false)
   const triggerRef = React.useRef(null)
 
   useClickOutsideRef(triggerRef, () => setIsDatePickerOpen(false))
 
-  const onMoveDateSelect = (date) => {
-    tasks.forEach((task) => task.setDate(date))
+  const onMoveDateSelect = date => {
+    tasks.forEach(task => task.setDate(date))
     setIsDatePickerOpen(false)
   }
 
@@ -35,6 +36,7 @@ const ExpiredTasks = ({ tasks }) => {
             />
             {isDatePickerOpen && (
               <DateSelector
+                right
                 triggerRef={triggerRef}
                 onSelect={onMoveDateSelect}
               />
@@ -43,13 +45,13 @@ const ExpiredTasks = ({ tasks }) => {
         </div>
       </div>
       <div className={styles.tasks}>
-        {tasks.map((task) => (
+        {tasks.map(task => (
           <Task key={`task_${task.id}`} task={task} />
         ))}
       </div>
     </div>
   )
-}
+})
 
 ExpiredTasks.propTypes = {
   tasks: PropTypes.object,

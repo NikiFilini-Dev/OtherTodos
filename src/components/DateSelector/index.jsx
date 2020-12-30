@@ -11,7 +11,7 @@ import ArrowLeft from "assets/arrow_left.svg"
 import ArrowRight from "assets/arrow_right.svg"
 import { buildCalendar } from "tools/date"
 
-const DateSelector = observer(({ value, onSelect, triggerRef }) => {
+const DateSelector = observer(({ value, onSelect, triggerRef, right }) => {
   if (!value) {
     value = new Date()
   }
@@ -63,14 +63,12 @@ const DateSelector = observer(({ value, onSelect, triggerRef }) => {
     setDate(cpy)
   }
 
-  const selectDate = (dayN) => {
-    const resultDate = new Date(date)
-    resultDate.setDate(dayN)
-    if (onSelect) onSelect(resultDate)
+  const selectDate = day => {
+    if (onSelect) onSelect(day)
   }
 
   return (
-    <FloatMenu targetBox={box} position={"left"}>
+    <FloatMenu targetBox={box} position={right ? "right" : "left"}>
       <div className={styles.info}>
         <span className={styles.monthText}>
           {month.slice(0, 3)}, {date.getFullYear()}
@@ -109,7 +107,7 @@ const DateSelector = observer(({ value, onSelect, triggerRef }) => {
                   [styles.today]: day.today,
                   [styles.selected]: day.selected,
                 })}
-                onClick={() => selectDate(day.number)}
+                onClick={() => selectDate(day)}
               >
                 {day.number}
                 {day.hasTasks && <span className={styles.hasTasksMark} />}

@@ -8,7 +8,7 @@ export function useClick(target, callback) {
 }
 
 export function useClickOutsideRef(ref, callback) {
-  useClick(document, (e) => {
+  useClick(document, e => {
     if (
       ref.current &&
       ref.current !== e.target &&
@@ -30,4 +30,15 @@ export function useFloatMenu(ref) {
   })
 
   return [ref, box]
+}
+
+export function useInput(ref, callback, type = "keyup") {
+  React.useEffect(() => {
+    const onKeyUp = e => callback(e)
+    if (!ref.current) return
+    ref.current.addEventListener(type, onKeyUp)
+    return () => {
+      if (ref.current) ref.current.removeEventListener(type, onKeyUp)
+    }
+  })
 }

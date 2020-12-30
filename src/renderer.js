@@ -8,7 +8,7 @@ import "./index.css"
 // import { persist } from "mst-persist"
 
 const Store = RootStore.create({
-  screen: "INBOX",
+  screen: "TODAY",
   selectedProject: 1,
   tags: [
     {

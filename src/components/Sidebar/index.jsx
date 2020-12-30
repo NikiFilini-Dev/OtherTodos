@@ -8,7 +8,9 @@ import LetterIcon from "assets/letter.svg"
 import TodayIcon from "assets/today.svg"
 import ArrowRightIcon from "assets/arrow_right.svg"
 import FolderIcon from "assets/folder.svg"
+import PlusIcon from "assets/plus.svg"
 import propTypes from "prop-types"
+import { useInput } from "tools/hooks"
 
 const Element = ({ active, onClick, icon, text }) => {
   const Icon = icon
@@ -33,13 +35,45 @@ Element.propTypes = {
   text: propTypes.string,
 }
 
-const Group = ({ name, elements, isActive, onElementClick }) => {
+const Group = ({ name, elements, isActive, onElementClick, onAdd }) => {
   const [isOpen, setIsOpen] = React.useState(true)
+  const [isAddActive, setIsAddActive] = React.useState(false)
+  const [newName, setNewName] = React.useState("")
   if (!isActive) isActive = () => {}
+  const addTriggerRef = React.useRef(null)
+  const addInputRef = React.useRef(null)
+
+  React.useEffect(() => {
+    console.log(isAddActive)
+    if (isAddActive) addInputRef.current.focus()
+  }, [isAddActive])
+
+  const onTitleClick = e => {
+    if (
+      addTriggerRef.current &&
+      (e.target === addTriggerRef.current ||
+        addTriggerRef.current.contains(e.target))
+    )
+      return
+    setIsOpen(!isOpen)
+  }
+
+  useInput(addInputRef, e => {
+    if (e.code === "Enter") {
+      onAdd(newName)
+      setNewName("")
+      setIsAddActive(false)
+    }
+  })
+
+  const onAddClick = () => {
+    setNewName("")
+    setIsAddActive(!isAddActive)
+  }
 
   return (
     <div>
-      <div className={styles.groupTitle} onClick={() => setIsOpen(!isOpen)}>
+      <div className={styles.groupTitle} onClick={onTitleClick}>
         <ArrowRightIcon
           className={classNames({
             [styles.groupTitleIcon]: true,
@@ -47,9 +81,27 @@ const Group = ({ name, elements, isActive, onElementClick }) => {
           })}
         />
         {name}
+        <div
+          className={styles.addTrigger}
+          ref={addTriggerRef}
+          onClick={onAddClick}
+        >
+          <PlusIcon />
+        </div>
       </div>
+      {isAddActive && (
+        <div>
+          <input
+            value={newName}
+            onChange={e => setNewName(e.target.value)}
+            className={styles.newName}
+            placeholder={"Имя"}
+            ref={addInputRef}
+          />
+        </div>
+      )}
       {isOpen &&
-        elements.map((project) => (
+        elements.map(project => (
           <Element
             key={`project_${project.id}`}
             text={project.name}
@@ -67,6 +119,7 @@ Group.propTypes = {
   elements: propTypes.array,
   isActive: propTypes.func,
   onElementClick: propTypes.func,
+  onAdd: propTypes.func,
 }
 
 const Sidebar = observer(() => {
@@ -74,9 +127,25 @@ const Sidebar = observer(() => {
     screen,
     setScreen,
     projects,
+    tags,
     selectedProject,
     selectProject,
+    selectedTag,
+    selectTag,
+    createProject,
+    createTag,
   } = useMst()
+
+  const addTag = name => {
+    selectTag(createTag(name))
+    setScreen("TAG")
+  }
+
+  const addProject = name => {
+    selectProject(createProject(name))
+    setScreen("PROJECT")
+  }
+
   return (
     <div>
       <div className={styles.logoWrapper}>
@@ -107,15 +176,28 @@ const Sidebar = observer(() => {
       <Group
         name={"Проекты"}
         elements={projects}
-        isActive={(project) =>
+        isActive={project =>
           project === selectedProject && screen === "PROJECT"
         }
-        onElementClick={(project) => {
+        onElementClick={project => {
           return () => {
             setScreen("PROJECT")
             selectProject(project)
           }
         }}
+        onAdd={addProject}
+      />
+      <Group
+        name={"Тэги"}
+        elements={tags}
+        onElementClick={tag => {
+          return () => {
+            selectTag(tag)
+            setScreen("TAG")
+          }
+        }}
+        isActive={tag => screen === "TAG" && tag.id === selectedTag.id}
+        onAdd={addTag}
       />
     </div>
   )
