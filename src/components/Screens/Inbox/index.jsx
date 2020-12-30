@@ -16,11 +16,11 @@ const Inbox = observer(() => {
     detachTempTask,
   } = useMst()
 
-  const [task, setTask] = React.useState(createTask(""))
+  const [task, setTask] = React.useState(createTask({}))
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
   setTempTask(task)
 
-  const inbox = all.filter(task => !task.done)
+  const inbox = all.filter(task => !task.done && !task.date)
   const onReject = () => {
     setTask(createTask(""))
     setIsNewTaskShown(false)
@@ -28,9 +28,11 @@ const Inbox = observer(() => {
   const onConfirm = () => {
     if (!task.text) return
     detachTempTask()
-    add(task)
-    setTask(createTask(""))
+    let next = createTask({})
+    setTempTask(next)
     setIsNewTaskShown(false)
+    add(task)
+    setTask(next)
   }
 
   return (
@@ -53,7 +55,7 @@ const Inbox = observer(() => {
         </div>
       )}
 
-      <TaskList tasks={inbox} name={"Все открытые задачи"} />
+      <TaskList tasks={inbox} name={"Задачи без даты"} />
     </div>
   )
 })

@@ -8,6 +8,7 @@ import classNames from "classnames"
 import TaskList from "components/TaskList"
 import ExpiredTasks from "components/ExpiredTasks"
 import Button from "components/Button"
+import DateSelector from "components/DateSelector"
 
 import CalendarIcon from "assets/calendar_empty.svg"
 import PlusIcon from "assets/plus.svg"
@@ -22,17 +23,22 @@ function toTitleCase(str) {
 
 const Today = observer(() => {
   const {
-    tasks: { today, expired, add },
+    tasks: { all, expired, add },
+    selectedDate,
+    selectDate,
     createTask,
     setTempTask,
     detachTempTask,
   } = useMst()
 
-  const [task, setTask] = React.useState(
-    createTask({ date: moment().format("YYYY-MM-DD") }),
-  )
+  const today = moment().format("YYYY-MM-DD")
+  const tasks = all.filter(task => task.date && task.date === selectedDate)
+
+  const [task, setTask] = React.useState(createTask({ date: selectedDate }))
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
+  const [isDateSelectorShown, setIsDateSelectorShown] = React.useState(false)
   setTempTask(task)
+  const ref = React.useRef(null)
 
   const onReject = () => {
     setTask(createTask(""))
@@ -49,27 +55,53 @@ const Today = observer(() => {
   const [selectedTag, setSelectedTag] = React.useState(null)
 
   let tags = new Set()
-  today.forEach(task => {
+  tasks.forEach(task => {
     if (task.tags.length) task.tags.forEach(tag => tags.add(tag))
   })
   tags = [...tags]
-  const withoutTags = today.filter(task => task.tags.length === 0)
+  const withoutTags = tasks.filter(task => task.tags.length === 0)
 
-  const expiredTasks = expired()
-  console.log(expiredTasks, expired)
+  const expiredTasks = selectedDate === today ? expired() : []
+
+  const setDate = date => {
+    console.log(date)
+    selectDate(date)
+    setIsDateSelectorShown(false)
+    task.setDate(date)
+  }
 
   return (
     <div className={styles.screen}>
       <div className={styles.info}>
-        <span className={styles.title}>Сегодня</span>
-        <span className={styles.additional}>
-          {toTitleCase(moment().format("dd DD MMM"))}
+        <span className={styles.title}>
+          {selectedDate === today
+            ? "Сегодня"
+            : toTitleCase(moment(selectedDate).format("dd DD MMM"))}
         </span>
-        <div className={styles.actions}>
-          <span className={styles.calendar}>
-            <CalendarIcon />
+        {selectedDate === today && (
+          <span className={styles.additional}>
+            {toTitleCase(moment().format("dd DD MMM"))}
           </span>
-          <Button icon={PlusIcon} activated={isNewTaskShown} />
+        )}
+        <div className={styles.actions}>
+          <span className={styles.calendar} ref={ref}>
+            <CalendarIcon
+              onClick={() => setIsDateSelectorShown(!isDateSelectorShown)}
+            />
+            {isDateSelectorShown && (
+              <DateSelector
+                right
+                triggerRef={ref}
+                onSelect={day => setDate(day.date)}
+                value={selectedDate}
+              />
+            )}
+          </span>
+          <Button
+            icon={PlusIcon}
+            activated={isNewTaskShown}
+            onClick={() => setIsNewTaskShown(!isNewTaskShown)}
+          />
         </div>
       </div>
       {isNewTaskShown && (
@@ -108,11 +140,11 @@ const Today = observer(() => {
         {selectedTag === null && (
           <div>
             {!!expiredTasks.length && <ExpiredTasks tasks={expiredTasks} />}
-            <TaskList tasks={withoutTags} name={"Сегодня"} />
+            <TaskList tasks={withoutTags} name={"Задачи"} />
             {tags.map(tag => (
               <TaskList
                 key={`task_list_${tag.name}`}
-                tasks={today.filter(task => task.tags.indexOf(tag) >= 0)}
+                tasks={tasks.filter(task => task.tags.indexOf(tag) >= 0)}
                 name={tag.name}
               />
             ))}
@@ -122,7 +154,7 @@ const Today = observer(() => {
           <div>
             <TaskList
               key={`task_list_${selectedTag.name}`}
-              tasks={today.filter(task => task.tags.indexOf(selectedTag) >= 0)}
+              tasks={tasks.filter(task => task.tags.indexOf(selectedTag) >= 0)}
               name={selectedTag.name}
             />
           </div>

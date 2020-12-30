@@ -35,88 +35,90 @@ Element.propTypes = {
   text: propTypes.string,
 }
 
-const Group = ({ name, elements, isActive, onElementClick, onAdd }) => {
-  const [isOpen, setIsOpen] = React.useState(true)
-  const [isAddActive, setIsAddActive] = React.useState(false)
-  const [newName, setNewName] = React.useState("")
-  if (!isActive) isActive = () => {}
-  const addTriggerRef = React.useRef(null)
-  const addInputRef = React.useRef(null)
+const Group = observer(
+  ({ name, elements, isActive, onElementClick, onAdd }) => {
+    const [isOpen, setIsOpen] = React.useState(true)
+    const [isAddActive, setIsAddActive] = React.useState(false)
+    const [newName, setNewName] = React.useState("")
+    if (!isActive) isActive = () => {}
+    const addTriggerRef = React.useRef(null)
+    const addInputRef = React.useRef(null)
 
-  React.useEffect(() => {
-    console.log(isAddActive)
-    if (isAddActive) addInputRef.current.focus()
-  }, [isAddActive])
+    React.useEffect(() => {
+      console.log(isAddActive)
+      if (isAddActive) addInputRef.current.focus()
+    }, [isAddActive])
 
-  const onTitleClick = e => {
-    if (
-      addTriggerRef.current &&
-      (e.target === addTriggerRef.current ||
-        addTriggerRef.current.contains(e.target))
-    )
-      return
-    setIsOpen(!isOpen)
-  }
-
-  useInput(addInputRef, e => {
-    if (e.code === "Enter") {
-      onAdd(newName)
-      setNewName("")
-      setIsAddActive(false)
+    const onTitleClick = e => {
+      if (
+        addTriggerRef.current &&
+        (e.target === addTriggerRef.current ||
+          addTriggerRef.current.contains(e.target))
+      )
+        return
+      setIsOpen(!isOpen)
     }
-  })
 
-  const onAddClick = () => {
-    setNewName("")
-    setIsAddActive(!isAddActive)
-  }
+    useInput(addInputRef, e => {
+      if (e.code === "Enter") {
+        onAdd(newName)
+        setNewName("")
+        setIsAddActive(false)
+      }
+    })
 
-  return (
-    <div>
-      <div className={styles.groupTitle} onClick={onTitleClick}>
-        <ArrowRightIcon
-          className={classNames({
-            [styles.groupTitleIcon]: true,
-            [styles.groupTitleIconOpen]: isOpen,
-          })}
-        />
-        {name}
-        <div
-          className={styles.addTrigger}
-          ref={addTriggerRef}
-          onClick={onAddClick}
-        >
-          <PlusIcon />
+    const onAddClick = () => {
+      setNewName("")
+      setIsAddActive(!isAddActive)
+    }
+
+    return (
+      <div>
+        <div className={styles.groupTitle} onClick={onTitleClick}>
+          <ArrowRightIcon
+            className={classNames({
+              [styles.groupTitleIcon]: true,
+              [styles.groupTitleIconOpen]: isOpen,
+            })}
+          />
+          {name}
+          <div
+            className={styles.addTrigger}
+            ref={addTriggerRef}
+            onClick={onAddClick}
+          >
+            <PlusIcon />
+          </div>
         </div>
+        {isAddActive && (
+          <div>
+            <input
+              value={newName}
+              onChange={e => setNewName(e.target.value)}
+              className={styles.newName}
+              placeholder={"Имя"}
+              ref={addInputRef}
+            />
+          </div>
+        )}
+        {isOpen &&
+          elements.map(project => (
+            <Element
+              key={`project_${project.id}`}
+              text={project.name}
+              icon={FolderIcon}
+              active={isActive(project)}
+              onClick={onElementClick(project)}
+            />
+          ))}
       </div>
-      {isAddActive && (
-        <div>
-          <input
-            value={newName}
-            onChange={e => setNewName(e.target.value)}
-            className={styles.newName}
-            placeholder={"Имя"}
-            ref={addInputRef}
-          />
-        </div>
-      )}
-      {isOpen &&
-        elements.map(project => (
-          <Element
-            key={`project_${project.id}`}
-            text={project.name}
-            icon={FolderIcon}
-            active={isActive(project)}
-            onClick={onElementClick(project)}
-          />
-        ))}
-    </div>
-  )
-}
+    )
+  },
+)
 
 Group.propTypes = {
   name: propTypes.string,
-  elements: propTypes.array,
+  elements: propTypes.any,
   isActive: propTypes.func,
   onElementClick: propTypes.func,
   onAdd: propTypes.func,

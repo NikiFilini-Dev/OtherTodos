@@ -17,7 +17,8 @@ const ExpiredTasks = observer(({ tasks }) => {
 
   useClickOutsideRef(triggerRef, () => setIsDatePickerOpen(false))
 
-  const onMoveDateSelect = date => {
+  const onMoveDateSelect = day => {
+    const date = day.date
     tasks.forEach(task => task.setDate(date))
     setIsDatePickerOpen(false)
   }

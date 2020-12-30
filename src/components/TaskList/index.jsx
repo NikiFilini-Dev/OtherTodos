@@ -44,7 +44,7 @@ const TaskList = observer(({ tasks, name }) => {
 })
 
 TaskList.propTypes = {
-  tasks: PropTypes.object,
+  tasks: PropTypes.any,
   name: PropTypes.string,
 }
 

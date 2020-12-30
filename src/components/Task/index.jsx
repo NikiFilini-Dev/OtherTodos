@@ -18,7 +18,7 @@ import FolderIcon from "assets/folder.svg"
 import CalendarIcon from "assets/calendar.svg"
 import StarIcon from "assets/star.svg"
 import ListIcon from "assets/list.svg"
-import { useFloatMenu, useClickOutsideRef } from "tools/hooks"
+import { useFloatMenu, useClickOutsideRef, useInput } from "tools/hooks"
 import { useMst } from "models/RootStore"
 
 const inRef = (ref, e) => {
@@ -32,7 +32,7 @@ const inRefs = (refs, e) => {
   return false
 }
 
-const Task = observer(({ task, active = false }) => {
+const Task = observer(({ task, active = false, onConfirm }) => {
   const { createTag } = useMst()
   const [isActive, setIsActive] = useState(active)
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
@@ -61,6 +61,11 @@ const Task = observer(({ task, active = false }) => {
     if (inputRef.current && active) inputRef.current.focus()
   }, ["active"])
 
+  useInput(inputRef, e => {
+    console.log(e)
+    if (e.key === "Enter" && onConfirm) onConfirm()
+  })
+
   const onTaskClick = e => {
     e.preventDefault()
     if (inRefs([dateRef, fullDateRef, projectRef, checkRef], e)) return
@@ -71,8 +76,8 @@ const Task = observer(({ task, active = false }) => {
     task.setPriority(priority)
   }
 
-  const onDateSelect = date => {
-    console.log("DATE SELECT", date)
+  const onDateSelect = day => {
+    let date = day.date
     if (moment.isDate(date)) date = moment(date).format("YYYY-MM-DD")
     task.setDate(date)
     setIsDatePickerOpen(false)

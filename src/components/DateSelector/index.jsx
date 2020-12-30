@@ -11,10 +11,14 @@ import ArrowLeft from "assets/arrow_left.svg"
 import ArrowRight from "assets/arrow_right.svg"
 import { buildCalendar } from "tools/date"
 
+import moment from "moment"
+
 const DateSelector = observer(({ value, onSelect, triggerRef, right }) => {
   if (!value) {
     value = new Date()
   }
+
+  if (typeof value === "string") value = moment(value)._d
 
   const {
     tasks: { all },
@@ -41,25 +45,22 @@ const DateSelector = observer(({ value, onSelect, triggerRef, right }) => {
 
   const weekDays = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]
 
-  const weeks = buildCalendar(date, all)
+  const weeks = buildCalendar(date, value, all)
 
   const onPrevClick = () => {
     const cpy = new Date()
+    cpy.setFullYear(date.getFullYear())
+    cpy.setDate(1)
     cpy.setMonth(date.getMonth() - 1)
-    cpy.setFullYear(
-      date.getMonth() === 0 ? date.getFullYear() - 1 : date.getFullYear(),
-    )
-    cpy.setDate(date.getDate())
+
     setDate(cpy)
   }
 
   const onNextClick = () => {
     const cpy = new Date()
+    cpy.setFullYear(date.getFullYear())
+    cpy.setDate(1)
     cpy.setMonth(date.getMonth() + 1)
-    cpy.setFullYear(
-      date.getMonth() === 11 ? date.getFullYear() + 1 : date.getFullYear(),
-    )
-    cpy.setDate(date.getDate())
     setDate(cpy)
   }
 
@@ -69,6 +70,12 @@ const DateSelector = observer(({ value, onSelect, triggerRef, right }) => {
 
   return (
     <FloatMenu targetBox={box} position={right ? "right" : "left"}>
+      <div
+        className={styles.selectToday}
+        onClick={() => selectDate({ date: new Date() })}
+      >
+        Сегодня
+      </div>
       <div className={styles.info}>
         <span className={styles.monthText}>
           {month.slice(0, 3)}, {date.getFullYear()}

@@ -2,27 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/assets/settings.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Screens/Tag/index.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Screens/Tag/styles.styl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/DateSelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DateSelector/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DateSelector/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DateSelector/styles.styl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ExpiredTasks/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ExpiredTasks/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Label/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Label/styles.styl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Screens/Inbox/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Inbox/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Screens/Project/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Project/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Screens/Tag/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Tag/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Screens/Tag/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Tag/styles.styl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Screens/Today/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Today/index.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Screens/Today/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Today/styles.styl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Sidebar/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar/styles.styl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Task/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/index.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/TaskList/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TaskList/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/RootStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/RootStore.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/TaskList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/TaskList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tools/date.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/date.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tools/hooks.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/hooks.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +85,7 @@
       <workItem from="1608549362313" duration="329000" />
       <workItem from="1608549718570" duration="3800000" />
       <workItem from="1608554206918" duration="19213000" />
-      <workItem from="1609140923652" duration="30496000" />
+      <workItem from="1609140923652" duration="37404000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -109,7 +108,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609169504291</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Добавление тегов и проектов">
+      <created>1609320299986</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1609320299986</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -131,7 +137,8 @@
     <MESSAGE value="Базовый туду лист" />
     <MESSAGE value="Заметки" />
     <MESSAGE value="Рабочие теги и экраны" />
-    <option name="LAST_COMMIT_MESSAGE" value="Рабочие теги и экраны" />
+    <MESSAGE value="Добавление тегов и проектов" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавление тегов и проектов" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -30,9 +30,7 @@ const getMonthDaysCount = originalDate => {
   return c
 }
 
-export function buildCalendar(value, tasks = []) {
-  let date = value
-
+export function buildCalendar(date, value, tasks = []) {
   const weeks = []
   const now = new Date()
   const tmpDate = new Date(date)
@@ -47,7 +45,8 @@ export function buildCalendar(value, tasks = []) {
     )
       return
 
-    if (daysWithTasks.indexOf(d.getDate()) < 0) daysWithTasks.push(d.getDate())
+    const key = moment(d).format("YYYY-MM-DD")
+    if (daysWithTasks.indexOf(key)) daysWithTasks.push(key)
   })
 
   tmpDate.setDate(1)
@@ -81,7 +80,8 @@ export function buildCalendar(value, tasks = []) {
       alien: d <= 0 || d > daysCount,
       today: isSameDate(tmpDate, now),
       selected: isSameDate(tmpDate, value),
-      hasTasks: daysWithTasks.indexOf(tmpDate.getDate()) >= 0,
+      hasTasks:
+        daysWithTasks.indexOf(moment(tmpDate).format("YYYY-MM-DD")) >= 0,
     })
     wc++
   }
