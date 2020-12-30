@@ -1,4 +1,4 @@
-import { types, detach } from "mobx-state-tree"
+import { types, detach, destroy } from "mobx-state-tree"
 import { createContext, useContext } from "react"
 import TaskList from "./TaskList"
 import Task, { factory as taskFactory } from "./Task"
@@ -12,7 +12,7 @@ const RootStore = types
     tasks: TaskList,
     projects: types.array(Project),
     selectedDate: moment().format("YYYY-MM-DD"),
-    screen: types.enumeration(["INBOX", "TODAY", "PROJECT", "TAG"]),
+    screen: types.enumeration(["INBOX", "TODAY", "PROJECT", "TAG", "LOG"]),
     selectedProject: types.maybeNull(types.reference(Project)),
     tags: types.array(Tag),
     selectedTag: types.maybeNull(types.reference(Tag)),
@@ -78,6 +78,20 @@ const RootStore = types
     },
     selectTag(tag) {
       self.selectedTag = tag
+    },
+    deleteTag(tag) {
+      if (self.selectedTag === tag) {
+        self.selectedTag = null
+        if (self.screen === "TAG") self.screen = "INBOX"
+      }
+      destroy(tag)
+    },
+    deleteProject(project) {
+      if (self.selectedProject === project) {
+        self.selectedProject = null
+        if (self.screen === "PROJECT") self.screen = "INBOX"
+      }
+      destroy(project)
     },
   }))
 

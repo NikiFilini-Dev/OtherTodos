@@ -1,4 +1,4 @@
-import { types, isStateTreeNode, detach } from "mobx-state-tree"
+import { types, destroy } from "mobx-state-tree"
 import Task from "./Task"
 import { isToday } from "tools/date"
 import moment from "moment"
@@ -29,6 +29,9 @@ const TaskList = types
   .actions(self => ({
     add(task) {
       self.all.push(task)
+    },
+    deleteTask(task) {
+      destroy(task)
     },
   }))
 

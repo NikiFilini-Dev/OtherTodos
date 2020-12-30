@@ -32,7 +32,9 @@ const Today = observer(() => {
   } = useMst()
 
   const today = moment().format("YYYY-MM-DD")
-  const tasks = all.filter(task => task.date && task.date === selectedDate)
+  let tasks = all.filter(
+    task => task.date && task.date === selectedDate && !task.done,
+  )
 
   const [task, setTask] = React.useState(createTask({ date: selectedDate }))
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
@@ -54,17 +56,24 @@ const Today = observer(() => {
 
   const [selectedTag, setSelectedTag] = React.useState(null)
 
+  let projects = new Set()
+  tasks.forEach(task => {
+    if (task.project) projects.add(task.project)
+  })
+  projects = [...projects]
+
   let tags = new Set()
   tasks.forEach(task => {
     if (task.tags.length) task.tags.forEach(tag => tags.add(tag))
   })
   tags = [...tags]
+
   const withoutTags = tasks.filter(task => task.tags.length === 0)
 
-  const expiredTasks = selectedDate === today ? expired() : []
+  let expiredTasks = selectedDate === today ? expired() : []
+  expiredTasks = expiredTasks.filter(task => !task.done)
 
   const setDate = date => {
-    console.log(date)
     selectDate(date)
     setIsDateSelectorShown(false)
     task.setDate(date)
@@ -141,11 +150,11 @@ const Today = observer(() => {
           <div>
             {!!expiredTasks.length && <ExpiredTasks tasks={expiredTasks} />}
             <TaskList tasks={withoutTags} name={"Задачи"} />
-            {tags.map(tag => (
+            {projects.map(project => (
               <TaskList
-                key={`task_list_${tag.name}`}
-                tasks={tasks.filter(task => task.tags.indexOf(tag) >= 0)}
-                name={tag.name}
+                key={`task_list_${project.name}`}
+                tasks={tasks.filter(task => task.project === project)}
+                name={project.name}
               />
             ))}
           </div>

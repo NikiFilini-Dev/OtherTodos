@@ -13,6 +13,7 @@ const Task = types
     priority: types.optional(types.integer, 3),
     date: types.maybeNull(types.string),
     tags: types.array(types.reference(Tag)),
+    closeDate: types.maybeNull(types.string),
   })
   .views(self => ({
     get done() {
@@ -21,7 +22,10 @@ const Task = types
   }))
   .actions(self => ({
     changeStatus(value) {
+      console.log("CHANGE STATUS", value)
       self.status = value ? "done" : "active"
+      if (value) self.closeDate = moment().format("YYYY-MM-DD")
+      else self.closeDate = null
     },
     setNote(value) {
       self.note = value
@@ -42,7 +46,7 @@ const Task = types
       self.tags.push(tag)
     },
     removeTag(tag) {
-      if (!self.tags.includes(tag)) return
+      if (self.tags.indexOf(tag) === -1) return
       self.tags.splice(self.tags.indexOf(tag), 1)
     },
     setText(text) {

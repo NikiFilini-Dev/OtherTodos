@@ -35,6 +35,7 @@ const inRefs = (refs, e) => {
 const Task = observer(({ task, active = false, onConfirm }) => {
   const { createTag } = useMst()
   const [isActive, setIsActive] = useState(active)
+  const [isDone, setIsDone] = useState(task.done)
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
   const [isFullDatePickerOpen, setIsFullDatePickerOpen] = useState(false)
   const [isProjectSelectorOpen, setIsProjectSelectorOpen] = useState(false)
@@ -91,13 +92,20 @@ const Task = observer(({ task, active = false, onConfirm }) => {
     task.addTag(tag)
   }
 
+  const onCheckboxChange = val => {
+    setIsDone(val)
+    setTimeout(() => {
+      task.changeStatus(val)
+    }, 3000)
+  }
+
   return (
     <div
       ref={containerRef}
       key={`task_${task.id}`}
       className={classNames({
         [styles.task]: true,
-        [styles.done]: task.done,
+        [styles.done]: isDone,
         [styles.active]: isActive,
       })}
       onClick={onTaskClick}
@@ -106,8 +114,8 @@ const Task = observer(({ task, active = false, onConfirm }) => {
         <Checkbox
           ref={checkRef}
           className={styles.check}
-          onChange={done => task.changeStatus(done)}
-          checked={task.done}
+          onChange={onCheckboxChange}
+          checked={isDone}
         />
         {!isActive && <span className={styles.taskText}>{task.text}</span>}
         {isActive && (
@@ -130,6 +138,7 @@ const Task = observer(({ task, active = false, onConfirm }) => {
         className={classNames({
           [styles.line]: true,
           [styles.padding]: true,
+          [styles.fullOnly]: true,
         })}
       >
         <span className={styles.project} ref={projectRef}>

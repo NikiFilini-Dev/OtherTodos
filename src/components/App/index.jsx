@@ -3,15 +3,13 @@ import styles from "./styles.styl"
 
 import { observer } from "mobx-react"
 import { useMst } from "models/RootStore"
-import classNames from "classnames"
 
 import Today from "components/Screens/Today"
 import Project from "components/Screens/Project"
 import Tag from "components/Screens/Tag"
 import Inbox from "components/Screens/Inbox"
+import Log from "components/Screens/Log"
 import Sidebar from "components/Sidebar"
-
-import DaySelector from "components/DaySelector"
 
 const App = observer(() => {
   const { screen } = useMst()
@@ -29,6 +27,9 @@ const App = observer(() => {
     case "TAG":
       Screen = Tag
       break
+    case "LOG":
+      Screen = Log
+      break
   }
   return (
     <div className={styles.app}>
@@ -38,9 +39,6 @@ const App = observer(() => {
       <div className={styles.main}>
         <Screen />
       </div>
-      {/*<div className={styles.timeline}>*/}
-      {/*  <DaySelector />*/}
-      {/*</div>*/}
     </div>
   )
 })

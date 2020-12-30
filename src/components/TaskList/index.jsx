@@ -12,9 +12,11 @@ import TimesIcon from "../../assets/times.svg"
 import PieIcon from "../../assets/pie_chart.svg"
 import { observer } from "mobx-react"
 
-const TaskList = observer(({ tasks, name }) => {
+const TaskList = observer(({ tasks, name, showHidden }) => {
+  if (!showHidden) tasks = tasks.filter(task => !task.done)
   tasks.sort((a, b) => b.id - a.id)
-  tasks.sort((a, b) => 0 - b.done)
+
+  if (!tasks.length) return <div />
 
   const doneCount = tasks.filter(t => t.done).length
   const pendingCount = tasks.filter(t => !t.done).length

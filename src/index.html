@@ -3,10 +3,24 @@
   <head>
     <meta charset="UTF-8">
     <title>Others Task</title>
-
+    <script>
+      const { remote } = require('electron')
+      window.remote = remote
+    </script>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div>
+        <button id="clearData">Очистить память</button>
+        <script>
+          function clearData() {
+            console.log("CLEAR")
+            localStorage.clear();
+          }
+          document.querySelector("#clearData").addEventListener("click", clearData);
+        </script>
+      </div>
+    </div>
   </body>
 <svg height="0" width="0">
   <defs>
@@ -15,5 +29,4 @@
     </clipPath>
   </defs>
 </svg>
-  <script src="http://localhost:8098"></script>
 </html>
