@@ -18,7 +18,12 @@ import FolderIcon from "assets/folder.svg"
 import CalendarIcon from "assets/calendar.svg"
 import StarIcon from "assets/star.svg"
 import ListIcon from "assets/list.svg"
-import { useFloatMenu, useClickOutsideRef, useInput } from "tools/hooks"
+import {
+  useFloatMenu,
+  useClickOutsideRef,
+  useInput,
+  useContextMenu,
+} from "tools/hooks"
 import { useMst } from "models/RootStore"
 
 const inRef = (ref, e) => {
@@ -33,7 +38,10 @@ const inRefs = (refs, e) => {
 }
 
 const Task = observer(({ task, active = false, onConfirm, expired }) => {
-  const { createTag } = useMst()
+  const {
+    createTag,
+    tasks: { deleteTask },
+  } = useMst()
   const [isActive, setIsActive] = useState(active)
   const [isDone, setIsDone] = useState(task.done)
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
@@ -63,9 +71,17 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   }, ["active"])
 
   useInput(inputRef, e => {
-    console.log(e)
     if (e.key === "Enter" && onConfirm) onConfirm()
   })
+
+  useContextMenu(containerRef, [
+    {
+      label: "Удалить",
+      click() {
+        deleteTask(task)
+      },
+    },
+  ])
 
   const onTaskClick = e => {
     e.preventDefault()
@@ -88,7 +104,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   const selectTag = tag => task.addTag(tag)
   const unselectTag = tag => task.removeTag(tag)
   const addTag = name => {
-    const tag = createTag(name)
+    const tag = createTag(name, task.project)
     task.addTag(tag)
   }
 
@@ -144,7 +160,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         <span className={styles.project} ref={projectRef}>
           <span onClick={() => setIsProjectSelectorOpen(true)}>
             <FolderIcon className={styles.projectIcon} />
-            {task.project ? task.project.name : "Без проекта"}
+            {task.project ? task.project.name : "Входящие"}
           </span>
           {isProjectSelectorOpen && (
             <FloatMenu targetBox={projectBox} position={"left"}>
@@ -246,6 +262,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             <FloatMenu targetBox={tagsBox}>
               <TagsSelector
                 selected={task.tags}
+                project={task.project}
                 select={selectTag}
                 unselect={unselectTag}
                 add={addTag}

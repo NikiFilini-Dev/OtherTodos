@@ -61,9 +61,9 @@ const RootStore = types
       self.projects.push(project)
       return project
     },
-    createTag(name) {
+    createTag(name, project) {
       const newId = self.lastId(self.tags) + 1
-      const tag = Tag.create({ id: newId, name })
+      const tag = Tag.create({ id: newId, name, project })
       self.tags.push(tag)
       return tag
     },

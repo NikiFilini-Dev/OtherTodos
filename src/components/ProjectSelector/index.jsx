@@ -28,6 +28,16 @@ const ProjectSelector = observer(({ selected, onSelect }) => {
         />
       </div>
       <div className={styles.projects}>
+        <div
+          className={classNames({
+            [styles.project]: true,
+            [styles.selected]: selected === null,
+          })}
+          onClick={() => onSelect(null)}
+        >
+          <FolderIcon className={styles.projectIcon} />
+          Входящие
+        </div>
         {filteredProjects.map(project => (
           <div
             key={`project-${project.id}`}

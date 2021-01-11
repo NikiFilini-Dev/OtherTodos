@@ -22,7 +22,7 @@ const Inbox = observer(() => {
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
   setTempTask(task)
 
-  const inbox = all.filter(task => !task.done && !task.date)
+  const inbox = all.filter(task => !task.done && !task.project)
 
   let tags = new Set()
   inbox.forEach(task => {
@@ -33,11 +33,11 @@ const Inbox = observer(() => {
     ? inbox.filter(task => task.tags.indexOf(selectedTag) >= 0)
     : inbox
 
-  let projects = new Set()
-  tasks.forEach(task => {
-    if (task.project) projects.add(task.project)
-  })
-  projects = [...projects]
+  // let projects = new Set()
+  // tasks.forEach(task => {
+  //   if (task.project) projects.add(task.project)
+  // })
+  // projects = [...projects]
 
   const onReject = () => {
     setTask(createTask(""))
@@ -72,17 +72,12 @@ const Inbox = observer(() => {
           </div>
         </div>
       )}
-      <TagsFilter
-        tags={tags}
-        selected={selectedTag}
-        select={tag => setSelectedTag(tag)}
-      />
-      {projects.map(project => (
-        <TaskList
-          tasks={tasks.filter(task => task.project === project)}
-          name={project.name}
-        />
-      ))}
+      {/*<TagsFilter*/}
+      {/*  tags={tags}*/}
+      {/*  selected={selectedTag}*/}
+      {/*  select={tag => setSelectedTag(tag)}*/}
+      {/*/>*/}
+      <TaskList tasks={tasks} name={"Задачи"} />
     </div>
   )
 })

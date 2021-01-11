@@ -35,14 +35,14 @@ const Project = observer(() => {
     tasks = tasks.filter(task => task.tags.indexOf(selectedTag) >= 0)
 
   const onReject = () => {
-    setTask(createTask(""))
+    setTask(createTask({ project: selectedProject }))
     setIsNewTaskShown(false)
   }
   const onConfirm = () => {
     if (!task.text) return
     detachTempTask()
     add(task)
-    setTask(createTask(""))
+    setTask(createTask({ project: selectedProject }))
     setIsNewTaskShown(false)
   }
 

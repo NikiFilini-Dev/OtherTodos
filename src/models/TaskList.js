@@ -31,6 +31,7 @@ const TaskList = types
       self.all.push(task)
     },
     deleteTask(task) {
+      self.all.splice(self.all.indexOf(task), 1)
       destroy(task)
     },
   }))

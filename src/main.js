@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron")
+const { app, BrowserWindow, Menu, MenuItem } = require("electron")
 const path = require("path")
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -20,6 +20,17 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+
+  const systemMenu = Menu.getApplicationMenu()
+  const viewWindow = systemMenu.items.find(item => item.role === "viewmenu")
+  viewWindow.submenu.append(
+    new MenuItem({
+      role: "zoomin",
+      accelerator: "CommandOrControl+=",
+      visible: false,
+    }),
+  )
+  Menu.setApplicationMenu(systemMenu)
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()

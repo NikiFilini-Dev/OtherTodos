@@ -165,6 +165,10 @@ const Sidebar = observer(() => {
       if (task.project !== project) return
       deleteTask(task)
     })
+    tags.forEach(tag => {
+      if (tag.project !== project) return
+      deleteTag(tag)
+    })
     deleteProject(project)
   }
 

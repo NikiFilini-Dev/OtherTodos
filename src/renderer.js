@@ -7,7 +7,7 @@ import moment from "moment"
 
 import "./index.css"
 import { persist } from "mst-persist"
-const DEBUG = false
+const DEBUG = process.env.P_ENV === "debug"
 const data = {
   screen: "TODAY",
   selectedProject: null,
@@ -22,10 +22,12 @@ if (DEBUG) {
     {
       id: 1,
       name: "Testing",
+      project: 2,
     },
     {
       id: 2,
       name: "Nanodesu",
+      project: 2,
     },
   ]
   data.projects = [
