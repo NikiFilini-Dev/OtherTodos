@@ -137,7 +137,7 @@ const Today = observer(() => {
       />
       <div className={styles.listOfLists}>
         {!!expiredTasks.length && <ExpiredTasks tasks={expiredTasks} />}
-        <TaskList tasks={withoutProject} name={"Задачи"} />
+        <TaskList tasks={withoutProject} name={"Входящие"} />
         {projects.map(project => (
           <TaskList
             key={`task_list_${project.name}`}

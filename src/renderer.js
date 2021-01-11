@@ -49,6 +49,7 @@ if (DEBUG) {
       note: "",
       priority: 1,
       date: moment().subtract(1, "days").format("YYYY-MM-DD"),
+      tags: [1],
     },
     {
       id: 2,

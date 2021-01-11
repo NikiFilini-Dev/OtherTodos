@@ -143,6 +143,41 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             onChange={e => task.setText(e.target.value)}
           />
         )}
+        {!isActive && Boolean(expired) && Boolean(task.project) && (
+          <span
+            className={classNames({
+              [styles.project]: true,
+              [styles.inline]: true,
+            })}
+          >
+            <FolderIcon className={styles.projectIcon} />
+            {task.project.name}
+          </span>
+        )}
+        {!isActive &&
+          Boolean(task.tags.length) &&
+          task.tags.map(tag => (
+            <span
+              key={`inline_tag_${tag.id}`}
+              className={classNames({
+                [styles.tag]: true,
+                [styles.inline]: true,
+              })}
+            >
+              {tag.name}
+            </span>
+          ))}
+        {!isActive && Boolean(expired) && (
+          <span
+            className={classNames({
+              [styles.date]: true,
+              [styles.inline]: true,
+            })}
+          >
+            <CalendarIcon className={styles.dateIcon} />
+            {moment(task.date).format("DD MMM")}
+          </span>
+        )}
         <div className={styles.priorityWrapper}>
           <PrioritySelector
             onSelect={onPrioritySelect}
@@ -154,7 +189,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         className={classNames({
           [styles.line]: true,
           [styles.padding]: true,
-          [styles.fullOnly]: !expired,
+          [styles.fullOnly]: true,
         })}
       >
         <span className={styles.project} ref={projectRef}>
