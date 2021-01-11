@@ -12,11 +12,17 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    transparent: true,
+    titleBarStyle: "hiddenInset",
+    // frame: false,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
     },
   })
+
+  const electronVibrancy = require("electron-vibrancy")
+  electronVibrancy.SetVibrancy(mainWindow, 7)
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)

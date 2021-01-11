@@ -20,12 +20,7 @@ const TaskList = observer(({ tasks, name, showHidden }) => {
 
   if (!tasks.length) return <div />
 
-  const doneCount = tasks.filter(t => t.done).length
-  const pendingCount = tasks.filter(t => !t.done).length
   const totalCount = tasks.length
-
-  let donePercent = Math.abs(doneCount / (totalCount / 100))
-  if (isNaN(donePercent)) donePercent = 100.0
   return (
     <div className={styles.wrapper}>
       <div className={styles.info}>
@@ -33,9 +28,6 @@ const TaskList = observer(({ tasks, name, showHidden }) => {
 
         <div className={styles.actions}>
           <Label icon={ListIcon} text={totalCount} />
-          <Label icon={DoneIcon} text={doneCount} />
-          <Label icon={PieIcon} text={`${donePercent.toFixed()}%`} />
-          <Label icon={TimesIcon} text={pendingCount} />
         </div>
       </div>
       <div className={styles.tasks}>

@@ -7,8 +7,22 @@
       const { remote } = require('electron')
       window.remote = remote
     </script>
+    <style>
+      #titlebar {
+        height: 36px;
+        -webkit-app-region: drag;
+        width: 100vw;
+        background: #08080826;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    </style>
   </head>
   <body>
+    <div id="titlebar">
+
+    </div>
     <div id="app">
       <div>
         <button id="clearData">Очистить память</button>

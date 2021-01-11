@@ -18,17 +18,18 @@ const Element = ({ active, onClick, icon, text, deletable, onDelete }) => {
   if (deletable)
     useContextMenu(ref, [{ label: "Delete", click: () => onDelete() }])
   return (
-    <div
-      ref={ref}
-      className={classNames({
-        [styles.groupElement]: true,
-        [styles.active]: active,
-      })}
-      onClick={onClick}
-    >
-      <Icon className={styles.groupElementIcon} />
-      {text}
-    </div>
+    <React.Fragment ref={ref}>
+      <div
+        className={classNames({
+          [styles.groupElement]: true,
+          [styles.active]: active,
+        })}
+        onClick={onClick}
+      >
+        <Icon className={styles.groupElementIcon} />
+        {text}
+      </div>
+    </React.Fragment>
   )
 }
 

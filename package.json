@@ -20,7 +20,11 @@
   },
   "license": "MIT",
   "config": {
+    "electronRebuildConfig": {
+      "extraModules": ["electron-vibrancy"]
+    },
     "forge": {
+
       "packagerConfig": {},
       "makers": [
         {
@@ -117,7 +121,8 @@
     "react-mobx": "^0.0.4",
     "stlint": "^1.0.65",
     "svg-url-loader": "^7.1.1",
-    "url-loader": "^4.1.1"
+    "url-loader": "^4.1.1",
+    "electron-vibrancy": "https://github.com/lunavod/electron-vibrancy.git"
   },
   "browserslist": [
     "last 1 version"
