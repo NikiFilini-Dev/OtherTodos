@@ -117,13 +117,12 @@ const DateSelector = observer(({ value, onSelect, triggerRef, right }) => {
                 className={classNames({
                   [styles.day]: true,
                   [styles.alien]: day.alien,
-                  [styles.today]: day.today,
                   [styles.selected]: day.selected,
                 })}
                 onClick={() => selectDate(day)}
               >
                 {day.number}
-                {day.hasTasks && <span className={styles.hasTasksMark} />}
+                {day.today && <span className={styles.todayMark} />}
               </span>
             ))}
           </div>

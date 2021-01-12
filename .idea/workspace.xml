@@ -2,20 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/menus/TagMenu/index.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Checkbox/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Checkbox/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TagsFilter/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TagsFilter/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TagsSelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TagsSelector/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TagsSelector/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TagsSelector/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Task/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Task/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/TaskList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/TaskList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DateSelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DateSelector/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DateSelector/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DateSelector/styles.styl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +73,7 @@
       <workItem from="1610359866760" duration="4546000" />
       <workItem from="1610371817911" duration="25000" />
       <workItem from="1610371863404" duration="2549000" />
-      <workItem from="1610376968158" duration="5222000" />
+      <workItem from="1610376968158" duration="5470000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -156,7 +145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610387765463</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Выбор задачи двумя кликами, автоувеличение поля заметок, меню тегов везде">
+      <created>1610466984869</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1610466984873</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -185,7 +181,8 @@
     <MESSAGE value="Фиксы, зум" />
     <MESSAGE value="Отображение информации о задачах в одну строку" />
     <MESSAGE value="Прозрачный фон" />
-    <option name="LAST_COMMIT_MESSAGE" value="Прозрачный фон" />
+    <MESSAGE value="Выбор задачи двумя кликами, автоувеличение поля заметок, меню тегов везде" />
+    <option name="LAST_COMMIT_MESSAGE" value="Выбор задачи двумя кликами, автоувеличение поля заметок, меню тегов везде" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
