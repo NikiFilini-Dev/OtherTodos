@@ -25,6 +25,7 @@ const createWindow = () => {
   electronVibrancy.SetVibrancy(mainWindow, 7)
 
   // and load the index.html of the app.
+  mainWindow.webContents.openDevTools()
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
   const systemMenu = Menu.getApplicationMenu()
@@ -39,7 +40,6 @@ const createWindow = () => {
   Menu.setApplicationMenu(systemMenu)
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished

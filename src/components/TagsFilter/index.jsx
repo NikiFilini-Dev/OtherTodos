@@ -2,6 +2,7 @@ import React from "react"
 import { observer } from "mobx-react"
 import styles from "./styles.styl"
 import classNames from "classnames"
+import TagMenu from "components/menus/TagMenu"
 
 const TagsFilter = observer(({ tags, selected, select }) => {
   return (
@@ -16,16 +17,17 @@ const TagsFilter = observer(({ tags, selected, select }) => {
         Все
       </span>
       {tags.map(tag => (
-        <span
-          key={`tag_${tag.id}`}
-          className={classNames({
-            [styles.tag]: true,
-            [styles.selected]: selected === tag,
-          })}
-          onClick={() => select(tag)}
-        >
-          {tag.name}
-        </span>
+        <TagMenu tag={tag} key={`tag_${tag.id}`}>
+          <span
+            className={classNames({
+              [styles.tag]: true,
+              [styles.selected]: selected === tag,
+            })}
+            onClick={() => select(tag)}
+          >
+            {tag.name}
+          </span>
+        </TagMenu>
       ))}
     </div>
   )

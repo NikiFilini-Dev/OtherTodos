@@ -25,6 +25,7 @@ import {
   useContextMenu,
 } from "tools/hooks"
 import { useMst } from "models/RootStore"
+import TextareaAutosize from "react-autosize-textarea"
 
 const inRef = (ref, e) => {
   return (
@@ -40,7 +41,7 @@ const inRefs = (refs, e) => {
 const Task = observer(({ task, active = false, onConfirm, expired }) => {
   const {
     createTag,
-    tasks: { deleteTask },
+    tasks: { deleteTask, selected, select },
   } = useMst()
   const [isActive, setIsActive] = useState(active)
   const [isDone, setIsDone] = useState(task.done)
@@ -48,6 +49,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   const [isFullDatePickerOpen, setIsFullDatePickerOpen] = useState(false)
   const [isProjectSelectorOpen, setIsProjectSelectorOpen] = useState(false)
   const [isTagsSelectorOpen, setIsTagsSelectorOpen] = useState(false)
+  const isSelected = selected === task
 
   const containerRef = useRef(null)
   const checkRef = useRef(null)
@@ -64,6 +66,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   useClickOutsideRef(tagsRef, () => setIsTagsSelectorOpen(false))
   useClickOutsideRef(containerRef, () => {
     if (!active) setIsActive(false)
+    if (isSelected) select(null)
   })
 
   React.useEffect(() => {
@@ -86,7 +89,10 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   const onTaskClick = e => {
     e.preventDefault()
     if (inRefs([dateRef, fullDateRef, projectRef, checkRef], e)) return
-    if (e.target) setIsActive(true)
+    if (e.target) {
+      if (isSelected) setIsActive(true)
+      else select(task)
+    }
   }
 
   const onPrioritySelect = priority => {
@@ -123,6 +129,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         [styles.task]: true,
         [styles.done]: isDone,
         [styles.active]: isActive,
+        [styles.selected]: isSelected,
       })}
       onClick={onTaskClick}
     >
@@ -236,7 +243,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
           [styles.fullOnly]: true,
         })}
       >
-        <textarea
+        <TextareaAutosize
           className={styles.notes}
           placeholder="Заметки"
           onChange={e => task.setNote(e.target.value)}

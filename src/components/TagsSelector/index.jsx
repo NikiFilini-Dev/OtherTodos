@@ -4,6 +4,7 @@ import { observer } from "mobx-react"
 import { useMst } from "models/RootStore"
 import SearchIcon from "assets/search.svg"
 import PlusIcon from "assets/plus.svg"
+import TagMenu from "components/menus/TagMenu"
 
 import styles from "./styles.styl"
 
@@ -38,13 +39,15 @@ const TagsSelector = observer(
         <div className={styles.list}>
           <div className={styles.listTitle}>Выбраны:</div>
           {selected.map(tag => (
-            <span
+            <TagMenu
+              tag={tag}
               key={`selected-${tag.name}`}
-              className={styles.tag}
-              onClick={() => onUnselectClick(tag)}
+              className={styles.tagMenu}
             >
-              {tag.name}
-            </span>
+              <span className={styles.tag} onClick={() => onUnselectClick(tag)}>
+                {tag.name}
+              </span>
+            </TagMenu>
           ))}
           {!selected.length && (
             <span className={styles.placeholder}>Нет тэгов</span>
@@ -53,13 +56,15 @@ const TagsSelector = observer(
         <div className={styles.list}>
           <div className={styles.listTitle}>Поиск:</div>
           {results.map(tag => (
-            <span
+            <TagMenu
+              tag={tag}
               key={`search-${tag.name}`}
-              className={styles.tag}
-              onClick={() => onSelectClick(tag)}
+              className={styles.tagMenu}
             >
-              {tag.name}
-            </span>
+              <span className={styles.tag} onClick={() => onSelectClick(tag)}>
+                {tag.name}
+              </span>
+            </TagMenu>
           ))}
           {!results.length && !!search.length && (
             <span className={styles.add} onClick={() => onAddClick(search)}>

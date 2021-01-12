@@ -1,11 +1,11 @@
 import { types, destroy } from "mobx-state-tree"
 import Task from "./Task"
-import { isToday } from "tools/date"
 import moment from "moment"
 
 const TaskList = types
   .model("TaskList", {
     all: types.array(Task),
+    selected: types.maybeNull(types.reference(Task)),
   })
   .views(self => ({
     get today() {
@@ -27,6 +27,9 @@ const TaskList = types
     },
   }))
   .actions(self => ({
+    select(task) {
+      self.selected = task
+    },
     add(task) {
       self.all.push(task)
     },

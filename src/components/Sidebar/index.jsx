@@ -142,18 +142,10 @@ const Sidebar = observer(() => {
     tags,
     selectedProject,
     selectProject,
-    selectedTag,
-    selectTag,
     createProject,
-    createTag,
     deleteProject,
     deleteTag,
   } = useMst()
-
-  const addTag = name => {
-    selectTag(createTag(name))
-    setScreen("TAG")
-  }
 
   const addProject = name => {
     selectProject(createProject(name))
@@ -171,12 +163,6 @@ const Sidebar = observer(() => {
       deleteTag(tag)
     })
     deleteProject(project)
-  }
-
-  const rmTag = tag => {
-    console.log("DELETE TAG", tag.toJSON())
-    all.forEach(task => task.removeTag(tag))
-    deleteTag(tag)
   }
 
   return (
@@ -230,19 +216,6 @@ const Sidebar = observer(() => {
         }}
         onAdd={addProject}
         onDelete={rmProject}
-      />
-      <Group
-        name={"Тэги"}
-        elements={tags}
-        onElementClick={tag => {
-          return () => {
-            selectTag(tag)
-            setScreen("TAG")
-          }
-        }}
-        isActive={tag => screen === "TAG" && tag.id === selectedTag.id}
-        onAdd={addTag}
-        onDelete={rmTag}
       />
     </div>
   )
