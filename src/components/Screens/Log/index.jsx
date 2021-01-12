@@ -19,18 +19,20 @@ const Log = observer(() => {
   })
 
   return (
-    <div>
+    <div className={styles.screen}>
       <div className={styles.info}>
         <span className={styles.title}>Закрытые задачи</span>
       </div>
-      {Object.keys(days).map(day => (
-        <TaskList
-          showHidden
-          key={`day_${day}`}
-          tasks={days[day]}
-          name={moment(day).format("DD MMM YYYY")}
-        />
-      ))}
+      <div className={styles.listOfLists}>
+        {Object.keys(days).map(day => (
+          <TaskList
+            showHidden
+            key={`day_${day}`}
+            tasks={days[day]}
+            name={moment(day).format("DD MMM YYYY")}
+          />
+        ))}
+      </div>
     </div>
   )
 })

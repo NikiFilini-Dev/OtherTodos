@@ -319,7 +319,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
 
 Task.propTypes = {
   task: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     text: PropTypes.text,
   }),
   expired: PropTypes.bool,

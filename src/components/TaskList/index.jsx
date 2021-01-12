@@ -7,9 +7,6 @@ import Task from "../Task/index.jsx"
 import Label from "../Label/index.jsx"
 
 import ListIcon from "../../assets/list.svg"
-import DoneIcon from "../../assets/done.svg"
-import TimesIcon from "../../assets/times.svg"
-import PieIcon from "../../assets/pie_chart.svg"
 import { observer } from "mobx-react"
 
 const TaskList = observer(({ tasks, name, showHidden }) => {

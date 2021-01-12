@@ -47,7 +47,7 @@ const Project = observer(() => {
   }
 
   return (
-    <div>
+    <div className={styles.screen}>
       <div className={styles.info}>
         <span className={styles.title}>{selectedProject.name}</span>
         <Button
@@ -70,7 +70,9 @@ const Project = observer(() => {
         select={tag => setSelectedTag(tag)}
         tags={tags}
       />
-      <TaskList tasks={tasks} name={"Задачи"} />
+      <div className={styles.listOfLists}>
+        <TaskList tasks={tasks} name={"Задачи"} />
+      </div>
     </div>
   )
 })

@@ -55,7 +55,7 @@ const ExpiredTasks = observer(({ tasks }) => {
 })
 
 ExpiredTasks.propTypes = {
-  tasks: PropTypes.object,
+  tasks: PropTypes.array,
 }
 
 export default ExpiredTasks
