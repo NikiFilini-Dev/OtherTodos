@@ -7,18 +7,23 @@ import TaskList from "components/TaskList"
 import Task from "components/Task"
 import PlusIcon from "assets/plus.svg"
 import Button from "components/Button"
+import { useTrap } from "../../../tools/hooks"
 
 const Inbox = observer(() => {
   const {
-    tasks: { all, add },
+    tasks: { all },
     createTask,
     setTempTask,
-    detachTempTask,
+    insertTempTask,
   } = useMst()
 
   const [task, setTask] = React.useState(createTask({}))
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
   setTempTask(task)
+
+  useTrap("command+n", () => {
+    setIsNewTaskShown(!isNewTaskShown)
+  })
 
   const inbox = all.filter(task => !task.done && !task.project)
 
@@ -28,14 +33,11 @@ const Inbox = observer(() => {
   }
   const onConfirm = () => {
     if (!task.text) return
-    detachTempTask()
-    let next = null
-    setTempTask(next)
-    setIsNewTaskShown(false)
-    add(task)
-    next = createTask({})
+    insertTempTask()
+    let next = createTask({})
     setTempTask(next)
     setTask(next)
+    setIsNewTaskShown(false)
   }
 
   return (
@@ -50,7 +52,7 @@ const Inbox = observer(() => {
       </div>
       {isNewTaskShown && (
         <div>
-          <Task task={task} active />
+          <Task task={task} active onConfirm={onConfirm} />
           <div className={styles.newTaskActions}>
             <Button text={"Добавить"} onClick={onConfirm} />
             <Button text={"Отменить"} secondary onClick={onReject} />

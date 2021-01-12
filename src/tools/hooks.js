@@ -1,4 +1,5 @@
 import React from "react"
+import Mousetrap from "mousetrap"
 
 export function useClick(target, callback) {
   React.useEffect(() => {
@@ -39,6 +40,32 @@ export function useInput(ref, callback, type = "keyup") {
     ref.current.addEventListener(type, onKeyUp)
     return () => {
       if (ref.current) ref.current.removeEventListener(type, onKeyUp)
+    }
+  })
+}
+
+export function useTrap(combination, callback) {
+  React.useEffect(() => {
+    Mousetrap.bind(combination, callback)
+    console.log("BINDING", combination)
+
+    return () => {
+      console.log("UNBINDING", combination)
+      Mousetrap.unbind(combination, callback)
+    }
+  })
+}
+
+export function useKeyListener(key, callback) {
+  window.pressedKeys = window.pressedKeys ? window.pressedKeys : new Set()
+  React.useEffect(() => {
+    const onKeyup = e => {
+      if (e.key === key) callback()
+    }
+    document.addEventListener("keyup", onKeyup)
+
+    return () => {
+      document.removeEventListener("keyup", onKeyup)
     }
   })
 }

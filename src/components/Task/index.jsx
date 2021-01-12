@@ -23,6 +23,7 @@ import {
   useClickOutsideRef,
   useInput,
   useContextMenu,
+  useKeyListener,
 } from "tools/hooks"
 import { useMst } from "models/RootStore"
 import TextareaAutosize from "react-autosize-textarea"
@@ -73,8 +74,8 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
     if (inputRef.current && active) inputRef.current.focus()
   }, ["active"])
 
-  useInput(inputRef, e => {
-    if (e.key === "Enter" && onConfirm) onConfirm()
+  useKeyListener("Enter", () => {
+    if (onConfirm) onConfirm()
   })
 
   useContextMenu(containerRef, [
@@ -85,6 +86,14 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
       },
     },
   ])
+
+  useKeyListener("Delete", () => {
+    if (isSelected) deleteTask(task)
+  })
+
+  useKeyListener("Backspace", () => {
+    if (isSelected) deleteTask(task)
+  })
 
   const onTaskClick = e => {
     e.preventDefault()

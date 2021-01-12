@@ -45,8 +45,10 @@ const RootStore = types
     },
   }))
   .actions(self => ({
-    detachTempTask() {
-      detach(self.tempTask)
+    insertTempTask() {
+      const task = self.tempTask.toJSON()
+      self.testTask = null
+      self.tasks.add(task)
     },
     setTempTask(task) {
       self.tempTask = task

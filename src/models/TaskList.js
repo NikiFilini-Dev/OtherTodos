@@ -1,4 +1,4 @@
-import { types, destroy } from "mobx-state-tree"
+import { types, destroy, getParent, detach } from "mobx-state-tree"
 import Task from "./Task"
 import moment from "moment"
 
@@ -31,9 +31,11 @@ const TaskList = types
       self.selected = task
     },
     add(task) {
+      if (getParent(self).tempTask === task) getParent(self).detachTempTask()
       self.all.push(task)
     },
     deleteTask(task) {
+      if (self.selected === task) self.selected = null
       self.all.splice(self.all.indexOf(task), 1)
       destroy(task)
     },

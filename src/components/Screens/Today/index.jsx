@@ -14,6 +14,7 @@ import CalendarIcon from "assets/calendar_empty.svg"
 import PlusIcon from "assets/plus.svg"
 import Task from "components/Task"
 import TagsFilter from "components/TagsFilter"
+import { useTrap } from "../../../tools/hooks"
 
 function toTitleCase(str) {
   return str
@@ -29,7 +30,7 @@ const Today = observer(() => {
     selectDate,
     createTask,
     setTempTask,
-    detachTempTask,
+    insertTempTask,
     setScreen,
   } = useMst()
 
@@ -44,15 +45,20 @@ const Today = observer(() => {
   setTempTask(task)
   const ref = React.useRef(null)
 
+  useTrap("command+n", () => {
+    setIsNewTaskShown(!isNewTaskShown)
+  })
+
   const onReject = () => {
-    setTask(createTask(""))
+    setTask(createTask({}))
     setIsNewTaskShown(false)
   }
   const onConfirm = () => {
     if (!task.text) return
-    detachTempTask()
-    add(task)
-    setTask(createTask(""))
+    insertTempTask()
+    let next = createTask({ date: selectedDate })
+    setTempTask(next)
+    setTask(next)
     setIsNewTaskShown(false)
   }
 
@@ -123,7 +129,7 @@ const Today = observer(() => {
       </div>
       {isNewTaskShown && (
         <div>
-          <Task task={task} active />
+          <Task task={task} active onConfirm={onConfirm} />
           <div className={styles.newTaskActions}>
             <Button text={"Добавить"} onClick={onConfirm} />
             <Button text={"Отменить"} secondary onClick={onReject} />
