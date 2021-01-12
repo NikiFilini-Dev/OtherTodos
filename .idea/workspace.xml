@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/tools/jsonStorage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +24,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js.linters.configure.manually.selectedeslint" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/assets" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.detected.package.stylelint" value="true" />
@@ -76,8 +71,7 @@
       <workItem from="1609340991725" duration="10873000" />
       <workItem from="1610359866760" duration="4546000" />
       <workItem from="1610371817911" duration="25000" />
-      <workItem from="1610371863404" duration="2549000" />
-      <workItem from="1610376968158" duration="11498000" />
+      <workItem from="1610371863404" duration="3022000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -142,42 +136,7 @@
       <option name="project" value="LOCAL" />
       <updated>1610369746677</updated>
     </task>
-    <task id="LOCAL-00010" summary="Прозрачный фон">
-      <created>1610387765463</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1610387765463</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Выбор задачи двумя кликами, автоувеличение поля заметок, меню тегов везде">
-      <created>1610466984869</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1610466984873</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Отображение точкой в календаре текущего дня">
-      <created>1610467211922</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1610467211922</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Нормальный скрол в экранах">
-      <created>1610468691101</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1610468691103</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Сочетания клавиш">
-      <created>1610473282484</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1610473282486</updated>
-    </task>
-    <option name="localTasksCounter" value="15" />
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -205,12 +164,7 @@
     <MESSAGE value="Куча правок" />
     <MESSAGE value="Фиксы, зум" />
     <MESSAGE value="Отображение информации о задачах в одну строку" />
-    <MESSAGE value="Прозрачный фон" />
-    <MESSAGE value="Выбор задачи двумя кликами, автоувеличение поля заметок, меню тегов везде" />
-    <MESSAGE value="Отображение точкой в календаре текущего дня" />
-    <MESSAGE value="Нормальный скрол в экранах" />
-    <MESSAGE value="Сочетания клавиш" />
-    <option name="LAST_COMMIT_MESSAGE" value="Сочетания клавиш" />
+    <option name="LAST_COMMIT_MESSAGE" value="Отображение информации о задачах в одну строку" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
