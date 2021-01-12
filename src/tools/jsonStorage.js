@@ -1,5 +1,5 @@
 import storage from "electron-json-storage"
-
+console.log(storage.getDataPath())
 const promisify = (func, args = [], cb = null) => {
   return new Promise((resolve, reject) => {
     func(...args, (error, data) => {

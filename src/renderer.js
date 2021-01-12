@@ -89,16 +89,16 @@ if (!DEBUG) {
   persist("root_store", Store, {
     storage: jsonStorage,
   })
-    .then(() => console.log("Hydrated!"))
+    .then(() => render())
     .catch(err => console.error(err))
+} else {
+  render()
 }
 
-ReactDOM.render(
-  <Provider value={Store}> {App} </Provider>,
-  document.querySelector("#app"),
-)
-
-console.log(
-  '👋 This message is being logged by "renderer.js", included via webpack',
-)
+function render() {
+  ReactDOM.render(
+    <Provider value={Store}> {App} </Provider>,
+    document.querySelector("#app"),
+  )
+}
 window.moment = moment
