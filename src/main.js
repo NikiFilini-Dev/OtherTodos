@@ -25,7 +25,8 @@ const createWindow = () => {
   electronVibrancy.SetVibrancy(mainWindow, 7)
 
   // and load the index.html of the app.
-  mainWindow.webContents.openDevTools()
+  console.log(process)
+  if (process.env.P_ENV === "debug") mainWindow.webContents.openDevTools()
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
   const systemMenu = Menu.getApplicationMenu()

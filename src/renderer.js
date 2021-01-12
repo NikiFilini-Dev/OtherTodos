@@ -4,6 +4,7 @@ import App from "./components/App/index.jsx"
 import RootStore, { Provider } from "./models/RootStore"
 import moment from "moment"
 // import makeInspectable from "mobx-devtools-mst"
+import jsonStorage from "tools/jsonStorage"
 
 import "./index.css"
 import { persist } from "mst-persist"
@@ -86,7 +87,7 @@ const Store = RootStore.create(data)
 
 if (!DEBUG) {
   persist("root_store", Store, {
-    storage: localStorage,
+    storage: jsonStorage,
   })
     .then(() => console.log("Hydrated!"))
     .catch(err => console.error(err))

@@ -11,6 +11,7 @@ import FolderIcon from "assets/folder.svg"
 import PlusIcon from "assets/plus.svg"
 import propTypes from "prop-types"
 import { useContextMenu, useInput } from "tools/hooks"
+import moment from "moment"
 
 const Element = ({ active, onClick, icon, text, deletable, onDelete }) => {
   const Icon = icon
@@ -137,6 +138,7 @@ const Sidebar = observer(() => {
     tasks: { all, deleteTask },
     screen,
     setScreen,
+    selectDate,
     projects,
     tags,
     selectedProject,
@@ -185,7 +187,10 @@ const Sidebar = observer(() => {
           [styles.groupElement]: true,
           [styles.active]: screen === "TODAY",
         })}
-        onClick={() => setScreen("TODAY")}
+        onClick={() => {
+          setScreen("TODAY")
+          selectDate(moment().format("YYYY-MM-DD"))
+        }}
       >
         <TodayIcon className={styles.groupElementIcon} />
         Сегодня

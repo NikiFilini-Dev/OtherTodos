@@ -106,6 +106,7 @@
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "classnames": "^2.2.6",
+    "electron-json-storage": "^4.3.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-vibrancy": "https://github.com/lunavod/electron-vibrancy.git",
     "es-abstract": "^1.18.0-next.1",

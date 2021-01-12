@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/tools/jsonStorage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/Inbox/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Inbox/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/Today/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Today/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Task/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/RootStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/RootStore.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/TaskList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/TaskList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tools/hooks.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/hooks.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -80,7 +77,7 @@
       <workItem from="1610359866760" duration="4546000" />
       <workItem from="1610371817911" duration="25000" />
       <workItem from="1610371863404" duration="2549000" />
-      <workItem from="1610376968158" duration="10182000" />
+      <workItem from="1610376968158" duration="11498000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -173,7 +170,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610468691103</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Сочетания клавиш">
+      <created>1610473282484</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1610473282486</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -205,7 +209,8 @@
     <MESSAGE value="Выбор задачи двумя кликами, автоувеличение поля заметок, меню тегов везде" />
     <MESSAGE value="Отображение точкой в календаре текущего дня" />
     <MESSAGE value="Нормальный скрол в экранах" />
-    <option name="LAST_COMMIT_MESSAGE" value="Нормальный скрол в экранах" />
+    <MESSAGE value="Сочетания клавиш" />
+    <option name="LAST_COMMIT_MESSAGE" value="Сочетания клавиш" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
