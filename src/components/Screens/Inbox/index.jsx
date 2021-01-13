@@ -21,6 +21,8 @@ const Inbox = observer(() => {
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
   setTempTask(task)
 
+  const buttonRef = React.createRef()
+
   useTrap("command+n", () => {
     setIsNewTaskShown(!isNewTaskShown)
   })
@@ -52,9 +54,13 @@ const Inbox = observer(() => {
       </div>
       {isNewTaskShown && (
         <div>
-          <Task task={task} active onConfirm={onConfirm} />
+          <Task
+            task={task}
+            active
+            onConfirm={() => buttonRef.current.click()}
+          />
           <div className={styles.newTaskActions}>
-            <Button text={"Добавить"} onClick={onConfirm} />
+            <Button text={"Добавить"} onClick={onConfirm} ref={buttonRef} />
             <Button text={"Отменить"} secondary onClick={onReject} />
           </div>
         </div>

@@ -25,7 +25,7 @@ function toTitleCase(str) {
 
 const Today = observer(() => {
   const {
-    tasks: { all, expired, add },
+    tasks: { all, expired },
     selectedDate,
     selectDate,
     createTask,
@@ -39,28 +39,14 @@ const Today = observer(() => {
     task => task.date && task.date === selectedDate && !task.done,
   )
 
-  const [task, setTask] = React.useState(createTask({ date: selectedDate }))
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
   const [isDateSelectorShown, setIsDateSelectorShown] = React.useState(false)
-  setTempTask(task)
+
   const ref = React.useRef(null)
 
   useTrap("command+n", () => {
     setIsNewTaskShown(!isNewTaskShown)
   })
-
-  const onReject = () => {
-    setTask(createTask({}))
-    setIsNewTaskShown(false)
-  }
-  const onConfirm = () => {
-    if (!task.text) return
-    insertTempTask()
-    let next = createTask({ date: selectedDate })
-    setTempTask(next)
-    setTask(next)
-    setIsNewTaskShown(false)
-  }
 
   const [selectedTag, setSelectedTag] = React.useState(null)
 
@@ -86,11 +72,30 @@ const Today = observer(() => {
     task => !task.done && (!selectedTag || task.tags.indexOf(selectedTag) >= 0),
   )
 
+  const initialTaskData = { date: selectedDate }
+  if (selectedTag) initialTaskData.tags = [selectedTag]
+  const [task, setTask] = React.useState(createTask(initialTaskData))
+  setTempTask(task)
+
   const setDate = date => {
     if (date === null) return setScreen("INBOX")
     selectDate(date)
     setIsDateSelectorShown(false)
     task.setDate(date)
+  }
+
+  const onReject = () => {
+    setTask(createTask({}))
+    setIsNewTaskShown(false)
+  }
+
+  const onConfirm = () => {
+    if (!task.text) return
+    insertTempTask()
+    let next = createTask(initialTaskData)
+    setTempTask(next)
+    setTask(next)
+    setIsNewTaskShown(false)
   }
 
   return (
@@ -139,7 +144,10 @@ const Today = observer(() => {
       <TagsFilter
         tags={tags}
         selected={selectedTag}
-        select={tag => setSelectedTag(tag)}
+        select={tag => {
+          if (isNewTaskShown && tag) task.addTag(tag)
+          setSelectedTag(tag)
+        }}
       />
       <div className={styles.listOfLists}>
         {!!expiredTasks.length && <ExpiredTasks tasks={expiredTasks} />}

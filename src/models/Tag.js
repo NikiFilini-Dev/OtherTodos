@@ -9,7 +9,7 @@ const Tag = types
   })
   .views(self => ({
     get tasks() {
-      return getRoot(self).tasks.filter(task => task.tags.indexOf(self >= 0))
+      getRoot(self).tasks.filter(task => task.tags.indexOf(self >= 0))
     },
   }))
 

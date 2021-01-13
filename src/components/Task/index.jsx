@@ -170,19 +170,21 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             {task.project.name}
           </span>
         )}
-        {!isActive &&
-          Boolean(task.tags.length) &&
-          task.tags.map(tag => (
-            <span
-              key={`inline_tag_${tag.id}`}
-              className={classNames({
-                [styles.tag]: true,
-                [styles.inline]: true,
-              })}
-            >
-              {tag.name}
-            </span>
-          ))}
+        <div className={styles.tags}>
+          {!isActive &&
+            Boolean(task.tags.length) &&
+            task.tags.map(tag => (
+              <span
+                key={`inline_tag_${tag.id}`}
+                className={classNames({
+                  [styles.tag]: true,
+                  [styles.inline]: true,
+                })}
+              >
+                {tag.name}
+              </span>
+            ))}
+        </div>
         {!isActive && Boolean(expired) && (
           <span
             className={classNames({

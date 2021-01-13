@@ -16,5 +16,10 @@ const Project = types
       return tasks
     },
   }))
+  .actions(self => ({
+    setName(name) {
+      self.name = name
+    },
+  }))
 
 export default Project

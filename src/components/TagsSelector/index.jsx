@@ -11,7 +11,6 @@ import styles from "./styles.styl"
 const TagsSelector = observer(
   ({ selected, add, select, unselect, project }) => {
     let { tags } = useMst()
-    tags = tags.filter(tag => tag.project === project)
     const [search, setSearch] = React.useState("")
 
     const results = tags.filter(

@@ -8,7 +8,11 @@ import TaskList from "components/TaskList"
 import Task from "../../Task"
 import Button from "../../Button"
 import PlusIcon from "../../../assets/plus.svg"
-import { useTrap } from "../../../tools/hooks"
+import {
+  useClickOutsideRef,
+  useKeyListener,
+  useTrap,
+} from "../../../tools/hooks"
 
 const Project = observer(() => {
   const {
@@ -19,16 +23,32 @@ const Project = observer(() => {
     insertTempTask,
   } = useMst()
 
-  let tasks = all.filter(task => task.project === selectedProject)
-  const [task, setTask] = React.useState(
-    createTask({ project: selectedProject }),
-  )
+  const inputRef = React.useRef()
+
   const [selectedTag, setSelectedTag] = React.useState(null)
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
+  const [isEditingTitle, setIsEditingTitle] = React.useState(false)
+
+  let tasks = all.filter(task => task.project === selectedProject)
+
+  const initialTaskData = {
+    project: selectedProject,
+  }
+  if (selectedTag) initialTaskData.tags = [selectedTag]
+
+  const [task, setTask] = React.useState(createTask(initialTaskData))
   setTempTask(task)
 
   useTrap("command+n", () => {
     setIsNewTaskShown(!isNewTaskShown)
+  })
+
+  useClickOutsideRef(inputRef, () => {
+    if (isEditingTitle) setIsEditingTitle(false)
+  })
+
+  useKeyListener("Enter", () => {
+    if (isEditingTitle) setIsEditingTitle(false)
   })
 
   let tags = new Set()
@@ -46,7 +66,7 @@ const Project = observer(() => {
   const onConfirm = () => {
     if (!task.text) return
     insertTempTask()
-    let next = createTask({ project: selectedProject })
+    let next = createTask(initialTaskData)
     setTempTask(next)
     setTask(next)
     setIsNewTaskShown(false)
@@ -55,7 +75,24 @@ const Project = observer(() => {
   return (
     <div className={styles.screen}>
       <div className={styles.info}>
-        <span className={styles.title}>{selectedProject.name}</span>
+        {isEditingTitle ? (
+          <input
+            type={"text"}
+            value={selectedProject.name}
+            className={styles.nameEdit}
+            onChange={e => selectedProject.setName(e.target.value)}
+            ref={inputRef}
+            autoFocus={true}
+          />
+        ) : (
+          <span
+            onClick={() => setIsEditingTitle(true)}
+            className={styles.title}
+          >
+            {selectedProject.name}
+          </span>
+        )}
+
         <Button
           icon={PlusIcon}
           onClick={() => setIsNewTaskShown(!isNewTaskShown)}
@@ -73,7 +110,10 @@ const Project = observer(() => {
       )}
       <TagsFilter
         selected={selectedTag}
-        select={tag => setSelectedTag(tag)}
+        select={tag => {
+          if (!isNewTaskShown && tag) task.addTag(tag)
+          setSelectedTag(tag)
+        }}
         tags={tags}
       />
       <div className={styles.listOfLists}>
