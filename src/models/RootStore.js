@@ -12,10 +12,14 @@ const RootStore = types
     tasks: TaskList,
     projects: types.array(Project),
     selectedDate: moment().format("YYYY-MM-DD"),
-    screen: types.enumeration(["INBOX", "TODAY", "PROJECT", "TAG", "LOG"]),
+    screen: types.optional(
+      types.enumeration(["INBOX", "TODAY", "PROJECT", "TAGS", "LOG"]),
+      "TODAY",
+    ),
     selectedProject: types.maybeNull(types.reference(Project)),
     tags: types.array(Tag),
     selectedTag: types.maybeNull(types.reference(Tag)),
+    _storeVersion: types.optional(types.number, 0),
   })
   .views(self => ({
     get lastTaskId() {
@@ -46,7 +50,9 @@ const RootStore = types
   }))
   .actions(self => ({
     insertTempTask() {
-      const task = self.tempTask.toJSON()
+      const task = JSON.parse(JSON.stringify(self.tempTask.toJSON()))
+      const newId = self.lastId(self.tasks.all) + 1
+      task.id = newId
       self.testTask = null
       self.tasks.add(task)
     },
@@ -54,7 +60,7 @@ const RootStore = types
       self.tempTask = task
     },
     createTask(data = {}) {
-      const newId = self.lastId(self.tasks.all) + 1
+      const newId = self.lastId(self.tasks.all) + 1000
       return Task.create(taskFactory(newId, data))
     },
     createProject(name) {
@@ -65,7 +71,11 @@ const RootStore = types
     },
     createTag(name, project) {
       const newId = self.lastId(self.tags) + 1
-      const tag = Tag.create({ id: newId, name, project })
+      let lastIndex = -1
+      self.tags.forEach(tag => {
+        if (tag.index > lastIndex) lastIndex = tag.index
+      })
+      const tag = Tag.create({ id: newId, name, project, index: lastIndex + 1 })
       self.tags.push(tag)
       return tag
     },
@@ -74,6 +84,9 @@ const RootStore = types
     },
     setScreen(screen) {
       self.screen = screen
+      self.tasks.selected = null
+      self.tempTask = null
+      self.selectedDate = moment().format("YYYY-MM-DD")
     },
     selectProject(project) {
       self.selectedProject = project
@@ -95,6 +108,7 @@ const RootStore = types
       }
       destroy(project)
     },
+    applyMigration(migration) {},
   }))
 
 export default RootStore

@@ -19,20 +19,27 @@
         position: absolute;
         left: 0;
         top: 0;
+        display: flex;
+        align-items: center;
+      }
+      #clearData {
+        margin-left: auto;
+        margin-right: 16px;
       }
     </style>
   </head>
   <body>
     <div id="titlebar">
-
+      <button id="clearData">Очистить память</button>
     </div>
     <div id="app">
       <div>
-        <button id="clearData">Очистить память</button>
+
         <script>
           function clearData() {
             console.log("CLEAR")
-            localStorage.clear();
+            jsonStorage.clear()
+            location.reload()
           }
           document.querySelector("#clearData").addEventListener("click", clearData);
         </script>

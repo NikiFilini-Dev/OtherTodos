@@ -8,9 +8,19 @@ import Label from "../Label/index.jsx"
 
 import ListIcon from "../../assets/list.svg"
 import { observer } from "mobx-react"
+import { useMst } from "../../models/RootStore"
+import moment from "moment"
 
 const TaskList = observer(({ tasks, name, showHidden }) => {
+  const { selectedDate, screen } = useMst()
   if (!showHidden) tasks = tasks.filter(task => !task.done)
+
+  tasks = tasks.filter(
+    task =>
+      !task.repeating ||
+      (task.date === selectedDate && screen === "TODAY") ||
+      moment(task.date, "YYYY-MM-DD")._d <= new Date(),
+  )
 
   tasks.sort((a, b) => b.id - a.id)
   tasks.sort((a, b) => a.priority - b.priority)

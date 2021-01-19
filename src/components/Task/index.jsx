@@ -50,6 +50,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   const [isFullDatePickerOpen, setIsFullDatePickerOpen] = useState(false)
   const [isProjectSelectorOpen, setIsProjectSelectorOpen] = useState(false)
   const [isTagsSelectorOpen, setIsTagsSelectorOpen] = useState(false)
+  const [isUpdated, setIsUpdated] = useState(false)
   const isSelected = selected === task
 
   const containerRef = useRef(null)
@@ -88,15 +89,14 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   ])
 
   useKeyListener("Delete", () => {
-    if (isSelected) deleteTask(task)
+    if (isSelected && !isActive) deleteTask(task)
   })
 
   useKeyListener("Backspace", () => {
-    if (isSelected) deleteTask(task)
+    if (isSelected && !isActive) deleteTask(task)
   })
 
   const onTaskClick = e => {
-    e.preventDefault()
     if (inRefs([dateRef, fullDateRef, projectRef, checkRef], e)) return
     if (e.target) {
       if (isSelected) setIsActive(true)
@@ -126,9 +126,18 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   const onCheckboxChange = val => {
     setIsDone(val)
     setTimeout(() => {
+      setIsUpdated(true)
       task.changeStatus(val)
-    }, 3000)
+    }, 1500)
   }
+
+  if (isUpdated) {
+    setIsDone(task.done)
+    setIsUpdated(false)
+  }
+
+  let tags = [...task.tags]
+  tags.sort((a, b) => a.index - b.index)
 
   return (
     <div
@@ -173,7 +182,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         <div className={styles.tags}>
           {!isActive &&
             Boolean(task.tags.length) &&
-            task.tags.map(tag => (
+            tags.map(tag => (
               <span
                 key={`inline_tag_${tag.id}`}
                 className={classNames({
@@ -185,11 +194,12 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
               </span>
             ))}
         </div>
-        {!isActive && Boolean(expired) && (
+        {!isActive && task.date && (
           <span
             className={classNames({
               [styles.date]: true,
               [styles.inline]: true,
+              [styles.expired]: expired,
             })}
           >
             <CalendarIcon className={styles.dateIcon} />
@@ -303,6 +313,16 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
               />
             )}
           </span>
+        </div>
+        <div>
+          Повторять каждые{" "}
+          <input
+            type={"number"}
+            className={styles.repeatCount}
+            value={task.repeatEvery || 0}
+            onChange={e => task.setRepeatEvery(e.target.value)}
+          />{" "}
+          дней
         </div>
         <div style={{ position: "relative" }} ref={tagsRef}>
           <div

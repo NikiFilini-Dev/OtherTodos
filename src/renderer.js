@@ -3,8 +3,8 @@ import ReactDOM from "react-dom"
 import App from "./components/App/index.jsx"
 import RootStore, { Provider } from "./models/RootStore"
 import moment from "moment"
-// import makeInspectable from "mobx-devtools-mst"
 import jsonStorage from "tools/jsonStorage"
+import migrations from "models/migrations"
 
 import "./index.css"
 import { persist } from "mst-persist"
@@ -24,11 +24,13 @@ if (DEBUG) {
       id: 1,
       name: "Testing",
       project: 2,
+      index: 0,
     },
     {
       id: 2,
       name: "Nanodesu",
       project: 2,
+      index: 1,
     },
   ]
   data.projects = [
@@ -85,15 +87,47 @@ if (DEBUG) {
 }
 const Store = RootStore.create(data)
 
-if (!DEBUG) {
-  persist("root_store", Store, {
-    storage: jsonStorage,
-  })
-    .then(() => render())
-    .catch(err => console.error(err))
-} else {
-  render()
+function hydrate() {
+  if (!DEBUG) {
+    console.log("HYDRATING")
+    persist("root_store", Store, {
+      storage: jsonStorage,
+    })
+      .then(() => render())
+      .catch(err => console.error(err))
+  } else {
+    render()
+  }
+  window.onerror = err => alert(JSON.stringify(err))
 }
+
+jsonStorage
+  .getItem("root_store")
+  .then(v => {
+    console.log(v)
+    if (typeof v === "string") v = JSON.parse(v)
+    console.log(migrations)
+
+    if (!v || !Object.keys(v).length) {
+      console.log(data)
+      jsonStorage
+        .setItem("root_store", JSON.stringify(data))
+        .then(hydrate)
+        .catch(alert)
+    } else {
+      migrations.forEach(migration => {
+        if (migration.id <= v._storeVersion) return
+        migration.up(v)
+        console.log(migration)
+        v._storeVersion = migration.id
+      })
+      jsonStorage.setItem("root_store", JSON.stringify(v)).then(() => hydrate())
+
+      return true
+    }
+    return true
+  })
+  .catch(alert)
 
 function render() {
   ReactDOM.render(

@@ -1,7 +1,7 @@
 {
   "name": "othertodos",
   "productName": "othertodos",
-  "version": "1.2.0",
+  "version": "1.2.4",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
@@ -122,6 +122,7 @@
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-autosize-textarea": "^7.1.0",
+    "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^17.0.1",
     "react-mobx": "^0.0.4",
     "stlint": "^1.0.65",

@@ -205,6 +205,16 @@ const Sidebar = observer(() => {
         <FolderIcon className={styles.groupElementIcon} />
         Журнал
       </div>
+      <div
+        className={classNames({
+          [styles.groupElement]: true,
+          [styles.active]: screen === "TAGS",
+        })}
+        onClick={() => setScreen("TAGS")}
+      >
+        <FolderIcon className={styles.groupElementIcon} />
+        Тэги
+      </div>
 
       <Group
         name={"Проекты"}

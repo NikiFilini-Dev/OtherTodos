@@ -28,6 +28,7 @@ const TaskList = types
   }))
   .actions(self => ({
     select(task) {
+      if (task === getParent(self).tempTask) return
       self.selected = task
     },
     add(task) {

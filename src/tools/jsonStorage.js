@@ -29,6 +29,11 @@ const jsonStorage = {
   keys(cb) {
     return promisify(storage.keys, [], cb)
   },
+  getDefaultDataPath() {
+    return storage.getDefaultDataPath()
+  },
 }
+
+window.jsonStorage = jsonStorage
 
 export default jsonStorage

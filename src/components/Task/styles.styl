@@ -69,10 +69,13 @@
 
 .date
   font-size 14px
-  color var(--accent)
+  color var(--brand)
   display inline-flex
   align-items center
   margin-right 17px
+
+  &.expired
+    color var(--accent)
 
 .project > span, .date > span
   display inline-flex
@@ -148,3 +151,7 @@
   height: 10px
   width: auto
   color gray
+
+.repeatCount
+  display inline
+  width 50px

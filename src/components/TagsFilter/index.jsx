@@ -5,6 +5,7 @@ import classNames from "classnames"
 import TagMenu from "components/menus/TagMenu"
 
 const TagsFilter = observer(({ tags, selected, select }) => {
+  tags.sort((a, b) => a.index - b.index)
   return (
     <div className={styles.list}>
       <span

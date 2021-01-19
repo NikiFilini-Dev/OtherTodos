@@ -6,7 +6,7 @@ import { useMst } from "models/RootStore"
 
 import Today from "components/Screens/Today"
 import Project from "components/Screens/Project"
-import Tag from "components/Screens/Tag"
+import Tags from "components/Screens/Tags"
 import Inbox from "components/Screens/Inbox"
 import Log from "components/Screens/Log"
 import Sidebar from "components/Sidebar"
@@ -24,8 +24,8 @@ const App = observer(() => {
     case "PROJECT":
       Screen = Project
       break
-    case "TAG":
-      Screen = Tag
+    case "TAGS":
+      Screen = Tags
       break
     case "LOG":
       Screen = Log

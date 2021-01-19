@@ -1,4 +1,4 @@
-import { types, getRoot, getParent } from "mobx-state-tree"
+import { types, getParent } from "mobx-state-tree"
 import Project from "./Project"
 import Tag from "./Tag"
 import moment from "moment"
@@ -14,6 +14,9 @@ const Task = types
     date: types.maybeNull(types.string),
     tags: types.array(types.reference(Tag)),
     closeDate: types.maybeNull(types.string),
+    creationDate: types.maybeNull(types.string),
+    repeatEvery: types.maybeNull(types.optional(types.integer, 0)),
+    repeating: types.optional(types.boolean, false),
   })
   .views(self => ({
     get done() {
@@ -21,11 +24,22 @@ const Task = types
     },
   }))
   .actions(self => ({
+    setRepeatEvery(n) {
+      if (!n) n = 0
+      self.repeatEvery = parseInt(n)
+    },
     changeStatus(value) {
-      console.log("CHANGE STATUS", value)
       self.status = value ? "done" : "active"
-      if (value) self.closeDate = moment().format("YYYY-MM-DD")
-      else self.closeDate = null
+      if (value) {
+        self.closeDate = moment().format("YYYY-MM-DD")
+        if (self.repeatEvery) {
+          // if (!self.date)
+          self.date = moment(self.date || self.closeDate, "YYYY-MM-DD")
+            .add(self.repeatEvery, "days")
+            .format("YYYY-MM-DD")
+          self.status = "active"
+        }
+      } else self.closeDate = null
     },
     setNote(value) {
       self.note = value

@@ -18,13 +18,15 @@ const Log = observer(() => {
     else days[task.closeDate] = [task]
   })
 
+  const reversedDays = Object.keys(days).reverse()
+
   return (
     <div className={styles.screen}>
       <div className={styles.info}>
         <span className={styles.title}>Закрытые задачи</span>
       </div>
       <div className={styles.listOfLists}>
-        {Object.keys(days).map(day => (
+        {reversedDays.map(day => (
           <TaskList
             showHidden
             key={`day_${day}`}

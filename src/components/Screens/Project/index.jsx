@@ -17,6 +17,7 @@ import {
 const Project = observer(() => {
   const {
     selectedProject,
+    tempTask,
     tasks: { all },
     createTask,
     setTempTask,
@@ -36,8 +37,12 @@ const Project = observer(() => {
   }
   if (selectedTag) initialTaskData.tags = [selectedTag]
 
-  const [task, setTask] = React.useState(createTask(initialTaskData))
-  setTempTask(task)
+  let task
+  if (tempTask) task = tempTask
+  else {
+    task = createTask(initialTaskData)
+    setTempTask(task)
+  }
 
   useTrap("command+n", () => {
     setIsNewTaskShown(!isNewTaskShown)
@@ -60,7 +65,8 @@ const Project = observer(() => {
     tasks = tasks.filter(task => task.tags.indexOf(selectedTag) >= 0)
 
   const onReject = () => {
-    setTask(createTask({ project: selectedProject }))
+    task = createTask(initialTaskData)
+    setTempTask(task)
     setIsNewTaskShown(false)
   }
   const onConfirm = () => {
@@ -68,7 +74,8 @@ const Project = observer(() => {
     insertTempTask()
     let next = createTask(initialTaskData)
     setTempTask(next)
-    setTask(next)
+    task = createTask(initialTaskData)
+    setTempTask(task)
     setIsNewTaskShown(false)
   }
 
