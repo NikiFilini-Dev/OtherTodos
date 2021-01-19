@@ -11,10 +11,11 @@ import Button from "components/Button"
 import DateSelector from "components/DateSelector"
 
 import CalendarIcon from "assets/calendar_empty.svg"
+import ListIcon from "assets/list.svg"
 import PlusIcon from "assets/plus.svg"
 import Task from "components/Task"
 import TagsFilter from "components/TagsFilter"
-import { useTrap } from "../../../tools/hooks"
+import { useTrap } from "tools/hooks"
 
 function toTitleCase(str) {
   return str
@@ -34,6 +35,7 @@ const Today = observer(() => {
     setScreen,
   } = useMst()
 
+  const [viewMode, setViewMode] = React.useState("projects")
   const today = moment().format("YYYY-MM-DD")
   let tasks = all.filter(
     task => task.date && task.date === selectedDate && !task.done,
@@ -64,6 +66,7 @@ const Today = observer(() => {
     if (task.project) projects.add(task.project)
   })
   projects = [...projects]
+  projects.sort((a, b) => a.index - b.index)
 
   const withoutProject = tasks.filter(task => !task.project)
 
@@ -112,6 +115,18 @@ const Today = observer(() => {
           </span>
         )}
         <div className={styles.actions}>
+          <span
+            className={classNames({
+              [styles.viewSwitch]: true,
+              [styles.active]: viewMode === "list",
+            })}
+          >
+            <ListIcon
+              onClick={() =>
+                setViewMode(viewMode === "list" ? "projects" : "list")
+              }
+            />
+          </span>
           <span className={styles.calendar} ref={ref}>
             <CalendarIcon
               onClick={() => setIsDateSelectorShown(!isDateSelectorShown)}
@@ -151,14 +166,25 @@ const Today = observer(() => {
       />
       <div className={styles.listOfLists}>
         {!!expiredTasks.length && <ExpiredTasks tasks={expiredTasks} />}
-        <TaskList tasks={withoutProject} name={"Входящие"} />
-        {projects.map(project => (
+
+        {viewMode === "list" ? (
           <TaskList
-            key={`task_list_${project.name}`}
-            tasks={tasks.filter(task => task.project === project)}
-            name={project.name}
+            tasks={tasks.filter(task => !expiredTasks.includes(task))}
+            name={"Все задачи"}
           />
-        ))}
+        ) : (
+          <React.Fragment>
+            <TaskList tasks={withoutProject} name={"Входящие"} />
+            {projects.map(project => (
+              <TaskList
+                key={`task_list_${project.name}`}
+                tasks={tasks.filter(task => task.project === project)}
+                name={project.name}
+              />
+            ))}
+          </React.Fragment>
+        )}
+        {}
       </div>
     </div>
   )

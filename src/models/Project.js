@@ -4,6 +4,7 @@ const Project = types
   .model("Project", {
     id: types.identifierNumber,
     name: types.string,
+    index: types.number,
   })
   .views(self => ({
     get tasks() {
@@ -19,6 +20,9 @@ const Project = types
   .actions(self => ({
     setName(name) {
       self.name = name
+    },
+    setIndex(val) {
+      self.index = val
     },
   }))
 

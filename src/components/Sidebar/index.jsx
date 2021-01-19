@@ -166,6 +166,9 @@ const Sidebar = observer(() => {
     deleteProject(project)
   }
 
+  const sortedProjects = [...projects]
+  sortedProjects.sort((a, b) => a.index - b.index)
+
   return (
     <div>
       <div className={styles.logoWrapper}>
@@ -215,10 +218,20 @@ const Sidebar = observer(() => {
         <FolderIcon className={styles.groupElementIcon} />
         Тэги
       </div>
+      <div
+        className={classNames({
+          [styles.groupElement]: true,
+          [styles.active]: screen === "PROJECTS",
+        })}
+        onClick={() => setScreen("PROJECTS")}
+      >
+        <FolderIcon className={styles.groupElementIcon} />
+        Проекты
+      </div>
 
       <Group
         name={"Проекты"}
-        elements={projects}
+        elements={sortedProjects}
         isActive={project =>
           project === selectedProject && screen === "PROJECT"
         }

@@ -13,7 +13,14 @@ const RootStore = types
     projects: types.array(Project),
     selectedDate: moment().format("YYYY-MM-DD"),
     screen: types.optional(
-      types.enumeration(["INBOX", "TODAY", "PROJECT", "TAGS", "LOG"]),
+      types.enumeration([
+        "INBOX",
+        "TODAY",
+        "PROJECT",
+        "TAGS",
+        "LOG",
+        "PROJECTS",
+      ]),
       "TODAY",
     ),
     selectedProject: types.maybeNull(types.reference(Project)),

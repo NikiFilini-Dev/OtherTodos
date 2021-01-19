@@ -28,7 +28,7 @@
 .actions > *
   margin-left 12px
 
-.calendar
+.calendar, .viewSwitch
   width 32px
   height 32px
   display inline-flex
@@ -37,6 +37,10 @@
   color #9BABC5
   cursor pointer
   position relative
+
+  &.active
+    color var(--brand)
+
 
 .tags
   display flex
