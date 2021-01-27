@@ -115,6 +115,29 @@ jsonStorage
         .then(hydrate)
         .catch(alert)
     } else {
+      const taskProjects = []
+      v.tasks.all.forEach(task => {
+        if (!taskProjects.includes(task.project))
+          taskProjects.push(task.project)
+      })
+      const missingProjects = taskProjects.filter(
+        id => id && !v.projects.find(p => p.id === id),
+      )
+      console.log("TASK PROJECTS:", taskProjects)
+      console.log(
+        "PROJECTS:",
+        v.projects.map(p => p.id),
+      )
+      console.log("MISSING:", missingProjects)
+      missingProjects.forEach(missingId => {
+        v.projects.push({
+          id: missingId,
+          name: `Lost ${missingId}`,
+          index: Infinity,
+        })
+      })
+      if (missingProjects.length)
+        v.projects = v.projects.map(p => ({ ...p, index: p.id - 1 }))
       migrations.forEach(migration => {
         if (migration.id <= v._storeVersion) return
         migration.up(v)

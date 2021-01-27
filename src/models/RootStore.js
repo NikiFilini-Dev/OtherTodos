@@ -72,7 +72,11 @@ const RootStore = types
     },
     createProject(name) {
       const newId = self.lastId(self.projects) + 1
-      const project = Project.create({ id: newId, name })
+      const maxIndex = self.projects.reduce(
+        (max, project) => (project.index > max ? project.index : max),
+        0,
+      )
+      const project = Project.create({ id: newId, name, index: maxIndex + 1 })
       self.projects.push(project)
       return project
     },

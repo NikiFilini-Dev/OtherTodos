@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/Screens/Projects/index.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Screens/Projects/styles.styl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/Today/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Today/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/Today/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Today/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Project.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Project.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/RootStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/RootStore.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/migrations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/migrations.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +82,7 @@
       <workItem from="1610376968158" duration="19535000" />
       <workItem from="1610626240828" duration="6328000" />
       <workItem from="1610997400584" duration="517000" />
-      <workItem from="1611063482992" duration="8529000" />
+      <workItem from="1611063482992" duration="10323000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -228,7 +224,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611070905089</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Сортировка проектов, переключение вида в разделе сегодня">
+      <created>1611074452185</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1611074452185</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -266,7 +269,8 @@
     <MESSAGE value="Fix hydrating" />
     <MESSAGE value="Bugfixes" />
     <MESSAGE value="Перемещение тэгов, миграции" />
-    <option name="LAST_COMMIT_MESSAGE" value="Перемещение тэгов, миграции" />
+    <MESSAGE value="Сортировка проектов, переключение вида в разделе сегодня" />
+    <option name="LAST_COMMIT_MESSAGE" value="Сортировка проектов, переключение вида в разделе сегодня" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
