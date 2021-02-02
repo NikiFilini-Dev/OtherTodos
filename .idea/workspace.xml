@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TagsSelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TagsSelector/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Task/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Task/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.rules.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.rules.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Screens/Log/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Log/index.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +43,7 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="prettier.import.notification.dismissed" value="true" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
-    <property name="settings.editor.selected.configurable" value="settings.javascript.prettier" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.JavaScript" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -87,7 +81,7 @@
       <workItem from="1610626240828" duration="6328000" />
       <workItem from="1610997400584" duration="517000" />
       <workItem from="1611063482992" duration="10323000" />
-      <workItem from="1611831654952" duration="2867000" />
+      <workItem from="1611831654952" duration="3461000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -236,7 +230,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611074452185</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Небольшие улучшения">
+      <created>1612270142237</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1612270142237</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -275,7 +276,8 @@
     <MESSAGE value="Bugfixes" />
     <MESSAGE value="Перемещение тэгов, миграции" />
     <MESSAGE value="Сортировка проектов, переключение вида в разделе сегодня" />
-    <option name="LAST_COMMIT_MESSAGE" value="Сортировка проектов, переключение вида в разделе сегодня" />
+    <MESSAGE value="Небольшие улучшения" />
+    <option name="LAST_COMMIT_MESSAGE" value="Небольшие улучшения" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
