@@ -156,6 +156,15 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   let tags = [...task.tags]
   tags.sort((a, b) => a.index - b.index)
 
+  const editorRef = React.useRef(null)
+  React.useEffect(() => {
+    editorRef.current.setText(task.note)
+    editorRef.current.addEventListener("change", e => {
+      console.log(e.detail.original)
+      task.setNote(e.detail.original)
+    })
+  }, [])
+
   return (
     <div
       ref={containerRef}
@@ -281,12 +290,13 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
           [styles.fullOnly]: true,
         })}
       >
-        <TextareaAutosize
-          className={styles.notes}
-          placeholder="Заметки"
-          onChange={e => task.setNote(e.target.value)}
-          value={task.note}
-        />
+        {/*<TextareaAutosize*/}
+        {/*  className={styles.notes}*/}
+        {/*  placeholder="Заметки"*/}
+        {/*  onChange={e => task.setNote(e.target.value)}*/}
+        {/*  value={task.note}*/}
+        {/*/>*/}
+        <baka-editor ref={editorRef} />
       </div>
       <div
         className={classNames({

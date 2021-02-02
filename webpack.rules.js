@@ -22,6 +22,7 @@ module.exports = [
       loader: "babel-loader",
       options: {
         presets: [
+          "@babel/preset-flow",
           [
             "@babel/preset-react",
             {
@@ -45,7 +46,6 @@ module.exports = [
           modules: {
             localIdentName: "[path][name]__[local]--[hash:base64:5]",
           },
-
         },
       },
       {

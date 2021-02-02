@@ -6,6 +6,7 @@ import moment from "moment"
 import jsonStorage from "tools/jsonStorage"
 import migrations from "models/migrations"
 
+import "./external/editor"
 import "./index.css"
 import { persist } from "mst-persist"
 const DEBUG = process.env.P_ENV === "debug"
@@ -51,7 +52,9 @@ if (DEBUG) {
       project: 1,
       note: "",
       priority: 1,
-      date: moment().subtract(1, "days").format("YYYY-MM-DD"),
+      date: moment()
+        .subtract(1, "days")
+        .format("YYYY-MM-DD"),
       tags: [1],
     },
     {
@@ -78,7 +81,9 @@ if (DEBUG) {
       id: 4,
       text: "Test task 4",
       status: "done",
-      closeDate: moment().subtract(1, "days").format("YYYY-MM-DD"),
+      closeDate: moment()
+        .subtract(1, "days")
+        .format("YYYY-MM-DD"),
       note: "",
       project: 1,
       priority: 4,
