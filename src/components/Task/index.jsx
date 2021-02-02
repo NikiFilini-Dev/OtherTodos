@@ -79,6 +79,13 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
     if (onConfirm) onConfirm()
   })
 
+  useKeyListener("Escape", () => {
+    if (isActive || selected) {
+      setIsActive(false)
+      select(null)
+    }
+  })
+
   useContextMenu(containerRef, [
     {
       label: "Удалить",
@@ -97,6 +104,16 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   })
 
   const onTaskClick = e => {
+    if (
+      isActive &&
+      (e.target.classList.contains(styles.task) ||
+        e.target.classList.contains(styles.line)) &&
+      !isDatePickerOpen &&
+      !isFullDatePickerOpen &&
+      !isProjectSelectorOpen &&
+      !isTagsSelectorOpen
+    )
+      return setIsActive(false)
     if (inRefs([dateRef, fullDateRef, projectRef, checkRef], e)) return
     if (e.target) {
       if (isSelected) setIsActive(true)

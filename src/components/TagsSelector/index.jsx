@@ -7,6 +7,7 @@ import PlusIcon from "assets/plus.svg"
 import TagMenu from "components/menus/TagMenu"
 
 import styles from "./styles.styl"
+import { useKeyListener } from "../../tools/hooks"
 
 const TagsSelector = observer(
   ({ selected, add, select, unselect, project }) => {
@@ -16,6 +17,13 @@ const TagsSelector = observer(
     const results = tags.filter(
       tag => tag.name.startsWith(search) && !selected.includes(tag),
     )
+
+    useKeyListener("Enter", () => {
+      if (!results.length && !!search.length) {
+        setSearch("")
+        add(search)
+      }
+    })
 
     const onSelectClick = tag => select(tag)
     const onUnselectClick = tag => unselect(tag)
@@ -33,6 +41,7 @@ const TagsSelector = observer(
             placeholder={"Тэги"}
             value={search}
             onChange={e => setSearch(e.target.value)}
+            autoFocus={true}
           />
         </div>
         <div className={styles.list}>

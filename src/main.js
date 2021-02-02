@@ -21,8 +21,9 @@ const createWindow = () => {
     },
   })
 
-  // const electronVibrancy = require("electron-vibrancy")
-  // electronVibrancy.SetVibrancy(mainWindow, 0)
+  const electronVibrancy = require("electron-vibrancy")
+  let material = 0
+  electronVibrancy.SetVibrancy(mainWindow, material)
 
   // and load the index.html of the app.
   console.log(process)
