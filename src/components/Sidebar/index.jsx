@@ -9,6 +9,11 @@ import TodayIcon from "assets/today.svg"
 import ArrowRightIcon from "assets/arrow_right.svg"
 import FolderIcon from "assets/folder.svg"
 import PlusIcon from "assets/plus.svg"
+import HistoryIcon from "assets/awesome/solid/history.svg"
+import TagsIcon from "assets/awesome/solid/tags.svg"
+import BookIcon from "assets/awesome/solid/book.svg"
+import PlaneIcon from "assets/awesome/regular/paper-plane.svg"
+import EnvelopeIcon from "assets/awesome/regular/envelope.svg"
 import propTypes from "prop-types"
 import { useContextMenu, useInput } from "tools/hooks"
 import moment from "moment"
@@ -182,7 +187,7 @@ const Sidebar = observer(() => {
         })}
         onClick={() => setScreen("INBOX")}
       >
-        <LetterIcon className={styles.groupElementIcon} />
+        <EnvelopeIcon className={styles.groupElementAwesomeIcon} />
         Входящие
       </div>
       <div
@@ -195,7 +200,7 @@ const Sidebar = observer(() => {
           selectDate(moment().format("YYYY-MM-DD"))
         }}
       >
-        <TodayIcon className={styles.groupElementIcon} />
+        <PlaneIcon className={styles.groupElementAwesomeIcon} />
         Сегодня
       </div>
       <div
@@ -205,7 +210,7 @@ const Sidebar = observer(() => {
         })}
         onClick={() => setScreen("LOG")}
       >
-        <FolderIcon className={styles.groupElementIcon} />
+        <HistoryIcon className={styles.groupElementAwesomeIcon} />
         Журнал
       </div>
       <div
@@ -215,7 +220,7 @@ const Sidebar = observer(() => {
         })}
         onClick={() => setScreen("TAGS")}
       >
-        <FolderIcon className={styles.groupElementIcon} />
+        <TagsIcon className={styles.groupElementAwesomeIcon} />
         Тэги
       </div>
       <div
@@ -225,7 +230,7 @@ const Sidebar = observer(() => {
         })}
         onClick={() => setScreen("PROJECTS")}
       >
-        <FolderIcon className={styles.groupElementIcon} />
+        <BookIcon className={styles.groupElementAwesomeIcon} />
         Проекты
       </div>
 

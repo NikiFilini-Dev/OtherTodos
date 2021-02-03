@@ -1,7 +1,5 @@
 import React from "react"
 import PropTypes from "prop-types"
-// import { observer } from "mobx-react"
-// import classNames from "classnames"
 import styles from "./styles.styl"
 import Task from "../Task/index.jsx"
 import Label from "../Label/index.jsx"
@@ -10,41 +8,121 @@ import ListIcon from "../../assets/list.svg"
 import { observer } from "mobx-react"
 import { useMst } from "../../models/RootStore"
 import moment from "moment"
+import classNames from "classnames"
+import ChevronRight from "../../assets/awesome/solid/chevron-right.svg"
+import TrashIcon from "../../assets/awesome/regular/trash-alt.svg"
+import { Draggable, Droppable } from "react-beautiful-dnd"
 
-const TaskList = observer(({ tasks, name, showHidden }) => {
-  const { selectedDate, screen } = useMst()
-  if (!showHidden) tasks = tasks.filter(task => !task.done)
+const TaskList = observer(
+  ({
+    tasks,
+    name,
+    showHidden,
+    renamable,
+    onNameChange,
+    showEmpty,
+    deletable,
+    onDelete,
+    dnd,
+  }) => {
+    const { selectedDate, screen } = useMst()
+    if (!showHidden) tasks = tasks.filter(task => !task.done)
 
-  tasks = tasks.filter(
-    task =>
-      !task.repeating ||
-      (task.date === selectedDate && screen === "TODAY") ||
-      moment(task.date, "YYYY-MM-DD")._d <= new Date(),
-  )
+    const [folded, setIsFolded] = React.useState(false)
 
-  tasks.sort((a, b) => b.id - a.id)
-  tasks.sort((a, b) => a.priority - b.priority)
+    tasks = tasks.filter(
+      task =>
+        !task.repeating ||
+        (task.date === selectedDate && screen === "TODAY") ||
+        moment(task.date, "YYYY-MM-DD")._d <= new Date(),
+    )
 
-  if (!tasks.length) return <div />
+    tasks.sort((a, b) => b.id - a.id)
+    tasks.sort((a, b) => a.priority - b.priority)
 
-  const totalCount = tasks.length
-  return (
-    <div className={styles.wrapper}>
-      <div className={styles.info}>
-        <span className={styles.name}>{name}</span>
+    if (!tasks.length && !showEmpty) return <div />
 
-        <div className={styles.actions}>
-          <Label icon={ListIcon} text={totalCount} />
+    const totalCount = tasks.length
+
+    console.log(tasks)
+
+    const Content = observer(({ provided, snapshot }) => {
+      return (
+        <div className={styles.tasks} ref={provided.innerRef}>
+          {!folded &&
+            tasks.map((task, index) => (
+              <Draggable
+                key={`task_${task.id}`}
+                draggableId={`task_${task.id}`}
+                type={"TASK"}
+                index={index}
+              >
+                {(provided, snapshot) => (
+                  <div>
+                    <div
+                      id={`task_${task.id}`}
+                      style={provided.draggableStyle}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                      className={styles.project}
+                    >
+                      <Task key={`task_${task.id}`} task={task} />
+                    </div>
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Draggable>
+            ))}
+          {provided.placeholder}
         </div>
+      )
+    })
+
+    return (
+      <div className={styles.wrapper}>
+        <div className={styles.info}>
+          <div
+            className={classNames({
+              [styles.fold]: true,
+              [styles.active]: folded,
+            })}
+            onClick={() => setIsFolded(!folded)}
+          >
+            <ChevronRight />
+          </div>
+          {renamable ? (
+            <input
+              value={name}
+              onChange={onNameChange}
+              className={styles.nameInput}
+            />
+          ) : (
+            <span className={styles.name}>{name}</span>
+          )}
+
+          <div className={styles.actions}>
+            {deletable && (
+              <div className={styles.delete} onClick={onDelete}>
+                <TrashIcon />
+              </div>
+            )}
+            <Label icon={ListIcon} text={totalCount} />
+          </div>
+        </div>
+        <Droppable
+          droppableId={dnd || Math.random() + "cat"}
+          type={"TASK"}
+          isDropDisabled={!dnd}
+        >
+          {(provided, snapshot) => (
+            <Content provided={provided} snapshot={snapshot} />
+          )}
+        </Droppable>
       </div>
-      <div className={styles.tasks}>
-        {tasks.map(task => (
-          <Task key={`task_${task.id}`} task={task} />
-        ))}
-      </div>
-    </div>
-  )
-})
+    )
+  },
+)
 
 TaskList.propTypes = {
   tasks: PropTypes.any,

@@ -149,6 +149,7 @@ jsonStorage
         console.log(migration)
         v._storeVersion = migration.id
       })
+      // v.projects = v.projects.map(project => ({ ...project, categories: [] }))
       jsonStorage.setItem("root_store", JSON.stringify(v)).then(() => hydrate())
 
       return true

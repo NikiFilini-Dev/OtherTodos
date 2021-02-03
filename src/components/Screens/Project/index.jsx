@@ -13,6 +13,7 @@ import {
   useKeyListener,
   useTrap,
 } from "../../../tools/hooks"
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 
 const Project = observer(() => {
   const {
@@ -79,6 +80,100 @@ const Project = observer(() => {
     setIsNewTaskShown(false)
   }
 
+  const addCategory = () => {
+    selectedProject.addCategory()
+  }
+
+  let onDragEnd = ({ destination, source, draggableId }) => {
+    if (!destination) return
+    console.log(destination, source, draggableId)
+
+    const id = parseInt(draggableId.match(/.+?_(\d+)/)[1])
+
+    if (draggableId.startsWith("category")) {
+      const arr = [...selectedProject.categories]
+
+      arr.forEach(item => {
+        if (item.id === id) return item.setIndex(destination.index)
+
+        if (
+          source.index < destination.index &&
+          item.index > source.index &&
+          item.index <= destination.index
+        ) {
+          item.setIndex(item.index - 1)
+        }
+
+        if (
+          source.index > destination.index &&
+          item.index >= destination.index &&
+          item.index < source.index
+        ) {
+          item.setIndex(item.index + 1)
+        }
+      })
+    }
+    if (draggableId.startsWith("task")) {
+      let match = destination.droppableId.match(/.+?_(\d+)/)
+      const targetCategory = match ? parseInt(match[1]) : null
+
+      let task = all.find(t => t.id === id)
+      task.setCategory(targetCategory)
+
+      console.log("SET CATEGORY", task)
+    }
+  }
+  window.onDragEndFunc = onDragEnd
+
+  const Content = observer(({ provided, snapshot }) => {
+    const categories = [...selectedProject.categories]
+    categories.sort((a, b) => a.index - b.index)
+    return (
+      <div className={styles.listOfLists} ref={provided.innerRef}>
+        <TaskList
+          tasks={tasks.filter(t => !t.category)}
+          name={"Без категории"}
+          showEmpty
+          dnd={"nocategory"}
+        />
+        {categories.map((category, index) => (
+          <Draggable
+            key={`category_${category.id}`}
+            draggableId={`category_${category.id}`}
+            type={"CATEGORY"}
+            index={index}
+          >
+            {(provided, snapshot) => (
+              <div
+                style={provided.draggableStyle}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                ref={provided.innerRef}
+                className={styles.project}
+              >
+                <TaskList
+                  tasks={category.sortedTasks}
+                  name={category.name}
+                  renamable
+                  showEmpty
+                  dnd={`task_list_${category.id}`}
+                  deletable={!category.tasks.length}
+                  onDelete={() => selectedProject.removeCategory(category)}
+                  onNameChange={e => category.setName(e.target.value)}
+                />
+              </div>
+            )}
+          </Draggable>
+        ))}
+        {provided.placeholder}
+        <div className={styles.addCategory} onClick={addCategory}>
+          <PlusIcon />
+          Добавить категорию
+        </div>
+      </div>
+    )
+  })
+
   return (
     <div className={styles.screen}>
       <div className={styles.info}>
@@ -123,9 +218,12 @@ const Project = observer(() => {
         }}
         tags={tags}
       />
-      <div className={styles.listOfLists}>
-        <TaskList tasks={tasks} name={"Задачи"} />
-      </div>
+
+      <Droppable droppableId={"projectsList"} type={"PROJECT"}>
+        {(provided, snapshot) => (
+          <Content provided={provided} snapshot={snapshot} />
+        )}
+      </Droppable>
     </div>
   )
 })

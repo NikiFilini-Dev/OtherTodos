@@ -1,6 +1,7 @@
 .wrapper
   display flex
   flex-direction column
+  //margin-bottom 16px
 
 .info
   display flex
@@ -19,9 +20,45 @@
   margin-left 8px
 
 .name
-  font-weight 600
+  font-weight 500
   font-size 16px
+
+.nameInput
+  font-weight 500
+  font-size 16px
+  padding 0
+  border 0
 
 .tasks
   display flex
   flex-direction column
+  min-height 16px
+
+.fold
+  width 12px
+  height 12px
+  margin-right 8px
+  display flex
+  align-items center
+  justify-content center
+  cursor pointer
+  transform rotate(90deg)
+
+  svg
+    height 1em
+    fill var(--brand)
+
+  &.active
+    transform rotate(0deg)
+
+.delete
+  height 32px
+  width 32px
+  display flex
+  align-items center
+  justify-content center
+  cursor pointer
+
+  svg
+    height 1em
+    fill #8e8e8e

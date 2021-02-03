@@ -2,6 +2,7 @@ import { types, getParent } from "mobx-state-tree"
 import Project from "./Project"
 import Tag from "./Tag"
 import moment from "moment"
+import ProjectCategory from "./ProjectCategory"
 
 const Task = types
   .model("Task", {
@@ -17,6 +18,7 @@ const Task = types
     creationDate: types.maybeNull(types.string),
     repeatEvery: types.maybeNull(types.optional(types.integer, 0)),
     repeating: types.optional(types.boolean, false),
+    category: types.maybeNull(types.reference(ProjectCategory)),
   })
   .views(self => ({
     get done() {
@@ -65,6 +67,9 @@ const Task = types
     },
     setText(text) {
       self.text = text
+    },
+    setCategory(c) {
+      self.category = c
     },
   }))
 

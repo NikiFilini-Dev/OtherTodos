@@ -58,8 +58,7 @@ const RootStore = types
   .actions(self => ({
     insertTempTask() {
       const task = JSON.parse(JSON.stringify(self.tempTask.toJSON()))
-      const newId = self.lastId(self.tasks.all) + 1
-      task.id = newId
+      task.id = self.lastId(self.tasks.all) + 1
       self.testTask = null
       self.tasks.add(task)
     },

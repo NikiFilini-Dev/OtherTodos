@@ -11,6 +11,7 @@ import Tags from "components/Screens/Tags"
 import Inbox from "components/Screens/Inbox"
 import Log from "components/Screens/Log"
 import Sidebar from "components/Sidebar"
+import { DragDropContext } from "react-beautiful-dnd"
 
 const App = observer(() => {
   const { screen } = useMst()
@@ -35,13 +36,18 @@ const App = observer(() => {
       Screen = Projects
       break
   }
+
+  React.useEffect(() => (window.onDragEndFunc = () => {}), [])
+
   return (
     <div className={styles.app}>
       <div className={styles.sideBar}>
         <Sidebar />
       </div>
       <div className={styles.main}>
-        <Screen />
+        <DragDropContext onDragEnd={(...args) => window.onDragEndFunc(...args)}>
+          <Screen />
+        </DragDropContext>
       </div>
     </div>
   )
