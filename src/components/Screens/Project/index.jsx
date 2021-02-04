@@ -123,6 +123,7 @@ const Project = observer(() => {
       console.log("SET CATEGORY", task)
     }
   }
+  React.useEffect(() => (window.onDragEndFunc = onDragEnd))
   window.onDragEndFunc = onDragEnd
 
   const Content = observer(({ provided, snapshot }) => {

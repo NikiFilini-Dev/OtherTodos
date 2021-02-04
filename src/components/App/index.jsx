@@ -37,7 +37,13 @@ const App = observer(() => {
       break
   }
 
-  React.useEffect(() => (window.onDragEndFunc = () => {}), [])
+  React.useEffect(
+    () =>
+      (window.onDragEndFunc = window.onDragEndFunc
+        ? window.onDragEndFunc
+        : () => {}),
+    [],
+  )
 
   return (
     <div className={styles.app}>
