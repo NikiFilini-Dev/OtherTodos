@@ -7,12 +7,15 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "build": "electron-builder build --mac",
     "make": "electron-forge make",
-    "publish": "electron-forge publish",
+    "ef:publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
     "lintjs": "eslint . --ext js --ext jsx",
-    "lintcss": "stylelint ."
+    "lintcss": "stylelint .",
+    "pub:base": "git push && git push --tags && yarn publish",
+    "pub:patch": "yarn version --patch && yarn pub:base",
+    "pub:minor": "yarn version --minor && yarn pub:base",
+    "pub:major": "yarn version --major && yarn pub:base"
   },
   "keywords": [],
   "author": {
@@ -42,6 +45,7 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
     "@electron-forge/plugin-webpack": "^6.0.0-beta.54",
+    "@electron-forge/publisher-github": "^6.0.0-beta.54",
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
