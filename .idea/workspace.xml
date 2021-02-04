@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.flowconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/forge.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/forge.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/external/editor/document.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/external/editor/document.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/external/editor/markdown_document.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/external/editor/markdown_document.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +88,7 @@
       <workItem from="1611063482992" duration="10323000" />
       <workItem from="1611831654952" duration="16864000" />
       <workItem from="1612371627758" duration="4308000" />
-      <workItem from="1612434089557" duration="2715000" />
+      <workItem from="1612434089557" duration="7232000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -265,7 +265,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612366151463</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Автоматическое версионирование">
+      <created>1612448079339</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1612448079339</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Автоматический линтинг">
+      <created>1612452794112</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1612452794112</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -284,7 +298,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Базовый туду лист" />
     <MESSAGE value="Заметки" />
     <MESSAGE value="Рабочие теги и экраны" />
     <MESSAGE value="Добавление тегов и проектов" />
@@ -308,7 +321,9 @@
     <MESSAGE value="Фильтр по тэгам в журнале" />
     <MESSAGE value="Рич эдитор бета" />
     <MESSAGE value="FontAwesome, категории в проектах" />
-    <option name="LAST_COMMIT_MESSAGE" value="FontAwesome, категории в проектах" />
+    <MESSAGE value="Автоматическое версионирование" />
+    <MESSAGE value="Автоматический линтинг" />
+    <option name="LAST_COMMIT_MESSAGE" value="Автоматический линтинг" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -13,7 +13,7 @@ import {
   useKeyListener,
   useTrap,
 } from "../../../tools/hooks"
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
+import { Droppable, Draggable } from "react-beautiful-dnd"
 
 const Project = observer(() => {
   const {
@@ -126,7 +126,7 @@ const Project = observer(() => {
   React.useEffect(() => (window.onDragEndFunc = onDragEnd))
   window.onDragEndFunc = onDragEnd
 
-  const Content = observer(({ provided, snapshot }) => {
+  const Content = observer(({ provided }) => {
     const categories = [...selectedProject.categories]
     categories.sort((a, b) => a.index - b.index)
     return (
@@ -144,7 +144,7 @@ const Project = observer(() => {
             type={"CATEGORY"}
             index={index}
           >
-            {(provided, snapshot) => (
+            {provided => (
               <div
                 style={provided.draggableStyle}
                 {...provided.draggableProps}

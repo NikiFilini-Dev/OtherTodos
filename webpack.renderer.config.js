@@ -1,4 +1,3 @@
-const webpack = require("webpack")
 const rules = require("./webpack.rules")
 const path = require("path")
 

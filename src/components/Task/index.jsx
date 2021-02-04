@@ -21,12 +21,10 @@ import ListIcon from "assets/list.svg"
 import {
   useFloatMenu,
   useClickOutsideRef,
-  useInput,
   useContextMenu,
   useKeyListener,
 } from "tools/hooks"
 import { useMst } from "models/RootStore"
-import TextareaAutosize from "react-autosize-textarea"
 
 const inRef = (ref, e) => {
   return (

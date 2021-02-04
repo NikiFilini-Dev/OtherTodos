@@ -1,4 +1,4 @@
-import { types, getParent } from "mobx-state-tree"
+import { types } from "mobx-state-tree"
 import Project from "./Project"
 import Tag from "./Tag"
 import moment from "moment"

@@ -1,6 +1,6 @@
-const {
-  utils: { fromBuildIdentifier },
-} = require("@electron-forge/core")
+// const {
+//   utils: { fromBuildIdentifier },
+// } = require("@electron-forge/core")
 
 require("dotenv").config()
 

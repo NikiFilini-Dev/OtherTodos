@@ -1,4 +1,4 @@
-import { types, destroy, getParent, detach } from "mobx-state-tree"
+import { types, destroy, getParent } from "mobx-state-tree"
 import Task from "./Task"
 import moment from "moment"
 

@@ -7,7 +7,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 const Tag = observer(({ tag, index }) => {
   return (
     <Draggable draggableId={`tag_${tag.id}`} type={"TAG"} index={index}>
-      {(provided, snapshot) => (
+      {provided => (
         <div>
           <div
             id={`tag_${tag.id}`}
@@ -59,7 +59,7 @@ const Tags = observer(() => {
   }
 
   console.log("TAGS:", tags)
-  const Content = observer(({ provided, snapshot }) => {
+  const Content = observer(({ provided }) => {
     let sortedTags = [...tags]
     sortedTags.sort((a, b) => a.index - b.index)
     console.log(sortedTags.map(i => i.index))

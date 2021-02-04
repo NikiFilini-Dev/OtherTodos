@@ -1,5 +1,4 @@
 import React from "react"
-import PropTypes from "prop-types"
 import styles from "./styles.styl"
 import FloatMenu from "components/FloatMenu"
 import { useFloatMenu } from "tools/hooks"
@@ -24,7 +23,7 @@ const DateSelector = observer(({ value, onSelect, triggerRef, right }) => {
     tasks: { all },
   } = useMst()
 
-  const [_, box] = useFloatMenu(triggerRef)
+  const [, box] = useFloatMenu(triggerRef)
   const [date, setDate] = React.useState(value)
 
   const months = [

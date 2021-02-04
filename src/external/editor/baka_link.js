@@ -2,7 +2,7 @@
 
 export default class BakaLink extends HTMLElement {
   connectedCallback(): void {
-    const observer = new MutationObserver(mutations => {
+    const observer = new MutationObserver(() => {
       if (this.querySelector("a")) return
       this.update()
     })

@@ -2,6 +2,7 @@
 
 import Document from "./document"
 
+// noinspection RegExpRedundantEscape,RegExpSingleCharAlternation
 export default class MarkdownDocument extends Document {
   set styles(value: any) {}
   get styles() {
@@ -35,18 +36,6 @@ export default class MarkdownDocument extends Document {
         }
         ranges.service.push([start - n, start])
         ranges.service.push([end, end + n])
-        return match
-      })
-    }
-
-    const processOneLine = (styleNames, regexp, n) => {
-      text.replace(regexp, (fullMatch, match, index) => {
-        let start = index
-        let end = index + fullMatch.length
-        for (let styleName of styleNames) {
-          ranges[styleName].push([start, end])
-        }
-        ranges.service.push([start, start + n])
         return match
       })
     }
@@ -96,10 +85,7 @@ export default class MarkdownDocument extends Document {
       text = text.replace(regexp, (full: string, match: string) => {
         return (
           full.slice(0, n) +
-          match.replace(/[*`_#~]/gm, (unsafe: string, index: number) => {
-            // replaced_occurrences.push(unsafe, index)
-            return "Ɇ"
-          }) +
+          match.replace(/[*`_#~]/gm, "Ɇ") +
           full.slice(full.length - n, full.length)
         )
       })
@@ -107,7 +93,7 @@ export default class MarkdownDocument extends Document {
 
     escapeMarkup(/```\n([^`]+?)\n```/gm, 4)
     escapeMarkup(
-      /(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b[-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/gm,
+      /(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/gm,
       0,
     )
     escapeMarkup(/(?<!`|\\)`([^`\n\r]+?)`/gm, 1)
@@ -117,7 +103,7 @@ export default class MarkdownDocument extends Document {
 
     process(
       ["link"],
-      /(?<!\]\()(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b[-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/gm,
+      /(?<!\]\()(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/gm,
       0,
     )
 
@@ -269,7 +255,7 @@ export default class MarkdownDocument extends Document {
     let styles: {
       [string]: [number, number],
     } = {}
-    for (let styleName in this.styles) {
+    for (let styleName of Object.keys(this.styles)) {
       for (let i = 0; i < this.styles[styleName].ranges.length; i++) {
         let range = this.styles[styleName].ranges[i]
         if (!(range[0] <= offset && range[1] >= offset)) continue
@@ -281,7 +267,7 @@ export default class MarkdownDocument extends Document {
 
   getStylesAtRange(start: number, end: number) {
     let styles: string[] = []
-    for (let styleName in this.styles) {
+    for (let styleName of Object.keys(this.styles)) {
       for (let i = 0; i < this.styles[styleName].ranges.length; i++) {
         let range: [number, number] = this.styles[styleName].ranges[i]
         if (

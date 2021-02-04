@@ -11,7 +11,7 @@ const PrioritySelector = ({ priority, onSelect = () => {} }) => {
   const [isShown, setIsShown] = React.useState(false)
   const wrapperRef = React.useRef(null)
 
-  const onPriorityClick = (priority) => {
+  const onPriorityClick = priority => {
     setIsShown(false)
     onSelect(priority)
   }
@@ -23,7 +23,7 @@ const PrioritySelector = ({ priority, onSelect = () => {} }) => {
     }
   })
 
-  useClick(document, (e) => {
+  useClick(document, e => {
     if (
       wrapperRef.current &&
       isShown &&

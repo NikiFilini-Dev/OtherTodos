@@ -32,10 +32,4 @@ const Category = types
     },
   }))
 
-function genId() {
-  return () => {
-    Category
-  }
-}
-
 export default Category

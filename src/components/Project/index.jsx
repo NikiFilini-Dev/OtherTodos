@@ -1,9 +1,7 @@
-import React, { useState } from "react"
+import React from "react"
 import PropTypes from "prop-types"
 import { observer } from "mobx-react"
-import classNames from "classnames"
 import styles from "./styles.styl"
-import { useMst } from "../../models/RootStore"
 import Task from "../Task/index.jsx"
 
 const Project = observer(({ project }) => {
@@ -13,7 +11,7 @@ const Project = observer(({ project }) => {
     <div>
       <h2 className={styles.title}>{project.name}:</h2>
       <ul className={styles.list}>
-        {tasks.map((task) => (
+        {tasks.map(task => (
           <Task key={`task_${task.id}`} task={task} />
         ))}
       </ul>

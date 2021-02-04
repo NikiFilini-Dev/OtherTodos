@@ -7,9 +7,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:sonarjs/recommended",
     "plugin:import/warnings",
-    "plugin:promise/recommended",
     "plugin:prettier/recommended",
     "prettier/react"
   ],
@@ -26,19 +24,12 @@
   "plugins": [
     "babel",
     "react",
-    "sonarjs",
-    "promise",
     "prettier"
   ],
   "rules": {
+    "no-useless-escape": "off",
     "react/react-in-jsx-scope": "off",
-    "indent": [
-      "error",
-      2,
-      {
-        "SwitchCase": 1
-      }
-    ],
+    "indent": "off",
     "quotes": [
       "error",
       "double",

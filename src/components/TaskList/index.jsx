@@ -46,7 +46,7 @@ const TaskList = observer(
 
     console.log(tasks)
 
-    const Content = observer(({ provided, snapshot }) => {
+    const Content = observer(({ provided }) => {
       return (
         <div className={styles.tasks} ref={provided.innerRef}>
           {!folded &&
@@ -57,7 +57,7 @@ const TaskList = observer(
                 type={"TASK"}
                 index={index}
               >
-                {(provided, snapshot) => (
+                {provided => (
                   <div>
                     <div
                       id={`task_${task.id}`}

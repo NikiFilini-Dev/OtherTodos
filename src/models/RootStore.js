@@ -1,4 +1,4 @@
-import { types, detach, destroy } from "mobx-state-tree"
+import { types, destroy } from "mobx-state-tree"
 import { createContext, useContext } from "react"
 import TaskList from "./TaskList"
 import Task, { factory as taskFactory } from "./Task"
@@ -118,7 +118,7 @@ const RootStore = types
       }
       destroy(project)
     },
-    applyMigration(migration) {},
+    applyMigration() {},
   }))
 
 export default RootStore

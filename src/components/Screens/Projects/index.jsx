@@ -11,7 +11,7 @@ const Project = observer(({ project, index }) => {
       type={"PROJECT"}
       index={index}
     >
-      {(provided, snapshot) => (
+      {provided => (
         <div>
           <div
             id={`project_${project.id}`}
@@ -63,7 +63,7 @@ const Projects = observer(() => {
   }
 
   console.log("PROJECTS:", projects)
-  const Content = observer(({ provided, snapshot }) => {
+  const Content = observer(({ provided }) => {
     let sortedProjects = [...projects]
     sortedProjects.sort((a, b) => a.index - b.index)
     console.log(sortedProjects.map(i => i.index))

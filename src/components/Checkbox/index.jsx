@@ -4,8 +4,8 @@ import classNames from "classnames"
 import PropTypes from "prop-types"
 import Checkmark from "assets/checkmark.svg"
 
-const Checkbox = forwardRef(({ onChange, checked, className }, ref) => {
-  const onClick = (e) => {
+const Checkbox = ({ onChange, checked, className }, ref) => {
+  const onClick = e => {
     e.preventDefault()
     if (onChange) onChange(!checked)
   }
@@ -25,7 +25,7 @@ const Checkbox = forwardRef(({ onChange, checked, className }, ref) => {
       <Checkmark className={styles.checkmark} />
     </div>
   )
-})
+}
 
 Checkbox.propTypes = {
   checked: PropTypes.bool,
@@ -33,4 +33,4 @@ Checkbox.propTypes = {
   className: PropTypes.string,
 }
 
-export default Checkbox
+export default forwardRef(Checkbox)

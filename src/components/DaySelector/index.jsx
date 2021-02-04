@@ -23,7 +23,7 @@ const DaySelector = observer(() => {
   const weeks = buildCalendar(date._d, all)
   const weekdays = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]
 
-  const onTriggerClick = (e) => {
+  const onTriggerClick = e => {
     e.preventDefault()
     setIsCalendarShown(!isCalendarShown)
   }
@@ -55,7 +55,7 @@ const DaySelector = observer(() => {
           </div>
           <div className={styles.calendar}>
             <div className={styles.week}>
-              {weekdays.map((name) => (
+              {weekdays.map(name => (
                 <span
                   key={name}
                   className={classNames({

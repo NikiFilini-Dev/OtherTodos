@@ -1,5 +1,4 @@
 const { app, autoUpdater, BrowserWindow, Menu, MenuItem } = require("electron")
-const path = require("path")
 
 const server = "https://hazel-three-pi.vercel.app/"
 const feed = `${server}/update/${process.platform}/${app.getVersion()}`
@@ -33,6 +32,7 @@ const createWindow = () => {
   // and load the index.html of the app.
   console.log(process)
   if (process.env.P_ENV === "debug") mainWindow.webContents.openDevTools()
+  // eslint-disable-next-line no-undef
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
   const systemMenu = Menu.getApplicationMenu()

@@ -73,6 +73,11 @@ export default class Document {
   history: Array<InsertEvent | DeleteEvent | SetTextEvent | ReplaceEvent> = []
   historyOffset: number = -1
 
+  set styles(value: any) {}
+  get styles() {
+    return []
+  }
+
   undo() {
     if (this.historyOffset === this.history.length - 1) return
     this.historyOffset += 1
@@ -116,15 +121,18 @@ export default class Document {
     this.fireUpdate(item, "redo")
   }
 
+  // eslint-disable-next-line no-unused-vars
   beforeDelete(start: number, n: number) {}
 
+  // eslint-disable-next-line no-unused-vars
   beforeInsert(start: number, text: string) {}
 
+  // eslint-disable-next-line no-unused-vars
   mark(styleName: string, range: [number, number]): number {}
 
   getStylesAtOffset(offset: number) {
     let styles = {}
-    for (let styleName in this.styles) {
+    for (let styleName of Object.keys(this.styles)) {
       for (let i = 0; i < this.styles[styleName].ranges.length; i++) {
         let range = this.styles[styleName].ranges[i]
         if (!(range[0] < offset && range[1] >= offset)) continue
@@ -136,7 +144,7 @@ export default class Document {
 
   getStylesAtRange(start: number, end: number) {
     let styles = []
-    for (let styleName in this.styles) {
+    for (let styleName of Object.keys(this.styles)) {
       for (let i = 0; i < this.styles[styleName].ranges.length; i++) {
         let range = this.styles[styleName].ranges[i]
         if (
@@ -166,7 +174,7 @@ export default class Document {
     start: number,
     value: string,
     save: boolean = true,
-    update: bolean = true,
+    update: boolean = true,
   ): void {
     const historyItem: InsertEvent = { type: "insert", value, start }
     if (save) {
@@ -257,7 +265,7 @@ export default class Document {
     let nodes: Array<MyNode> = []
     let result = ""
 
-    for (let styleName in this.styles) {
+    for (let styleName of Object.keys(this.styles)) {
       for (let range of this.styles[styleName].ranges) {
         allRanges.push({ style: styleName, range })
       }
