@@ -1,7 +1,7 @@
 {
   "name": "othertodos",
   "productName": "OtherTodos",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Best app for tasks",
   "main": ".webpack/main",
   "scripts": {
@@ -11,7 +11,7 @@
     "ef:publish": "electron-forge publish",
     "lint": "eslint . --fix --ext js --ext jsx",
     "pretty": "prettier --write \"./**/*.js*(x)\"",
-    "pub:base": "git push && git push --tags && yarn publish",
+    "pub:base": "git push && git push --tags && yarn ef:publish",
     "pub:patch": "yarn version --patch && yarn pub:base",
     "pub:minor": "yarn version --minor && yarn pub:base",
     "pub:major": "yarn version --major && yarn pub:base",
