@@ -1,7 +1,7 @@
 {
   "name": "othertodos",
   "productName": "OtherTodos",
-  "version": "1.5.1",
+  "version": "1.7.0",
   "description": "Best app for tasks",
   "main": ".webpack/main",
   "scripts": {
@@ -93,10 +93,12 @@
     "react-autosize-textarea": "^7.1.0",
     "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^17.0.1",
+    "react-hot-loader": "^4.13.0",
     "react-mobx": "^0.0.4",
     "stlint": "^1.0.65",
     "svg-url-loader": "^7.1.1",
-    "url-loader": "^4.1.1"
+    "url-loader": "^4.1.1",
+    "uuid": "^8.3.2"
   },
   "browserslist": [
     "last 1 version"
