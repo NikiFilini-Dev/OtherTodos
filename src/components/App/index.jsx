@@ -6,8 +6,6 @@ import { useMst } from "models/RootStore"
 
 import Today from "components/Screens/Today"
 import Project from "components/Screens/Project"
-import Projects from "components/Screens/Projects"
-import Tags from "components/Screens/Tags"
 import Inbox from "components/Screens/Inbox"
 import Log from "components/Screens/Log"
 import Sidebar from "components/Sidebar"
@@ -15,7 +13,13 @@ import { DragDropContext } from "react-beautiful-dnd"
 import Timeline from "../Timeline"
 
 const App = observer(() => {
-  const { screen } = useMst()
+  const {
+    screen,
+    sidebarWidth,
+    setSidebarWidth,
+    timelineWidth,
+    setTimelineWidth,
+  } = useMst()
   let Screen = Today
   switch (screen) {
     case "INBOX":
@@ -27,14 +31,8 @@ const App = observer(() => {
     case "PROJECT":
       Screen = Project
       break
-    case "TAGS":
-      Screen = Tags
-      break
     case "LOG":
       Screen = Log
-      break
-    case "PROJECTS":
-      Screen = Projects
       break
   }
 
@@ -46,17 +44,69 @@ const App = observer(() => {
     [],
   )
 
+  const onDragStart = (getInitialData, processMove, prevent = () => false) => {
+    return e => {
+      if (prevent(e)) return
+      e.preventDefault()
+      const startX = e.pageX
+      const initialData = getInitialData()
+      const onMove = moveE => {
+        processMove(moveE, initialData, startX)
+      }
+      document.addEventListener("mousemove", onMove)
+      document.addEventListener("mouseup", () => {
+        document.removeEventListener("mousemove", onMove)
+      })
+    }
+  }
+
+  const sidebarRef = React.useRef(null)
+  const onResizeSidebarStart = onDragStart(
+    () => ({}),
+    e => {
+      const width = e.pageX - 32
+      setSidebarWidth(width > 250 ? width : 250)
+    },
+  )
+
+  const timelineRef = React.useRef(null)
+  const onResizeTimelineStart = onDragStart(
+    () => ({}),
+    e => {
+      const box = timelineRef.current.getBoundingClientRect()
+      const width = box.right - e.pageX - 18
+      console.log(width)
+      setTimelineWidth(width > 350 ? width : 350)
+    },
+  )
+
   return (
-    <div className={styles.app}>
-      <div className={styles.sideBar}>
+    <div
+      className={styles.app}
+      style={{
+        "--sidebar-width": `${sidebarWidth}px`,
+        "--timeline-width": `${timelineWidth}px`,
+      }}
+    >
+      <div className={styles.sideBar} ref={sidebarRef}>
         <Sidebar />
       </div>
+      <div
+        className={styles.resizeHandle}
+        draggable={true}
+        onDragStart={e => onResizeSidebarStart(e)}
+      />
       <div className={styles.main}>
         <DragDropContext onDragEnd={(...args) => window.onDragEndFunc(...args)}>
           <Screen />
         </DragDropContext>
       </div>
-      <div className={styles.timeline}>
+      <div
+        className={styles.resizeHandle}
+        draggable={true}
+        onDragStart={e => onResizeTimelineStart(e)}
+      />
+      <div className={styles.timeline} ref={timelineRef}>
         <Timeline />
       </div>
     </div>

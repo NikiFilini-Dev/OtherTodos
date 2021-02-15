@@ -1,6 +1,6 @@
 calendarWidth = 250px
 sideBarWidth = 250px
-mainWidth = calc(100% - 16px - 250px - 16px - 250px)
+mainWidth = calc(100% - 16px - var(--sidebar-width) - 16px - var(--timeline-width))
 
 mainBlockRadius = 8.5px
 mainBlockPadding = 36px 24px
@@ -41,25 +41,33 @@ body
   display flex
   height: 100%
 
+.resizeHandle
+  height 100%
+  width 3px
+  //background var(--brand)
+  cursor col-resize
+
 .sideBar
   background white
   padding: mainBlockPadding
-  width 250px
+  width var(--sidebar-width)
   border-radius 8.5px
   overflow-y auto
+  margin-right 8px
 
 .main
   padding 36px 16px
   background white
   border-radius 8.5px
-  margin 0 16px
+  margin 0 8px
   width mainWidth
 
 .timeline
-  width 346px
+  width var(--timeline-width)
   background white
   border-radius 8.5px
   padding mainBlockPadding
+  margin-left 8px
 
 *::-webkit-scrollbar {
   width: 3px;

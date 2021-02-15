@@ -8,33 +8,53 @@ import ArrowRightIcon from "assets/arrow_right.svg"
 import FolderIcon from "assets/folder.svg"
 import PlusIcon from "assets/plus.svg"
 import HistoryIcon from "assets/awesome/solid/history.svg"
-import TagsIcon from "assets/awesome/solid/tags.svg"
-import BookIcon from "assets/awesome/solid/book.svg"
 import PlaneIcon from "assets/awesome/regular/paper-plane.svg"
 import EnvelopeIcon from "assets/awesome/regular/envelope.svg"
 import propTypes from "prop-types"
 import { useContextMenu, useInput } from "tools/hooks"
 import moment from "moment"
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 
-const Element = ({ active, onClick, icon, text, deletable, onDelete }) => {
-  const Icon = icon
-  const ref = React.useRef(null)
-  if (deletable)
-    useContextMenu(ref, [{ label: "Delete", click: () => onDelete() }])
-  return (
-    <div
-      className={classNames({
-        [styles.groupElement]: true,
-        [styles.active]: active,
-      })}
-      onClick={onClick}
-      ref={ref}
-    >
-      <Icon className={styles.groupElementIcon} />
-      {text}
-    </div>
-  )
-}
+const Element = observer(
+  ({
+    active,
+    onClick,
+    icon,
+    text,
+    deletable,
+    onDelete,
+    droppableId,
+    provided,
+  }) => {
+    const Icon = icon
+    const [savedRef, setSavedRef] = React.useState({ current: null })
+
+    const setRef = ref => {
+      provided.innerRef(ref)
+      if (savedRef.current !== ref) setSavedRef({ current: ref })
+    }
+
+    if (deletable)
+      useContextMenu(savedRef, [{ label: "Delete", click: () => onDelete() }])
+
+    return (
+      <div
+        className={classNames({
+          [styles.groupElement]: true,
+          [styles.active]: active,
+        })}
+        onClick={onClick}
+        ref={setRef}
+        id={droppableId}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+      >
+        <Icon className={styles.groupElementIcon} />
+        {text}
+      </div>
+    )
+  },
+)
 
 Element.propTypes = {
   active: propTypes.bool,
@@ -46,8 +66,17 @@ Element.propTypes = {
 }
 
 const Group = observer(
-  ({ name, elements, isActive, onElementClick, onAdd, onDelete }) => {
-    const [isOpen, setIsOpen] = React.useState(true)
+  ({
+    name,
+    elements,
+    isActive,
+    onElementClick,
+    onAdd,
+    onDelete,
+    type,
+    initiallyFolded,
+  }) => {
+    const [isOpen, setIsOpen] = React.useState(!initiallyFolded)
     const [isAddActive, setIsAddActive] = React.useState(false)
     const [newName, setNewName] = React.useState("")
     if (!isActive) isActive = () => {}
@@ -82,6 +111,65 @@ const Group = observer(
       setIsAddActive(!isAddActive)
     }
 
+    let onDragEnd = ({ destination, source, draggableId }) => {
+      if (!destination) return
+      console.log(destination, source, draggableId)
+
+      const id = parseInt(draggableId.match(/.+?_(\d+)/)[1])
+
+      const arr = [...elements]
+
+      arr.forEach(tag => {
+        if (tag.id === id) return tag.setIndex(destination.index)
+
+        if (
+          source.index < destination.index &&
+          tag.index > source.index &&
+          tag.index <= destination.index
+        ) {
+          tag.setIndex(tag.index - 1)
+        }
+
+        if (
+          source.index > destination.index &&
+          tag.index >= destination.index &&
+          tag.index < source.index
+        ) {
+          tag.setIndex(tag.index + 1)
+        }
+      })
+    }
+
+    const Content = observer(({ provided }) => {
+      return (
+        <div className={styles.elements} ref={provided.innerRef}>
+          {isOpen &&
+            elements.map((element, i) => (
+              <Draggable
+                draggableId={`${type}_${element.id}`}
+                type={type}
+                index={i}
+                key={`${type}_${i}`}
+              >
+                {provided => (
+                  <Element
+                    key={`${type}_${element.id}`}
+                    text={element.name}
+                    icon={FolderIcon}
+                    active={isActive(element)}
+                    onClick={onElementClick(element)}
+                    deletable={!!onDelete}
+                    onDelete={() => onDelete(element)}
+                    provided={provided}
+                  />
+                )}
+              </Draggable>
+            ))}
+          {provided.placeholder}
+        </div>
+      )
+    })
+
     return (
       <div>
         <div className={styles.groupTitle} onClick={onTitleClick}>
@@ -111,18 +199,11 @@ const Group = observer(
             />
           </div>
         )}
-        {isOpen &&
-          elements.map(project => (
-            <Element
-              key={`project_${project.id}`}
-              text={project.name}
-              icon={FolderIcon}
-              active={isActive(project)}
-              onClick={onElementClick(project)}
-              deletable={!!onDelete}
-              onDelete={() => onDelete(project)}
-            />
-          ))}
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId={"projectsList"} type={"PROJECT"}>
+            {provided => <Content provided={provided} />}
+          </Droppable>
+        </DragDropContext>
       </div>
     )
   },
@@ -149,11 +230,18 @@ const Sidebar = observer(() => {
     createProject,
     deleteProject,
     deleteTag,
+    selectTag,
+    createTag,
   } = useMst()
 
   const addProject = name => {
     selectProject(createProject(name))
     setScreen("PROJECT")
+  }
+
+  const addTag = name => {
+    selectTag(createTag(name))
+    setScreen("TAG")
   }
 
   const rmProject = project => {
@@ -169,8 +257,19 @@ const Sidebar = observer(() => {
     deleteProject(project)
   }
 
+  const rmTag = tag => {
+    console.log("DELETE TAGT", tag.toJSON())
+    all.forEach(task => {
+      task.removeTag(tag)
+    })
+    deleteTag(tag)
+  }
+
   const sortedProjects = [...projects]
   sortedProjects.sort((a, b) => a.index - b.index)
+
+  const sortedTags = [...tags]
+  sortedTags.sort((a, b) => a.index - b.index)
 
   return (
     <div>
@@ -211,27 +310,6 @@ const Sidebar = observer(() => {
         <HistoryIcon className={styles.groupElementAwesomeIcon} />
         Журнал
       </div>
-      <div
-        className={classNames({
-          [styles.groupElement]: true,
-          [styles.active]: screen === "TAGS",
-        })}
-        onClick={() => setScreen("TAGS")}
-      >
-        <TagsIcon className={styles.groupElementAwesomeIcon} />
-        Тэги
-      </div>
-      <div
-        className={classNames({
-          [styles.groupElement]: true,
-          [styles.active]: screen === "PROJECTS",
-        })}
-        onClick={() => setScreen("PROJECTS")}
-      >
-        <BookIcon className={styles.groupElementAwesomeIcon} />
-        Проекты
-      </div>
-
       <Group
         name={"Проекты"}
         elements={sortedProjects}
@@ -246,6 +324,16 @@ const Sidebar = observer(() => {
         }}
         onAdd={addProject}
         onDelete={rmProject}
+      />
+      <Group
+        name={"Тэги"}
+        elements={sortedTags}
+        isActive={() => false}
+        onElementClick={() => {}}
+        onAdd={addTag}
+        onDelete={rmTag}
+        initiallyFolded={true}
+        type={"TAG"}
       />
     </div>
   )

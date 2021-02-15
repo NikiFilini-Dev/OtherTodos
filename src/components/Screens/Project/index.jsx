@@ -8,6 +8,7 @@ import TaskList from "components/TaskList"
 import Task from "../../Task"
 import Button from "../../Button"
 import PlusIcon from "../../../assets/plus.svg"
+import FolderPlusIcon from "assets/awesome/solid/folder-plus.svg"
 import {
   useClickOutsideRef,
   useKeyListener,
@@ -170,9 +171,12 @@ const Project = observer(() => {
           </Draggable>
         ))}
         {provided.placeholder}
-        <div className={styles.addCategory} onClick={addCategory}>
+        <div
+          className={styles.addCategory}
+          onClick={() => setIsNewTaskShown(true)}
+        >
           <PlusIcon />
-          Добавить категорию
+          Добавить задачу
         </div>
       </div>
     )
@@ -199,11 +203,19 @@ const Project = observer(() => {
           </span>
         )}
 
-        <Button
-          icon={PlusIcon}
-          onClick={() => setIsNewTaskShown(!isNewTaskShown)}
-          activated={isNewTaskShown}
-        />
+        <div className={styles.actions}>
+          <Button
+            icon={FolderPlusIcon}
+            awesome={true}
+            onClick={() => addCategory()}
+            secondary={true}
+          />
+          <Button
+            icon={PlusIcon}
+            onClick={() => setIsNewTaskShown(!isNewTaskShown)}
+            activated={isNewTaskShown}
+          />
+        </div>
       </div>
       {isNewTaskShown && (
         <div>

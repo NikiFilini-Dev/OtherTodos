@@ -17,20 +17,15 @@ const RootStore = types
     selectedDate: moment().format("YYYY-MM-DD"),
     timelineDate: moment().format("YYYY-MM-DD"),
     screen: types.optional(
-      types.enumeration([
-        "INBOX",
-        "TODAY",
-        "PROJECT",
-        "TAGS",
-        "LOG",
-        "PROJECTS",
-      ]),
+      types.enumeration(["INBOX", "TODAY", "PROJECT", "LOG"]),
       "TODAY",
     ),
     selectedProject: types.maybeNull(types.reference(Project)),
     tags: types.array(Tag),
     selectedTag: types.maybeNull(types.reference(Tag)),
     _storeVersion: types.optional(types.number, 0),
+    sidebarWidth: types.optional(types.number, 250),
+    timelineWidth: types.optional(types.number, 350),
   })
   .views(self => ({
     get lastTaskId() {
@@ -60,6 +55,12 @@ const RootStore = types
     },
   }))
   .actions(self => ({
+    setSidebarWidth(val) {
+      self.sidebarWidth = val
+    },
+    setTimelineWidth(val) {
+      self.timelineWidth = val
+    },
     insertTempTask() {
       const task = JSON.parse(JSON.stringify(self.tempTask.toJSON()))
       task.id = self.lastId(self.tasks.all) + 1

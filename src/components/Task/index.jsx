@@ -17,7 +17,9 @@ import TagsSelector from "components/TagsSelector"
 import FolderIcon from "assets/folder.svg"
 import CalendarIcon from "assets/calendar.svg"
 import StarIcon from "assets/star.svg"
-import ListIcon from "assets/list.svg"
+import TrashIcon from "assets/awesome/regular/trash-alt.svg"
+import TagsIcon from "assets/awesome/solid/tags.svg"
+import RedoIcon from "assets/awesome/solid/redo.svg"
 import {
   useFloatMenu,
   useClickOutsideRef,
@@ -104,6 +106,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   const onTaskClick = e => {
     if (
       isActive &&
+      !active &&
       (e.target.classList.contains(styles.task) ||
         e.target.classList.contains(styles.line)) &&
       !isDatePickerOpen &&
@@ -289,12 +292,6 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
           [styles.fullOnly]: true,
         })}
       >
-        {/*<TextareaAutosize*/}
-        {/*  className={styles.notes}*/}
-        {/*  placeholder="Заметки"*/}
-        {/*  onChange={e => task.setNote(e.target.value)}*/}
-        {/*  value={task.note}*/}
-        {/*/>*/}
         <baka-editor ref={editorRef} />
       </div>
       <div
@@ -315,7 +312,6 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
           [styles.line]: true,
           [styles.padding]: true,
           [styles.fullOnly]: true,
-          [styles.spaceBetween]: true,
         })}
       >
         <div style={{ position: "relative" }}>
@@ -340,22 +336,36 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             )}
           </span>
         </div>
-        <div>
-          Повторять каждые{" "}
+        {!active && (
+          <div className={styles.delete} onClick={() => deleteTask(task)}>
+            <TrashIcon />
+          </div>
+        )}
+        <div
+          className={classNames({
+            [styles.redo]: true,
+            [styles.active]: task.repeatEvery,
+          })}
+        >
+          <RedoIcon />
           <input
             type={"number"}
             className={styles.repeatCount}
             value={task.repeatEvery || 0}
             onChange={e => task.setRepeatEvery(e.target.value)}
+            min={0}
           />{" "}
-          дней
+          д.
         </div>
         <div style={{ position: "relative" }} ref={tagsRef}>
           <div
-            className={styles.tagsTrigger}
+            className={classNames({
+              [styles.tagsTrigger]: true,
+              [styles.active]: isTagsSelectorOpen,
+            })}
             onClick={() => setIsTagsSelectorOpen(true)}
           >
-            <ListIcon className={styles.tagsTriggerIcon} viewBox={"0 0 14 8"} />
+            <TagsIcon className={styles.tagsTriggerIcon} />
           </div>
           {isTagsSelectorOpen && (
             <FloatMenu targetBox={tagsBox}>

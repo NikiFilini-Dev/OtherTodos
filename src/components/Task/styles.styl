@@ -108,7 +108,7 @@
   margin-left auto
 
 .priorityWrapper
-  margin-left 0px
+  margin-left 0
   cursor pointer
 
 .tag
@@ -154,6 +154,18 @@
 .fullDateIcon
   margin-right 12px
 
+.delete
+  margin-right 24px
+  margin-left auto
+  cursor pointer
+
+  svg
+    height 1em
+    fill gray
+
+.delete ~ .redo
+  margin-left 0
+
 .tagsTrigger
   width 32px
   height 32px
@@ -161,12 +173,31 @@
   align-items center
   justify-content center
   cursor pointer
+  &.active svg
+    fill var(--brand)
 
 .tagsTriggerIcon
-  height: 10px
-  width: auto
-  color gray
+  height 1em
+  fill gray
+  transition fill .2s
 
 .repeatCount
   display inline
   width 50px
+
+.redo
+  display flex
+  align-items center
+  margin-right 12px
+  margin-left auto
+
+  input
+    margin 0 6px
+
+  svg
+    height 1em
+    fill gray
+    transition fill .2s
+
+  &.active svg
+    fill var(--brand)

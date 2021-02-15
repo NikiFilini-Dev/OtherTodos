@@ -86,5 +86,5 @@ export function useContextMenu(ref, items = []) {
       },
       false,
     )
-  })
+  }, [ref.current])
 }
