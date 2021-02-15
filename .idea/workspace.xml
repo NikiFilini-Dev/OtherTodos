@@ -5,11 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.flowconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/external/editor/document.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/external/editor/document.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/external/editor/markdown_document.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/external/editor/markdown_document.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/forge.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/forge.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/App/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/App/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DaySelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DaySelector/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DaySelector/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DaySelector/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FloatMenu/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FloatMenu/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FloatMenu/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FloatMenu/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PriorityIndicator/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PriorityIndicator/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PrioritySelector/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PrioritySelector/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Screens/Log/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Log/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Sidebar/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Task/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Task/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TaskList/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TaskList/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TimeSelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TimeSelector/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TimeSelector/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TimeSelector/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timeline/Event/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timeline/Event/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timeline/Event/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timeline/Event/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timeline/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timeline/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timeline/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timeline/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Project.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Project.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/ProjectCategory.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ProjectCategory.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/RootStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/RootStore.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Task.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Task.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/TimelineEvent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/TimelineEvent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webpack.rules.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.rules.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +46,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1lK3VM7LQlBPMXXm2Cr8xHmk6I6" />
   <component name="ProjectViewState">
@@ -28,6 +64,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js.linters.configure.manually.selectedeslint" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -46,7 +83,7 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="prettier.import.notification.dismissed" value="true" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
-    <property name="settings.editor.selected.configurable" value="settings.javascript.prettier" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -57,6 +94,10 @@
       <recent name="$PROJECT_DIR$/src/components/Screens" />
       <recent name="$PROJECT_DIR$/src/assets" />
       <recent name="$PROJECT_DIR$/src/assets/fonts" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/Timeline" />
+      <recent name="$PROJECT_DIR$/src/components" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -88,7 +129,9 @@
       <workItem from="1611063482992" duration="10323000" />
       <workItem from="1611831654952" duration="16864000" />
       <workItem from="1612371627758" duration="4308000" />
-      <workItem from="1612434089557" duration="7232000" />
+      <workItem from="1612434089557" duration="11462000" />
+      <workItem from="1612964722243" duration="655000" />
+      <workItem from="1612965618456" duration="50457000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -279,7 +322,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612452794112</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Автоматический линтинг">
+      <created>1612453428562</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1612453428562</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -298,7 +348,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Заметки" />
     <MESSAGE value="Рабочие теги и экраны" />
     <MESSAGE value="Добавление тегов и проектов" />
     <MESSAGE value="MVP" />
@@ -323,7 +372,8 @@
     <MESSAGE value="FontAwesome, категории в проектах" />
     <MESSAGE value="Автоматическое версионирование" />
     <MESSAGE value="Автоматический линтинг" />
-    <option name="LAST_COMMIT_MESSAGE" value="Автоматический линтинг" />
+    <MESSAGE value="Таймлайн" />
+    <option name="LAST_COMMIT_MESSAGE" value="Таймлайн" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -1,9 +1,9 @@
-calendarWidth = 0px
+calendarWidth = 250px
 sideBarWidth = 250px
-mainWidth = calc(100% - 0px - 250px - 16px)
+mainWidth = calc(100% - 16px - 250px - 16px - 250px)
 
 mainBlockRadius = 8.5px
-mainBlockPadding = 47px 36px
+mainBlockPadding = 36px 24px
 
 brand = #2F45C5
 accent = #FB2B76
@@ -27,6 +27,7 @@ body
 
 :global(#app)
   padding 24px
+  padding-top 0
   font-family SF Pro Display, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif
   //background #F7F7F7
   height calc(100vh - 36px)
@@ -52,7 +53,6 @@ body
   background white
   border-radius 8.5px
   margin 0 16px
-  margin-right 0
   width mainWidth
 
 .timeline

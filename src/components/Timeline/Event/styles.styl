@@ -1,0 +1,101 @@
+.event
+  border-radius 8px
+  background var(--background)
+  color white
+  padding 6px
+  display flex
+  //flex-direction column
+  font-size 14px
+  height 100%
+  position relative
+  min-height calc(12px + 1em)
+  .start
+    font-weight 200
+    color var(--light)
+    margin-right 3px
+
+  .name
+    color var(--normal)
+    font-weight 500
+
+.allDayEvent
+  background var(--background)
+  padding 3px 6px
+  border-radius 3px
+  margin-bottom 6px
+
+  .start
+    display none
+
+  .name
+    color var(--normal)
+
+.eventMenu
+  padding 24px
+  font-family SF Pro Display, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif
+  display flex
+  flex-direction column
+  align-items flex-start
+
+  .menuAction
+    width 1.1em
+    height 1.1em
+    display flex
+    justify-content center
+    align-items center
+    cursor pointer
+
+    svg
+      width .9em
+      fill #9BABC5
+
+  input
+    padding 0
+    border 0
+    font-weight 500
+    font-size 1.1em
+    font-family SF Pro Display, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif
+    &:active,&:focus
+      outline none
+
+  .menuItem
+    margin-top 16px
+    display flex
+    justify-content space-between
+    width 100%
+
+    &:first-child
+      margin-top 0
+
+    &.disabled
+      opacity .5
+
+    .menuItemName
+      color #9BABC5
+      font-size 0.95em
+      font-weight 300
+    .menuItemValue
+      color var(--brand)
+
+    .colorVariant
+      background var(--color)
+      width 24px
+      height 24px
+      margin 0 3px
+      display inline-flex
+      justify-content center
+      align-items center
+      cursor pointer
+
+      &.selected::before
+        content " "
+        display inline-block
+        width 18px
+        height 18px
+        border 2px solid white
+
+
+
+.eventAndMenuWrapper
+  height 100%
+  width 100%

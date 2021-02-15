@@ -2,7 +2,7 @@ import { getRoot, types } from "mobx-state-tree"
 
 const Category = types
   .model("ProjectCategory", {
-    id: types.identifierNumber,
+    id: types.identifier,
     name: types.string,
     index: types.number,
     folded: types.boolean,

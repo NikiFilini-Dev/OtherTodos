@@ -26,7 +26,8 @@ const Log = observer(() => {
   })
   tags = [...tags]
 
-  const reversedDays = Object.keys(days).reverse()
+  let reversedDays = Object.keys(days).reverse()
+  reversedDays.sort((a, b) => moment(b)._d - moment(a)._d)
 
   const onTagSelect = tag => {
     setSelectedTag(tag)

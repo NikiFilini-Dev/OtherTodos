@@ -1,6 +1,6 @@
-// const {
-//   utils: { fromBuildIdentifier },
-// } = require("@electron-forge/core")
+const {
+  utils: { fromBuildIdentifier },
+} = require("@electron-forge/core")
 
 require("dotenv").config()
 
@@ -13,21 +13,21 @@ module.exports = {
   },
   buildIdentifier: process.env.IS_BETA ? "beta" : "prod",
   packagerConfig: {
-    // appBundleId: fromBuildIdentifier({
-    //   beta: "com.beta.othertodos",
-    //   prod: "com.othertodos",
-    // }),
-    // osxSign: {
-    //   identity: process.env.IDENTITY,
-    //   "hardened-runtime": true,
-    //   entitlements: "entitlements.plist",
-    //   "entitlements-inherit": "entitlements.plist",
-    //   "signature-flags": "library",
-    // },
-    // osxNotarize: {
-    //   appleId: process.env.APPLE_ID,
-    //   appleIdPassword: process.env.APPLE_ID_PASSWORD,
-    // },
+    appBundleId: fromBuildIdentifier({
+      beta: "com.beta.othertodos",
+      prod: "com.othertodos",
+    }),
+    osxSign: {
+      identity: process.env.IDENTITY,
+      "hardened-runtime": true,
+      entitlements: "entitlements.plist",
+      "entitlements-inherit": "entitlements.plist",
+      "signature-flags": "library",
+    },
+    osxNotarize: {
+      appleId: process.env.APPLE_ID,
+      appleIdPassword: process.env.APPLE_ID_PASSWORD,
+    },
   },
   publishers: [
     {

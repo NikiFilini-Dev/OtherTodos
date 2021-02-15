@@ -14,7 +14,7 @@ const padTime = s => {
   return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`
 }
 
-const Event = observer(({ event, boxRef }) => {
+const Event = observer(({ event, boxRef, isDragging }) => {
   const { deleteEvent } = useMst()
   const box =
     boxRef && boxRef.current ? boxRef.current.getBoundingClientRect() : {}
@@ -28,6 +28,7 @@ const Event = observer(({ event, boxRef }) => {
   const startMenuRef = React.useRef(null)
   const endMenuRef = React.useRef(null)
   const onEventClick = e => {
+    if (isDragging) return
     e.preventDefault()
     setEditActive(true)
   }
@@ -66,6 +67,10 @@ const Event = observer(({ event, boxRef }) => {
 
     endHours = endHours + (hours - startHours)
     endMinutes = endMinutes + (minutes - startMinutes)
+    if (endMinutes < 0) {
+      endHours -= 1
+      endMinutes += 60
+    }
 
     event.setStart(`${hours}:${minutes}`)
     event.setEnd(`${endHours}:${endMinutes}`)
@@ -89,6 +94,62 @@ const Event = observer(({ event, boxRef }) => {
     event.setEnd(`${endHours}:${endMinutes}`)
 
     setEndActive(false)
+  }
+
+  const colors = [
+    "#FFE8EA",
+    "#DEE4F5",
+    "#E57373",
+    "#A5D6A7",
+    "#FFE082",
+    "#B39DDB",
+  ]
+
+  let styleVars = {}
+  switch (event.color) {
+    case "#B39DDB":
+      styleVars = {
+        "--background": "#B39DDB",
+        "--light": "#5E35B1",
+        "--normal": "#512DA8",
+      }
+      break
+    case "#FFE082":
+      styleVars = {
+        "--background": "#FFE082",
+        "--light": "#FFB300",
+        "--normal": "#FFA000",
+      }
+      break
+    case "#A5D6A7":
+      styleVars = {
+        "--background": "#A5D6A7",
+        "--light": "#43A047",
+        "--normal": "#388E3C",
+      }
+      break
+    case "#E57373":
+      styleVars = {
+        "--background": "#Ef9A9A",
+        "--light": "#EF5350",
+        "--normal": "#E53935",
+      }
+      break
+    case "#DEE4F5":
+      styleVars = {
+        "--background": "#DEE4F5",
+        "--light": "#9BABC5",
+        "--normal": "#3D5496",
+      }
+      break
+    case "#FFE8EA":
+    default:
+      styleVars = {
+        "--background": "#FFE8EA",
+        "--light": "#c62828",
+        "--normal": "#b71c1c",
+      }
+      break
   }
 
   return (
@@ -172,6 +233,19 @@ const Event = observer(({ event, boxRef }) => {
                 {padTime(event.end)}
               </span>
             </div>
+            <div className={styles.menuItem}>
+              {colors.map(color => (
+                <div
+                  key={`color_${color}`}
+                  className={classNames({
+                    [styles.colorVariant]: true,
+                    [styles.selected]: color === event.color,
+                  })}
+                  onClick={() => event.setColor(color)}
+                  style={{ "--color": color }}
+                />
+              ))}
+            </div>
           </div>
         </FloatMenu>
       )}
@@ -179,6 +253,7 @@ const Event = observer(({ event, boxRef }) => {
         className={event.allDay ? styles.allDayEvent : styles.event}
         ref={ref}
         onClick={onEventClick}
+        style={styleVars}
       >
         <span className={styles.start}>{padTime(event.start)}</span>
         <span className={styles.name}>{event.name}</span>

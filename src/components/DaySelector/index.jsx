@@ -13,14 +13,11 @@ function capitalizeFirstLetter(string) {
 }
 
 const DaySelector = observer(() => {
-  const [isCalendarShown, setIsCalendarShown] = React.useState(true)
-  const {
-    selectedDate,
-    selectDate,
-    tasks: { all },
-  } = useMst()
-  const date = moment(selectedDate)
-  const weeks = buildCalendar(date._d, all)
+  const [isCalendarShown, setIsCalendarShown] = React.useState(false)
+  const { timelineDate, setTimelineDate } = useMst()
+  const date = moment(timelineDate, "YYYY-MM-DD")
+  console.log(date, timelineDate)
+  const weeks = buildCalendar(new Date(), date._d, [])
   const weekdays = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]
 
   const onTriggerClick = e => {
@@ -78,7 +75,7 @@ const DaySelector = observer(() => {
                       [styles.today]: day.today,
                       [styles.selected]: day.selected,
                     })}
-                    onClick={() => selectDate(day.date)}
+                    onClick={() => setTimelineDate(day.date)}
                   >
                     {day.number}
                     {day.hasTasks && <span className={styles.hasTasksMark} />}

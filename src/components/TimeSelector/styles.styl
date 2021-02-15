@@ -1,0 +1,58 @@
+.wrapper
+  display flex
+  flex-direction column
+  font-family SF Pro Display, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif
+  padding 16px
+
+  .select
+    display flex
+    align-items center
+
+    .delimiter
+      font-size 32px
+      padding 0 4px
+      margin-top -12px
+      user-select none
+      color #9BABC5
+
+    .row
+      display flex
+      flex-direction column
+      justify-content center
+      align-items center
+
+      .action
+        width 28px
+        height 28px
+        display flex
+        justify-content center
+        align-items center
+        cursor pointer
+
+        &:hover svg
+          fill var(--brand)
+
+        svg
+          width 20px
+          fill #9BABC5
+          transition fill .2s
+
+      input
+        padding 0
+        text-align center
+        width 58px
+        font-size 32px
+        line-height 1em
+        margin 3px 0
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button
+          -webkit-appearance none
+
+  .save
+    background var(--brand)
+    padding 8px 16px
+    border-radius 5px
+    color white
+    margin-top 12px
+    cursor pointer

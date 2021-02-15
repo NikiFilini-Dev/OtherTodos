@@ -1,5 +1,6 @@
 import { destroy, getRoot, types } from "mobx-state-tree"
 import ProjectCategory from "./ProjectCategory"
+import { v4 as uuidv4 } from "uuid"
 
 const Project = types
   .model("Project", {
@@ -31,12 +32,8 @@ const Project = types
         (acc, category) => (category.index > acc ? category.index : acc),
         -1,
       )
-      const lastId = self.categories.reduce(
-        (acc, category) => (category.id > acc ? category.id : acc),
-        0,
-      )
       data = {
-        id: lastId + 1,
+        id: uuidv4(),
         name: "Новая категория",
         index: lastIndex + 1,
         folded: false,

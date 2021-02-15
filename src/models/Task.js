@@ -26,6 +26,9 @@ const Task = types
     },
   }))
   .actions(self => ({
+    setCloseDate(val) {
+      self.closeDate = val
+    },
     setRepeatEvery(n) {
       if (!n) n = 0
       self.repeatEvery = parseInt(n)

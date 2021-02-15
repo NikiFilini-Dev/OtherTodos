@@ -84,11 +84,13 @@ const Project = observer(() => {
     selectedProject.addCategory()
   }
 
-  let onDragEnd = ({ destination, source, draggableId }) => {
+  let onDragEnd = args => {
+    if (!args) return
+    let { destination, source, draggableId } = args
     if (!destination) return
     console.log(destination, source, draggableId)
 
-    const id = parseInt(draggableId.match(/.+?_(\d+)/)[1])
+    const id = parseInt(draggableId.match(/.+?_(.+)/)[1])
 
     if (draggableId.startsWith("category")) {
       const arr = [...selectedProject.categories]
@@ -114,8 +116,8 @@ const Project = observer(() => {
       })
     }
     if (draggableId.startsWith("task")) {
-      let match = destination.droppableId.match(/.+?_(\d+)/)
-      const targetCategory = match ? parseInt(match[1]) : null
+      let match = destination.droppableId.match(/.+?_(.+)/)
+      const targetCategory = match ? match[1] : null
 
       let task = all.find(t => t.id === id)
       task.setCategory(targetCategory)
@@ -129,6 +131,26 @@ const Project = observer(() => {
   const Content = observer(({ provided }) => {
     const categories = [...selectedProject.categories]
     categories.sort((a, b) => a.index - b.index)
+    const Category = observer(({ provided, category }) => (
+      <div
+        style={provided.draggableStyle}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        ref={provided.innerRef}
+        className={styles.project}
+      >
+        <TaskList
+          tasks={category.sortedTasks}
+          name={category.name}
+          renamable
+          showEmpty
+          dnd={`tasklist_${category.id}`}
+          deletable={!category.tasks.length}
+          onDelete={() => selectedProject.removeCategory(category)}
+          onNameChange={e => category.setName(e.target.value)}
+        />
+      </div>
+    ))
     return (
       <div className={styles.listOfLists} ref={provided.innerRef}>
         <TaskList
@@ -144,26 +166,7 @@ const Project = observer(() => {
             type={"CATEGORY"}
             index={index}
           >
-            {provided => (
-              <div
-                style={provided.draggableStyle}
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-                ref={provided.innerRef}
-                className={styles.project}
-              >
-                <TaskList
-                  tasks={category.sortedTasks}
-                  name={category.name}
-                  renamable
-                  showEmpty
-                  dnd={`task_list_${category.id}`}
-                  deletable={!category.tasks.length}
-                  onDelete={() => selectedProject.removeCategory(category)}
-                  onNameChange={e => category.setName(e.target.value)}
-                />
-              </div>
-            )}
+            {provided => <Category provided={provided} category={category} />}
           </Draggable>
         ))}
         {provided.placeholder}

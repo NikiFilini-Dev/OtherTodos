@@ -15,7 +15,6 @@
         height: 36px;
         -webkit-app-region: drag;
         width: 100vw;
-        background: #08080878;
         position: absolute;
         left: 0;
         top: 0;
@@ -24,7 +23,7 @@
       }
       #clearData {
         margin-left: auto;
-        margin-right: 16px;
+        margin-right: 24px;
       }
 
       :root {
@@ -136,25 +135,36 @@
       #editor .service_image_title {
         color: darkorange;
       }
+      #modals {
+          position: absolute;
+          width: 100vw;
+          height: 100vh;
+          left: 0;
+          top: 0;
+          pointer-events: none;
+      }
+
+      #modals > div {
+          position: absolute;
+          width: 100vw;
+          height: 100vh;
+          left: 0;
+          top: 0;
+          pointer-events: none;
+      }
+      #modals > div > * {
+          pointer-events: all;
+      }
     </style>
   </head>
   <body>
     <div id="titlebar">
-      <button id="clearData">Очистить память</button>
     </div>
     <div id="app">
       <div>
-
-        <script>
-          function clearData() {
-            console.log("CLEAR")
-            jsonStorage.clear()
-            location.reload()
-          }
-          document.querySelector("#clearData").addEventListener("click", clearData);
-        </script>
       </div>
     </div>
+  <div id="modals"></div>
   </body>
 <svg height="0" width="0">
   <defs>

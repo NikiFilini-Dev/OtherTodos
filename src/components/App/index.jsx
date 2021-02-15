@@ -12,6 +12,7 @@ import Inbox from "components/Screens/Inbox"
 import Log from "components/Screens/Log"
 import Sidebar from "components/Sidebar"
 import { DragDropContext } from "react-beautiful-dnd"
+import Timeline from "../Timeline"
 
 const App = observer(() => {
   const { screen } = useMst()
@@ -54,6 +55,9 @@ const App = observer(() => {
         <DragDropContext onDragEnd={(...args) => window.onDragEndFunc(...args)}>
           <Screen />
         </DragDropContext>
+      </div>
+      <div className={styles.timeline}>
+        <Timeline />
       </div>
     </div>
   )

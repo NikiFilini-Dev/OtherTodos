@@ -4,14 +4,18 @@ import TaskList from "./TaskList"
 import Task, { factory as taskFactory } from "./Task"
 import Project from "./Project"
 import Tag from "./Tag"
+import TimelineEvent from "./TimelineEvent"
 import moment from "moment"
+import { v4 as uuidv4 } from "uuid"
 
 const RootStore = types
   .model("Store", {
     tempTask: types.maybeNull(Task),
+    events: types.array(TimelineEvent),
     tasks: TaskList,
     projects: types.array(Project),
     selectedDate: moment().format("YYYY-MM-DD"),
+    timelineDate: moment().format("YYYY-MM-DD"),
     screen: types.optional(
       types.enumeration([
         "INBOX",
@@ -65,6 +69,12 @@ const RootStore = types
     setTempTask(task) {
       self.tempTask = task
     },
+    setTimelineDate(val) {
+      if (typeof val !== "string") {
+        val = moment(val).format("YYYY-MM-DD")
+      }
+      self.timelineDate = val
+    },
     createTask(data = {}) {
       const newId = self.lastId(self.tasks.all) + 1000
       return Task.create(taskFactory(newId, data))
@@ -88,6 +98,12 @@ const RootStore = types
       const tag = Tag.create({ id: newId, name, project, index: lastIndex + 1 })
       self.tags.push(tag)
       return tag
+    },
+    createEvent(data) {
+      self.events.push({
+        ...data,
+        id: uuidv4(),
+      })
     },
     selectDate(date) {
       self.selectedDate = moment(date).format("YYYY-MM-DD")
@@ -117,6 +133,9 @@ const RootStore = types
         if (self.screen === "PROJECT") self.screen = "INBOX"
       }
       destroy(project)
+    },
+    deleteEvent(event) {
+      destroy(event)
     },
     applyMigration() {},
   }))

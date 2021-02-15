@@ -14,6 +14,7 @@ const data = {
   screen: "TODAY",
   selectedProject: null,
   selectedTag: null,
+  selectedDate: moment().format("YYYY-MM-DD"),
   tags: [],
   projects: [],
   tasks: { all: [] },
@@ -165,3 +166,4 @@ function render() {
   )
 }
 window.moment = moment
+window.Store = Store

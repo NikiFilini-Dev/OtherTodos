@@ -192,17 +192,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             onChange={e => task.setText(e.target.value)}
           />
         )}
-        {!isActive && Boolean(expired) && Boolean(task.project) && (
-          <span
-            className={classNames({
-              [styles.project]: true,
-              [styles.inline]: true,
-            })}
-          >
-            <FolderIcon className={styles.projectIcon} />
-            {task.project.name}
-          </span>
-        )}
+        <div className={styles.puller} />
         <div className={styles.tags}>
           {!isActive &&
             Boolean(task.tags.length) &&
@@ -218,6 +208,17 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
               </span>
             ))}
         </div>
+        {!isActive && Boolean(expired) && Boolean(task.project) && (
+          <span
+            className={classNames({
+              [styles.project]: true,
+              [styles.inline]: true,
+            })}
+          >
+            <FolderIcon className={styles.projectIcon} />
+            {task.project.name}
+          </span>
+        )}
         {!isActive && task.date && (
           <span
             className={classNames({
