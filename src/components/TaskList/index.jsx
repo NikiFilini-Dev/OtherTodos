@@ -12,6 +12,7 @@ import classNames from "classnames"
 import ChevronRight from "../../assets/awesome/solid/chevron-right.svg"
 import TrashIcon from "../../assets/awesome/regular/trash-alt.svg"
 import { Draggable, Droppable } from "react-beautiful-dnd"
+import { useInput } from "../../tools/hooks"
 
 const TaskList = observer(
   ({
@@ -29,6 +30,7 @@ const TaskList = observer(
     if (!showHidden) tasks = tasks.filter(task => !task.done)
 
     const [folded, setIsFolded] = React.useState(false)
+    const inputRef = React.useRef(null)
 
     tasks = tasks.filter(
       task =>
@@ -44,7 +46,10 @@ const TaskList = observer(
 
     const totalCount = tasks.length
 
-    console.log(tasks)
+    useInput(inputRef, e => {
+      if (e.key !== "Enter") return
+      inputRef.current.blur()
+    })
 
     const Content = observer(({ provided }) => {
       return (
@@ -96,6 +101,7 @@ const TaskList = observer(
               value={name}
               onChange={onNameChange}
               className={styles.nameInput}
+              ref={inputRef}
             />
           ) : (
             <span className={styles.name}>{name}</span>

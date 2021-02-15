@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Timeline/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timeline/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Timeline/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timeline/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TaskList/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TaskList/index.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +23,9 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedIndex" value="1" />
   </component>
   <component name="ProjectId" id="1lK3VM7LQlBPMXXm2Cr8xHmk6I6" />
   <component name="ProjectViewState">
@@ -102,7 +103,7 @@
       <workItem from="1612371627758" duration="4308000" />
       <workItem from="1612434089557" duration="11462000" />
       <workItem from="1612964722243" duration="655000" />
-      <workItem from="1612965618456" duration="51991000" />
+      <workItem from="1612965618456" duration="52868000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -307,7 +308,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613388135801</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="Переход к текущему времени при фокусе">
+      <created>1613389777650</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1613389777650</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -326,8 +334,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Рабочие теги и экраны" />
-    <MESSAGE value="Добавление тегов и проектов" />
     <MESSAGE value="MVP" />
     <MESSAGE value="Удаление проектов и тэгов" />
     <MESSAGE value="Куча правок" />
@@ -351,7 +357,9 @@
     <MESSAGE value="Автоматическое версионирование" />
     <MESSAGE value="Автоматический линтинг" />
     <MESSAGE value="Таймлайн" />
-    <option name="LAST_COMMIT_MESSAGE" value="Таймлайн" />
+    <MESSAGE value="Переход к текущему времени при фокусе" />
+    <MESSAGE value="Выход из редактирования категории по энтеру" />
+    <option name="LAST_COMMIT_MESSAGE" value="Выход из редактирования категории по энтеру" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
