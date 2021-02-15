@@ -40,7 +40,7 @@ module.exports = {
           prerelease: false,
         },
         prerelease: false,
-        authToken: "23f7b5f8fa36495abe2c0daf2511bf652d1ff606",
+        authToken: process.env.GITHUB_TOKEN,
       },
     },
   ],
