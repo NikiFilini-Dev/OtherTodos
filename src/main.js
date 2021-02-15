@@ -49,6 +49,10 @@ const createWindow = () => {
     },
   })
 
+  app.on("browser-window-focus", () =>
+    mainWindow.webContents.send("focus", "focused"),
+  )
+
   const electronVibrancy = require("electron-vibrancy")
   let material = 0
   electronVibrancy.SetVibrancy(mainWindow, material)

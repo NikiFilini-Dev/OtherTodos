@@ -8,6 +8,7 @@ import ChevronRight from "assets/awesome/solid/chevron-right.svg"
 import DaySelector from "components/DaySelector"
 import Event from "./Event"
 import { useMst } from "models/RootStore"
+const ipc = require("electron").ipcRenderer
 
 const Timeline = observer(() => {
   const { events, createEvent, timelineDate, setTimelineDate } = useMst()
@@ -35,13 +36,29 @@ const Timeline = observer(() => {
   }
   React.useEffect(() => {
     setNowOffset(calcOffset())
+    ref.current.scrollTop =
+      nowRef.current.offsetTop - ref.current.getBoundingClientRect().height / 2
     const timer = setInterval(() => setNowOffset(calcOffset()), 10000)
     return () => {
       clearInterval(timer)
     }
   }, [])
 
+  React.useEffect(() => {
+    const onFocus = () => {
+      ref.current.scrollTop =
+        nowRef.current.offsetTop -
+        ref.current.getBoundingClientRect().height / 2
+    }
+    onFocus()
+    ipc.on("focus", onFocus)
+    return () => {
+      ipc.off("focus", onFocus)
+    }
+  }, [])
+
   const ref = React.useRef(null)
+  const nowRef = React.useRef(null)
   const [eventRefs, setEventRefs] = React.useState({})
 
   const onPrevClick = () => {
@@ -162,6 +179,16 @@ const Timeline = observer(() => {
     },
   )
 
+  const [initialScrolled, setInitialScrolled] = React.useState(false)
+
+  React.useEffect(() => {
+    console.log("TOP CHANGED", nowRef.current.offsetTop)
+    if (initialScrolled) return
+    ref.current.scrollTop =
+      nowRef.current.offsetTop - ref.current.getBoundingClientRect().height / 2
+    if (nowRef.current.offsetTop > 6) setInitialScrolled(true)
+  }, [nowRef.current?.getBoundingClientRect().top])
+
   return (
     <div className={styles.wrapper}>
       <DaySelector />
@@ -231,6 +258,7 @@ const Timeline = observer(() => {
         <div
           className={styles.now}
           style={{ "--now-offset": `${nowOffset}px` }}
+          ref={nowRef}
         >
           <span>{moment().format("HH:mm")}</span>
           <div className={styles.line} />
