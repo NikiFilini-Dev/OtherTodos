@@ -42,8 +42,6 @@ const TaskList = observer(
     tasks.sort((a, b) => b.id - a.id)
     tasks.sort((a, b) => a.priority - b.priority)
 
-    if (!tasks.length && !showEmpty) return <div />
-
     const totalCount = tasks.length
 
     useInput(inputRef, e => {
@@ -84,6 +82,7 @@ const TaskList = observer(
       )
     })
 
+    if (!tasks.length && !showEmpty) return <div />
     return (
       <div className={styles.wrapper}>
         <div className={styles.info}>

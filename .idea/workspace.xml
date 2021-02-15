@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/forge.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/forge.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TaskList/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TaskList/index.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,7 +45,7 @@
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.detected.package.stylelint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
-    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.eslint" value="/usr/local/bin/node" />
     <property name="node.js.path.for.package.standard" value="project" />
     <property name="node.js.path.for.package.stylelint" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
@@ -104,7 +104,8 @@
       <workItem from="1612371627758" duration="4308000" />
       <workItem from="1612434089557" duration="11462000" />
       <workItem from="1612964722243" duration="655000" />
-      <workItem from="1612965618456" duration="63591000" />
+      <workItem from="1612965618456" duration="64444000" />
+      <workItem from="1613412544857" duration="1566000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -330,7 +331,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613401719967</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Автоапдейт">
+      <created>1613406160239</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1613406160239</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -349,7 +357,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Удаление проектов и тэгов" />
     <MESSAGE value="Куча правок" />
     <MESSAGE value="Фиксы, зум" />
     <MESSAGE value="Отображение информации о задачах в одну строку" />
@@ -374,7 +381,8 @@
     <MESSAGE value="Переход к текущему времени при фокусе" />
     <MESSAGE value="Выход из редактирования категории по энтеру" />
     <MESSAGE value="Удаление задачи через кнопку" />
-    <option name="LAST_COMMIT_MESSAGE" value="Удаление задачи через кнопку" />
+    <MESSAGE value="Автоапдейт" />
+    <option name="LAST_COMMIT_MESSAGE" value="Автоапдейт" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

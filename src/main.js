@@ -49,9 +49,14 @@ const createWindow = () => {
     },
   })
 
-  app.on("browser-window-focus", () =>
-    mainWindow.webContents.send("focus", "focused"),
-  )
+  //todo Проверять, существует ли окно
+  try {
+    app.on("browser-window-focus", () =>
+      mainWindow.webContents.send("focus", "focused"),
+    )
+  } catch (err) {
+    console.error(err)
+  }
 
   const electronVibrancy = require("electron-vibrancy")
   let material = 0
