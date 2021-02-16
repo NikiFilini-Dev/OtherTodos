@@ -14,10 +14,8 @@ const padTime = s => {
   return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`
 }
 
-const Event = observer(({ event, boxRef, isDragging }) => {
+const Event = observer(({ event, isDragging }) => {
   const { deleteEvent } = useMst()
-  const box =
-    boxRef && boxRef.current ? boxRef.current.getBoundingClientRect() : {}
   const [editActive, setEditActive] = React.useState(false)
   const [startActive, setStartActive] = React.useState(false)
   const [endActive, setEndActive] = React.useState(false)
@@ -53,8 +51,6 @@ const Event = observer(({ event, boxRef, isDragging }) => {
     if (notInRef && notInMenuRef && notInStartMenuRef && notInEndMenuRef)
       setEditActive(false)
   })
-  const position =
-    box.y + box.height / 2 < window.innerHeight / 2 ? "lefttop" : "leftbottom"
 
   const onStartSet = (hours, minutes) => {
     let [endHours, endMinutes] = event.end.split(":")
@@ -105,7 +101,7 @@ const Event = observer(({ event, boxRef, isDragging }) => {
     "#B39DDB",
   ]
 
-  let styleVars = {}
+  let styleVars
   switch (event.color) {
     case "#B39DDB":
       styleVars = {
@@ -156,10 +152,8 @@ const Event = observer(({ event, boxRef, isDragging }) => {
     <div className={styles.eventAndMenuWrapper}>
       {startActive && (
         <FloatMenu
-          position={position}
-          targetBox={
-            startRef.current ? startRef.current.getBoundingClientRect() : {}
-          }
+          position={"horizontal_left"}
+          target={startRef}
           menuRef={startMenuRef}
         >
           <TimeSelector
@@ -171,10 +165,8 @@ const Event = observer(({ event, boxRef, isDragging }) => {
       )}
       {endActive && (
         <FloatMenu
-          position={position}
-          targetBox={
-            endRef.current ? endRef.current.getBoundingClientRect() : {}
-          }
+          position={"horizontal_left"}
+          target={endRef}
           menuRef={endMenuRef}
         >
           <TimeSelector
@@ -185,7 +177,7 @@ const Event = observer(({ event, boxRef, isDragging }) => {
         </FloatMenu>
       )}
       {editActive && (
-        <FloatMenu position={position} targetBox={box}>
+        <FloatMenu position={"horizontal_left"} target={ref}>
           <div className={styles.eventMenu} ref={menuRef}>
             <div className={styles.menuItem}>
               <input

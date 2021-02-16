@@ -21,11 +21,14 @@ $borderColor = #F2F2F2
   overflow hidden
   clip-path: url(#tail)
 
-.tail.lefttop
+.tail.horizontal_left
   transform rotate(90deg)
   left auto
   right -18px
   top 16px
+  &.bottom
+    top auto
+    bottom 16px
 
 .tail.leftbottom
   transform rotate(90deg)
@@ -33,6 +36,22 @@ $borderColor = #F2F2F2
   right -18px
   top auto
   bottom 16px
+
+.tail.vertical_right
+  right 18px
+  left auto
+  &.bottom
+    bottom -12px
+    top auto
+    transform rotate(180deg)
+
+.tail.vertical_left
+  left 18px
+  right auto
+  &.bottom
+    bottom -12px
+    top auto
+    transform rotate(180deg)
 
 .tail.right
   left auto
@@ -61,7 +80,7 @@ $borderColor = #F2F2F2
   width $size * 2
   height $size
   position absolute
-  left 0px
+  left 0
   z-inde 1
 
 .tail .right

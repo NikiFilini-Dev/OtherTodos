@@ -1,7 +1,6 @@
 import React from "react"
 import styles from "./styles.styl"
 import FloatMenu from "components/FloatMenu"
-import { useFloatMenu } from "tools/hooks"
 import classNames from "classnames"
 import { observer } from "mobx-react"
 import { useMst } from "models/RootStore"
@@ -23,7 +22,6 @@ const DateSelector = observer(({ value, onSelect, triggerRef, right }) => {
     tasks: { all },
   } = useMst()
 
-  const [, box] = useFloatMenu(triggerRef)
   const [date, setDate] = React.useState(value)
 
   const months = [
@@ -68,7 +66,10 @@ const DateSelector = observer(({ value, onSelect, triggerRef, right }) => {
   }
 
   return (
-    <FloatMenu targetBox={box} position={right ? "right" : "left"}>
+    <FloatMenu
+      target={triggerRef}
+      position={`vertical_${right ? "right" : "left"}`}
+    >
       <div
         className={styles.fixedElement}
         onClick={() => selectDate({ date: new Date() })}

@@ -9,6 +9,8 @@ import DaySelector from "components/DaySelector"
 import Event from "./Event"
 import { useMst } from "models/RootStore"
 const ipc = require("electron").ipcRenderer
+import { useScrollEmitter } from "../../tools/hooks"
+import ScrollContext from "../Screens/scrollContext"
 
 const Timeline = observer(() => {
   const { events, createEvent, timelineDate, setTimelineDate } = useMst()
@@ -189,6 +191,8 @@ const Timeline = observer(() => {
     if (nowRef.current.offsetTop > 6) setInitialScrolled(true)
   }, [nowRef.current?.getBoundingClientRect().top])
 
+  const scrollEmitter = useScrollEmitter(ref)
+
   return (
     <div className={styles.wrapper}>
       <DaySelector />
@@ -229,53 +233,55 @@ const Timeline = observer(() => {
         ref={ref}
         onDoubleClick={onTimelineClick}
       >
-        {todayEvents
-          .filter(t => !t.allDay)
-          .map(event => (
-            <div
-              ref={eventRefs[event.id] || { current: null }}
-              key={`event_${event.id}`}
-              className={styles.eventContainer}
-              style={{
-                "--start": `${calcOffset(event.start)}px`,
-                "--end": `${calcOffset(event.end)}px`,
-              }}
-              draggable={true}
-              onDragStart={e => onMoveStart(event, e)}
-            >
-              <Event
-                event={event}
-                boxRef={eventRefs[event.id]}
-                isDragging={isDragging}
-              />
+        <ScrollContext.Provider value={scrollEmitter}>
+          {todayEvents
+            .filter(t => !t.allDay)
+            .map(event => (
               <div
-                className={styles.eventStretch}
+                ref={eventRefs[event.id] || { current: null }}
+                key={`event_${event.id}`}
+                className={styles.eventContainer}
+                style={{
+                  "--start": `${calcOffset(event.start)}px`,
+                  "--end": `${calcOffset(event.end)}px`,
+                }}
                 draggable={true}
-                onDragStart={e => onStretchStart(event, e)}
-              />
+                onDragStart={e => onMoveStart(event, e)}
+              >
+                <Event
+                  event={event}
+                  boxRef={eventRefs[event.id]}
+                  isDragging={isDragging}
+                />
+                <div
+                  className={styles.eventStretch}
+                  draggable={true}
+                  onDragStart={e => onStretchStart(event, e)}
+                />
+              </div>
+            ))}
+          <div
+            className={styles.now}
+            style={{ "--now-offset": `${nowOffset}px` }}
+            ref={nowRef}
+          >
+            <span>{moment().format("HH:mm")}</span>
+            <div className={styles.line} />
+          </div>
+          {arr.map(i => (
+            <div
+              key={i}
+              className={styles.hour}
+              style={{
+                "--hour-height": `${hourHeight}px`,
+                "--font-size": `${fontSize}px`,
+              }}
+            >
+              <span>{`${i}`.padStart(2, "0")}:00</span>
+              <div className={styles.dash} />
             </div>
           ))}
-        <div
-          className={styles.now}
-          style={{ "--now-offset": `${nowOffset}px` }}
-          ref={nowRef}
-        >
-          <span>{moment().format("HH:mm")}</span>
-          <div className={styles.line} />
-        </div>
-        {arr.map(i => (
-          <div
-            key={i}
-            className={styles.hour}
-            style={{
-              "--hour-height": `${hourHeight}px`,
-              "--font-size": `${fontSize}px`,
-            }}
-          >
-            <span>{`${i}`.padStart(2, "0")}:00</span>
-            <div className={styles.dash} />
-          </div>
-        ))}
+        </ScrollContext.Provider>
       </div>
     </div>
   )

@@ -17,6 +17,9 @@ import Task from "components/Task"
 import TagsFilter from "components/TagsFilter"
 import { useTrap } from "tools/hooks"
 
+import ScrollContext from "../scrollContext"
+import Emitter from "events"
+
 function toTitleCase(str) {
   return str
     .split(" ")
@@ -101,6 +104,30 @@ const Today = observer(() => {
     setIsNewTaskShown(false)
   }
 
+  const scrollRef = React.useRef(null)
+  const [scrollEmitter] = React.useState(new Emitter())
+
+  React.useEffect(() => {
+    let last_known_scroll_position
+    let ticking
+    const onScroll = e => {
+      last_known_scroll_position = e.target.scrollTop
+
+      if (!ticking) {
+        window.requestAnimationFrame(function() {
+          scrollEmitter.emit("scroll", last_known_scroll_position)
+          ticking = false
+        })
+
+        ticking = true
+      }
+    }
+
+    const current = scrollRef.current
+    current?.addEventListener("scroll", onScroll)
+    return () => current?.removeEventListener("scroll", onScroll)
+  })
+
   return (
     <div className={styles.screen}>
       <div className={styles.info}>
@@ -164,28 +191,30 @@ const Today = observer(() => {
           setSelectedTag(tag)
         }}
       />
-      <div className={styles.listOfLists}>
-        {!!expiredTasks.length && <ExpiredTasks tasks={expiredTasks} />}
+      <ScrollContext.Provider value={scrollEmitter}>
+        <div className={styles.listOfLists} ref={scrollRef}>
+          {!!expiredTasks.length && <ExpiredTasks tasks={expiredTasks} />}
 
-        {viewMode === "list" ? (
-          <TaskList
-            tasks={tasks.filter(task => !expiredTasks.includes(task))}
-            name={"Все задачи"}
-          />
-        ) : (
-          <React.Fragment>
-            <TaskList tasks={withoutProject} name={"Входящие"} />
-            {projects.map(project => (
-              <TaskList
-                key={`task_list_${project.name}`}
-                tasks={tasks.filter(task => task.project === project)}
-                name={project.name}
-              />
-            ))}
-          </React.Fragment>
-        )}
-        {}
-      </div>
+          {viewMode === "list" ? (
+            <TaskList
+              tasks={tasks.filter(task => !expiredTasks.includes(task))}
+              name={"Все задачи"}
+            />
+          ) : (
+            <React.Fragment>
+              <TaskList tasks={withoutProject} name={"Входящие"} />
+              {projects.map(project => (
+                <TaskList
+                  key={`task_list_${project.name}`}
+                  tasks={tasks.filter(task => task.project === project)}
+                  name={project.name}
+                />
+              ))}
+            </React.Fragment>
+          )}
+          {}
+        </div>
+      </ScrollContext.Provider>
     </div>
   )
 })

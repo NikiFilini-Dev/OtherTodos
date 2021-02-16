@@ -11,9 +11,17 @@ const server = "https://hazel.lunavod.vercel.app"
 const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 
 autoUpdater.setFeedURL(feed)
+autoUpdater.addListener("error", e => {
+  if (e.code !== -1009) alert(e)
+  console.error(e)
+})
 setInterval(() => {
-  autoUpdater.checkForUpdates()
-}, 60000)
+  try {
+    autoUpdater.checkForUpdates()
+  } catch (err) {
+    console.error(err)
+  }
+}, 2000)
 autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName) => {
   const dialogOpts = {
     type: "info",
@@ -50,13 +58,13 @@ const createWindow = () => {
   })
 
   //todo Проверять, существует ли окно
-  try {
-    app.on("browser-window-focus", () =>
-      mainWindow.webContents.send("focus", "focused"),
-    )
-  } catch (err) {
-    console.error(err)
-  }
+  app.on("browser-window-focus", () => {
+    try {
+      mainWindow.webContents.send("focus", "focused")
+    } catch (err) {
+      console.error(err)
+    }
+  })
 
   const electronVibrancy = require("electron-vibrancy")
   let material = 0

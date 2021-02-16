@@ -6,8 +6,7 @@ import FloatMenu from "../FloatMenu/index.jsx"
 import { useClick } from "../../tools/hooks"
 
 const PrioritySelector = ({ priority, onSelect = () => {} }) => {
-  const ref = React.createRef(null)
-  const [targetBox, setTargetBox] = React.useState({ width: 0, height: 0 })
+  const ref = React.useRef(null)
   const [isShown, setIsShown] = React.useState(false)
   const wrapperRef = React.useRef(null)
 
@@ -15,13 +14,6 @@ const PrioritySelector = ({ priority, onSelect = () => {} }) => {
     setIsShown(false)
     onSelect(priority)
   }
-
-  React.useEffect(() => {
-    let el = ref.current
-    if (!targetBox.top) {
-      setTargetBox(el.getBoundingClientRect())
-    }
-  })
 
   useClick(document, e => {
     if (
@@ -40,7 +32,7 @@ const PrioritySelector = ({ priority, onSelect = () => {} }) => {
       </div>
 
       {isShown && (
-        <FloatMenu targetBox={targetBox}>
+        <FloatMenu target={ref} position={"vertical_right"}>
           <div className={styles.priorityList}>
             <div
               className={styles.priorityElement}

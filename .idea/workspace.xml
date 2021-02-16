@@ -5,9 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/Screens/scrollContext.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TaskList/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TaskList/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/App/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DateSelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DateSelector/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FloatMenu/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FloatMenu/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FloatMenu/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FloatMenu/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PrioritySelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PrioritySelector/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Screens/Today/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Today/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Task/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timeline/Event/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timeline/Event/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timeline/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timeline/index.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tools/hooks.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/hooks.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,8 +65,9 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="prettier.import.notification.dismissed" value="true" />
+    <property name="prettierjs.PrettierConfiguration.NodeInterpreter" value="/usr/local/bin/node" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -105,7 +116,8 @@
       <workItem from="1612434089557" duration="11462000" />
       <workItem from="1612964722243" duration="655000" />
       <workItem from="1612965618456" duration="64444000" />
-      <workItem from="1613412544857" duration="1566000" />
+      <workItem from="1613412544857" duration="7474000" />
+      <workItem from="1613477216628" duration="5321000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -357,8 +369,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Куча правок" />
-    <MESSAGE value="Фиксы, зум" />
     <MESSAGE value="Отображение информации о задачах в одну строку" />
     <MESSAGE value="Прозрачный фон" />
     <MESSAGE value="Выбор задачи двумя кликами, автоувеличение поля заметок, меню тегов везде" />
@@ -382,7 +392,9 @@
     <MESSAGE value="Выход из редактирования категории по энтеру" />
     <MESSAGE value="Удаление задачи через кнопку" />
     <MESSAGE value="Автоапдейт" />
-    <option name="LAST_COMMIT_MESSAGE" value="Автоапдейт" />
+    <MESSAGE value="Фиксы" />
+    <MESSAGE value="Скролл всплывающих меню" />
+    <option name="LAST_COMMIT_MESSAGE" value="Скролл всплывающих меню" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

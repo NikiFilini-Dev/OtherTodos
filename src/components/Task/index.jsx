@@ -20,12 +20,7 @@ import StarIcon from "assets/star.svg"
 import TrashIcon from "assets/awesome/regular/trash-alt.svg"
 import TagsIcon from "assets/awesome/solid/tags.svg"
 import RedoIcon from "assets/awesome/solid/redo.svg"
-import {
-  useFloatMenu,
-  useClickOutsideRef,
-  useContextMenu,
-  useKeyListener,
-} from "tools/hooks"
+import { useClickOutsideRef, useContextMenu, useKeyListener } from "tools/hooks"
 import { useMst } from "models/RootStore"
 
 const inRef = (ref, e) => {
@@ -59,8 +54,8 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
 
   const dateRef = useRef(null)
   const fullDateRef = useRef(null)
-  const [projectRef, projectBox] = useFloatMenu()
-  const [tagsRef, tagsBox] = useFloatMenu()
+  const projectRef = React.useRef(null)
+  const tagsRef = React.useRef(null)
 
   useClickOutsideRef(dateRef, () => setIsDatePickerOpen(false))
   useClickOutsideRef(fullDateRef, () => setIsFullDatePickerOpen(false))
@@ -253,17 +248,6 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             <FolderIcon className={styles.projectIcon} />
             {task.project ? task.project.name : "Входящие"}
           </span>
-          {isProjectSelectorOpen && (
-            <FloatMenu targetBox={projectBox} position={"left"}>
-              <ProjectSelector
-                selected={task.project ? task.project.id : null}
-                onSelect={project => {
-                  setIsProjectSelectorOpen(false)
-                  task.setProject(project)
-                }}
-              />
-            </FloatMenu>
-          )}
         </span>
         {task.date && !isActive && (
           <span style={{ position: "relative" }}>
@@ -368,13 +352,24 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             <TagsIcon className={styles.tagsTriggerIcon} />
           </div>
           {isTagsSelectorOpen && (
-            <FloatMenu targetBox={tagsBox}>
+            <FloatMenu target={tagsRef} position={"vertical_right"}>
               <TagsSelector
                 selected={task.tags}
                 project={task.project}
                 select={selectTag}
                 unselect={unselectTag}
                 add={addTag}
+              />
+            </FloatMenu>
+          )}
+          {isProjectSelectorOpen && (
+            <FloatMenu target={projectRef} position={"vertical_left"}>
+              <ProjectSelector
+                selected={task.project ? task.project.id : null}
+                onSelect={project => {
+                  setIsProjectSelectorOpen(false)
+                  task.setProject(project)
+                }}
               />
             </FloatMenu>
           )}

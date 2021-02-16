@@ -4,9 +4,14 @@ import PropTypes from "prop-types"
 import styles from "./styles.styl"
 import classNames from "classnames"
 import { observer } from "mobx-react"
+import { useBoxTrack } from "../../tools/hooks"
 
 const FloatMenu = observer(
-  ({ children, position = "right", targetBox, menuRef }) => {
+  ({ children, position = "right", target, menuRef }) => {
+    if (!target) return <div />
+
+    const targetBox = useBoxTrack(target)
+
     const [el] = React.useState(document.createElement("div"))
     React.useEffect(() => {
       document.querySelector("#modals").appendChild(el)
@@ -17,36 +22,73 @@ const FloatMenu = observer(
 
     let portal = false
     let style = {}
+    let modifier
     switch (position) {
-      case "right":
-        style = {
-          top: targetBox.height + 12 + "px",
-          right: targetBox.width / 2 - 19 + "px",
-        }
-        break
-      case "left":
-        style = {
-          top: targetBox.height + 12 + "px",
-          left: targetBox.width / 2 - 19 + "px",
-        }
-        break
-      case "lefttop":
-        style = {
-          top: targetBox.y + targetBox.height / 2 - 24 + "px",
-          right: window.innerWidth - targetBox.x + 12 + "px",
+      case "horizontal_left":
+        if (targetBox.y + targetBox.height / 2 < window.innerHeight / 2) {
+          style = {
+            top: targetBox.y + targetBox.height / 2 - 24 + "px",
+            right: window.innerWidth - targetBox.x + 12 + "px",
+          }
+        } else {
+          style = {
+            bottom:
+              window.innerHeight -
+              targetBox.y -
+              targetBox.height / 2 -
+              24 +
+              "px",
+            right: window.innerWidth - targetBox.x + 12 + "px",
+          }
+          modifier = "bottom"
         }
         portal = true
         break
-      case "leftbottom":
-        style = {
-          bottom:
-            window.innerHeight - targetBox.y - targetBox.height / 2 - 12 + "px",
-          right: window.innerWidth - targetBox.x + 12 + "px",
+      case "vertical_left":
+        if (targetBox.y < window.innerHeight / 2) {
+          style = {
+            top: targetBox.top + targetBox.height + 12 + "px",
+            left: targetBox.left + targetBox.width / 2 - 19 + "px",
+          }
+        } else {
+          style = {
+            bottom: window.innerHeight - targetBox.y + 19 + "px",
+            left: targetBox.left + targetBox.width / 2 - 19 + "px",
+          }
+          modifier = "bottom"
+        }
+        portal = true
+        break
+      case "vertical_right":
+        if (targetBox.y < window.innerHeight / 2) {
+          style = {
+            top: targetBox.top + targetBox.height + 12 + "px",
+            right:
+              window.innerWidth -
+              targetBox.left -
+              targetBox.width * 1.5 -
+              14 +
+              "px",
+          }
+          modifier = "top"
+        } else {
+          style = {
+            bottom: window.innerHeight - targetBox.y + 19 + "px",
+            right:
+              window.innerWidth -
+              targetBox.left -
+              targetBox.width * 1.5 -
+              14 +
+              "px",
+          }
+          modifier = "bottom"
         }
         portal = true
         break
     }
-    console.log("STYLE", style, targetBox)
+    if (style.bottom !== undefined && parseInt(style.bottom) < 0)
+      style.bottom = 0
+    if (style.top !== undefined && parseInt(style.top) < 0) style.top = 0
     const Content = (
       <div
         className={styles.rectang}
@@ -57,6 +99,7 @@ const FloatMenu = observer(
           className={classNames({
             [styles.tail]: true,
             [styles[position]]: true,
+            [styles[modifier]]: true,
           })}
         >
           <div className={styles.left} />
