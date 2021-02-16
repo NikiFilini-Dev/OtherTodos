@@ -1,0 +1,93 @@
+.wrapper
+  padding 22px
+  padding-top 0
+  cursor default
+
+.fixedElement
+  height 28px
+  border-radius 5px
+  background rgba(0,0,0,.04)
+  margin 6px 22px
+  display flex
+  align-items center
+  justify-content flex-start
+  padding 0 6px
+  colro #424242
+  cursor pointer
+
+  &:first-child
+    margin-top 22px
+
+.info
+  display flex
+  justify-content space-between
+  align-items center
+  padding 0 22px
+
+.monthText
+  font-size 14px
+  font-weight 700
+
+.actions
+  display inline-flex
+
+
+.action
+  display inline-flex
+  width 16px
+  height 24px
+  justify-content center
+  align-items center
+  margin-left 3px
+  cursor pointer
+
+.week
+  display flex
+
+.day
+  //background #2F45C5
+  width 24px
+  height 24px
+  display inline-flex
+  justify-content center
+  align-items center
+  margin-left 2px
+  margin-bottom 2px
+  font-size 12px
+  color #161938
+  border 1px solid transparent
+  border-radius 5px
+  cursor pointer
+  position relative
+
+  &:first-child
+    margin-left 0
+
+  &:hover
+    background rgba(0,0,0,.05)
+
+  &.alien
+    color rgba(0,0,0,.4)
+
+  &.selected
+    background #2F45C5
+    color white
+
+  &.dayname
+    color #9BABC5
+    cursor default
+
+    &:hover
+      background transparent
+
+.todayMark
+  width 3px
+  height 3px
+  background var(--brand)
+  border-radius 50%
+  position absolute
+  bottom 2px
+  margin 0 auto
+
+.selected .todayMark
+  background white
