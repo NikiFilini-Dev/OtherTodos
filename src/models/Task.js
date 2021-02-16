@@ -1,12 +1,13 @@
-import { types } from "mobx-state-tree"
+import { getRoot, types } from "mobx-state-tree"
 import Project from "./Project"
 import Tag from "./Tag"
 import moment from "moment"
 import ProjectCategory from "./ProjectCategory"
+import { v4 as uuidv4 } from "uuid"
 
 const Task = types
   .model("Task", {
-    id: types.identifierNumber,
+    id: types.identifier,
     text: types.string,
     note: types.string,
     status: types.enumeration("TYPE_STATUS", ["active", "done"]),
@@ -38,11 +39,17 @@ const Task = types
       if (value) {
         self.closeDate = moment().format("YYYY-MM-DD")
         if (self.repeatEvery) {
-          // if (!self.date)
-          self.date = moment(self.date || self.closeDate, "YYYY-MM-DD")
+          const newTask = JSON.parse(JSON.stringify(self))
+          newTask.date = moment(self.date || self.closeDate, "YYYY-MM-DD")
             .add(self.repeatEvery, "days")
             .format("YYYY-MM-DD")
-          self.status = "active"
+          newTask.status = "active"
+          newTask.creationDate = moment().format("YYYY-MM-DD")
+          newTask.closeDate = null
+          newTask.id = uuidv4()
+          console.log(newTask)
+          const root = getRoot(self)
+          root.tasks.add(root.createTask(newTask))
         }
       } else self.closeDate = null
     },

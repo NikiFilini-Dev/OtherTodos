@@ -5,19 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/Screens/scrollContext.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DateSelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DateSelector/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FloatMenu/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FloatMenu/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FloatMenu/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FloatMenu/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PrioritySelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PrioritySelector/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/Today/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Today/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Task/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Timeline/Event/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timeline/Event/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Timeline/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timeline/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tools/hooks.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/hooks.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Project.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Project.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/RootStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/RootStore.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Tag.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Tag.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Task.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Task.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/migrations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/migrations.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +110,8 @@
       <workItem from="1612964722243" duration="655000" />
       <workItem from="1612965618456" duration="64444000" />
       <workItem from="1613412544857" duration="7474000" />
-      <workItem from="1613477216628" duration="5321000" />
+      <workItem from="1613477216628" duration="6196000" />
+      <workItem from="1613484401706" duration="1388000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -350,7 +344,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613406160239</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Скролл всплывающих меню">
+      <created>1613483343441</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1613483343441</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -369,7 +370,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Отображение информации о задачах в одну строку" />
     <MESSAGE value="Прозрачный фон" />
     <MESSAGE value="Выбор задачи двумя кликами, автоувеличение поля заметок, меню тегов везде" />
     <MESSAGE value="Отображение точкой в календаре текущего дня" />
@@ -394,7 +394,8 @@
     <MESSAGE value="Автоапдейт" />
     <MESSAGE value="Фиксы" />
     <MESSAGE value="Скролл всплывающих меню" />
-    <option name="LAST_COMMIT_MESSAGE" value="Скролл всплывающих меню" />
+    <MESSAGE value="Переход на uuid, изменение алгоритма повторящихся задач" />
+    <option name="LAST_COMMIT_MESSAGE" value="Переход на uuid, изменение алгоритма повторящихся задач" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

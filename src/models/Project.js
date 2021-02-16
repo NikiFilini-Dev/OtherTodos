@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid"
 
 const Project = types
   .model("Project", {
-    id: types.identifierNumber,
+    id: types.identifier,
     name: types.string,
     index: types.number,
     categories: types.array(ProjectCategory),

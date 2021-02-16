@@ -3,7 +3,7 @@ import Project from "./Project"
 
 const Tag = types
   .model("Tag", {
-    id: types.identifierNumber,
+    id: types.identifier,
     name: types.string,
     project: types.maybeNull(types.reference(Project)),
     index: types.number,

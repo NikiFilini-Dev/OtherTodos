@@ -27,33 +27,6 @@ const RootStore = types
     sidebarWidth: types.optional(types.number, 250),
     timelineWidth: types.optional(types.number, 350),
   })
-  .views(self => ({
-    get lastTaskId() {
-      return (
-        self.tasks.all.reduce(
-          (maxId, task) =>
-            parseInt(task.id) > maxId ? parseInt(task.id) : maxId,
-          0,
-        ) || 0
-      )
-    },
-    get lastTagId() {
-      return (
-        self.tags.reduce(
-          (maxId, tag) => (parseInt(tag.id) > maxId ? parseInt(tag.id) : maxId),
-          0,
-        ) || 0
-      )
-    },
-    lastId(arr) {
-      return (
-        arr.reduce(
-          (maxId, el) => (parseInt(el.id) > maxId ? parseInt(el.id) : maxId),
-          0,
-        ) || 0
-      )
-    },
-  }))
   .actions(self => ({
     setSidebarWidth(val) {
       self.sidebarWidth = val
@@ -63,8 +36,8 @@ const RootStore = types
     },
     insertTempTask() {
       const task = JSON.parse(JSON.stringify(self.tempTask.toJSON()))
-      task.id = self.lastId(self.tasks.all) + 1
-      self.testTask = null
+      task.id = uuidv4()
+      self.tempTask = null
       self.tasks.add(task)
     },
     setTempTask(task) {
@@ -77,11 +50,11 @@ const RootStore = types
       self.timelineDate = val
     },
     createTask(data = {}) {
-      const newId = self.lastId(self.tasks.all) + 1000
+      const newId = uuidv4()
       return Task.create(taskFactory(newId, data))
     },
     createProject(name) {
-      const newId = self.lastId(self.projects) + 1
+      const newId = uuidv4()
       const maxIndex = self.projects.reduce(
         (max, project) => (project.index > max ? project.index : max),
         0,
@@ -91,7 +64,7 @@ const RootStore = types
       return project
     },
     createTag(name, project) {
-      const newId = self.lastId(self.tags) + 1
+      const newId = uuidv4()
       let lastIndex = -1
       self.tags.forEach(tag => {
         if (tag.index > lastIndex) lastIndex = tag.index
