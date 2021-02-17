@@ -62,6 +62,27 @@
   color black
   background #f7f7f7
 
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+}
+
+.colorInput
+  padding 0
+  background transparent
+  width 1.5em
+  height 1.5em
+  border-radius 50%
+  border 0
+  overflow hidden
+  -webkit-appearance none
+  margin-right 14px
+  margin-left 19px
+  &:active, &:focus
+    outline none
+
 .groupElementIcon
   margin-right 14px
   margin-left 19px

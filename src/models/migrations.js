@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid"
+import { randomTagColor } from "./Tag"
 
 const migrations = [
   {
@@ -56,6 +57,15 @@ const migrations = [
         Store.selectedProject = refs.projects[Store.selectedProject]
       if (Store.selectedTag) Store.selectedTag = refs.tags[Store.selectedTag]
       if (Store.tempTask) Store.tempTask = null
+    },
+  },
+  {
+    id: 9,
+    desc: "Set tag colors",
+    up(Store) {
+      Store.tags.forEach(
+        tag => (tag.color = tag.color ? tag.color : randomTagColor()),
+      )
     },
   },
 ]

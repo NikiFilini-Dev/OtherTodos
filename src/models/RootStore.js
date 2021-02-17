@@ -3,7 +3,7 @@ import { createContext, useContext } from "react"
 import TaskList from "./TaskList"
 import Task, { factory as taskFactory } from "./Task"
 import Project from "./Project"
-import Tag from "./Tag"
+import Tag, { randomTagColor } from "./Tag"
 import TimelineEvent from "./TimelineEvent"
 import moment from "moment"
 import { v4 as uuidv4 } from "uuid"
@@ -17,17 +17,24 @@ const RootStore = types
     selectedDate: moment().format("YYYY-MM-DD"),
     timelineDate: moment().format("YYYY-MM-DD"),
     screen: types.optional(
-      types.enumeration(["INBOX", "TODAY", "PROJECT", "LOG"]),
+      types.enumeration(["INBOX", "TODAY", "PROJECT", "LOG", "TAGS"]),
       "TODAY",
     ),
     selectedProject: types.maybeNull(types.reference(Project)),
     tags: types.array(Tag),
     selectedTag: types.maybeNull(types.reference(Tag)),
+    selectedTagType: types.optional(
+      types.enumeration(["TASK", "EVENT"]),
+      "TASK",
+    ),
     _storeVersion: types.optional(types.number, 0),
     sidebarWidth: types.optional(types.number, 250),
     timelineWidth: types.optional(types.number, 350),
   })
   .actions(self => ({
+    selectTagType(type) {
+      self.selectedTagType = type
+    },
     setSidebarWidth(val) {
       self.sidebarWidth = val
     },
@@ -63,21 +70,30 @@ const RootStore = types
       self.projects.push(project)
       return project
     },
-    createTag(name, project) {
+    createTag(name, type) {
       const newId = uuidv4()
       let lastIndex = -1
       self.tags.forEach(tag => {
+        if (tag.type !== type) return
         if (tag.index > lastIndex) lastIndex = tag.index
       })
-      const tag = Tag.create({ id: newId, name, project, index: lastIndex + 1 })
+      const tag = Tag.create({
+        id: newId,
+        name,
+        index: lastIndex + 1,
+        color: randomTagColor(),
+        type: type || "TASK",
+      })
       self.tags.push(tag)
       return tag
     },
     createEvent(data) {
+      const newId = uuidv4()
       self.events.push({
         ...data,
-        id: uuidv4(),
+        id: newId,
       })
+      return newId
     },
     selectDate(date) {
       self.selectedDate = moment(date).format("YYYY-MM-DD")
@@ -108,10 +124,16 @@ const RootStore = types
       }
       destroy(project)
     },
-    deleteEvent(event) {
+    deleteEvent(event, force = false) {
+      if (event.task && !force) {
+        return event.task.unconnectEvent()
+      }
       destroy(event)
     },
     applyMigration() {},
+    removeAllEvents() {
+      self.events = []
+    },
   }))
 
 export default RootStore

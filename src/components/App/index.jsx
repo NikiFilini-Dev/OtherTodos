@@ -8,6 +8,7 @@ import Today from "components/Screens/Today"
 import Project from "components/Screens/Project"
 import Inbox from "components/Screens/Inbox"
 import Log from "components/Screens/Log"
+import TaskTags from "components/Screens/TaskTags"
 import Sidebar from "components/Sidebar"
 import { DragDropContext } from "react-beautiful-dnd"
 import Timeline from "../Timeline"
@@ -33,6 +34,9 @@ const App = observer(() => {
       break
     case "LOG":
       Screen = Log
+      break
+    case "TAGS":
+      Screen = TaskTags
       break
   }
 

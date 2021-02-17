@@ -8,6 +8,7 @@ import ArrowRightIcon from "assets/arrow_right.svg"
 import FolderIcon from "assets/folder.svg"
 import PlusIcon from "assets/plus.svg"
 import HistoryIcon from "assets/awesome/solid/history.svg"
+import TagsIcon from "assets/awesome/solid/tags.svg"
 import PlaneIcon from "assets/awesome/regular/paper-plane.svg"
 import EnvelopeIcon from "assets/awesome/regular/envelope.svg"
 import propTypes from "prop-types"
@@ -25,6 +26,9 @@ const Element = observer(
     onDelete,
     droppableId,
     provided,
+    colored,
+    color,
+    setColor,
   }) => {
     const Icon = icon
     const [savedRef, setSavedRef] = React.useState({ current: null })
@@ -49,7 +53,17 @@ const Element = observer(
         {...provided.draggableProps}
         {...provided.dragHandleProps}
       >
-        <Icon className={styles.groupElementIcon} />
+        {colored ? (
+          <input
+            type={"color"}
+            defaultValue={color ? color : "var(--brand)"}
+            className={styles.colorInput}
+            onChange={e => setColor(e.target.value)}
+          />
+        ) : (
+          <Icon className={styles.groupElementIcon} />
+        )}
+
         {text}
       </div>
     )
@@ -75,6 +89,7 @@ const Group = observer(
     onDelete,
     type,
     initiallyFolded,
+    colored,
   }) => {
     const [isOpen, setIsOpen] = React.useState(!initiallyFolded)
     const [isAddActive, setIsAddActive] = React.useState(false)
@@ -115,7 +130,7 @@ const Group = observer(
       if (!destination) return
       console.log(destination, source, draggableId)
 
-      const id = parseInt(draggableId.match(/.+?_(\d+)/)[1])
+      const id = draggableId.match(/.+?_(.+)/)[1]
 
       const arr = [...elements]
 
@@ -161,6 +176,9 @@ const Group = observer(
                     deletable={!!onDelete}
                     onDelete={() => onDelete(element)}
                     provided={provided}
+                    colored={colored}
+                    color={element.color}
+                    setColor={color => element.setColor(color)}
                   />
                 )}
               </Draggable>
@@ -230,18 +248,13 @@ const Sidebar = observer(() => {
     createProject,
     deleteProject,
     deleteTag,
-    selectTag,
-    createTag,
+    selectTagType,
+    selectedTagType,
   } = useMst()
 
   const addProject = name => {
     selectProject(createProject(name))
     setScreen("PROJECT")
-  }
-
-  const addTag = name => {
-    selectTag(createTag(name))
-    setScreen("TAG")
   }
 
   const rmProject = project => {
@@ -255,14 +268,6 @@ const Sidebar = observer(() => {
       deleteTag(tag)
     })
     deleteProject(project)
-  }
-
-  const rmTag = tag => {
-    console.log("DELETE TAGT", tag.toJSON())
-    all.forEach(task => {
-      task.removeTag(tag)
-    })
-    deleteTag(tag)
   }
 
   const sortedProjects = [...projects]
@@ -310,6 +315,32 @@ const Sidebar = observer(() => {
         <HistoryIcon className={styles.groupElementAwesomeIcon} />
         Журнал
       </div>
+      <div
+        className={classNames({
+          [styles.groupElement]: true,
+          [styles.active]: screen === "TAGS" && selectedTagType === "TASK",
+        })}
+        onClick={() => {
+          setScreen("TAGS")
+          selectTagType("TASK")
+        }}
+      >
+        <TagsIcon className={styles.groupElementAwesomeIcon} />
+        Метки задач
+      </div>
+      <div
+        className={classNames({
+          [styles.groupElement]: true,
+          [styles.active]: screen === "TAGS" && selectedTagType === "EVENT",
+        })}
+        onClick={() => {
+          setScreen("TAGS")
+          selectTagType("EVENT")
+        }}
+      >
+        <TagsIcon className={styles.groupElementAwesomeIcon} />
+        Метки событий
+      </div>
       <Group
         name={"Проекты"}
         elements={sortedProjects}
@@ -324,16 +355,6 @@ const Sidebar = observer(() => {
         }}
         onAdd={addProject}
         onDelete={rmProject}
-      />
-      <Group
-        name={"Тэги"}
-        elements={sortedTags}
-        isActive={() => false}
-        onElementClick={() => {}}
-        onAdd={addTag}
-        onDelete={rmTag}
-        initiallyFolded={true}
-        type={"TAG"}
       />
     </div>
   )

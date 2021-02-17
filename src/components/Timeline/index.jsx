@@ -18,9 +18,10 @@ const Timeline = observer(() => {
   const [isDragging, setIsDragging] = React.useState(false)
 
   const arr = []
-  for (let i = 0; i <= 24; i++) {
+  for (let i = 0; i < 24; i++) {
     arr.push(i)
   }
+  arr.push(0)
 
   const hourHeight = 37
   const fontSize = 13
@@ -97,13 +98,9 @@ const Timeline = observer(() => {
       `${hours}`.padStart(2, "0") +
       ":" +
       `${minutes - (minutes % 5)}`.padStart(2, "0")
-    let end = moment(start, "HH:mm")
-      .add(1, "hours")
-      .format("HH:mm")
-    if (moment(end, "HH:mm").isBefore(moment(start, "HH:mm"))) end = "24:00"
     createEvent({
       start,
-      end,
+      duration: 60,
       date: timelineDate,
       name: "Новое событие",
     })
@@ -143,38 +140,28 @@ const Timeline = observer(() => {
   }
 
   const onStretchStart = onDragStart(
-    event => event.end,
+    event => event.duration,
     (event, add, initialTime) => {
-      const newEnd = moment(initialTime, "HH:mm")
-        .add(add, "minutes")
-        .format("HH:mm")
-      if (
-        moment(event.start, "HH:mm")
-          .add(30, "minutes")
-          .isAfter(moment(newEnd, "HH:mm"))
-      )
-        return
-      if (moment(event.start, "HH:mm").isAfter(moment(newEnd, "HH:mm")))
-        return event.setEnd("24:00")
-      if (newEnd !== event.end) event.setEnd(newEnd)
+      event.setDuration(initialTime + add)
     },
   )
 
   const onMoveStart = onDragStart(
-    event => ({ initialStart: event.start, initialEnd: event.end }),
-    (event, add, { initialStart, initialEnd }) => {
-      const newStart = moment(initialStart, "HH:mm")
+    event => ({ initialStart: event.start, initialDuration: event.duration }),
+    (event, add, { initialStart }) => {
+      const minimum =
+        0 -
+        moment
+          .duration(
+            moment(initialStart, "HH:mm").diff(moment("00:00", "HH:mm")),
+          )
+          .asMinutes()
+      if (add < minimum) add = minimum
+      console.log(add)
+      let newStart = moment(initialStart, "HH:mm")
         .add(add, "minutes")
         .format("HH:mm")
-
-      const newEnd = moment(initialEnd, "HH:mm")
-        .add(add, "minutes")
-        .format("HH:mm")
-
-      if (moment(newStart, "HH:mm").isAfter(moment(newEnd, "HH:mm"))) return
-
-      if (newStart !== event.start) event.setStart(newStart)
-      if (newEnd !== event.end) event.setEnd(newEnd)
+      event.processSetStart(newStart)
     },
     (event, e) => {
       return e.target.classList.contains(styles.eventStretch)
@@ -243,7 +230,8 @@ const Timeline = observer(() => {
                 className={styles.eventContainer}
                 style={{
                   "--start": `${calcOffset(event.start)}px`,
-                  "--end": `${calcOffset(event.end)}px`,
+                  "--end": `${((hourHeight + fontSize) / 60) * event.duration +
+                    calcOffset(event.start)}px`,
                 }}
                 draggable={true}
                 onDragStart={e => onMoveStart(event, e)}

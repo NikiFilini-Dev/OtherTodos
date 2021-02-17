@@ -1,0 +1,67 @@
+.screen
+  display flex
+  flex-direction column
+  max-height 100%
+  height 100%
+
+.info
+  margin-bottom 28px
+  padding 0 20px
+  display flex
+  justify-content space-between
+
+
+.title
+  font-weight 600
+  font-size 24px
+  margin-right 12px
+  cursor pointer
+
+.actions
+  display flex
+  align-items center
+
+  & > *
+    margin-left 12px
+
+.list
+  display flex
+  flex-direction column
+  overflow-y auto
+  padding 4px
+  height 100%
+
+.tag
+  padding 16px
+  margin-bottom 12px
+  display flex
+  align-items center
+  border-radius 4.5px
+  background rgba(0,0,0,0.05)
+
+  .colorIndicator
+    fill var(--tag-color)
+    height 1.2em
+    margin-right 16px
+
+  .tagName
+    padding 0
+    background transparent
+    font-size 1em
+    border 0
+    &:active, &:focus
+      outline none
+
+  .colorInput
+    margin-left auto
+
+.addTag
+  margin 0 20px
+  margin-top 36px
+  display flex
+  align-items center
+  color #9c9c9c
+  cursor pointer
+
+  svg
+    margin-right 8px

@@ -52,6 +52,7 @@ export function useBoxTrack(ref) {
 
   React.useEffect(() => {
     const onScroll = () => {
+      if (!ref.current) return
       const box = ref.current.getBoundingClientRect()
       if (box.x !== pos.x || box.y !== pos.y) setPos(box)
     }

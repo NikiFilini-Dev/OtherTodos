@@ -37,6 +37,7 @@ const TaskList = types
     },
     deleteTask(task) {
       if (self.selected === task) self.selected = null
+      task.unconnectEvent()
       self.all.splice(self.all.indexOf(task), 1)
       destroy(task)
     },

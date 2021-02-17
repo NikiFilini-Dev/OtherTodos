@@ -8,18 +8,23 @@ import TagMenu from "components/menus/TagMenu"
 import styles from "./styles.styl"
 import { useKeyListener } from "../../tools/hooks"
 
-const TagsSelector = observer(({ selected, add, select, unselect }) => {
-  let { tags } = useMst()
+const TagsSelector = observer(({ selected, select, unselect, type }) => {
+  if (!type) type = "TASK"
+  let { tags, createTag } = useMst()
   const [search, setSearch] = React.useState("")
 
-  const results = tags.filter(
-    tag => tag.name.startsWith(search) && !selected.includes(tag),
+  let results = tags.filter(
+    tag =>
+      tag.name.startsWith(search) &&
+      !selected.includes(tag) &&
+      tag.type === type,
   )
+  results.sort((a, b) => a.index - b.index)
 
   useKeyListener("Enter", () => {
     if (!results.length && !!search.length) {
       setSearch("")
-      add(search)
+      select(createTag(search, type))
     }
   })
 
@@ -27,7 +32,7 @@ const TagsSelector = observer(({ selected, add, select, unselect }) => {
   const onUnselectClick = tag => unselect(tag)
   const onAddClick = name => {
     setSearch("")
-    add(name)
+    select(createTag(name, type))
   }
 
   return (

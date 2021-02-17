@@ -91,7 +91,7 @@ const Project = observer(() => {
     if (!destination) return
     console.log(destination, source, draggableId)
 
-    const id = parseInt(draggableId.match(/.+?_(.+)/)[1])
+    const id = draggableId.match(/.+?_(.+)/)[1]
 
     if (draggableId.startsWith("category")) {
       const arr = [...selectedProject.categories]

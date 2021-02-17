@@ -12,7 +12,6 @@ const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 
 autoUpdater.setFeedURL(feed)
 autoUpdater.addListener("error", e => {
-  if (e.code !== -1009) alert(e)
   console.error(e)
 })
 setInterval(() => {
@@ -21,7 +20,7 @@ setInterval(() => {
   } catch (err) {
     console.error(err)
   }
-}, 2000)
+}, 10000)
 autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName) => {
   const dialogOpts = {
     type: "info",

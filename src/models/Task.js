@@ -4,6 +4,7 @@ import Tag from "./Tag"
 import moment from "moment"
 import ProjectCategory from "./ProjectCategory"
 import { v4 as uuidv4 } from "uuid"
+import { LateTimelineEvent } from "./TimelineEvent"
 
 const Task = types
   .model("Task", {
@@ -20,6 +21,7 @@ const Task = types
     repeatEvery: types.maybeNull(types.optional(types.integer, 0)),
     repeating: types.optional(types.boolean, false),
     category: types.maybeNull(types.reference(ProjectCategory)),
+    event: types.maybeNull(types.reference(types.late(LateTimelineEvent))),
   })
   .views(self => ({
     get done() {
@@ -27,6 +29,27 @@ const Task = types
     },
   }))
   .actions(self => ({
+    unconnectEvent() {
+      if (!self.event) return
+      const id = self.event.id
+      self.event = null
+      const root = getRoot(self)
+      root.deleteEvent(
+        root.events.find(e => e.id === id),
+        true,
+      )
+    },
+    createAndConnectEvent() {
+      if (self.event) return
+      if (!self.date) self.date = moment().format("YYYY-MM-DD")
+      const root = getRoot(self)
+      self.event = root.createEvent({
+        task: self.id,
+        date: self.date,
+        allDay: true,
+        name: self.text,
+      })
+    },
     setCloseDate(val) {
       self.closeDate = val
     },
@@ -62,6 +85,10 @@ const Task = types
     setDate(value) {
       if (moment.isDate(value)) value = moment(value).format("YYYY-MM-DD")
       self.date = value
+      if (self.event) {
+        if (value) self.event.setDate(self.date)
+        else self.unconnectEvent()
+      }
     },
     setProject(project) {
       self.project = project
@@ -95,3 +122,7 @@ export const factory = (id, data = {}) => ({
 })
 
 export default Task
+
+export function LateTask() {
+  return Task
+}

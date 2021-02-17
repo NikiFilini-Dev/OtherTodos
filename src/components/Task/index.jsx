@@ -9,6 +9,7 @@ import styles from "./styles.styl"
 
 import Checkbox from "components/Checkbox"
 import PrioritySelector from "components/PrioritySelector"
+import TaskDateSelector from "components/TaskDateSelector"
 import DateSelector from "components/DateSelector"
 import ProjectSelector from "components/ProjectSelector"
 import FloatMenu from "components/FloatMenu"
@@ -20,7 +21,12 @@ import StarIcon from "assets/star.svg"
 import TrashIcon from "assets/awesome/regular/trash-alt.svg"
 import TagsIcon from "assets/awesome/solid/tags.svg"
 import RedoIcon from "assets/awesome/solid/redo.svg"
-import { useClickOutsideRef, useContextMenu, useKeyListener } from "tools/hooks"
+import {
+  useClick,
+  useClickOutsideRef,
+  useContextMenu,
+  useKeyListener,
+} from "tools/hooks"
 import { useMst } from "models/RootStore"
 
 const inRef = (ref, e) => {
@@ -54,14 +60,24 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
 
   const dateRef = useRef(null)
   const fullDateRef = useRef(null)
+  const fullDateMenuRef = useRef(null)
   const projectRef = React.useRef(null)
   const tagsRef = React.useRef(null)
 
+  const startMenuRef = React.useRef(null)
+  const endMenuRef = React.useRef(null)
+
   useClickOutsideRef(dateRef, () => setIsDatePickerOpen(false))
-  useClickOutsideRef(fullDateRef, () => setIsFullDatePickerOpen(false))
+  useClick(document, e => {
+    if (!isFullDatePickerOpen) return
+    if (inRefs([fullDateRef, fullDateMenuRef, startMenuRef, endMenuRef], e))
+      return
+    setIsFullDatePickerOpen(false)
+  })
   useClickOutsideRef(projectRef, () => setIsProjectSelectorOpen(false))
   useClickOutsideRef(tagsRef, () => setIsTagsSelectorOpen(false))
   useClickOutsideRef(containerRef, () => {
+    if (isFullDatePickerOpen) return
     if (!active) setIsActive(false)
     if (isSelected) select(null)
   })
@@ -110,7 +126,10 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
       !isTagsSelectorOpen
     )
       return setIsActive(false)
-    if (inRefs([dateRef, fullDateRef, projectRef, checkRef], e)) return
+    if (
+      inRefs([dateRef, fullDateRef, projectRef, checkRef, fullDateMenuRef], e)
+    )
+      return
     if (e.target) {
       if (isSelected) setIsActive(true)
       else select(task)
@@ -310,14 +329,6 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
               : task.date
               ? moment(task.date).format("DD MMM")
               : "Без даты"}
-            {isFullDatePickerOpen && (
-              <DateSelector
-                value={moment(task.date ? task.date : new Date())._d}
-                onSelect={onDateSelect}
-                // onSelect={onDateSelect}
-                triggerRef={fullDateRef}
-              />
-            )}
           </span>
         </div>
         {!active && (
@@ -371,6 +382,15 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
                   task.setProject(project)
                 }}
               />
+            </FloatMenu>
+          )}
+          {isFullDatePickerOpen && (
+            <FloatMenu
+              target={fullDateRef}
+              position={"vertical_left"}
+              menuRef={fullDateMenuRef}
+            >
+              <TaskDateSelector task={task} {...{ startMenuRef, endMenuRef }} />
             </FloatMenu>
           )}
         </div>

@@ -4,14 +4,22 @@ import { useClickOutsideRef } from "../../tools/hooks"
 import styles from "./styles.styl"
 import ChevronUp from "assets/awesome/solid/chevron-up.svg"
 import ChevronDown from "assets/awesome/solid/chevron-down.svg"
+import moment from "moment"
 
-const TimeSelector = ({ onOutsideClick, onSubmit, initialTime }) => {
+const TimeSelector = ({
+  onOutsideClick,
+  onSubmit,
+  initialTime,
+  minimalTime,
+}) => {
   const [rawHours, setRawHours] = React.useState(
     initialTime.split(":")[0].padStart(2, "0"),
   )
   const [rawMinutes, setRawMinutes] = React.useState(
     initialTime.split(":")[1].padStart(2, "0"),
   )
+
+  const minimalMoment = moment(minimalTime, "HH:mm")
 
   const hours = parseInt(rawHours.length ? rawHours : "0")
   const setHours = hours => setRawHours(String(hours).padStart(2, "0"))
@@ -21,30 +29,12 @@ const TimeSelector = ({ onOutsideClick, onSubmit, initialTime }) => {
 
   const ref = React.useRef(null)
 
-  const minutesUp = () => {
-    if (minutes < 59) return setMinutes(minutes + 1)
-    else {
-      if (hours < 23) setHours(hours + 1)
-      else setHours(0)
-      setMinutes(0)
-    }
-  }
-
-  const minutesDown = () => {
-    if (minutes > 0) return setMinutes(minutes - 1)
-    if (hours > 0) setHours(hours - 1)
-    else setHours(23)
-    setMinutes(59)
-  }
-
-  const hoursUp = () => {
-    if (hours < 24) return setHours(hours + 1)
-    else return setHours(0)
-  }
-
-  const hoursDown = () => {
-    if (hours > 0) return setHours(hours - 1)
-    else return setHours(23)
+  const changeTime = (amount, unit) => {
+    let time = moment(`${hours}:${minutes}`, "H:m").add(amount, unit)
+    if (minimalTime && time.isBefore(minimalMoment)) time = minimalMoment
+    const [newHours, newMinutes] = time.format("HH:mm").split(":")
+    setMinutes(newMinutes)
+    setHours(newHours)
   }
 
   useClickOutsideRef(ref, () => onOutsideClick())
@@ -53,29 +43,43 @@ const TimeSelector = ({ onOutsideClick, onSubmit, initialTime }) => {
     <div className={styles.wrapper} ref={ref}>
       <div className={styles.select}>
         <div className={styles.row}>
-          <span className={styles.action} onClick={hoursUp}>
+          <span
+            className={styles.action}
+            onClick={() => changeTime(1, "hours")}
+          >
             <ChevronUp />
           </span>
           <input
             type="number"
             value={rawHours}
-            onChange={e => setRawHours(e.target.value)}
+            onChange={e => setRawHours(e.target.value.slice(0, 2))}
           />
-          <span className={styles.action} onClick={hoursDown}>
+          <span
+            className={styles.action}
+            onClick={() => changeTime(-1, "hours")}
+          >
             <ChevronDown />
           </span>
         </div>
         <div className={styles.delimiter}>:</div>
         <div className={styles.row}>
-          <span className={styles.action} onClick={minutesUp}>
+          <span
+            className={styles.action}
+            onClick={() => changeTime(1, "minutes")}
+          >
             <ChevronUp />
           </span>
           <input
             type="number"
             value={rawMinutes}
-            onChange={e => setRawMinutes(e.target.value)}
+            onChange={e => {
+              setRawMinutes(e.target.value.slice(0, 2))
+            }}
           />
-          <span className={styles.action} onClick={minutesDown}>
+          <span
+            className={styles.action}
+            onClick={() => changeTime(-1, "minutes")}
+          >
             <ChevronDown />
           </span>
         </div>
@@ -97,6 +101,7 @@ TimeSelector.propTypes = {
   onOutsideClick: PropTypes.func.required,
   onSubmit: PropTypes.func.required,
   initialTime: PropTypes.string.required,
+  minimalTime: PropTypes.string.required,
 }
 
 export default TimeSelector
