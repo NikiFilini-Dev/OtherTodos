@@ -66,11 +66,17 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
 
   const startMenuRef = React.useRef(null)
   const endMenuRef = React.useRef(null)
+  const tagMenuRef = React.useRef(null)
 
   useClickOutsideRef(dateRef, () => setIsDatePickerOpen(false))
   useClick(document, e => {
     if (!isFullDatePickerOpen) return
-    if (inRefs([fullDateRef, fullDateMenuRef, startMenuRef, endMenuRef], e))
+    if (
+      inRefs(
+        [fullDateRef, fullDateMenuRef, startMenuRef, endMenuRef, tagMenuRef],
+        e,
+      )
+    )
       return
     setIsFullDatePickerOpen(false)
   })
@@ -390,7 +396,10 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
               position={"vertical_left"}
               menuRef={fullDateMenuRef}
             >
-              <TaskDateSelector task={task} {...{ startMenuRef, endMenuRef }} />
+              <TaskDateSelector
+                task={task}
+                {...{ startMenuRef, endMenuRef, tagMenuRef }}
+              />
             </FloatMenu>
           )}
         </div>

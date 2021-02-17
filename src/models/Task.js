@@ -47,6 +47,8 @@ const Task = types
         task: self.id,
         date: self.date,
         allDay: true,
+        start: "00:00",
+        duration: 60,
         name: self.text,
       })
     },
