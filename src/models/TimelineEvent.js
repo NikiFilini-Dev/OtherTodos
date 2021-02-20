@@ -64,13 +64,6 @@ const TimelineEvent = types
         const startMoment = moment(self.start, "HH:mm")
         let newEndMoment = moment(startMoment).endOf("day")
         const diff = newEndMoment.diff(startMoment)
-        console.log(
-          "DIFF:",
-          startMoment,
-          newEndMoment,
-          diff,
-          moment.duration(diff).asMinutes(),
-        )
         return this.setDuration(moment.duration(diff).asMinutes() + 1)
       }
       this.setEnd(`${hours}:${minutes}`)

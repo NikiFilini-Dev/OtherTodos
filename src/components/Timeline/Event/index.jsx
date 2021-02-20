@@ -84,7 +84,7 @@ const Event = observer(({ event, isDragging }) => {
   }
 
   const styleVars = {
-    "--background": event.tag?.color || event.color,
+    "--background": event.tag?.color || "#b7b7b7",
     "--light": "white",
     "--normal": "white",
   }

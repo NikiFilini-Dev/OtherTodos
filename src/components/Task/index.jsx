@@ -21,6 +21,7 @@ import StarIcon from "assets/star.svg"
 import TrashIcon from "assets/awesome/regular/trash-alt.svg"
 import TagsIcon from "assets/awesome/solid/tags.svg"
 import RedoIcon from "assets/awesome/solid/redo.svg"
+import CalendarWeekIcon from "assets/awesome/solid/calendar-week.svg"
 import {
   useClick,
   useClickOutsideRef,
@@ -240,6 +241,11 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
           >
             <FolderIcon className={styles.projectIcon} />
             {task.project.name}
+          </span>
+        )}
+        {task.event && (
+          <span className={styles.hasEvent}>
+            <CalendarWeekIcon />
           </span>
         )}
         {!isActive && task.date && (

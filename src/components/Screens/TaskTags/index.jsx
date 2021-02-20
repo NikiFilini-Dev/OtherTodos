@@ -4,10 +4,19 @@ import { useMst } from "models/RootStore"
 import styles from "./styles.styl"
 import PlusIcon from "../../../assets/plus.svg"
 import TagIcon from "assets/awesome/solid/tag.svg"
+import TrashIcon from "assets/awesome/solid/trash-alt.svg"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
+const { dialog } = require("electron").remote
 
 const TaskTags = observer(() => {
-  const { tags, createTag, selectedTagType } = useMst()
+  const {
+    tags,
+    createTag,
+    selectedTagType,
+    deleteTag,
+    tasks: { all },
+    events,
+  } = useMst()
 
   const type = selectedTagType
 
@@ -43,6 +52,25 @@ const TaskTags = observer(() => {
     })
   }
 
+  const onTagDelete = tag => {
+    const dialogOpts = {
+      type: "info",
+      buttons: ["Удалить", "отмена"],
+      title: "Удаление тэга",
+      detail: 'Удалить тэг "' + tag.name + '"?',
+    }
+
+    dialog.showMessageBox(dialogOpts).then(returnValue => {
+      if (returnValue.response === 0) {
+        all.forEach(task => task.removeTag(tag))
+        events.forEach(event =>
+          event.setTag(event.tag === tag ? null : event.tag),
+        )
+        deleteTag(tag)
+      }
+    })
+  }
+
   const Tag = observer(({ tag, provided }) => {
     return (
       <div
@@ -62,6 +90,9 @@ const TaskTags = observer(() => {
           onChange={e => tag.setName(e.target.value)}
           className={styles.tagName}
         />
+        <div className={styles.delete} onClick={() => onTagDelete(tag)}>
+          <TrashIcon />
+        </div>
         <input
           type={"color"}
           className={styles.colorInput}

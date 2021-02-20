@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid"
 import { randomTagColor } from "./Tag"
+import moment from "moment"
 
 const migrations = [
   {
@@ -66,6 +67,19 @@ const migrations = [
       Store.tags.forEach(
         tag => (tag.color = tag.color ? tag.color : randomTagColor()),
       )
+    },
+  },
+  {
+    id: 10,
+    desc: "Move from end to duration",
+    up(Store) {
+      Store.events.forEach(event => {
+        event.duration = moment
+          .duration(
+            moment(event.end, "HH:mm").diff(moment(event.start, "HH:mm")),
+          )
+          .asMinutes()
+      })
     },
   },
 ]

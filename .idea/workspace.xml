@@ -6,9 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Screens/TaskTags/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/TaskTags/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Screens/TaskTags/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/TaskTags/styles.styl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Task/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Task/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/styles.styl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/TaskDateSelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TaskDateSelector/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Task.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Task.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timeline/Event/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timeline/Event/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/TimelineEvent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/TimelineEvent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/migrations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/migrations.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +116,8 @@
       <workItem from="1612965618456" duration="64444000" />
       <workItem from="1613412544857" duration="7474000" />
       <workItem from="1613477216628" duration="6196000" />
-      <workItem from="1613484401706" duration="30414000" />
+      <workItem from="1613484401706" duration="30982000" />
+      <workItem from="1613682588762" duration="2874000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>

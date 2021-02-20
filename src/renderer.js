@@ -18,78 +18,7 @@ const data = {
   tags: [],
   projects: [],
   tasks: { all: [] },
-}
-
-if (DEBUG) {
-  data.tags = [
-    {
-      id: 1,
-      name: "Testing",
-      project: 2,
-      index: 0,
-    },
-    {
-      id: 2,
-      name: "Nanodesu",
-      project: 2,
-      index: 1,
-    },
-  ]
-  data.projects = [
-    {
-      id: 1,
-      name: "Test project",
-    },
-    {
-      id: 2,
-      name: "Project 2",
-    },
-  ]
-  data.tasks.all = [
-    {
-      id: 1,
-      text: "Test task 1",
-      status: "active",
-      project: 1,
-      note: "",
-      priority: 1,
-      date: moment()
-        .subtract(1, "days")
-        .format("YYYY-MM-DD"),
-      tags: [1],
-    },
-    {
-      id: 2,
-      text: "Test task 2",
-      status: "active",
-      project: 2,
-      note: "",
-      priority: 2,
-      date: moment().format("YYYY-MM-DD"),
-      tags: [1],
-    },
-    {
-      id: 3,
-      text: "Test task 3",
-      status: "done",
-      closeDate: moment().format("YYYY-MM-DD"),
-      note: "",
-      project: 1,
-      priority: 3,
-      date: moment().format("YYYY-MM-DD"),
-    },
-    {
-      id: 4,
-      text: "Test task 4",
-      status: "done",
-      closeDate: moment()
-        .subtract(1, "days")
-        .format("YYYY-MM-DD"),
-      note: "",
-      project: 1,
-      priority: 4,
-    },
-  ]
+  events: [],
 }
 const Store = RootStore.create(data)
 

@@ -185,7 +185,7 @@ const TaskDateSelector = observer(
                     setTimeout(() => {
                       task.event.setTag(tag)
                       setTagActive(false)
-                    }, 10)
+                    }, 100)
                   }}
                   unselect={() => {
                     setTimeout(() => {
