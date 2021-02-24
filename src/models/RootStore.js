@@ -44,10 +44,16 @@ const RootStore = types
     insertTempTask() {
       const task = JSON.parse(JSON.stringify(self.tempTask.toJSON()))
       task.id = uuidv4()
-      self.tempTask = null
       self.tasks.add(task)
+      if (self.tempTask.event) {
+        self.tempTask.event.task = task.id
+      }
+      self.tempTask = null
     },
     setTempTask(task) {
+      if (self.tempTask && self.tempTask.event) {
+        this.deleteEvent(self.tempTask.event)
+      }
       self.tempTask = task
     },
     setTimelineDate(val) {

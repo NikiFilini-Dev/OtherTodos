@@ -82,6 +82,24 @@ const migrations = [
       })
     },
   },
+  {
+    id: 25,
+    desc: "Remove events from temp tasks",
+    up(Store) {
+      ;[...Store.events].forEach(event => {
+        let task = Store.tasks.all.find(t => t.id === event.task)
+        if (!task && event.task) {
+          Store.events.splice(Store.events.indexOf(event), 1)
+        }
+      })
+      Store.tasks.all.forEach(task => {
+        let event = Store.events.find(e => e.id === task.event)
+        if (!event && task.event) {
+          task.event = null
+        }
+      })
+    },
+  },
 ]
 
 export default migrations

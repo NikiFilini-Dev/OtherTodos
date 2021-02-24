@@ -50,6 +50,10 @@ jsonStorage
         .then(hydrate)
         .catch(alert)
     } else {
+      if (v._storeVersion === 0) {
+        v.tempTask = null
+        v.events = []
+      }
       const taskProjects = []
       v.tasks.all.forEach(task => {
         if (!taskProjects.includes(task.project))
