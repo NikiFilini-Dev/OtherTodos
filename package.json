@@ -15,7 +15,10 @@
     "pub:patch": "yarn version --patch && yarn pub:base",
     "pub:minor": "yarn version --minor && yarn pub:base",
     "pub:major": "yarn version --major && yarn pub:base",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "web:build": "webpack --config=webpack.web.config.js --progress --color --mode=development",
+    "web:watch": "webpack --config=webpack.web.config.js --progress --color --mode=development --watch",
+    "web:server": "nodemon web/server.js"
   },
   "keywords": [],
   "author": {
@@ -63,6 +66,7 @@
     "eslint-plugin-sonarjs": "^0.5.0",
     "husky": "^5.0.8",
     "node-loader": "^1.0.2",
+    "nodemon": "^2.0.7",
     "react-svg-loader": "^3.0.3",
     "style-loader": "^1.3.0",
     "stylelint": "^13.8.0",
@@ -70,7 +74,8 @@
     "stylelint-config-recommended": "^3.0.0",
     "stylus": "^0.54.8",
     "stylus-loader": "^4.3.1",
-    "webpack": "^4.44.2"
+    "webpack": "^4.44.2",
+    "webpack-cli": "^4.6.0"
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.12.1",
@@ -79,6 +84,8 @@
     "electron-squirrel-startup": "^1.0.0",
     "electron-vibrancy": "https://github.com/lunavod/electron-vibrancy.git",
     "es-abstract": "^1.18.0-next.1",
+    "events": "^3.3.0",
+    "express": "^4.17.1",
     "graphql-request": "^3.3.0",
     "lodash": "^4.17.20",
     "mobx": "^6.0.4",

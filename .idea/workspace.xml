@@ -5,10 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/web/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/mocks/electron.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/mocks/jsonStorage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/server.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webpack.web.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/OtherTodos.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OtherTodos.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/RootStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/RootStore.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/migrations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/migrations.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/Search.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/search.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tools/jsonStorage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/jsonStorage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +56,7 @@
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.detected.package.stylelint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
-    <property name="node.js.path.for.package.eslint" value="/usr/local/bin/node" />
+    <property name="node.js.path.for.package.eslint" value="node" />
     <property name="node.js.path.for.package.standard" value="project" />
     <property name="node.js.path.for.package.stylelint" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
@@ -56,9 +66,9 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="prettier.import.notification.dismissed" value="true" />
-    <property name="prettierjs.PrettierConfiguration.NodeInterpreter" value="/usr/local/bin/node" />
+    <property name="prettierjs.PrettierConfiguration.NodeInterpreter" value="node" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.prettier" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -111,6 +121,7 @@
       <workItem from="1613477216628" duration="6196000" />
       <workItem from="1613484401706" duration="30982000" />
       <workItem from="1613682588762" duration="6250000" />
+      <workItem from="1617621760918" duration="3240000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -376,7 +387,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Выбор задачи двумя кликами, автоувеличение поля заметок, меню тегов везде" />
     <MESSAGE value="Отображение точкой в календаре текущего дня" />
     <MESSAGE value="Нормальный скрол в экранах" />
     <MESSAGE value="Сочетания клавиш" />
@@ -401,7 +411,8 @@
     <MESSAGE value="Скролл всплывающих меню" />
     <MESSAGE value="Переход на uuid, изменение алгоритма повторящихся задач" />
     <MESSAGE value="Удаление тэгов" />
-    <option name="LAST_COMMIT_MESSAGE" value="Удаление тэгов" />
+    <MESSAGE value="Web init" />
+    <option name="LAST_COMMIT_MESSAGE" value="Web init" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

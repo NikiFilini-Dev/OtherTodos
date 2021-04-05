@@ -9,6 +9,7 @@ import migrations from "models/migrations"
 import "./external/editor"
 import "./index.css"
 import { persist } from "mst-persist"
+
 const DEBUG = process.env.P_ENV === "debug"
 const data = {
   screen: "TODAY",
@@ -33,64 +34,70 @@ function hydrate() {
   } else {
     render()
   }
-  window.onerror = err => alert(JSON.stringify(err))
+  // window.onerror = err => alert(JSON.stringify(err))
 }
 
-jsonStorage
-  .getItem("root_store")
-  .then(v => {
-    console.log(v)
-    if (typeof v === "string") v = JSON.parse(v)
-    console.log(migrations)
+if (!IS_WEB) {
+  jsonStorage
+    .getItem("root_store")
+    .then(v => {
+      console.log(v)
+      if (typeof v === "string") v = JSON.parse(v)
+      console.log(migrations)
 
-    if (!v || !Object.keys(v).length) {
-      console.log(data)
-      jsonStorage
-        .setItem("root_store", JSON.stringify(data))
-        .then(hydrate)
-        .catch(alert)
-    } else {
-      if (v._storeVersion === 0) {
-        v.tempTask = null
-        v.events = []
-      }
-      const taskProjects = []
-      v.tasks.all.forEach(task => {
-        if (!taskProjects.includes(task.project))
-          taskProjects.push(task.project)
-      })
-      const missingProjects = taskProjects.filter(
-        id => id && !v.projects.find(p => p.id === id),
-      )
-      console.log("TASK PROJECTS:", taskProjects)
-      console.log(
-        "PROJECTS:",
-        v.projects.map(p => p.id),
-      )
-      console.log("MISSING:", missingProjects)
-      missingProjects.forEach(missingId => {
-        v.projects.push({
-          id: missingId,
-          name: `Lost ${missingId}`,
-          index: Infinity,
+      if (!v || !Object.keys(v).length) {
+        console.log(data)
+        jsonStorage
+          .setItem("root_store", JSON.stringify(data))
+          .then(hydrate)
+          .catch(alert)
+      } else {
+        if (v._storeVersion === 0) {
+          v.tempTask = null
+          v.events = []
+        }
+        const taskProjects = []
+        v.tasks.all.forEach(task => {
+          if (!taskProjects.includes(task.project))
+            taskProjects.push(task.project)
         })
-      })
-      if (missingProjects.length)
-        v.projects = v.projects.map(p => ({ ...p, index: p.id - 1 }))
-      migrations.forEach(migration => {
-        if (migration.id <= v._storeVersion) return
-        migration.up(v)
-        console.log(migration)
-        v._storeVersion = migration.id
-      })
-      // v.projects = v.projects.map(project => ({ ...project, categories: [] }))
-      jsonStorage.setItem("root_store", JSON.stringify(v)).then(() => hydrate())
+        const missingProjects = taskProjects.filter(
+          id => id && !v.projects.find(p => p.id === id),
+        )
+        console.log("TASK PROJECTS:", taskProjects)
+        console.log(
+          "PROJECTS:",
+          v.projects.map(p => p.id),
+        )
+        console.log("MISSING:", missingProjects)
+        missingProjects.forEach(missingId => {
+          v.projects.push({
+            id: missingId,
+            name: `Lost ${missingId}`,
+            index: Infinity,
+          })
+        })
+        if (missingProjects.length)
+          v.projects = v.projects.map(p => ({ ...p, index: p.id - 1 }))
+        migrations.forEach(migration => {
+          if (migration.id <= v._storeVersion) return
+          migration.up(v)
+          console.log(migration)
+          v._storeVersion = migration.id
+        })
+        // v.projects = v.projects.map(project => ({ ...project, categories: [] }))
+        jsonStorage
+          .setItem("root_store", JSON.stringify(v))
+          .then(() => hydrate())
 
+        return true
+      }
       return true
-    }
-    return true
-  })
-  .catch(alert)
+    })
+    .catch(alert)
+} else {
+  render()
+}
 
 function render() {
   ReactDOM.render(
@@ -98,5 +105,6 @@ function render() {
     document.querySelector("#app"),
   )
 }
+
 window.moment = moment
 window.Store = Store
