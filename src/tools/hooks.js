@@ -1,6 +1,6 @@
 import React from "react"
 import Mousetrap from "mousetrap"
-import ScrollContext from "components/Screens/scrollContext"
+import ScrollContext from "contexts/scrollContext"
 import Emitter from "events"
 
 export function useClick(target, callback) {
@@ -10,14 +10,25 @@ export function useClick(target, callback) {
   })
 }
 
+const inRef = (ref, el) => {
+  return ref.current && (ref.current === el || ref.current.contains(el))
+}
+
 export function useClickOutsideRef(ref, callback) {
   useClick(document, e => {
-    if (
-      ref.current &&
-      ref.current !== e.target &&
-      !ref.current.contains(e.target)
-    )
-      callback()
+    if (!inRef(ref, e.target)) callback()
+  })
+}
+
+export function useClickOutsideRefs(refs, callback) {
+  useClick(document, e => {
+    let inRefs = false
+    for (let ref of refs) {
+      if (!inRef(ref, e.target)) continue
+      inRefs = true
+      break
+    }
+    if (!inRefs) callback()
   })
 }
 
@@ -30,7 +41,7 @@ export function useScrollEmitter(scrollRef) {
       last_known_scroll_position = e.target.scrollTop
 
       if (!ticking) {
-        window.requestAnimationFrame(function() {
+        window.requestAnimationFrame(function () {
           scrollEmitter.emit("scroll", last_known_scroll_position)
           ticking = false
         })
@@ -69,7 +80,6 @@ export function useFloatMenu(ref) {
 
   React.useEffect(() => {
     if (!ref.current) return
-    // console.log("Scroll container", scrollRef.current)
     let currentBox = ref.current.getBoundingClientRect()
     if (box.width !== currentBox.width || box.height !== currentBox.height)
       setBox(currentBox)
@@ -92,10 +102,8 @@ export function useInput(ref, callback, type = "keyup") {
 export function useTrap(combination, callback) {
   React.useEffect(() => {
     Mousetrap.bind(combination, callback)
-    console.log("BINDING", combination)
 
     return () => {
-      console.log("UNBINDING", combination)
       Mousetrap.unbind(combination, callback)
     }
   })
@@ -118,6 +126,7 @@ export function useKeyListener(key, callback) {
 export function useContextMenu(ref, items = []) {
   React.useEffect(() => {
     if (!ref.current) return
+    if (!window.remote.Menu) return
     const { Menu, MenuItem } = window.remote
 
     const menu = new Menu()

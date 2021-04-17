@@ -16,6 +16,11 @@ module.exports = [
     },
   },
   {
+    test: /\.mjs$/,
+    include: /node_modules/,
+    type: "javascript/auto",
+  },
+  {
     test: /\.(m?js|jsx)$/,
     exclude: /(node_modules|bower_components)/,
     use: {
@@ -44,6 +49,7 @@ module.exports = [
       {
         loader: "style-loader",
       },
+      "@teamsupercell/typings-for-css-modules-loader",
       {
         loader: "css-loader",
         options: {
@@ -77,15 +83,17 @@ module.exports = [
   /**
    * Typescript Example:
    *
-   * {
-   *   test: /\.tsx?$/,
-   *   exclude: /(node_modules|.webpack)/,
-   *   loaders: [{
-   *     loader: 'ts-loader',
-   *     options: {
-   *       transpileOnly: true
-   *     }
-   *   }]
-   * }
    */
+  {
+    test: /\.tsx?$/,
+    exclude: /(node_modules|.webpack)/,
+    loaders: [
+      {
+        loader: "ts-loader",
+        options: {
+          transpileOnly: true,
+        },
+      },
+    ],
+  },
 ]

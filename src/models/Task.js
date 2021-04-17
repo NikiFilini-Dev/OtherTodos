@@ -1,10 +1,10 @@
-import { getRoot, types } from "mobx-state-tree"
+import { getParent, getRoot, types } from "mobx-state-tree"
 import Project from "./Project"
 import Tag from "./Tag"
-import moment from "moment"
 import ProjectCategory from "./ProjectCategory"
 import { v4 as uuidv4 } from "uuid"
 import { LateTimelineEvent } from "./TimelineEvent"
+import { DateTime } from "luxon"
 
 const Task = types
   .model("Task", {
@@ -17,7 +17,9 @@ const Task = types
     date: types.maybeNull(types.string),
     tags: types.array(types.reference(Tag)),
     closeDate: types.maybeNull(types.string),
-    creationDate: types.maybeNull(types.string),
+    creationDate: types.optional(types.string, () =>
+      DateTime.now().toFormat("D"),
+    ),
     repeatEvery: types.maybeNull(types.optional(types.integer, 0)),
     repeating: types.optional(types.boolean, false),
     category: types.maybeNull(types.reference(ProjectCategory)),
@@ -27,9 +29,18 @@ const Task = types
     get done() {
       return self.status === "done"
     },
+    get syncName() {
+      return "Task"
+    },
+    get syncable() {
+      return getParent(self).tempTask === undefined
+    },
   }))
-  .actions(self => ({
-    unconnectEvent() {
+  .actions(self => {
+    const actions = {}
+    const actionsMap = {}
+
+    actions.unconnectEvent = () => {
       if (!self.event) return
       const id = self.event.id
       self.event = null
@@ -38,10 +49,12 @@ const Task = types
         root.events.find(e => e.id === id),
         true,
       )
-    },
-    createAndConnectEvent() {
+    }
+    actionsMap.unconnectEvent = ["event"]
+
+    actions.createAndConnectEvent = () => {
       if (self.event) return
-      if (!self.date) self.date = moment().format("YYYY-MM-DD")
+      if (!self.date) self.date = DateTime.now().toFormat("D")
       const root = getRoot(self)
       self.event = root.createEvent({
         task: self.id,
@@ -51,25 +64,31 @@ const Task = types
         duration: 60,
         name: self.text,
       })
-    },
-    setCloseDate(val) {
+    }
+    actionsMap.createAndConnectEvent = ["event"]
+
+    actions.setCloseDate = val => {
       self.closeDate = val
-    },
-    setRepeatEvery(n) {
+    }
+    actionsMap.setCloseDate = ["closeDate"]
+
+    actions.setRepeatEvery = n => {
       if (!n) n = 0
       self.repeatEvery = parseInt(n)
-    },
-    changeStatus(value) {
+    }
+    actionsMap.setRepeatEvery = ["repeatEvery"]
+
+    actions.changeStatus = value => {
       self.status = value ? "done" : "active"
       if (value) {
-        self.closeDate = moment().format("YYYY-MM-DD")
+        self.closeDate = DateTime.now().toFormat("D")
         if (self.repeatEvery) {
           const newTask = JSON.parse(JSON.stringify(self))
-          newTask.date = moment(self.date || self.closeDate, "YYYY-MM-DD")
-            .add(self.repeatEvery, "days")
-            .format("YYYY-MM-DD")
+          newTask.date = DateTime.fromFormat(self.date || self.closeDate, "D")
+            .plus({ days: self.repeatEvery })
+            .toFormat("D")
           newTask.status = "active"
-          newTask.creationDate = moment().format("YYYY-MM-DD")
+          newTask.creationDate = DateTime.now().toFormat("D")
           newTask.closeDate = null
           newTask.id = uuidv4()
           console.log(newTask)
@@ -77,51 +96,78 @@ const Task = types
           root.tasks.add(root.createTask(newTask))
         }
       } else self.closeDate = null
-    },
-    setNote(value) {
+    }
+    actionsMap.changeStatus = ["status", "closeDate"]
+
+    actions.setNote = value => {
       self.note = value
-    },
-    setPriority(value) {
+    }
+    actionsMap.setNote = ["note"]
+
+    actions.setPriority = value => {
       self.priority = value
-    },
-    setDate(value) {
-      if (moment.isDate(value)) value = moment(value).format("YYYY-MM-DD")
+    }
+    actionsMap.setPriority = ["priority"]
+
+    actions.setDate = value => {
+      if (value instanceof Date)
+        value = DateTime.fromJSDate(value).toFormat("D")
       self.date = value
       if (self.event) {
         if (value) self.event.setDate(self.date)
         else self.unconnectEvent()
       }
-    },
-    setProject(project) {
+    }
+    actionsMap.setDate = ["date", "event"]
+
+    actions.setProject = project => {
       self.project = project
-    },
-    addTag(tag) {
+    }
+    actionsMap.setProject = ["project"]
+
+    actions.addTag = tag => {
       console.log(tag)
       if (self.tags.includes(tag)) return
       self.tags.push(tag)
-    },
-    removeTag(tag) {
+    }
+    actionsMap.addTag = ["tags"]
+
+    actions.removeTag = tag => {
       if (self.tags.indexOf(tag) === -1) return
       self.tags.splice(self.tags.indexOf(tag), 1)
-    },
-    setText(text) {
-      self.text = text
-    },
-    setCategory(c) {
-      self.category = c
-    },
-  }))
+    }
+    actionsMap.removeTag = ["tags"]
 
-export const factory = (id, data = {}) => ({
-  id,
-  project: null,
-  date: null,
-  text: "",
-  note: "",
-  tags: [],
-  status: "active",
-  ...data,
-})
+    actions.setText = text => {
+      self.text = text
+    }
+    actionsMap.setText = ["text"]
+
+    actions.setCategory = c => {
+      self.category = c
+    }
+    actionsMap.setCategory = ["category"]
+
+    actions.getActionsMap = () => actionsMap
+
+    return actions
+  })
+
+export const factory = (id, data = {}) => {
+  if (data.project === "") data.project = null
+  if (data.event === "") data.event = null
+  if (data.category === "") data.category = null
+  return {
+    id,
+    project: null,
+    date: null,
+    text: "",
+    note: "",
+    tags: [],
+    status: "active",
+    ...data,
+  }
+}
 
 export default Task
 

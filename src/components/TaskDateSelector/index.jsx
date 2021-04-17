@@ -74,7 +74,7 @@ const TaskDateSelector = observer(
 
     const selectDate = day => {
       let date = day.date
-      if (moment.isDate(date)) date = moment(date).format("YYYY-MM-DD")
+      if (moment.isDate(date)) date = moment(date).format()
       task.setDate(date)
     }
 

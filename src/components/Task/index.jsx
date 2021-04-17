@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React from "react"
 import PropTypes from "prop-types"
 import { observer } from "mobx-react"
 import classNames from "classnames"
@@ -10,7 +10,6 @@ import styles from "./styles.styl"
 import Checkbox from "components/Checkbox"
 import PrioritySelector from "components/PrioritySelector"
 import TaskDateSelector from "components/TaskDateSelector"
-import DateSelector from "components/DateSelector"
 import ProjectSelector from "components/ProjectSelector"
 import FloatMenu from "components/FloatMenu"
 import TagsSelector from "components/TagsSelector"
@@ -25,72 +24,52 @@ import CalendarWeekIcon from "assets/awesome/solid/calendar-week.svg"
 import {
   useClick,
   useClickOutsideRef,
+  useClickOutsideRefs,
   useContextMenu,
   useKeyListener,
 } from "tools/hooks"
 import { useMst } from "models/RootStore"
-
-const inRef = (ref, e) => {
-  return (
-    ref.current && (e.target === ref.current || ref.current.contains(e.target))
-  )
-}
-
-const inRefs = (refs, e) => {
-  for (let ref of refs) if (inRef(ref, e)) return true
-  return false
-}
+import TaskState from "./state"
 
 const Task = observer(({ task, active = false, onConfirm, expired }) => {
   const {
     createTag,
     tasks: { deleteTask, selected, select },
   } = useMst()
-  const [isActive, setIsActive] = useState(active)
-  const [isDone, setIsDone] = useState(task.done)
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
-  const [isFullDatePickerOpen, setIsFullDatePickerOpen] = useState(false)
-  const [isProjectSelectorOpen, setIsProjectSelectorOpen] = useState(false)
-  const [isTagsSelectorOpen, setIsTagsSelectorOpen] = useState(false)
-  const [isUpdated, setIsUpdated] = useState(false)
-  const isSelected = selected === task
+  const [state] = React.useState(new TaskState())
+  if (active && !state.active) state.active = active
 
-  const containerRef = useRef(null)
-  const checkRef = useRef(null)
-  const inputRef = useRef(null)
-
-  const dateRef = useRef(null)
-  const fullDateRef = useRef(null)
-  const fullDateMenuRef = useRef(null)
-  const projectRef = React.useRef(null)
-  const tagsRef = React.useRef(null)
-
-  const startMenuRef = React.useRef(null)
-  const endMenuRef = React.useRef(null)
-  const tagMenuRef = React.useRef(null)
-
-  useClickOutsideRef(dateRef, () => setIsDatePickerOpen(false))
   useClick(document, e => {
-    if (!isFullDatePickerOpen) return
     if (
-      inRefs(
-        [fullDateRef, fullDateMenuRef, startMenuRef, endMenuRef, tagMenuRef],
-        e,
-      )
+      !state.menus.datePicker ||
+      state.elementInMenuOrTrigger(e.target, "datePicker") ||
+      state.elementInMenuOrTrigger(e.target, "datePicker_start") ||
+      state.elementInMenuOrTrigger(e.target, "datePicker_end")
     )
       return
-    setIsFullDatePickerOpen(false)
+
+    state.closeMenu("datePicker")
   })
-  useClickOutsideRef(projectRef, () => setIsProjectSelectorOpen(false))
-  useClickOutsideRef(tagsRef, () => setIsTagsSelectorOpen(false))
-  useClickOutsideRef(containerRef, () => {
-    if (isFullDatePickerOpen) return
-    if (!active) setIsActive(false)
-    if (isSelected) select(null)
+
+  useClickOutsideRefs(
+    [state.refs.menus.project.menu, state.refs.menus.project.trigger],
+    () => state.closeMenu("project"),
+  )
+  useClickOutsideRefs(
+    [state.refs.menus.tags.menu, state.refs.menus.tags.trigger],
+    () => state.closeMenu("tags"),
+  )
+  useClickOutsideRef(state.refs.container, () => {
+    if (!state.allMenusClosed) return
+
+    if (!active) state.active = false
+    if (selected?.id === task.id) {
+      select(null)
+    }
   })
 
   React.useEffect(() => {
-    if (inputRef.current && active) inputRef.current.focus()
+    if (state.refs.input.current && active) state.refs.input.current.focus()
   }, ["active"])
 
   useKeyListener("Enter", () => {
@@ -98,61 +77,53 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   })
 
   useKeyListener("Escape", () => {
-    if (isActive || selected) {
-      setIsActive(false)
+    if (state.active || selected) {
+      state.active = false
       select(null)
     }
   })
 
-  useContextMenu(containerRef, [
+  useContextMenu(state.refs.container, [
     {
       label: "Удалить",
-      click() {
-        deleteTask(task)
-      },
+      click: () => deleteTask(task),
     },
   ])
 
   useKeyListener("Delete", () => {
-    if (isSelected && !isActive) deleteTask(task)
+    if (selected?.id === task.id && !state.active) deleteTask(task)
   })
 
   useKeyListener("Backspace", () => {
-    if (isSelected && !isActive) deleteTask(task)
+    if (selected?.id === task.id && !state.active) deleteTask(task)
   })
 
   const onTaskClick = e => {
     if (
-      isActive &&
+      state.active &&
       !active &&
       (e.target.classList.contains(styles.task) ||
         e.target.classList.contains(styles.line)) &&
-      !isDatePickerOpen &&
-      !isFullDatePickerOpen &&
-      !isProjectSelectorOpen &&
-      !isTagsSelectorOpen
-    )
-      return setIsActive(false)
+      state.allMenusClosed
+    ) {
+      state.active = false
+      return
+    }
+
     if (
-      inRefs([dateRef, fullDateRef, projectRef, checkRef, fullDateMenuRef], e)
+      state.elementInAnyMenuOrTrigger(e.target) ||
+      state.inRef(e.target, state.refs.checkbox)
     )
       return
-    if (e.target) {
-      if (isSelected) setIsActive(true)
-      else select(task)
+
+    if (selected?.id === task.id) state.active = true
+    else {
+      select(task)
     }
   }
 
   const onPrioritySelect = priority => {
     task.setPriority(priority)
-  }
-
-  const onDateSelect = day => {
-    let date = day.date
-    if (moment.isDate(date)) date = moment(date).format("YYYY-MM-DD")
-    task.setDate(date)
-    setIsDatePickerOpen(false)
-    setIsFullDatePickerOpen(false)
   }
 
   const selectTag = tag => task.addTag(tag)
@@ -162,8 +133,9 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
     task.addTag(tag)
   }
 
+  const [isUpdated, setIsUpdated] = React.useState(false)
   const onCheckboxChange = val => {
-    setIsDone(val)
+    state.done = val
     setTimeout(() => {
       setIsUpdated(true)
       task.changeStatus(val)
@@ -171,7 +143,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   }
 
   if (isUpdated) {
-    setIsDone(task.done)
+    state.done = task.done
     setIsUpdated(false)
   }
 
@@ -180,6 +152,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
 
   const editorRef = React.useRef(null)
   React.useEffect(() => {
+    if (!editorRef.current) return
     editorRef.current.setText(task.note)
     editorRef.current.addEventListener("change", e => {
       console.log(e.detail.original)
@@ -189,27 +162,26 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
 
   return (
     <div
-      ref={containerRef}
-      key={`task_${task.id}`}
+      ref={state.refs.container}
       className={classNames({
         [styles.task]: true,
-        [styles.done]: isDone,
-        [styles.active]: isActive,
-        [styles.selected]: isSelected,
+        [styles.done]: state.done,
+        [styles.active]: state.active,
+        [styles.selected]: selected?.id === task.id,
       })}
       onClick={onTaskClick}
     >
       <div className={styles.line}>
         <Checkbox
-          ref={checkRef}
+          ref={state.refs.checkbox}
           className={styles.check}
           onChange={onCheckboxChange}
-          checked={isDone}
+          checked={state.done}
         />
-        {!isActive && <span className={styles.taskText}>{task.text}</span>}
-        {isActive && (
+        {!state.active && <span className={styles.taskText}>{task.text}</span>}
+        {state.active && (
           <input
-            ref={inputRef}
+            ref={state.refs.input}
             className={styles.taskTextEdit}
             value={task.text}
             placeholder={"Задача"}
@@ -218,7 +190,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         )}
         <div className={styles.puller} />
         <div className={styles.tags}>
-          {!isActive &&
+          {!state.active &&
             Boolean(task.tags.length) &&
             tags.map(tag => (
               <span
@@ -232,7 +204,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
               </span>
             ))}
         </div>
-        {!isActive && Boolean(expired) && Boolean(task.project) && (
+        {!state.active && Boolean(expired) && Boolean(task.project) && (
           <span
             className={classNames({
               [styles.project]: true,
@@ -248,7 +220,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             <CalendarWeekIcon />
           </span>
         )}
-        {!isActive && task.date && (
+        {!state.active && task.date && (
           <span
             className={classNames({
               [styles.date]: true,
@@ -274,29 +246,17 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
           [styles.fullOnly]: true,
         })}
       >
-        <span className={styles.project} ref={projectRef}>
-          <span onClick={() => setIsProjectSelectorOpen(true)}>
+        <span className={styles.project} ref={state.refs.menus.project.trigger}>
+          <span onClick={() => state.openMenu("project")}>
             <FolderIcon className={styles.projectIcon} />
             {task.project ? task.project.name : "Входящие"}
           </span>
         </span>
-        {task.date && !isActive && (
-          <span style={{ position: "relative" }}>
-            <span
-              className={styles.date}
-              ref={dateRef}
-              onClick={() => setIsDatePickerOpen(true)}
-            >
-              <CalendarIcon className={styles.dateIcon} />
-              {moment(task.date).format("DD MMM")}
-            </span>
-            {isDatePickerOpen && (
-              <DateSelector
-                value={moment(task.date)._d}
-                onSelect={onDateSelect}
-                triggerRef={dateRef}
-              />
-            )}
+
+        {task.date && !state.active && (
+          <span className={styles.date}>
+            <CalendarIcon className={styles.dateIcon} />
+            {moment(task.date).format("DD MMM")}
           </span>
         )}
       </div>
@@ -332,11 +292,11 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         <div style={{ position: "relative" }}>
           <span
             className={styles.fullDate}
-            ref={fullDateRef}
-            onClick={() => setIsFullDatePickerOpen(true)}
+            ref={state.refs.menus.datePicker.trigger}
+            onClick={() => state.openMenu("datePicker")}
           >
             <StarIcon className={styles.fullDateIcon} />
-            {task.date === moment().format("YYYY-MM-DD")
+            {task.date === moment().format()
               ? "Сегодня"
               : task.date
               ? moment(task.date).format("DD MMM")
@@ -364,60 +324,76 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
           />{" "}
           д.
         </div>
-        <div style={{ position: "relative" }} ref={tagsRef}>
+        <div
+          style={{ position: "relative" }}
+          ref={state.refs.menus.tags.trigger}
+        >
           <div
             className={classNames({
               [styles.tagsTrigger]: true,
-              [styles.active]: isTagsSelectorOpen,
+              [styles.active]: state.menus.tags,
             })}
-            onClick={() => setIsTagsSelectorOpen(true)}
+            onClick={() => state.openMenu("tags")}
           >
             <TagsIcon className={styles.tagsTriggerIcon} />
           </div>
-          {isTagsSelectorOpen && (
-            <FloatMenu target={tagsRef} position={"vertical_right"}>
-              <TagsSelector
-                selected={task.tags}
-                project={task.project}
-                select={selectTag}
-                unselect={unselectTag}
-                add={addTag}
-              />
-            </FloatMenu>
-          )}
-          {isProjectSelectorOpen && (
-            <FloatMenu target={projectRef} position={"vertical_left"}>
-              <ProjectSelector
-                selected={task.project ? task.project.id : null}
-                onSelect={project => {
-                  setIsProjectSelectorOpen(false)
-                  task.setProject(project)
-                }}
-              />
-            </FloatMenu>
-          )}
-          {isFullDatePickerOpen && (
-            <FloatMenu
-              target={fullDateRef}
-              position={"vertical_left"}
-              menuRef={fullDateMenuRef}
-            >
-              <TaskDateSelector
-                task={task}
-                {...{ startMenuRef, endMenuRef, tagMenuRef }}
-              />
-            </FloatMenu>
-          )}
         </div>
       </div>
+
+      {state.menus.tags && (
+        <FloatMenu
+          target={state.refs.menus.tags.trigger}
+          menuRef={state.refs.menus.tags.menu}
+          position={"vertical_right"}
+        >
+          <TagsSelector
+            selected={task.tags}
+            project={task.project}
+            select={selectTag}
+            unselect={unselectTag}
+            add={addTag}
+          />
+        </FloatMenu>
+      )}
+
+      {state.menus.project && (
+        <FloatMenu
+          target={state.refs.menus.project.trigger}
+          menuRef={state.refs.menus.project.menu}
+          position={"vertical_left"}
+        >
+          <ProjectSelector
+            selected={task.project ? task.project.id : null}
+            onSelect={project => {
+              state.closeMenu("project")
+              task.setProject(project)
+            }}
+          />
+        </FloatMenu>
+      )}
+
+      {state.menus.datePicker && (
+        <FloatMenu
+          target={state.refs.menus.datePicker.trigger}
+          position={"vertical_left"}
+          menuRef={state.refs.menus.datePicker.menu}
+        >
+          <TaskDateSelector
+            task={task}
+            startMenuRef={state.refs.menus.datePicker_start.menu}
+            endMenuRef={state.refs.menus.datePicker_end.menu}
+            tagMenuRef={state.refs.menus.tags.menu}
+          />
+        </FloatMenu>
+      )}
     </div>
   )
 })
 
 Task.propTypes = {
   task: PropTypes.shape({
-    id: PropTypes.number,
-    text: PropTypes.text,
+    id: PropTypes.string,
+    text: PropTypes.string,
   }),
   expired: PropTypes.bool,
 }

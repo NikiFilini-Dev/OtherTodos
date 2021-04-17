@@ -3,27 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <title>Others Task</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png">
+  <link rel="manifest" href="/public/site.webmanifest">
+  <link rel="mask-icon" href="/public/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-config" content="/public/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
   <script>
-    // const { remote } = require('electron')
-    // window.remote = remote
+    window.IS_WEB = true
+    window.remote = {}
   </script>
   <style>
       body {
           background: #ececec;
-      }
-      #titlebar {
-          height: 36px;
-          -webkit-app-region: drag;
-          width: 100vw;
-          position: absolute;
-          left: 0;
-          top: 0;
-          display: flex;
-          align-items: center;
-      }
-      #clearData {
-          margin-left: auto;
-          margin-right: 24px;
       }
 
       :root {
@@ -99,7 +94,7 @@
 
       #editor .monospace {
           font-family: Monospace, monospace;
-          background: rgba(0,0,2555, .1);
+          background: rgba(0, 0, 2555, .1);
           padding: 2px;
           border-radius: 4px;
           display: inline-block;
@@ -135,6 +130,7 @@
       #editor .service_image_title {
           color: darkorange;
       }
+
       #modals {
           position: absolute;
           width: 100vw;
@@ -152,14 +148,13 @@
           top: 0;
           pointer-events: none;
       }
+
       #modals > div > * {
           pointer-events: all;
       }
   </style>
 </head>
-<body>
-<div id="titlebar">
-</div>
+<body class="web">
 <div id="app">
   <div>
   </div>

@@ -1,0 +1,277 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type GenerateTokenResponse {
+    token: String!
+    user: User!
+}
+
+type Mutation {
+    activateUser(hash: String!): Boolean!
+    createUser(user: NewUserData): User!
+    deleteProject(id: String!): Boolean
+    deleteProjectCategory(id: String!): Boolean
+    deleteTag(id: String!): Boolean
+    deleteTask(id: String!): Boolean
+    deleteTimelineEvent(id: String!): Boolean
+    generateToken(email: String!, password: String!): GenerateTokenResponse
+    requestPasswordReset(email: String!): Boolean!
+    resetPassword(hash: String!, newPassword: String!): Boolean!
+    test: Boolean
+    updateProject(changedAt: ProjectChangesDate, data: ProjectUpdate, id: String!): Project!
+    updateProjectCategory(changedAt: ProjectCategoryChangesDate, data: ProjectCategoryUpdate, id: String!): ProjectCategory!
+    updateTag(changedAt: TagChangesDate, data: TagUpdate, id: String!): Tag!
+    updateTask(changedAt: TaskChangesDate, data: TaskUpdate, id: String!): Task!
+    updateTimelineEvent(changedAt: TimelineEventChangesDate, data: TimelineEventUpdate, id: String!): TimelineEvent!
+}
+
+type PageMeta {
+    limit: Int
+    offset: Int
+    totalItems: Int
+}
+
+type Project {
+    categories: [String]!
+    id: String!
+    index: Int!
+    name: String!
+}
+
+type ProjectCategory {
+    folded: Boolean!
+    id: String!
+    index: Int!
+    name: String!
+}
+
+type ProjectCategoryChanges {
+    folded: Time
+    index: Time
+    name: Time
+}
+
+type ProjectChanges {
+    categories: Time
+    index: Time
+    name: Time
+}
+
+type Query {
+    me: User!
+    projectCategories: [ProjectCategory]!
+    projects: [Project]!
+    tags: [Tag]!
+    tasks: [Task]!
+    test: Boolean
+    timelineEvents: [TimelineEvent]!
+    updatedProjectCategories(since: Time!): [ProjectCategory]!
+    updatedProjects(since: Time!): [Project]!
+    updatedTags(since: Time!): [Tag]!
+    updatedTasks(since: Time!): [Task]!
+    updatedTimelineEvents(since: Time!): [TimelineEvent]!
+    user(id: String!): User!
+    users(limit: Int, offset: Int): UsersPage
+}
+
+type Tag {
+    color: String!
+    id: String!
+    index: Int!
+    name: String!
+    project: String!
+    type: String!
+}
+
+type TagChanges {
+    color: Time
+    id: Time
+    index: Time
+    name: Time
+    project: Time
+    type: Time
+}
+
+type Task {
+    category: String
+    closeDate: Date
+    creationDate: Date
+    date: Date
+    deletedAt: Time
+    event: String
+    id: String
+    note: String
+    priority: Int
+    project: String
+    repeatEvery: Int
+    repeating: Boolean
+    status: String
+    tags: [String]
+    text: String
+}
+
+type TaskChanges {
+    category: Time
+    closeDate: Time
+    creationDate: Time
+    date: Time
+    event: Time
+    note: Time
+    priority: Time
+    project: Time
+    repeatEvery: Time
+    repeating: Time
+    status: Time
+    tags: Time
+    text: Time
+}
+
+type TimelineEvent {
+    allDay: Boolean
+    color: String!
+    date: Date!
+    deletedAt: Time
+    duration: Int
+    id: String!
+    name: String!
+    start: String
+    tag: String
+    task: String
+}
+
+type TimelineEventChanges {
+    allDay: Time
+    color: Time
+    date: Time
+    deletedAt: Time
+    duration: Time
+    name: Time
+    start: Time
+    tag: Time
+    task: Time
+}
+
+type User {
+    activated: Boolean!
+    email: String!
+    firstName: String!
+    id: String!
+    lastName: String!
+}
+
+type UsersPage {
+    meta: PageMeta!
+    nodes: [User]!
+}
+
+input NewUserData {
+    email: String!
+    firstName: String!
+    lastName: String!
+    password: String!
+}
+
+input ProjectCategoryChangesDate {
+    folded: Time
+    index: Time
+    name: Time
+}
+
+input ProjectCategoryUpdate {
+    folded: Boolean
+    index: Int
+    name: String
+}
+
+input ProjectChangesDate {
+    categories: Time
+    index: Time
+    name: Time
+}
+
+input ProjectUpdate {
+    categories: [String]
+    index: Int
+    name: String
+}
+
+input TagChangesDate {
+    color: Time
+    id: Time
+    index: Time
+    name: Time
+    project: Time
+    type: Time
+}
+
+input TagUpdate {
+    color: String
+    id: String
+    index: Int
+    name: String
+    project: String
+    type: String
+}
+
+input TaskChangesDate {
+    category: Time
+    closeDate: Time
+    creationDate: Time
+    date: Time
+    event: Time
+    note: Time
+    priority: Time
+    project: Time
+    repeatEvery: Time
+    repeating: Time
+    status: Time
+    tags: Time
+    text: Time
+}
+
+input TaskUpdate {
+    category: String
+    closeDate: Date
+    creationDate: Date
+    date: Date
+    event: String
+    note: String
+    priority: Int
+    project: String
+    repeatEvery: Int
+    repeating: Boolean
+    status: String
+    tags: [String]
+    text: String
+}
+
+input TimelineEventChangesDate {
+    allDay: Time
+    color: Time
+    date: Time
+    duration: Time
+    name: Time
+    start: Time
+    tag: Time
+    task: Time
+}
+
+input TimelineEventUpdate {
+    allDay: Boolean
+    color: String
+    date: String
+    duration: Int
+    name: String
+    start: String
+    tag: String
+    task: String
+}
+
+
+scalar Date
+
+scalar Time

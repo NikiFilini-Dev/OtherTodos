@@ -1,3 +1,6 @@
+.sidebar
+  position relative
+  height 100%
 
 .logoWrapper
   display flex
@@ -90,5 +93,32 @@ input[type="color"]::-webkit-color-swatch {
 .groupElementAwesomeIcon
   margin-right 14px
   margin-left 19px
-  height 1em
+  height 1.5em
   fill var(--brand)
+
+.userInfo
+  position absolute
+  bottom -36px
+  height 64px
+  width 100%
+  border-top 1px solid rgba(0,0,0,.1)
+  display flex
+  //justify-content space-between
+  align-items center
+
+  svg
+    height 1.5em
+    margin-right 12px
+
+  .signOut
+    margin-left auto
+
+    svg
+      fill rgba(0,0,0,.2)
+      transition fill .2s
+      cursor pointer
+      margin-right 0
+
+    &:hover
+      svg
+        fill var(--brand)

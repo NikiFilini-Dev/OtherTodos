@@ -4,10 +4,11 @@ import { useMst } from "models/RootStore"
 import styles from "./styles.styl"
 
 import TaskList from "components/TaskList"
-import moment from "moment"
+import { DateTime } from "luxon"
 import TagsFilter from "../../TagsFilter"
 
 const Log = observer(() => {
+  window.luxon = DateTime
   const {
     tasks: { all },
   } = useMst()
@@ -21,13 +22,17 @@ const Log = observer(() => {
 
     if (selectedTag && !task.tags.includes(selectedTag)) return
 
-    if (days[task.closeDate]) days[task.closeDate].push(task)
-    else days[task.closeDate] = [task]
+    const key = task.closeDate
+
+    if (days[key]) days[key].push(task)
+    else days[key] = [task]
   })
   tags = [...tags]
 
   let reversedDays = Object.keys(days).reverse()
-  reversedDays.sort((a, b) => moment(b)._d - moment(a)._d)
+  reversedDays.sort(
+    (a, b) => DateTime.fromFormat(b, "D") - DateTime.fromFormat(a, "D"),
+  )
 
   const onTagSelect = tag => {
     setSelectedTag(tag)
@@ -45,7 +50,7 @@ const Log = observer(() => {
             showHidden
             key={`day_${day}`}
             tasks={days[day]}
-            name={moment(day).format("DD MMM YYYY")}
+            name={DateTime.fromFormat(day, "D").toFormat("dd.MM.yyyy")}
           />
         ))}
       </div>

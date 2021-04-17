@@ -45,7 +45,7 @@ export function buildCalendar(date, value, tasks = []) {
     )
       return
 
-    const key = moment(d).format("YYYY-MM-DD")
+    const key = moment(d).format()
     if (daysWithTasks.indexOf(key)) daysWithTasks.push(key)
   })
 
@@ -80,8 +80,7 @@ export function buildCalendar(date, value, tasks = []) {
       alien: d <= 0 || d > daysCount,
       today: isSameDate(tmpDate, now),
       selected: isSameDate(tmpDate, value),
-      hasTasks:
-        daysWithTasks.indexOf(moment(tmpDate).format("YYYY-MM-DD")) >= 0,
+      hasTasks: daysWithTasks.indexOf(moment(tmpDate).format()) >= 0,
     })
     wc++
   }

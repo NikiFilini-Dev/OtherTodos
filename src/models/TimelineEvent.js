@@ -21,9 +21,17 @@ const TimelineEvent = types
         .add(self.duration, "minutes")
         .format("HH:mm")
     },
+    get syncName() {
+      return "TimelineEvent"
+    },
+    get syncable() {
+      return true
+    },
   }))
-  .actions(self => ({
-    setDuration(val) {
+  .actions(self => {
+    const actions = {}
+    const actionsMap = {}
+    actions.setDuration = val => {
       if (val < 30) return
       const startDay = moment(self.start, "HH:mm").format("DD.MM")
       const potentialEndMoment = moment(self.start, "HH:mm").add(val, "minutes")
@@ -34,9 +42,10 @@ const TimelineEvent = types
         return
       }
       self.duration = val
-    },
-    processSetStart(hours, minutes) {
-      console.log(hours, minutes)
+    }
+    actionsMap.setDuration = ["duration"]
+
+    actions.processSetStart = (hours, minutes) => {
       if (typeof hours === "string" && !minutes) {
         ;[hours, minutes] = hours.split(":").map(i => parseInt(i))
       }
@@ -55,8 +64,10 @@ const TimelineEvent = types
       }
       console.log("Final startS", startS)
       self.start = startS
-    },
-    processSetEnd(hours, minutes) {
+    }
+    actionsMap.processSetStart = ["start"]
+
+    actions.processSetEnd = (hours, minutes) => {
       if (typeof hours === "string" && !minutes) {
         ;[hours, minutes] = hours.split(":").map(i => parseInt(i))
       }
@@ -67,41 +78,70 @@ const TimelineEvent = types
         return this.setDuration(moment.duration(diff).asMinutes() + 1)
       }
       this.setEnd(`${hours}:${minutes}`)
-    },
-    removeTag() {
+    }
+    actionsMap.processSetEnd = []
+
+    actions.removeTag = () => {
       self.tag = null
-    },
-    setTag(tag) {
+    }
+    actionsMap.removeTag = ["tag"]
+
+    actions.setTag = tag => {
       self.tag = tag
-    },
-    setName(val) {
+    }
+    actionsMap.setTag = ["tag"]
+
+    actions.setName = val => {
       self.name = val
-    },
-    setStart(val) {
+    }
+    actionsMap.setName = ["name"]
+
+    actions.setStart = val => {
       self.start = val
-    },
-    setEnd(val) {
-      console.log("SET END", val)
+    }
+    actionsMap.setStart = ["start"]
+
+    actions.setEnd = val => {
       self.duration = moment
         .duration(moment(val, "HH:mm").diff(moment(self.start, "HH:mm")))
         .asMinutes()
-    },
-    setAllDay(val) {
+    }
+    actionsMap.setEnd = ["duration"]
+
+    actions.setAllDay = val => {
       self.allDay = val
       if (!val && (!self.start || !self.end)) {
         self.start = "00:00"
         self.duration = 60
       }
-    },
-    setDate(val) {
+    }
+    actionsMap.setAllDay = ["allDay", "start", "duration"]
+
+    actions.setDate = val => {
       self.date = val
-    },
-    setColor(val) {
+    }
+    actionsMap.setDate = ["date"]
+
+    actions.setColor = val => {
       self.color = val
-    },
-  }))
+    }
+    actionsMap.setColor = ["color"]
+
+    actions.getActionsMap = () => actionsMap
+
+    return actions
+  })
 
 export default TimelineEvent
+
+export const factory = (id, data = {}) => {
+  if (data.task === "") data.task = null
+  if (data.tag === "") data.tag = null
+  return {
+    id,
+    ...data,
+  }
+}
 
 export function LateTimelineEvent() {
   return TimelineEvent

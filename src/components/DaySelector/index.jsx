@@ -2,11 +2,11 @@ import React from "react"
 import { buildCalendar } from "tools/date"
 import styles from "./styles.styl"
 import CalendarIcon from "assets/calendar_empty.svg"
-import moment from "moment"
 import "moment/locale/ru"
 import classNames from "classnames"
 import { observer } from "mobx-react"
 import { useMst } from "models/RootStore"
+import { DateTime } from "luxon"
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
@@ -15,9 +15,8 @@ function capitalizeFirstLetter(string) {
 const DaySelector = observer(() => {
   const [isCalendarShown, setIsCalendarShown] = React.useState(false)
   const { timelineDate, setTimelineDate } = useMst()
-  const date = moment(timelineDate, "YYYY-MM-DD")
-  console.log(date, timelineDate)
-  const weeks = buildCalendar(new Date(), date._d, [])
+  const date = DateTime.fromFormat(timelineDate, "D")
+  const weeks = buildCalendar(new Date(), date.toJSDate(), [])
   const weekdays = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]
 
   const onTriggerClick = e => {
@@ -40,10 +39,10 @@ const DaySelector = observer(() => {
           <div className={styles.topBig}>
             <span>
               <span className={styles.bigTitle}>
-                {capitalizeFirstLetter(date.format("MMMM"))}
+                {capitalizeFirstLetter(date.toFormat("LLLL"))}
               </span>
               <span className={styles.shortDate}>
-                {capitalizeFirstLetter(date.format("dd, DD"))}
+                {capitalizeFirstLetter(date.toFormat("dd.MM.yyyy"))}
               </span>
             </span>
             <span onClick={onTriggerClick}>

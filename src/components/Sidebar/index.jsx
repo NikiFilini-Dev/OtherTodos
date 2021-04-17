@@ -7,14 +7,16 @@ import classNames from "classnames"
 import ArrowRightIcon from "assets/arrow_right.svg"
 import FolderIcon from "assets/folder.svg"
 import PlusIcon from "assets/plus.svg"
-import HistoryIcon from "assets/awesome/solid/history.svg"
-import TagsIcon from "assets/awesome/solid/tags.svg"
-import PlaneIcon from "assets/awesome/regular/paper-plane.svg"
-import EnvelopeIcon from "assets/awesome/regular/envelope.svg"
+import HistoryIcon from "assets/line_awesome/history-solid.svg"
+import TagsIcon from "assets/line_awesome/tags-solid.svg"
+import PlaneIcon from "assets/line_awesome/telegram-plane.svg"
+import EnvelopeIcon from "assets/line_awesome/envelope.svg"
+import UserCircleIcon from "assets/line_awesome/user-circle.svg"
+import SignOutAltIcon from "assets/line_awesome/sign-out-alt-solid.svg"
 import propTypes from "prop-types"
 import { useContextMenu, useInput } from "tools/hooks"
-import moment from "moment"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
+import { DateTime } from "luxon"
 
 const Element = observer(
   ({
@@ -99,7 +101,6 @@ const Group = observer(
     const addInputRef = React.useRef(null)
 
     React.useEffect(() => {
-      console.log(isAddActive)
       if (isAddActive) addInputRef.current.focus()
     }, [isAddActive])
 
@@ -128,7 +129,6 @@ const Group = observer(
 
     let onDragEnd = ({ destination, source, draggableId }) => {
       if (!destination) return
-      console.log(destination, source, draggableId)
 
       const id = draggableId.match(/.+?_(.+)/)[1]
 
@@ -250,6 +250,8 @@ const Sidebar = observer(() => {
     deleteTag,
     selectTagType,
     selectedTagType,
+    user,
+    setUser,
   } = useMst()
 
   const addProject = name => {
@@ -258,7 +260,6 @@ const Sidebar = observer(() => {
   }
 
   const rmProject = project => {
-    console.log("DELETE PROJECT", project.toJSON())
     all.forEach(task => {
       if (task.project !== project) return
       deleteTask(task)
@@ -276,8 +277,13 @@ const Sidebar = observer(() => {
   const sortedTags = [...tags]
   sortedTags.sort((a, b) => a.index - b.index)
 
+  const onSignOutClick = () => {
+    setUser(null)
+    location.reload()
+  }
+
   return (
-    <div>
+    <div className={styles.sidebar}>
       <div className={styles.logoWrapper}>
         <Logo className={styles.logo} />
         <span className={styles.logoTitle}>Task</span>
@@ -299,7 +305,7 @@ const Sidebar = observer(() => {
         })}
         onClick={() => {
           setScreen("TODAY")
-          selectDate(moment().format("YYYY-MM-DD"))
+          selectDate(DateTime.now().toFormat("D"))
         }}
       >
         <PlaneIcon className={styles.groupElementAwesomeIcon} />
@@ -356,6 +362,15 @@ const Sidebar = observer(() => {
         onAdd={addProject}
         onDelete={rmProject}
       />
+      {user && (
+        <div className={styles.userInfo}>
+          <UserCircleIcon />
+          {user.name}
+          <div className={styles.signOut} onClick={() => onSignOutClick()}>
+            <SignOutAltIcon />
+          </div>
+        </div>
+      )}
     </div>
   )
 })

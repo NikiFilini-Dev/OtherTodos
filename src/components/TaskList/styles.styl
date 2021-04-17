@@ -63,3 +63,12 @@
   svg
     height 1em
     fill #8e8e8e
+
+
+.listWrapper
+  max-height: 500px;
+  transition: max-height 0.25s ease-in;
+  &.folded
+    max-height: 0;
+    transition: max-height 0.15s ease-out;
+    overflow: hidden;

@@ -1,6 +1,6 @@
 import { types, destroy, getParent } from "mobx-state-tree"
-import Task from "./Task"
-import moment from "moment"
+import Task, { factory } from "./Task"
+import { DateTime } from "luxon"
 
 const TaskList = types
   .model("TaskList", {
@@ -9,17 +9,19 @@ const TaskList = types
   })
   .views(self => ({
     get today() {
-      return self.all.filter(
-        task =>
-          task.date && moment(task.date).isSame(moment().format("YYYY-MM-DD")),
-      )
+      return self.all.filter(task => {
+        return (
+          task.date &&
+          DateTime.fromFormat(task.date, "D") === DateTime.now().startOf("day")
+        )
+      })
     },
     expired() {
-      console.log("Updating expired")
       return self.all.filter(
         task =>
           task.date &&
-          moment(task.date).isBefore(moment(moment().format("YYYY-MM-DD"))),
+          DateTime.fromFormat(task.date, "D").startOf("day") <
+            DateTime.now().startOf("day"),
       )
     },
     get inbox() {
@@ -28,7 +30,7 @@ const TaskList = types
   }))
   .actions(self => ({
     select(task) {
-      if (task === getParent(self).tempTask) return
+      if (task === getParent(self).tempTask && task !== null) return
       self.selected = task
     },
     add(task) {
@@ -37,9 +39,13 @@ const TaskList = types
     },
     deleteTask(task) {
       if (self.selected === task) self.selected = null
-      task.unconnectEvent()
+      if (task.event) task.unconnectEvent()
       self.all.splice(self.all.indexOf(task), 1)
+      window.syncMachine.registerDelete(task.id, "task")
       destroy(task)
+    },
+    loadTasksFromData(tasksData) {
+      self.all = tasksData.map(data => factory(data.id, data))
     },
   }))
 
