@@ -29,6 +29,14 @@ const Auth = observer(() => {
     setScreen("TODAY")
   }
 
+  const logIn = () => {
+    loginForm.logIn(u => afterLoggingIn(u))
+  }
+
+  const register = () => {
+    registerForm.register(u => afterLoggingIn(u))
+  }
+
   return (
     <div className={styles.screen}>
       <div className={styles.info}>
@@ -43,6 +51,7 @@ const Auth = observer(() => {
             onChange={e => loginForm.setEmail(e.target.value)}
             value={loginForm.email}
             className={styles.input}
+            onSubmit={() => logIn()}
           />
           <Errors errors={loginForm.errors.email} />
 
@@ -53,13 +62,11 @@ const Auth = observer(() => {
             value={loginForm.password}
             type={"password"}
             className={styles.input}
+            onSubmit={() => logIn()}
           />
           <Errors errors={loginForm.errors.password} />
 
-          <button
-            className={styles.button}
-            onClick={() => loginForm.logIn(u => afterLoggingIn(u))}
-          >
+          <button className={styles.button} onClick={() => logIn()}>
             Войти
           </button>
         </div>
@@ -72,6 +79,7 @@ const Auth = observer(() => {
             onChange={e => registerForm.setEmail(e.target.value)}
             value={registerForm.email}
             className={styles.input}
+            onSubmit={() => register()}
           />
           <Errors errors={registerForm.errors.email} />
 
@@ -82,6 +90,7 @@ const Auth = observer(() => {
             value={registerForm.password}
             type={"password"}
             className={styles.input}
+            onSubmit={() => register()}
           />
           <Errors errors={registerForm.errors.password} />
 
@@ -92,6 +101,7 @@ const Auth = observer(() => {
             value={registerForm.passwordConfirmation}
             type={"password"}
             className={styles.input}
+            onSubmit={() => register()}
           />
           <Errors errors={registerForm.errors.passwordConfirmation} />
 
@@ -101,6 +111,7 @@ const Auth = observer(() => {
             onChange={e => registerForm.setName(e.target.value)}
             value={registerForm.name}
             className={styles.input}
+            onSubmit={() => register()}
           />
           <Errors errors={registerForm.errors.name} />
 
@@ -110,13 +121,11 @@ const Auth = observer(() => {
             onChange={e => registerForm.setLastName(e.target.value)}
             value={registerForm.lastName}
             className={styles.input}
+            onSubmit={() => register()}
           />
           <Errors errors={registerForm.errors.lastName} />
 
-          <button
-            className={styles.button}
-            onClick={() => registerForm.register(u => afterLoggingIn(u))}
-          >
+          <button className={styles.button} onClick={() => register()}>
             Зарегистрироваться
           </button>
         </div>

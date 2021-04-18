@@ -8,6 +8,7 @@ const Input = observer(
     placeholder,
     value,
     onChange,
+    onSubmit = () => {},
     type = "text",
     className = "",
     name = "",
@@ -20,14 +21,19 @@ const Input = observer(
 
       const onFocus = () => setIsActive(true)
       const onBlur = () => setIsActive(false)
+      const onKeydown = e => {
+        if (e.code === "Enter") onSubmit()
+      }
 
       ref.current.addEventListener("blur", onBlur)
       ref.current.addEventListener("focus", onFocus)
+      ref.current.addEventListener("keydown", onKeydown)
 
       return () => {
         if (!ref.current) return
         ref.current.removeEventListener("blur", onBlur)
         ref.current.removeEventListener("focus", onFocus)
+        ref.current.removeEventListener("keydown", onKeydown)
       }
     })
 
