@@ -1,11 +1,6 @@
 import SyncType from "../syncType"
 import gqlClient from "../../graphql/client"
 import {
-  DELETE_PROJECT,
-  GET_PROJECTS,
-  UPDATE_PROJECT,
-} from "../../graphql/projects"
-import {
   DELETE_PROJECT_CATEGORY,
   GET_PROJECT_CATEGORIES,
   UPDATE_PROJECT_CATEGORY,

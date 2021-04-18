@@ -37,6 +37,13 @@ module.exports = {
     new webpack.DefinePlugin({
       IS_WEB: true,
     }),
+    new webpack.ProvidePlugin({
+      logger: [path.resolve(__dirname, "src", "tools", "logger.ts"), "logger"],
+      createLogger: [
+        path.resolve(__dirname, "src", "tools", "logger.ts"),
+        "createLogger",
+      ],
+    }),
   ],
   devtool: "eval-source-map",
 }

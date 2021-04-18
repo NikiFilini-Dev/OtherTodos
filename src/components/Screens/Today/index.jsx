@@ -137,8 +137,6 @@ const Today = observer(() => {
     setIsNewTaskShown(true)
   }
 
-  console.log(DateTime.fromFormat(selectedDate, "D"))
-
   return (
     <div className={styles.screen}>
       <div className={styles.info}>
@@ -146,26 +144,25 @@ const Today = observer(() => {
           {selectedDate === today
             ? "Сегодня"
             : toTitleCase(
-                DateTime.fromFormat(selectedDate, "D").toFormat("DD MM yyyy"),
+                DateTime.fromFormat(selectedDate, "D").toFormat("dd.MM"),
               )}
         </span>
         {selectedDate === today && (
           <span className={styles.additional}>
-            {/*{toTitleCase(moment().format("dd DD MMM"))}*/}
+            {toTitleCase(DateTime.now().toFormat("dd.MM"))}
           </span>
         )}
         <div className={styles.actions}>
           <span
+            onClick={() =>
+              setViewMode(viewMode === "list" ? "projects" : "list")
+            }
             className={classNames({
               [styles.viewSwitch]: true,
               [styles.active]: viewMode === "list",
             })}
           >
-            <ListIcon
-              onClick={() =>
-                setViewMode(viewMode === "list" ? "projects" : "list")
-              }
-            />
+            <ListIcon />
           </span>
           <span className={styles.calendar} ref={ref}>
             <CalendarIcon

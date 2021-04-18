@@ -29,10 +29,10 @@ body
   overflow hidden
   //background #9c9c9cd9
 
-body:global(.web)
   display flex
   justify-content center
   align-items center
+
 
 :global(#modals)
   font-family 'Commisioner', Helvetica, Arial, sans-serif
@@ -44,13 +44,10 @@ body:global(.web)
   //background #F7F7F7
   height calc(100vh - 36px)
   //background #ffffff29
-  position absolute
   left 0
   bottom 0
   width 100vw
   max-width 1920px
-
-:global(body.web #app)
   padding-top 24px
   position relative
 
@@ -66,11 +63,12 @@ body:global(.web)
 
 .sideBar
   background white
-  padding: mainBlockPadding
+  padding: 36px 0
   width var(--sidebar-width)
   border-radius 8.5px
   overflow-y auto
   margin-right 8px
+  position relative
 
 .main
   padding 36px 16px

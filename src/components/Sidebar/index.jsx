@@ -17,6 +17,7 @@ import propTypes from "prop-types"
 import { useContextMenu, useInput } from "tools/hooks"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import { DateTime } from "luxon"
+import { noop } from "lodash"
 
 const Element = observer(
   ({
@@ -96,7 +97,7 @@ const Group = observer(
     const [isOpen, setIsOpen] = React.useState(!initiallyFolded)
     const [isAddActive, setIsAddActive] = React.useState(false)
     const [newName, setNewName] = React.useState("")
-    if (!isActive) isActive = () => {}
+    if (!isActive) isActive = noop
     const addTriggerRef = React.useRef(null)
     const addInputRef = React.useRef(null)
 
@@ -252,6 +253,8 @@ const Sidebar = observer(() => {
     selectedTagType,
     user,
     setUser,
+    clear,
+    backup,
   } = useMst()
 
   const addProject = name => {
@@ -277,91 +280,95 @@ const Sidebar = observer(() => {
   const sortedTags = [...tags]
   sortedTags.sort((a, b) => a.index - b.index)
 
-  const onSignOutClick = () => {
+  const onSignOutClick = async () => {
     setUser(null)
-    location.reload()
+    await backup()
+    clear()
+    // location.reload()
   }
 
   return (
-    <div className={styles.sidebar}>
+    <React.Fragment>
       <div className={styles.logoWrapper}>
         <Logo className={styles.logo} />
         <span className={styles.logoTitle}>Task</span>
       </div>
-      <div
-        className={classNames({
-          [styles.groupElement]: true,
-          [styles.active]: screen === "INBOX",
-        })}
-        onClick={() => setScreen("INBOX")}
-      >
-        <EnvelopeIcon className={styles.groupElementAwesomeIcon} />
-        Входящие
-      </div>
-      <div
-        className={classNames({
-          [styles.groupElement]: true,
-          [styles.active]: screen === "TODAY",
-        })}
-        onClick={() => {
-          setScreen("TODAY")
-          selectDate(DateTime.now().toFormat("D"))
-        }}
-      >
-        <PlaneIcon className={styles.groupElementAwesomeIcon} />
-        Сегодня
-      </div>
-      <div
-        className={classNames({
-          [styles.groupElement]: true,
-          [styles.active]: screen === "LOG",
-        })}
-        onClick={() => setScreen("LOG")}
-      >
-        <HistoryIcon className={styles.groupElementAwesomeIcon} />
-        Журнал
-      </div>
-      <div
-        className={classNames({
-          [styles.groupElement]: true,
-          [styles.active]: screen === "TAGS" && selectedTagType === "TASK",
-        })}
-        onClick={() => {
-          setScreen("TAGS")
-          selectTagType("TASK")
-        }}
-      >
-        <TagsIcon className={styles.groupElementAwesomeIcon} />
-        Метки задач
-      </div>
-      <div
-        className={classNames({
-          [styles.groupElement]: true,
-          [styles.active]: screen === "TAGS" && selectedTagType === "EVENT",
-        })}
-        onClick={() => {
-          setScreen("TAGS")
-          selectTagType("EVENT")
-        }}
-      >
-        <TagsIcon className={styles.groupElementAwesomeIcon} />
-        Метки событий
-      </div>
-      <Group
-        name={"Проекты"}
-        elements={sortedProjects}
-        isActive={project =>
-          project === selectedProject && screen === "PROJECT"
-        }
-        onElementClick={project => {
-          return () => {
-            setScreen("PROJECT")
-            selectProject(project)
+      <div className={styles.sidebar}>
+        <div
+          className={classNames({
+            [styles.groupElement]: true,
+            [styles.active]: screen === "INBOX",
+          })}
+          onClick={() => setScreen("INBOX")}
+        >
+          <EnvelopeIcon className={styles.groupElementAwesomeIcon} />
+          Входящие
+        </div>
+        <div
+          className={classNames({
+            [styles.groupElement]: true,
+            [styles.active]: screen === "TODAY",
+          })}
+          onClick={() => {
+            setScreen("TODAY")
+            selectDate(DateTime.now().toFormat("D"))
+          }}
+        >
+          <PlaneIcon className={styles.groupElementAwesomeIcon} />
+          Сегодня
+        </div>
+        <div
+          className={classNames({
+            [styles.groupElement]: true,
+            [styles.active]: screen === "LOG",
+          })}
+          onClick={() => setScreen("LOG")}
+        >
+          <HistoryIcon className={styles.groupElementAwesomeIcon} />
+          Журнал
+        </div>
+        <div
+          className={classNames({
+            [styles.groupElement]: true,
+            [styles.active]: screen === "TAGS" && selectedTagType === "TASK",
+          })}
+          onClick={() => {
+            setScreen("TAGS")
+            selectTagType("TASK")
+          }}
+        >
+          <TagsIcon className={styles.groupElementAwesomeIcon} />
+          Метки задач
+        </div>
+        <div
+          className={classNames({
+            [styles.groupElement]: true,
+            [styles.active]: screen === "TAGS" && selectedTagType === "EVENT",
+          })}
+          onClick={() => {
+            setScreen("TAGS")
+            selectTagType("EVENT")
+          }}
+        >
+          <TagsIcon className={styles.groupElementAwesomeIcon} />
+          Метки событий
+        </div>
+        <Group
+          name={"Проекты"}
+          elements={sortedProjects}
+          isActive={project =>
+            project === selectedProject && screen === "PROJECT"
           }
-        }}
-        onAdd={addProject}
-        onDelete={rmProject}
-      />
+          onElementClick={project => {
+            return () => {
+              setScreen("PROJECT")
+              selectProject(project)
+            }
+          }}
+          onAdd={addProject}
+          onDelete={rmProject}
+        />
+      </div>
       {user && (
         <div className={styles.userInfo}>
           <UserCircleIcon />
@@ -371,7 +378,7 @@ const Sidebar = observer(() => {
           </div>
         </div>
       )}
-    </div>
+    </React.Fragment>
   )
 })
 

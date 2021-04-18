@@ -65,9 +65,11 @@ const createWindow = () => {
     }
   })
 
-  const electronVibrancy = require("electron-vibrancy")
-  let material = 0
-  electronVibrancy.SetVibrancy(mainWindow, material)
+  if (process.platform === "darwin") {
+    const electronVibrancy = require("electron-vibrancy")
+    let material = 0
+    electronVibrancy.SetVibrancy(mainWindow, material)
+  }
 
   // and load the index.html of the app.
   if (process.env.P_ENV === "debug") mainWindow.webContents.openDevTools()

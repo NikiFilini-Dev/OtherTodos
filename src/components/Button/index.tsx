@@ -1,6 +1,5 @@
 import React from "react"
 import styles from "./styles.styl"
-import propTypes from "prop-types"
 import classNames from "classnames"
 
 const Button = (

@@ -1,10 +1,5 @@
 import SyncType from "../syncType"
 import gqlClient from "../../graphql/client"
-import {
-  DELETE_PROJECT,
-  GET_PROJECTS,
-  UPDATE_PROJECT,
-} from "../../graphql/projects"
 import { DELETE_TAG, GET_TAGS, UPDATE_TAG } from "../../graphql/tags"
 
 export default class Tag extends SyncType {

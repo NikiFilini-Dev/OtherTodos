@@ -4,8 +4,9 @@ import styles from "./styles.styl"
 import PriorityIndicator from "../PriorityIndicator/index.jsx"
 import FloatMenu from "../FloatMenu/index.jsx"
 import { useClick } from "../../tools/hooks"
+import { noop } from "lodash"
 
-const PrioritySelector = ({ priority, onSelect = () => {} }) => {
+const PrioritySelector = ({ priority, onSelect = noop }) => {
   const ref = React.useRef(null)
   const [isShown, setIsShown] = React.useState(false)
   const wrapperRef = React.useRef(null)

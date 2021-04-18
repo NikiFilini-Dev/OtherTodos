@@ -1,4 +1,11 @@
-import { types, detach, Instance, destroy } from "mobx-state-tree"
+import {
+  types,
+  detach,
+  Instance,
+  destroy,
+  getSnapshot,
+  applySnapshot,
+} from "mobx-state-tree"
 import { createContext, useContext } from "react"
 import TaskList from "./TaskList"
 import Task, { factory as taskFactory } from "./Task"
@@ -9,6 +16,7 @@ import { DateTime } from "luxon"
 import { v4 as uuidv4 } from "uuid"
 import User from "./User"
 import ProjectCategory from "./ProjectCategory"
+import jsonStorage from "../tools/jsonStorage"
 
 const RootStore = types
   .model("Store", {
@@ -22,7 +30,7 @@ const RootStore = types
     timelineDate: DateTime.now().toFormat("D"),
     screen: types.optional(
       types.enumeration(["INBOX", "TODAY", "PROJECT", "LOG", "TAGS", "AUTH"]),
-      "AUTH",
+      "TODAY",
     ),
     selectedProject: types.maybeNull(types.reference(Project)),
     tags: types.array(Tag),
@@ -40,7 +48,10 @@ const RootStore = types
       if (window.IS_WEB) {
         localStorage.setItem("user", JSON.stringify(user))
       }
-      setTimeout(() => window.syncMachine.loadAll(null), 10)
+      setTimeout(() => window.syncMachine.resetTimer(), 10)
+      if (user?.id && self.screen === "AUTH") {
+        self.screen = "TODAY"
+      }
       self.user = user
     },
     selectTagType(type) {
@@ -149,10 +160,8 @@ const RootStore = types
       window.syncMachine.registerDelete(event.id, event.syncName)
       destroy(event)
     },
-    applyMigration() {},
     removeAllEvents() {
-      // @ts-ignore
-      self.events = []
+      while (self.events.length) self.events.pop()
     },
     loadTimelineEventsFromData(tasksData) {
       self.events = tasksData.map(data => timelineEventFactory(data.id, data))
@@ -169,6 +178,30 @@ const RootStore = types
     addCategory(category) {
       self.categories.push(category)
     },
+
+    clear() {
+      const snapshot = getSnapshot<IRootStore>(self)
+      const store = JSON.parse(JSON.stringify(snapshot))
+      store.tasks.all = []
+      store.projects = []
+      store.categories = []
+      store.events = []
+      store.tags = []
+      applySnapshot(self, store)
+    },
+
+    backup() {
+      return new Promise<void>(resolve => {
+        jsonStorage.getItem("root_store").then(store => {
+          jsonStorage
+            .setItem(
+              `_root_store_[${DateTime.now().toFormat("D HH:mm")}]`,
+              store,
+            )
+            .then(() => resolve())
+        })
+      })
+    },
   }))
 
 export default RootStore
@@ -184,4 +217,4 @@ export function useMst(): IRootStore {
   return store
 }
 
-export interface IRootStore extends Instance<typeof RootStore> {}
+export type IRootStore = Instance<typeof RootStore>

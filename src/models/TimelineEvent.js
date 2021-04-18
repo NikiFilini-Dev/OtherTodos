@@ -1,7 +1,7 @@
 import { types } from "mobx-state-tree"
 import { LateTask } from "./Task"
 import Tag, { randomTagColor } from "./Tag"
-import moment from "moment"
+import { DateTime } from "luxon"
 
 const TimelineEvent = types
   .model("TimelineEvent", {
@@ -17,9 +17,9 @@ const TimelineEvent = types
   })
   .views(self => ({
     get end() {
-      return moment(self.start, "HH:mm")
-        .add(self.duration, "minutes")
-        .format("HH:mm")
+      return DateTime.fromFormat(self.start, "HH:mm")
+        .plus({ minutes: self.duration })
+        .toFormat("HH:mm")
     },
     get syncName() {
       return "TimelineEvent"
@@ -33,11 +33,15 @@ const TimelineEvent = types
     const actionsMap = {}
     actions.setDuration = val => {
       if (val < 30) return
-      const startDay = moment(self.start, "HH:mm").format("DD.MM")
-      const potentialEndMoment = moment(self.start, "HH:mm").add(val, "minutes")
+      const startDay = DateTime.fromFormat(self.start, "HH:mm").toFormat(
+        "dd.MM",
+      )
+      const potentialEndMoment = DateTime.fromFormat(self.start, "HH:mm").plus({
+        minutes: val,
+      })
       if (
-        potentialEndMoment.format("DD.MM") !== startDay &&
-        potentialEndMoment.format("HH:mm") !== "00:00"
+        potentialEndMoment.toFormat("dd.MM") !== startDay &&
+        potentialEndMoment.toFormat("HH:mm") !== "00:00"
       ) {
         return
       }
@@ -50,17 +54,17 @@ const TimelineEvent = types
         ;[hours, minutes] = hours.split(":").map(i => parseInt(i))
       }
       let startS = `${hours}:${minutes}`
-      const newStartMoment = moment(startS, "HH:mm")
-      const potentialEndMoment = moment(startS, "HH:mm").add(
-        self.duration,
-        "minutes",
-      )
+      const newStartMoment = DateTime.fromFormat(startS, "HH:mm")
+      const potentialEndMoment = DateTime.fromFormat(startS, "HH:mm").plus({
+        minutes: self.duration,
+      })
       if (
-        potentialEndMoment.format("DD.MM") !== newStartMoment.format("DD.MM")
+        potentialEndMoment.toFormat("dd.MM") !==
+        newStartMoment.toFormat("dd.MM")
       ) {
-        startS = moment("00:00", "HH:mm")
-          .subtract(self.duration, "minutes")
-          .format("HH:mm")
+        startS = DateTime.fromFormat("00:00", "HH:mm")
+          .minus({ minutes: self.duration })
+          .toFormat("HH:mm")
       }
       console.log("Final startS", startS)
       self.start = startS
@@ -72,12 +76,12 @@ const TimelineEvent = types
         ;[hours, minutes] = hours.split(":").map(i => parseInt(i))
       }
       if (!hours && !minutes) {
-        const startMoment = moment(self.start, "HH:mm")
-        let newEndMoment = moment(startMoment).endOf("day")
-        const diff = newEndMoment.diff(startMoment)
-        return this.setDuration(moment.duration(diff).asMinutes() + 1)
+        const startMoment = DateTime.fromFormat(self.start, "HH:mm")
+        let newEndMoment = startMoment.endOf("day")
+        const diff = newEndMoment.diff(startMoment, "minutes")
+        return this.setDuration(diff.values.minutes + 1)
       }
-      this.setEnd(`${hours}:${minutes}`)
+      actions.setEnd(`${hours}:${minutes}`)
     }
     actionsMap.processSetEnd = []
 
@@ -102,9 +106,10 @@ const TimelineEvent = types
     actionsMap.setStart = ["start"]
 
     actions.setEnd = val => {
-      self.duration = moment
-        .duration(moment(val, "HH:mm").diff(moment(self.start, "HH:mm")))
-        .asMinutes()
+      self.duration = DateTime.fromFormat(val, "HH:mm").diff(
+        DateTime.fromFormat(self.start, "HH:mm"),
+        "minutes",
+      ).values.minutes
     }
     actionsMap.setEnd = ["duration"]
 

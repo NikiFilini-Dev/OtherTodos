@@ -1,10 +1,13 @@
-import { IRootStore } from "../models/RootStore"
 import gqlClient from "../graphql/client"
+import jsonStorage from "tools/jsonStorage"
+
+const syncLogger = createLogger("SYNC")
 
 export default abstract class SyncType {
   name: string
   UPDATE_MUTATION: any
   DELETE_MUTATION: any
+  dumpTimer: NodeJS.Timeout | null
 
   lastLoadAt = new Date(0)
   state = "waiting"
@@ -22,9 +25,32 @@ export default abstract class SyncType {
 
   abstract load()
 
-  abstract preprocess(item: object): object
+  abstract preprocess(item: Record<string, any>): Record<string, any>
 
-  registerChange(fields, id) {
+  loadUpdates() {
+    return new Promise<void>(resolve => {
+      jsonStorage.getItem(`syncMachine_updates_${this.name}`, data => {
+        syncLogger.debug("Type %s loaded updates: %s", this.name, data)
+        this.updates = data
+        resolve()
+      })
+    })
+  }
+
+  planDump() {
+    if (this.dumpTimer) clearTimeout(this.dumpTimer)
+    this.dumpTimer = setTimeout(() => this.dumpUpdates(), 300)
+  }
+
+  dumpUpdates() {
+    if (!window.IS_WEB) {
+      syncLogger.debug("Dumping updates: %s", JSON.stringify(this.updates))
+      jsonStorage.setItem(`syncMachine_updates_${this.name}`, this.updates)
+    }
+  }
+
+  registerChange(fields, id, dump = true) {
+    // console.log("Registered change:", fields)
     this.updates[id] = {
       state: "alive",
       fields: {
@@ -32,6 +58,7 @@ export default abstract class SyncType {
         ...fields,
       },
     }
+    if (dump) this.planDump()
   }
 
   registerDelete(id) {
@@ -41,10 +68,11 @@ export default abstract class SyncType {
         ...this.updates[id]?.fields,
       },
     }
+    this.dumpUpdates()
   }
 
   sendUpdates() {
-    const updates = JSON.parse(JSON.stringify(this.updates))
+    const updates = { ...this.updates }
     this.state = "updating"
 
     const promises = Object.keys(updates).map(
@@ -58,14 +86,16 @@ export default abstract class SyncType {
           }
 
           if (item.state === "alive") {
-            const onSuccess = data => {
-              console.log(data, this.updates, updates)
+            const onSuccess = () => {
               Object.keys(this.updates[id].fields).forEach(fieldName => {
                 const field = this.updates[id].fields[fieldName]
                 if (field.date === item.fields[fieldName].date) {
                   delete this.updates[id].fields[fieldName]
                 }
               })
+              if (Object.keys(this.updates[id].fields).length === 0)
+                delete this.updates[id]
+              this.dumpUpdates()
               resolve()
             }
 
@@ -73,7 +103,10 @@ export default abstract class SyncType {
             const dates = {}
 
             Object.keys(item.fields).forEach(name => {
+              if (name === "id") return
               changes[name] = item.fields[name].value
+              if (changes[name] === null) changes[name] = ""
+              if (changes[name]?.id) changes[name] = changes[name].id
               dates[name] = item.fields[name].date
             })
 
@@ -84,13 +117,13 @@ export default abstract class SyncType {
                 if (result.error) {
                   onError(result.error)
                 } else {
-                  onSuccess(result.data)
+                  onSuccess()
                 }
               })
           } else {
-            const onSuccess = data => {
-              console.log(data)
-              delete this.updates[item.id]
+            const onSuccess = () => {
+              delete this.updates[id]
+              this.dumpUpdates()
             }
 
             gqlClient
@@ -100,7 +133,7 @@ export default abstract class SyncType {
                 if (result.error) {
                   onError(result.error)
                 } else {
-                  onSuccess(result.data)
+                  onSuccess()
                 }
               })
           }

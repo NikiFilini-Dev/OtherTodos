@@ -1,4 +1,4 @@
-import moment from "moment"
+import { DateTime } from "luxon"
 
 export function isSameDate(d1, d2) {
   return (
@@ -38,14 +38,14 @@ export function buildCalendar(date, value, tasks = []) {
   const daysWithTasks = []
   tasks.forEach(task => {
     if (!task.date) return
-    let d = moment(task.date)._d
+    let d = DateTime.fromFormat(task.date, "D").toJSDate()
     if (
       d.getMonth() !== date.getMonth() ||
       d.getFullYear() !== date.getFullYear()
     )
       return
 
-    const key = moment(d).format()
+    const key = DateTime.fromJSDate(d).toFormat("D")
     if (daysWithTasks.indexOf(key)) daysWithTasks.push(key)
   })
 
@@ -80,7 +80,8 @@ export function buildCalendar(date, value, tasks = []) {
       alien: d <= 0 || d > daysCount,
       today: isSameDate(tmpDate, now),
       selected: isSameDate(tmpDate, value),
-      hasTasks: daysWithTasks.indexOf(moment(tmpDate).format()) >= 0,
+      hasTasks:
+        daysWithTasks.indexOf(DateTime.fromJSDate(tmpDate).toFormat("D")) >= 0,
     })
     wc++
   }

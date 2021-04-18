@@ -13,6 +13,7 @@ import Auth from "components/Screens/Auth"
 import Sidebar from "components/Sidebar"
 import { DragDropContext } from "react-beautiful-dnd"
 import Timeline from "../Timeline"
+import { noop } from "lodash"
 
 const App = observer(() => {
   const {
@@ -55,7 +56,7 @@ const App = observer(() => {
     () =>
       (window.onDragEndFunc = window.onDragEndFunc
         ? window.onDragEndFunc
-        : () => {}),
+        : noop),
     [],
   )
 

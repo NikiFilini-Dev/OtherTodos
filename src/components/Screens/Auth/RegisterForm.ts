@@ -7,11 +7,11 @@ export default class RegisterForm {
     makeAutoObservable(this)
   }
 
-  email: string = ""
-  password: string = ""
-  passwordConfirmation: string = ""
-  name: string = ""
-  lastName: string = ""
+  email = ""
+  password = ""
+  passwordConfirmation = ""
+  name = ""
+  lastName = ""
 
   errors: {
     email: Set<string>

@@ -8,15 +8,15 @@ import { useMst } from "models/RootStore"
 import ArrowLeft from "assets/arrow_left.svg"
 import ArrowRight from "assets/arrow_right.svg"
 import { buildCalendar } from "tools/date"
-
-import moment from "moment"
+import { DateTime } from "luxon"
 
 const DateSelector = observer(({ value, onSelect, triggerRef, right }) => {
   if (!value) {
     value = new Date()
   }
 
-  if (typeof value === "string") value = moment(value)._d
+  if (typeof value === "string")
+    value = DateTime.fromFormat(value, "D").toJSDate()
 
   const {
     tasks: { all },

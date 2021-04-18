@@ -1,13 +1,18 @@
 import SyncMachine from "./syncMachine"
 import React from "react"
-
-declare const IS_WEB: boolean
+import winston from "winston"
+import { IRootStore } from "./models/RootStore"
 
 declare global {
+  const IS_WEB: boolean
+  const logger: winston.Logger
+  const createLogger: (label?: string) => winston.Logger
+
   interface Window {
     getToken: () => string
     syncMachine: SyncMachine
     IS_WEB: boolean
+    Store: IRootStore
   }
 }
 

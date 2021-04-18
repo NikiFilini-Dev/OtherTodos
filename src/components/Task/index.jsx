@@ -2,8 +2,6 @@ import React from "react"
 import PropTypes from "prop-types"
 import { observer } from "mobx-react"
 import classNames from "classnames"
-import moment from "moment"
-import "moment/locale/ru"
 
 import styles from "./styles.styl"
 
@@ -30,6 +28,7 @@ import {
 } from "tools/hooks"
 import { useMst } from "models/RootStore"
 import TaskState from "./state"
+import { DateTime } from "luxon"
 
 const Task = observer(({ task, active = false, onConfirm, expired }) => {
   const {
@@ -216,7 +215,10 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
           </span>
         )}
         {task.event && (
-          <span className={styles.hasEvent}>
+          <span
+            className={styles.hasEvent}
+            style={{ "--tag-color": task.event.tag?.color }}
+          >
             <CalendarWeekIcon />
           </span>
         )}
@@ -229,7 +231,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             })}
           >
             <CalendarIcon className={styles.dateIcon} />
-            {moment(task.date).format("DD MMM")}
+            {DateTime.fromFormat(task.date, "D").toFormat("dd LLL")}
           </span>
         )}
         <div className={styles.priorityWrapper}>
@@ -256,7 +258,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         {task.date && !state.active && (
           <span className={styles.date}>
             <CalendarIcon className={styles.dateIcon} />
-            {moment(task.date).format("DD MMM")}
+            {DateTime.fromFormat(task.date, "D").toFormat("dd LLL")}
           </span>
         )}
       </div>
@@ -296,10 +298,10 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             onClick={() => state.openMenu("datePicker")}
           >
             <StarIcon className={styles.fullDateIcon} />
-            {task.date === moment().format()
+            {task.date === DateTime.now().toFormat("D")
               ? "Сегодня"
               : task.date
-              ? moment(task.date).format("DD MMM")
+              ? DateTime.fromFormat(task.date, "D").toFormat("dd LLL")
               : "Без даты"}
           </span>
         </div>

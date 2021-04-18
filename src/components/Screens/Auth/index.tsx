@@ -20,9 +20,11 @@ const Errors = observer(({ errors }: { errors: Iterable<string> }) => {
 })
 
 const Auth = observer(() => {
-  const { setUser, setScreen } = useMst()
+  const { setUser, setScreen, user } = useMst()
   const [loginForm] = React.useState(new LoginForm())
   const [registerForm] = React.useState(new RegisterForm())
+
+  if (user?.id) setScreen("TODAY")
 
   const afterLoggingIn = user => {
     setUser(user)

@@ -17,7 +17,7 @@ const Project = types
       )
     },
     get sortedTasks() {
-      let tasks = this.tasks
+      const tasks = this.tasks
       tasks.sort((a, b) => parseInt(b.id) - parseInt(a.id))
       tasks.sort((a, b) => a.done - b.done)
       return tasks
@@ -71,4 +71,4 @@ const Project = types
   })
 
 export default Project
-export interface IProject extends Instance<typeof Project> {}
+export type IProject = Instance<typeof Project>

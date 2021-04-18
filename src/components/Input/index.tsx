@@ -2,13 +2,14 @@ import React from "react"
 import { observer } from "mobx-react"
 import classNames from "classnames"
 import styles from "./styles.styl"
+import { noop } from "lodash"
 
 const Input = observer(
   ({
     placeholder,
     value,
     onChange,
-    onSubmit = () => {},
+    onSubmit = noop,
     type = "text",
     className = "",
     name = "",

@@ -2,14 +2,12 @@ import React from "react"
 import ReactDOM from "react-dom"
 import App from "./components/App/index.jsx"
 import RootStore, { Provider } from "./models/RootStore"
-import moment from "moment"
 import jsonStorage from "tools/jsonStorage"
 import migrations from "models/migrations"
 
 import "./external/editor"
 import "./index.css"
 import { persist } from "mst-persist"
-import { IProject } from "models/Project.js"
 import SyncMachine from "./syncMachine"
 import { DateTime } from "luxon"
 
@@ -32,90 +30,123 @@ window.getToken = (): string => {
   return Store.user?.token || ""
 }
 
-window.syncMachine = new SyncMachine(Store)
+window.syncMachine = new SyncMachine(Store, !window.IS_WEB)
 
 function hydrate() {
   if (!DEBUG) {
     console.log("HYDRATING")
     persist("root_store", Store, {
       storage: jsonStorage,
+      blacklist: ["selectedProject", "screen"],
     })
-      .then(() => render())
+      .then(() => {
+        render()
+        window.syncMachine.finishHydration()
+      })
       .catch(err => console.error(err))
   } else {
     render()
   }
 }
 
-if (!window.IS_WEB) {
-  jsonStorage
-    .getItem("root_store")
-    .then(v => {
-      console.log(v)
-      if (typeof v === "string") v = JSON.parse(v)
-      console.log(migrations)
+const getFields = obj => {
+  const fields = {}
+  Object.keys(obj).forEach(fieldName => {
+    fields[fieldName] = {
+      value: obj[fieldName],
+      date: new Date(),
+    }
+  })
+  return fields
+}
+const registerInitialData = store => {
+  const taskType = window.syncMachine.getTypeByName("Task")
+  if (!taskType) return
+  store.tasks.all.forEach(task => {
+    taskType.registerChange(getFields(task), task.id, false)
+  })
+  taskType.dumpUpdates()
 
-      if (!v || !Object.keys(v).length) {
-        console.log(data)
-        jsonStorage
-          .setItem("root_store", JSON.stringify(data))
-          .then(hydrate)
-          .catch(alert)
-      } else {
-        if (v._storeVersion === 0) {
-          v.tempTask = null
-          v.events = []
-        }
-        const taskProjects: IProject[] = []
-        v.tasks.all.forEach(task => {
-          if (!taskProjects.includes(task.project))
-            taskProjects.push(task.project)
-        })
-        const missingProjects = taskProjects.filter(
-          id => id && !v.projects.find(p => p.id === id),
-        )
-        console.log("TASK PROJECTS:", taskProjects)
-        console.log(
-          "PROJECTS:",
-          v.projects.map(p => p.id),
-        )
-        console.log("MISSING:", missingProjects)
-        missingProjects.forEach(missingId => {
-          v.projects.push({
-            id: missingId,
-            name: `Lost ${missingId}`,
-            index: Infinity,
-          })
-        })
-        if (missingProjects.length)
-          v.projects = v.projects.map(p => ({ ...p, index: p.id - 1 }))
-        migrations.forEach(migration => {
-          if (migration.id <= v._storeVersion) return
-          migration.up(v)
-          console.log(migration)
-          v._storeVersion = migration.id
-        })
-        // v.projects = v.projects.map(project => ({ ...project, categories: [] }))
-        jsonStorage
-          .setItem("root_store", JSON.stringify(v))
-          .then(() => hydrate())
+  const projectType = window.syncMachine.getTypeByName("Project")
+  if (!projectType) return
+  store.projects.forEach(project => {
+    projectType.registerChange(getFields(project), project.id, false)
+  })
+  projectType.dumpUpdates()
 
-        return true
-      }
-      return true
+  const projectCategoryType = window.syncMachine.getTypeByName(
+    "ProjectCategory",
+  )
+  if (!projectCategoryType) return
+  store.categories?.forEach(category => {
+    projectCategoryType.registerChange(getFields(category), category.id, false)
+  })
+  projectCategoryType.dumpUpdates()
+
+  const tagType = window.syncMachine.getTypeByName("Tag")
+  if (!tagType) return
+  store.tags.forEach(tag => {
+    tagType.registerChange(getFields(tag), tag.id, false)
+  })
+  tagType.dumpUpdates()
+
+  const timelineEventType = window.syncMachine.getTypeByName("TimelineEvent")
+  if (!timelineEventType) return
+  store.events.forEach(event => {
+    timelineEventType.registerChange(getFields(event), event.id, false)
+  })
+  timelineEventType.dumpUpdates()
+}
+
+const initStorage = async () => {
+  let v = await jsonStorage.getItem("root_store")
+  if (typeof v === "string") v = JSON.parse(v)
+
+  if (!v || !Object.keys(v).length) {
+    await jsonStorage.setItem("root_store", JSON.stringify(data))
+    hydrate()
+    return
+  } else {
+    if (v._storeVersion === 0) {
+      v.tempTask = null
+      v.events = []
+    }
+
+    migrations.forEach(migration => {
+      if (migration.id <= v._storeVersion) return
+      v = migration.up(v)
+      console.log(migration)
+      v._storeVersion = migration.id
     })
-    .catch(alert)
+
+    const synced = await jsonStorage.getItem("synced")
+    if (!synced.date) {
+      await jsonStorage.setItem(
+        `_root_store_[${DateTime.now().toFormat("D HH:mm")}]`,
+        v,
+      )
+      registerInitialData(v)
+    }
+
+    await jsonStorage.setItem("root_store", JSON.stringify(v))
+    hydrate()
+
+    return true
+  }
+}
+
+if (!IS_WEB) {
+  initStorage()
 } else {
   render()
 }
 
 function render() {
+  window.syncMachine.loadAll(null)
   ReactDOM.render(
     <Provider value={Store}> {App} </Provider>,
     document.querySelector("#app"),
   )
 }
 
-window.moment = moment
-// @ts-ignore
 window.Store = Store

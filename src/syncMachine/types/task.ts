@@ -1,11 +1,6 @@
 import SyncType from "../syncType"
 import gqlClient from "../../graphql/client"
-import {
-  DELETE_TASK,
-  GET_TASKS,
-  GET_TASKS_SINCE,
-  UPDATE_TASK,
-} from "../../graphql/tasks"
+import { DELETE_TASK, GET_TASKS, UPDATE_TASK } from "../../graphql/tasks"
 
 export default class Task extends SyncType {
   name = "Task"

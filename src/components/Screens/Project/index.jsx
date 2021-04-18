@@ -8,7 +8,7 @@ import TaskList from "components/TaskList"
 import Task from "../../Task"
 import Button from "../../Button"
 import PlusIcon from "../../../assets/plus.svg"
-import FolderPlusIcon from "assets/awesome/solid/folder-plus.svg"
+import FolderPlusIcon from "assets/line_awesome/folder-plus-solid.svg"
 import {
   useClickOutsideRef,
   useKeyListener,

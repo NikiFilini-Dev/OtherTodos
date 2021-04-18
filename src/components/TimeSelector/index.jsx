@@ -4,7 +4,7 @@ import { useClickOutsideRef } from "../../tools/hooks"
 import styles from "./styles.styl"
 import ChevronUp from "assets/awesome/solid/chevron-up.svg"
 import ChevronDown from "assets/awesome/solid/chevron-down.svg"
-import moment from "moment"
+import { DateTime } from "luxon"
 
 const TimeSelector = ({
   onOutsideClick,
@@ -19,7 +19,7 @@ const TimeSelector = ({
     initialTime.split(":")[1].padStart(2, "0"),
   )
 
-  const minimalMoment = moment(minimalTime, "HH:mm")
+  const minimalMoment = DateTime.fromFormat(minimalTime || "00:00", "HH:mm")
 
   const hours = parseInt(rawHours.length ? rawHours : "0")
   const setHours = hours => setRawHours(String(hours).padStart(2, "0"))
@@ -30,9 +30,11 @@ const TimeSelector = ({
   const ref = React.useRef(null)
 
   const changeTime = (amount, unit) => {
-    let time = moment(`${hours}:${minutes}`, "H:m").add(amount, unit)
-    if (minimalTime && time.isBefore(minimalMoment)) time = minimalMoment
-    const [newHours, newMinutes] = time.format("HH:mm").split(":")
+    let time = DateTime.fromFormat(`${hours}:${minutes}`, "H:m").plus({
+      [unit]: amount,
+    })
+    if (minimalTime && time < minimalMoment) time = minimalMoment
+    const [newHours, newMinutes] = time.toFormat("HH:mm").split(":")
     setMinutes(newMinutes)
     setHours(newHours)
   }

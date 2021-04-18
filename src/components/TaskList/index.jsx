@@ -7,12 +7,12 @@ import Label from "../Label/index.jsx"
 import ListIcon from "../../assets/list.svg"
 import { observer } from "mobx-react"
 import { useMst } from "../../models/RootStore"
-import moment from "moment"
 import classNames from "classnames"
 import ChevronRight from "../../assets/awesome/solid/chevron-right.svg"
 import TrashIcon from "../../assets/awesome/regular/trash-alt.svg"
 import { Draggable, Droppable } from "react-beautiful-dnd"
 import { useInput } from "../../tools/hooks"
+import { DateTime } from "luxon"
 
 const TaskList = observer(
   ({
@@ -36,7 +36,7 @@ const TaskList = observer(
       task =>
         !task.repeating ||
         (task.date === selectedDate && screen === "TODAY") ||
-        moment(task.date)._d <= new Date(),
+        DateTime.fromFormat(task.date, "D").toJSDate() <= new Date(),
     )
 
     tasks.sort((a, b) => b.id - a.id)

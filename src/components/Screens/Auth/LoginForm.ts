@@ -7,8 +7,8 @@ export default class LoginForm {
     makeAutoObservable(this)
   }
 
-  email: string = ""
-  password: string = ""
+  email = ""
+  password = ""
 
   errors: {
     email: Set<string>

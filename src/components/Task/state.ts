@@ -8,7 +8,7 @@ export default class TaskState {
     })
   }
 
-  _active: boolean = false
+  _active = false
   get active(): boolean {
     return this._active
   }
@@ -17,7 +17,7 @@ export default class TaskState {
     this._active = val
   }
 
-  _done: boolean = false
+  _done = false
   get done(): boolean {
     return this._done
   }
@@ -79,12 +79,12 @@ export default class TaskState {
 
   elementInMenu(el, name: string) {
     if (!(name in this.refs.menus)) return
-    let ref = this.refs.menus[name].menu
+    const ref = this.refs.menus[name].menu
     return ref.current && (el === ref.current || ref.current.contains(el))
   }
 
   elementInAnyMenu(el) {
-    for (let name of Object.keys(this.refs.menus)) {
+    for (const name of Object.keys(this.refs.menus)) {
       if (this.inRef(el, this.refs.menus[name].menu)) return true
     }
     return false
@@ -99,7 +99,7 @@ export default class TaskState {
   }
 
   elementInAnyMenuOrTrigger(el) {
-    for (let name of Object.keys(this.menus)) {
+    for (const name of Object.keys(this.menus)) {
       if (
         this.inRef(el, this.refs.menus[name].menu) ||
         this.inRef(el, this.refs.menus[name].trigger)
@@ -110,7 +110,7 @@ export default class TaskState {
   }
 
   get allMenusClosed(): boolean {
-    for (let name of Object.keys(this.refs.menus)) {
+    for (const name of Object.keys(this.refs.menus)) {
       if (this.menus[name]) return false
     }
     return true

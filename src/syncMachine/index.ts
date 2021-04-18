@@ -12,6 +12,9 @@ import Project from "./types/project"
 import ProjectCategory from "./types/project_category"
 import TimelineEvent from "./types/timeline_event"
 import Tag from "./types/tag"
+import jsonStorage from "../tools/jsonStorage"
+
+const syncLogger = createLogger("SYNC")
 
 export default class SyncMachine {
   types: SyncType[] = [
@@ -24,6 +27,7 @@ export default class SyncMachine {
 
   state = "initial"
   applying = false
+  hydrated = true
 
   timer: NodeJS.Timeout | null = null
   timeout = 1000
@@ -33,8 +37,9 @@ export default class SyncMachine {
 
   store: IRootStore
 
-  constructor(Store: IRootStore) {
+  constructor(Store: IRootStore, waitForHydration = false) {
     this.store = Store
+    this.hydrated = !waitForHydration
 
     this.loadAll(null)
 
@@ -43,6 +48,18 @@ export default class SyncMachine {
 
     this.initInterval()
     this.initWindowHooks()
+  }
+
+  getTypeByName(name: string) {
+    return this.types.find(type => type.name === name)
+  }
+
+  finishHydration() {
+    Promise.all(this.types.map(type => type.loadUpdates())).then(() => {
+      this.hydrated = true
+      syncLogger.debug("Hydration finished")
+      this.resetTimer()
+    })
   }
 
   initWindowHooks() {
@@ -60,7 +77,7 @@ export default class SyncMachine {
   loadAll(timer: NodeJS.Timeout | null) {
     if (!window.getToken()) return
     if (this.timer !== timer) return
-    console.log("Loading")
+    syncLogger.info("Loading...")
 
     const promises = this.types.map(type => type.load())
     if (this.timer !== timer) return
@@ -76,17 +93,22 @@ export default class SyncMachine {
         applySnapshot(this.store, snapshot)
         this.applying = false
         this.state = "waiting"
+        syncLogger.info("Loaded.")
       },
       reason => console.error(reason),
     )
   }
 
   updateAll() {
+    if (!window.getToken()) return this.resetTimer()
     const timer = this.timer
     this.state = "sending updates"
+    syncLogger.info("Sending updates...")
     const promises = this.types.map(type => type.sendUpdates())
     Promise.all(promises).then(() => {
+      if (!IS_WEB) jsonStorage.setItem("synced", { date: new Date() })
       this.state = "updates send"
+      syncLogger.info("Updates sent.")
       this.loadAll(timer)
     })
   }
@@ -99,7 +121,7 @@ export default class SyncMachine {
   registerDelete(id: string, typeName: string) {
     const type = this.types.find(type => type.name === typeName)
     if (!type) {
-      console.warn("TYPE %s NOT REGISTERED")
+      syncLogger.warn("TYPE %s NOT REGISTERED", typeName)
       return
     }
 
@@ -109,7 +131,7 @@ export default class SyncMachine {
 
   hookCreate() {
     onPatch(this.store, patch => {
-      if (this.applying) return
+      if (!this.hydrated || this.applying) return
       if (patch.op === "add") {
         const node = pointer.get(this.store, patch.path)
         if (!node.syncable) return
@@ -122,7 +144,7 @@ export default class SyncMachine {
 
         const type = this.types.find(type => type.name === node.syncName)
         if (!type) {
-          console.warn("TYPE %s NOT REGISTERED", type)
+          syncLogger.warn("TYPE %s NOT REGISTERED", node.syncName)
           return
         }
 
@@ -144,13 +166,19 @@ export default class SyncMachine {
   hookUpdate() {
     const handler = call => {
       const node = call.context
-      if (call.name === "getActionsMap" || !node.syncName || !node.syncable) {
+      if (
+        !this.hydrated ||
+        call.name === "getActionsMap" ||
+        call.name === "@APPLY_SNAPSHOT" ||
+        !node.syncName ||
+        !node.syncable
+      ) {
         return
       }
 
       const type = this.types.find(type => type.name === node.syncName)
       if (!type) {
-        console.warn("TYPE %s NOT REGISTERED", type)
+        syncLogger.warn("TYPE %s NOT REGISTERED", type)
         return
       }
       const fields = {}
@@ -162,7 +190,7 @@ export default class SyncMachine {
         }
       })
 
-      console.log(call.name, fields)
+      logger.debug("Actions %s invoked", call.name)
 
       type.registerChange(fields, call.context.id)
       this.resetTimer()
