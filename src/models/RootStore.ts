@@ -26,8 +26,8 @@ const RootStore = types
     tasks: TaskList,
     projects: types.array(Project),
     categories: types.array(ProjectCategory),
-    selectedDate: DateTime.now().toFormat("D"),
-    timelineDate: DateTime.now().toFormat("D"),
+    selectedDate: DateTime.now().toFormat("M/d/yyyy"),
+    timelineDate: DateTime.now().toFormat("M/d/yyyy"),
     screen: types.optional(
       types.enumeration(["INBOX", "TODAY", "PROJECT", "LOG", "TAGS", "AUTH"]),
       "TODAY",
@@ -80,7 +80,7 @@ const RootStore = types
     },
     setTimelineDate(val) {
       if (val instanceof Date) {
-        val = DateTime.fromJSDate(val).toFormat("D")
+        val = DateTime.fromJSDate(val).toFormat("M/d/yyyy")
       }
       self.timelineDate = val
     },
@@ -124,7 +124,8 @@ const RootStore = types
       return newId
     },
     selectDate(date) {
-      if (date instanceof Date) date = DateTime.fromJSDate(date).toFormat("D")
+      if (date instanceof Date)
+        date = DateTime.fromJSDate(date).toFormat("M/d/yyyy")
       console.log("SELECTING DATE", date)
       self.selectedDate = date
     },
@@ -132,7 +133,7 @@ const RootStore = types
       self.screen = screen
       self.tasks.selected = null
       self.tempTask = null
-      self.selectedDate = DateTime.now().toFormat("D")
+      self.selectedDate = DateTime.now().toFormat("M/d/yyyy")
     },
     selectProject(project) {
       self.selectedProject = project

@@ -231,7 +231,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             })}
           >
             <CalendarIcon className={styles.dateIcon} />
-            {DateTime.fromFormat(task.date, "D").toFormat("dd LLL")}
+            {DateTime.fromFormat(task.date, "M/d/yyyy").toFormat("dd LLL")}
           </span>
         )}
         <div className={styles.priorityWrapper}>
@@ -258,7 +258,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         {task.date && !state.active && (
           <span className={styles.date}>
             <CalendarIcon className={styles.dateIcon} />
-            {DateTime.fromFormat(task.date, "D").toFormat("dd LLL")}
+            {DateTime.fromFormat(task.date, "M/d/yyyy").toFormat("dd LLL")}
           </span>
         )}
       </div>
@@ -298,10 +298,10 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             onClick={() => state.openMenu("datePicker")}
           >
             <StarIcon className={styles.fullDateIcon} />
-            {task.date === DateTime.now().toFormat("D")
+            {task.date === DateTime.now().toFormat("M/d/yyyy")
               ? "Сегодня"
               : task.date
-              ? DateTime.fromFormat(task.date, "D").toFormat("dd LLL")
+              ? DateTime.fromFormat(task.date, "M/d/yyyy").toFormat("dd LLL")
               : "Без даты"}
           </span>
         </div>

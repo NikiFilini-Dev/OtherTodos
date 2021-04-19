@@ -38,14 +38,14 @@ export function buildCalendar(date, value, tasks = []) {
   const daysWithTasks = []
   tasks.forEach(task => {
     if (!task.date) return
-    let d = DateTime.fromFormat(task.date, "D").toJSDate()
+    let d = DateTime.fromFormat(task.date, "M/d/yyyy").toJSDate()
     if (
       d.getMonth() !== date.getMonth() ||
       d.getFullYear() !== date.getFullYear()
     )
       return
 
-    const key = DateTime.fromJSDate(d).toFormat("D")
+    const key = DateTime.fromJSDate(d).toFormat("M/d/yyyy")
     if (daysWithTasks.indexOf(key)) daysWithTasks.push(key)
   })
 
@@ -81,7 +81,9 @@ export function buildCalendar(date, value, tasks = []) {
       today: isSameDate(tmpDate, now),
       selected: isSameDate(tmpDate, value),
       hasTasks:
-        daysWithTasks.indexOf(DateTime.fromJSDate(tmpDate).toFormat("D")) >= 0,
+        daysWithTasks.indexOf(
+          DateTime.fromJSDate(tmpDate).toFormat("M/d/yyyy"),
+        ) >= 0,
     })
     wc++
   }

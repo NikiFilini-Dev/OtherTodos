@@ -14,7 +14,7 @@ function capitalizeFirstLetter(string) {
 const DaySelector = observer(() => {
   const [isCalendarShown, setIsCalendarShown] = React.useState(false)
   const { timelineDate, setTimelineDate } = useMst()
-  const date = DateTime.fromFormat(timelineDate, "D")
+  const date = DateTime.fromFormat(timelineDate, "M/d/yyyy")
   const weeks = buildCalendar(new Date(), date.toJSDate(), [])
   const weekdays = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]
 

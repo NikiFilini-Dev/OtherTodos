@@ -18,7 +18,7 @@ const data = {
   screen: rawUser ? "TODAY" : "AUTH",
   selectedProject: null,
   selectedTag: null,
-  selectedDate: DateTime.now().toFormat("D"),
+  selectedDate: DateTime.now().toFormat("M/d/yyyy"),
   tags: [],
   projects: [],
   tasks: { all: [] },

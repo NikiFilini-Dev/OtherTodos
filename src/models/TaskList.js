@@ -12,7 +12,8 @@ const TaskList = types
       return self.all.filter(task => {
         return (
           task.date &&
-          DateTime.fromFormat(task.date, "D") === DateTime.now().startOf("day")
+          DateTime.fromFormat(task.date, "M/d/yyyy") ===
+            DateTime.now().startOf("day")
         )
       })
     },
@@ -20,7 +21,7 @@ const TaskList = types
       return self.all.filter(
         task =>
           task.date &&
-          DateTime.fromFormat(task.date, "D").startOf("day") <
+          DateTime.fromFormat(task.date, "M/d/yyyy").startOf("day") <
             DateTime.now().startOf("day"),
       )
     },

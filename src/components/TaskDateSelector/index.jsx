@@ -28,7 +28,7 @@ const TaskDateSelector = observer(
     }
 
     if (typeof value === "string")
-      value = DateTime.fromFormat(value, "D").toJSDate()
+      value = DateTime.fromFormat(value, "M/d/yyyy").toJSDate()
 
     const {
       tasks: { all },
@@ -75,7 +75,8 @@ const TaskDateSelector = observer(
 
     const selectDate = day => {
       let date = day.date
-      if (date instanceof Date) date = DateTime.fromJSDate(date).toFormat("D")
+      if (date instanceof Date)
+        date = DateTime.fromJSDate(date).toFormat("M/d/yyyy")
       task.setDate(date)
     }
 

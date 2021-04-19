@@ -39,12 +39,14 @@ const Today = observer(() => {
   } = useMst()
 
   const [viewMode, setViewMode] = React.useState("projects")
-  const today = DateTime.now().toFormat("D")
+  const today = DateTime.now().toFormat("M/d/yyyy")
   let tasks = all.filter(task => {
     return (
       task.date &&
-      DateTime.fromFormat(task.date, "D").startOf("day").toMillis() ===
-        DateTime.fromFormat(selectedDate, "D").startOf("day").toMillis() &&
+      DateTime.fromFormat(task.date, "M/d/yyyy").startOf("day").toMillis() ===
+        DateTime.fromFormat(selectedDate, "M/d/yyyy")
+          .startOf("day")
+          .toMillis() &&
       !task.done
     )
   })
@@ -144,7 +146,7 @@ const Today = observer(() => {
           {selectedDate === today
             ? "Сегодня"
             : toTitleCase(
-                DateTime.fromFormat(selectedDate, "D").toFormat("dd.MM"),
+                DateTime.fromFormat(selectedDate, "M/d/yyyy").toFormat("dd.MM"),
               )}
         </span>
         {selectedDate === today && (

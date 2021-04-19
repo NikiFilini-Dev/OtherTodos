@@ -66,13 +66,17 @@ const Timeline = observer(() => {
 
   const onPrevClick = () => {
     setTimelineDate(
-      DateTime.fromFormat(timelineDate, "D").minus({ days: 1 }).toFormat("D"),
+      DateTime.fromFormat(timelineDate, "M/d/yyyy")
+        .minus({ days: 1 })
+        .toFormat("M/d/yyyy"),
     )
   }
 
   const onNextClick = () => {
     setTimelineDate(
-      DateTime.fromFormat(timelineDate, "D").plus({ days: 1 }).toFormat("D"),
+      DateTime.fromFormat(timelineDate, "M/d/yyyy")
+        .plus({ days: 1 })
+        .toFormat("M/d/yyyy"),
     )
   }
 
@@ -173,10 +177,12 @@ const Timeline = observer(() => {
       <DaySelector />
       <div className={styles.currentDate}>
         <span className={styles.dayName}>
-          {timelineDate === DateTime.now().toFormat("D") ? "Сегодня" : ""}
+          {timelineDate === DateTime.now().toFormat("M/d/yyyy")
+            ? "Сегодня"
+            : ""}
         </span>
         <span className={styles.dayDetail}>
-          {DateTime.fromFormat(timelineDate, "D").toFormat("DD")}
+          {DateTime.fromFormat(timelineDate, "M/d/yyyy").toFormat("DD")}
         </span>
         <span className={styles.action} onClick={onPrevClick}>
           <ChevronLeft />

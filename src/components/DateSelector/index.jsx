@@ -16,7 +16,7 @@ const DateSelector = observer(({ value, onSelect, triggerRef, right }) => {
   }
 
   if (typeof value === "string")
-    value = DateTime.fromFormat(value, "D").toJSDate()
+    value = DateTime.fromFormat(value, "M/d/yyyy").toJSDate()
 
   const {
     tasks: { all },

@@ -18,7 +18,7 @@ const Task = types
     tags: types.array(types.reference(Tag)),
     closeDate: types.maybeNull(types.string),
     creationDate: types.optional(types.string, () =>
-      DateTime.now().toFormat("D"),
+      DateTime.now().toFormat("M/d/yyyy"),
     ),
     repeatEvery: types.maybeNull(types.optional(types.integer, 0)),
     repeating: types.optional(types.boolean, false),
@@ -54,7 +54,7 @@ const Task = types
 
     actions.createAndConnectEvent = () => {
       if (self.event) return
-      if (!self.date) self.date = DateTime.now().toFormat("D")
+      if (!self.date) self.date = DateTime.now().toFormat("M/d/yyyy")
       const root = getRoot(self)
       self.event = root.createEvent({
         task: self.id,
@@ -81,14 +81,17 @@ const Task = types
     actions.changeStatus = value => {
       self.status = value ? "done" : "active"
       if (value) {
-        self.closeDate = DateTime.now().toFormat("D")
+        self.closeDate = DateTime.now().toFormat("M/d/yyyy")
         if (self.repeatEvery) {
           const newTask = JSON.parse(JSON.stringify(self))
-          newTask.date = DateTime.fromFormat(self.date || self.closeDate, "D")
+          newTask.date = DateTime.fromFormat(
+            self.date || self.closeDate,
+            "M/d/yyyy",
+          )
             .plus({ days: self.repeatEvery })
-            .toFormat("D")
+            .toFormat("M/d/yyyy")
           newTask.status = "active"
-          newTask.creationDate = DateTime.now().toFormat("D")
+          newTask.creationDate = DateTime.now().toFormat("M/d/yyyy")
           newTask.closeDate = null
           newTask.id = uuidv4()
           console.log(newTask)
@@ -111,7 +114,7 @@ const Task = types
 
     actions.setDate = value => {
       if (value instanceof Date)
-        value = DateTime.fromJSDate(value).toFormat("D")
+        value = DateTime.fromJSDate(value).toFormat("M/d/yyyy")
       self.date = value
       if (self.event) {
         if (value) self.event.setDate(self.date)

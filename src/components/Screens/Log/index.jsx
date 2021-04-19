@@ -31,7 +31,8 @@ const Log = observer(() => {
 
   let reversedDays = Object.keys(days).reverse()
   reversedDays.sort(
-    (a, b) => DateTime.fromFormat(b, "D") - DateTime.fromFormat(a, "D"),
+    (a, b) =>
+      DateTime.fromFormat(b, "M/d/yyyy") - DateTime.fromFormat(a, "M/d/yyyy"),
   )
 
   const onTagSelect = tag => {
@@ -50,7 +51,7 @@ const Log = observer(() => {
             showHidden
             key={`day_${day}`}
             tasks={days[day]}
-            name={DateTime.fromFormat(day, "D").toFormat("dd.MM.yyyy")}
+            name={DateTime.fromFormat(day, "M/d/yyyy").toFormat("dd.MM.yyyy")}
           />
         ))}
       </div>

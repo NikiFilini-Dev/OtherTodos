@@ -9,8 +9,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "ef:publish": "electron-forge publish",
-    "lint": "eslint . --fix --ext js --ext jsx",
-    "pretty": "prettier --write \"./**/*.js*(x)\"",
+    "lint": "eslint . --fix --ext js --ext jsx --ext ts --ext tsx",
+    "pretty": "prettier --write \"./**/*.[jt]s*(x)\"",
     "pub:base": "git push && git push --tags && yarn ef:publish",
     "pub:patch": "yarn version --patch && yarn pub:base",
     "pub:minor": "yarn version --minor && yarn pub:base",
@@ -88,6 +88,7 @@
     "stylus": "^0.54.8",
     "stylus-loader": "^4.3.1",
     "webpack": "^4.44.2",
+    "webpack-bundle-analyzer": "^4.4.1",
     "webpack-cli": "^4.6.0"
   },
   "dependencies": {

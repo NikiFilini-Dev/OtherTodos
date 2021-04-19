@@ -36,7 +36,7 @@ const TaskList = observer(
       task =>
         !task.repeating ||
         (task.date === selectedDate && screen === "TODAY") ||
-        DateTime.fromFormat(task.date, "D").toJSDate() <= new Date(),
+        DateTime.fromFormat(task.date, "M/d/yyyy").toJSDate() <= new Date(),
     )
 
     tasks.sort((a, b) => b.id - a.id)

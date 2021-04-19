@@ -118,13 +118,13 @@ const migrations: Migration[] = [
     desc: "Add creation date",
     up(Store) {
       if (Store.tempTask?.id) {
-        Store.tempTask.creationDate = DateTime.now().toFormat("D")
+        Store.tempTask.creationDate = DateTime.now().toFormat("M/d/yyyy")
       }
       Store.tasks.all.forEach(task => {
         let time = task.creationDate
         if (!time) time = task.date
         if (!time) time = task.closeDate
-        if (!time) time = DateTime.now().toFormat("D")
+        if (!time) time = DateTime.now().toFormat("M/d/yyyy")
         task.creationDate = time
       })
       return Store
@@ -207,7 +207,7 @@ const migrations: Migration[] = [
 ]
 
 function momentToLuxon(date) {
-  const val = DateTime.fromJSDate(moment(date).toDate()).toFormat("D")
+  const val = DateTime.fromJSDate(moment(date).toDate()).toFormat("M/d/yyyy")
   console.log(date, val)
   return val
 }

@@ -311,7 +311,7 @@ const Sidebar = observer(() => {
           })}
           onClick={() => {
             setScreen("TODAY")
-            selectDate(DateTime.now().toFormat("D"))
+            selectDate(DateTime.now().toFormat("M/d/yyyy"))
           }}
         >
           <PlaneIcon className={styles.groupElementAwesomeIcon} />
