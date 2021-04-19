@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/global.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/global.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphql/client.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/client.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webpack.web.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.web.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +133,7 @@
       <workItem from="1618739126542" duration="20611000" />
       <workItem from="1618765303250" duration="8133000" />
       <workItem from="1618781669817" duration="4131000" />
-      <workItem from="1618835024592" duration="752000" />
+      <workItem from="1618835024592" duration="3290000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -392,7 +394,14 @@
       <option name="project" value="LOCAL" />
       <updated>1618741959323</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Dotenv">
+      <created>1618835816479</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1618835816479</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -411,7 +420,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Сочетания клавиш" />
     <MESSAGE value="Фикс сохранения и текущей даты при переключении на раздел сегодня" />
     <MESSAGE value="Version bump" />
     <MESSAGE value="Fix hydrating" />
@@ -436,7 +444,8 @@
     <MESSAGE value="Web init" />
     <MESSAGE value="Implemented sync" />
     <MESSAGE value="Submit form on enter" />
-    <option name="LAST_COMMIT_MESSAGE" value="Submit form on enter" />
+    <MESSAGE value="Dotenv" />
+    <option name="LAST_COMMIT_MESSAGE" value="Dotenv" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

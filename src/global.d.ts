@@ -5,6 +5,7 @@ import { IRootStore } from "./models/RootStore"
 
 declare global {
   const IS_WEB: boolean
+  const API_URL: string
   const logger: winston.Logger
   const createLogger: (label?: string) => winston.Logger
 
