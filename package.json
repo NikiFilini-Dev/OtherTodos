@@ -116,6 +116,7 @@
     "@urql/core": "^2.0.0",
     "@urql/exchange-graphcache": "^4.0.0",
     "classnames": "^2.2.6",
+    "dotenv-webpack": "^7.0.2",
     "electron-json-storage": "^4.3.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-vibrancy": "https://github.com/lunavod/electron-vibrancy.git",

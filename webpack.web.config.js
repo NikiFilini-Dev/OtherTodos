@@ -1,7 +1,7 @@
 const webpack = require("webpack")
 const rules = require("./webpack.rules")
 const path = require("path")
-require("dotenv").config()
+const Dotenv = require("dotenv-webpack")
 
 rules.push({
   test: /\.css$/,
@@ -35,6 +35,7 @@ module.exports = {
     fs: "empty",
   },
   plugins: [
+    new Dotenv(),
     new webpack.DefinePlugin({
       IS_WEB: true,
       API_URL: JSON.stringify(process.env.API_URL),

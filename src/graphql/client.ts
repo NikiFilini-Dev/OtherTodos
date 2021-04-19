@@ -1,7 +1,7 @@
 import { createClient, fetchExchange } from "urql"
 
 const client = createClient({
-  url: API_URL,
+  url: process.env.API_URL,
   fetchOptions: () => {
     const token = window.getToken()
     return {

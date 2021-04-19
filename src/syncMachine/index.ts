@@ -109,7 +109,7 @@ export default class SyncMachine {
       if (!IS_WEB) jsonStorage.setItem("synced", { date: new Date() })
       this.state = "updates send"
       syncLogger.info("Updates sent.")
-      this.loadAll(timer)
+      setTimeout(() => this.loadAll(timer), 1000)
     })
   }
 
