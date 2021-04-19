@@ -17,7 +17,7 @@ const TimelineEvent = types
   })
   .views(self => ({
     get end() {
-      return DateTime.fromFormat(self.start, "HH:mm")
+      return DateTime.fromFormat(self.start, "H:m")
         .plus({ minutes: self.duration })
         .toFormat("HH:mm")
     },
@@ -33,10 +33,8 @@ const TimelineEvent = types
     const actionsMap = {}
     actions.setDuration = val => {
       if (val < 30) return
-      const startDay = DateTime.fromFormat(self.start, "HH:mm").toFormat(
-        "dd.MM",
-      )
-      const potentialEndMoment = DateTime.fromFormat(self.start, "HH:mm").plus({
+      const startDay = DateTime.fromFormat(self.start, "H:m").toFormat("dd.MM")
+      const potentialEndMoment = DateTime.fromFormat(self.start, "H:m").plus({
         minutes: val,
       })
       if (
@@ -54,8 +52,8 @@ const TimelineEvent = types
         ;[hours, minutes] = hours.split(":").map(i => parseInt(i))
       }
       let startS = `${hours}:${minutes}`
-      const newStartMoment = DateTime.fromFormat(startS, "HH:mm")
-      const potentialEndMoment = DateTime.fromFormat(startS, "HH:mm").plus({
+      const newStartMoment = DateTime.fromFormat(startS, "H:m")
+      const potentialEndMoment = DateTime.fromFormat(startS, "H:m").plus({
         minutes: self.duration,
       })
       if (
@@ -76,7 +74,7 @@ const TimelineEvent = types
         ;[hours, minutes] = hours.split(":").map(i => parseInt(i))
       }
       if (!hours && !minutes) {
-        const startMoment = DateTime.fromFormat(self.start, "HH:mm")
+        const startMoment = DateTime.fromFormat(self.start, "H:m")
         let newEndMoment = startMoment.endOf("day")
         const diff = newEndMoment.diff(startMoment, "minutes")
         return this.setDuration(diff.values.minutes + 1)
@@ -106,8 +104,8 @@ const TimelineEvent = types
     actionsMap.setStart = ["start"]
 
     actions.setEnd = val => {
-      self.duration = DateTime.fromFormat(val, "HH:mm").diff(
-        DateTime.fromFormat(self.start, "HH:mm"),
+      self.duration = DateTime.fromFormat(val, "H:m").diff(
+        DateTime.fromFormat(self.start, "H:m"),
         "minutes",
       ).values.minutes
     }

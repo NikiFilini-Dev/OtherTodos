@@ -100,10 +100,10 @@ const TimeSelector = ({
 }
 
 TimeSelector.propTypes = {
-  onOutsideClick: PropTypes.func.required,
-  onSubmit: PropTypes.func.required,
-  initialTime: PropTypes.string.required,
-  minimalTime: PropTypes.string.required,
+  onOutsideClick: PropTypes.func,
+  onSubmit: PropTypes.func,
+  initialTime: PropTypes.string,
+  minimalTime: PropTypes.string,
 }
 
 export default TimeSelector

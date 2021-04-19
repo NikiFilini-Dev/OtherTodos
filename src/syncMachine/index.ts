@@ -165,6 +165,7 @@ export default class SyncMachine {
 
   hookUpdate() {
     const handler = call => {
+      logger.info("Actions %s invoked", call.name, call)
       const node = call.context
       if (
         !this.hydrated ||
