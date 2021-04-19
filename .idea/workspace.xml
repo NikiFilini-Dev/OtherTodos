@@ -5,55 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.eslintignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/tools/logger.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/forge.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/forge.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Button/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Button/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DateSelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DateSelector/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DaySelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DaySelector/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Input/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Input/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PrioritySelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PrioritySelector/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/Auth/LoginForm.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Auth/LoginForm.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/Auth/RegisterForm.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Auth/RegisterForm.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/Auth/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Auth/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/Today/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Today/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/Today/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Today/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Sidebar/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Task/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Task/state.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/state.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Task/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TaskDateSelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TaskDateSelector/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TaskList/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TaskList/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TaskList/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TaskList/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TimeSelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TimeSelector/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/external/editor/document.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/external/editor/document.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/external/editor/markdown_document.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/external/editor/markdown_document.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/global.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/global.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Project.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Project.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/RootStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/RootStore.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/TimelineEvent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/TimelineEvent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/migrations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/migrations.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/syncMachine/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/syncMachine/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/syncMachine/syncType.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/syncMachine/syncType.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/syncMachine/types/project_category.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/syncMachine/types/project_category.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/syncMachine/types/tag.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/syncMachine/types/tag.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/syncMachine/types/task.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/syncMachine/types/task.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/syncMachine/types/timeline_event.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/syncMachine/types/timeline_event.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tools/date.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/date.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.renderer.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.renderer.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.web.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.web.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -178,6 +131,7 @@
       <workItem from="1618739126542" duration="20611000" />
       <workItem from="1618765303250" duration="8133000" />
       <workItem from="1618781669817" duration="4131000" />
+      <workItem from="1618835024592" duration="752000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
