@@ -7,6 +7,12 @@ const {
   MenuItem,
 } = require("electron")
 
+import * as Sentry from "@sentry/electron"
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+})
+
 // const server = "https://hazel.lunavod.vercel.app"
 // const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 

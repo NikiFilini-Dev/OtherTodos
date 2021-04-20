@@ -96,6 +96,9 @@
   "dependencies": {
     "@apollo/client": "^3.3.14",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@sentry/browser": "^6.3.0",
+    "@sentry/electron": "^2.4.0",
+    "@sentry/tracing": "^6.3.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@types/classnames": "^2.2.11",
     "@types/electron-json-storage": "^4.0.0",
