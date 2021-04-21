@@ -166,16 +166,12 @@ export default class SyncMachine {
 
   hookUpdate() {
     const handler = call => {
-      if (call.name === "getActionsMap" ||
-      call.name === "@APPLY_SNAPSHOT") return
+      if (call.name === "getActionsMap" || call.name === "@APPLY_SNAPSHOT")
+        return
 
       logger.info("Actions %s invoked", call.name)
       const node = call.context
-      if (
-        !this.hydrated ||
-        !node.syncName ||
-        !node.syncable
-      ) {
+      if (!this.hydrated || !node.syncName || !node.syncable) {
         return
       }
 
