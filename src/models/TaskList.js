@@ -5,7 +5,7 @@ import { DateTime } from "luxon"
 const TaskList = types
   .model("TaskList", {
     all: types.array(Task),
-    selected: types.maybeNull(types.reference(Task)),
+    selected: types.maybeNull(types.string), //types.maybeNull(types.reference(Task)),
   })
   .views(self => ({
     get today() {
@@ -32,7 +32,7 @@ const TaskList = types
   .actions(self => ({
     select(task) {
       if (task === getParent(self).tempTask && task !== null) return
-      self.selected = task
+      self.selected = task?.id
     },
     add(task) {
       if (getParent(self).tempTask === task) getParent(self).detachTempTask()

@@ -88,6 +88,7 @@ export default class SyncMachine {
         let snapshot = JSON.parse(JSON.stringify(getSnapshot(this.store)))
         results.forEach(func => {
           snapshot = func(snapshot)
+          // console.log(snapshot)
         })
         this.applying = true
         applySnapshot(this.store, snapshot)
@@ -165,12 +166,13 @@ export default class SyncMachine {
 
   hookUpdate() {
     const handler = call => {
-      logger.info("Actions %s invoked", call.name, call)
+      if (call.name === "getActionsMap" ||
+      call.name === "@APPLY_SNAPSHOT") return
+
+      logger.info("Actions %s invoked", call.name)
       const node = call.context
       if (
         !this.hydrated ||
-        call.name === "getActionsMap" ||
-        call.name === "@APPLY_SNAPSHOT" ||
         !node.syncName ||
         !node.syncable
       ) {

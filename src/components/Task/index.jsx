@@ -62,7 +62,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
     if (!state.allMenusClosed) return
 
     if (!active) state.active = false
-    if (selected?.id === task.id) {
+    if (selected === task.id) {
       select(null)
     }
   })
@@ -90,11 +90,11 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   ])
 
   useKeyListener("Delete", () => {
-    if (selected?.id === task.id && !state.active) deleteTask(task)
+    if (selected === task.id && !state.active) deleteTask(task)
   })
 
   useKeyListener("Backspace", () => {
-    if (selected?.id === task.id && !state.active) deleteTask(task)
+    if (selected === task.id && !state.active) deleteTask(task)
   })
 
   const onTaskClick = e => {
@@ -115,7 +115,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
     )
       return
 
-    if (selected?.id === task.id) state.active = true
+    if (selected === task.id) state.active = true
     else {
       select(task)
     }
@@ -166,7 +166,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         [styles.task]: true,
         [styles.done]: state.done,
         [styles.active]: state.active,
-        [styles.selected]: selected?.id === task.id,
+        [styles.selected]: selected === task.id,
       })}
       onClick={onTaskClick}
     >

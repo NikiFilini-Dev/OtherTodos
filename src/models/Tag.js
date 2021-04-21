@@ -23,7 +23,7 @@ const Tag = types
   .model("Tag", {
     id: types.identifier,
     name: types.string,
-    project: types.maybeNull(types.reference(Project)),
+    // project: types.maybeNull(types.reference(Project)),
     index: types.number,
     color: types.maybeNull(types.string, randomTagColor()),
     type: types.optional(
