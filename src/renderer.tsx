@@ -127,6 +127,8 @@ const initStorage = async () => {
       v.events = []
     }
 
+    v.events = v.events || []
+    v.categories = v.categories || []
     migrations.forEach(migration => {
       if (migration.id <= v._storeVersion) return
       v = migration.up(v)

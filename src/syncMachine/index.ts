@@ -120,7 +120,9 @@ export default class SyncMachine {
   }
 
   registerDelete(id: string, typeName: string) {
-    const type = this.types.find(type => type.name === typeName)
+    const type = this.types.find(
+      type => type.name.toLowerCase() === typeName.toLowerCase(),
+    )
     if (!type) {
       syncLogger.warn("TYPE %s NOT REGISTERED", typeName)
       return
@@ -143,7 +145,9 @@ export default class SyncMachine {
         )
           return
 
-        const type = this.types.find(type => type.name === node.syncName)
+        const type = this.types.find(
+          type => type.name.toLowerCase() === node.syncName.toLowerCase(),
+        )
         if (!type) {
           syncLogger.warn("TYPE %s NOT REGISTERED", node.syncName)
           return

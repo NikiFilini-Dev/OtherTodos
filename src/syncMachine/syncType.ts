@@ -81,6 +81,7 @@ export default abstract class SyncType {
           const item = updates[id]
 
           const onError = error => {
+            syncLogger.error(error)
             console.error(error)
             reject()
           }
