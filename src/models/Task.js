@@ -24,6 +24,7 @@ const Task = types
     repeating: types.optional(types.boolean, false),
     category: types.maybeNull(types.reference(ProjectCategory)),
     event: types.maybeNull(types.reference(types.late(LateTimelineEvent))),
+    colorTag: types.maybeNull(types.reference(Tag)),
   })
   .views(self => ({
     get done() {
@@ -151,6 +152,11 @@ const Task = types
     }
     actionsMap.setCategory = ["category"]
 
+    actions.setColorTag = t => {
+      self.colorTag = t
+    }
+    actionsMap.setColorTag = ["colorTag"]
+
     actions.getActionsMap = () => actionsMap
 
     return actions
@@ -160,10 +166,12 @@ export const factory = (id, data = {}) => {
   if (data.project === "") data.project = null
   if (data.event === "") data.event = null
   if (data.category === "") data.category = null
+  if (data.colorTag === "") data.colorTag = null
   return {
     id,
     project: null,
     date: null,
+    colorTag: null,
     text: "",
     note: "",
     tags: [],

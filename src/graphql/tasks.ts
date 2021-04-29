@@ -35,6 +35,7 @@ export const GET_TASKS = gql`
       repeating
       category
       event
+      colorTag
     }
   }
 `
@@ -56,6 +57,7 @@ export const GET_TASKS_SINCE = gql`
       repeating
       category
       event
+      colorTag
     }
   }
 `

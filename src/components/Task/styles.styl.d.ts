@@ -2,6 +2,7 @@ declare namespace StylesStylNamespace {
   export interface IStylesStyl {
     active: string
     check: string
+    colored: string
     date: string
     dateIcon: string
     delete: string

@@ -12,6 +12,7 @@ export default class Task extends SyncType {
     if (item.project === "") item.project = null
     if (item.event === "") item.event = null
     if (item.category === "") item.category = null
+    if (item.colorTag === "") item.colorTag = null
     return item
   }
 

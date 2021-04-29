@@ -19,6 +19,7 @@ import TrashIcon from "assets/awesome/regular/trash-alt.svg"
 import TagsIcon from "assets/awesome/solid/tags.svg"
 import RedoIcon from "assets/awesome/solid/redo.svg"
 import CalendarWeekIcon from "assets/awesome/solid/calendar-week.svg"
+import PalletIcon from "assets/line_awesome/palette-solid.svg"
 import {
   useClick,
   useClickOutsideRef,
@@ -37,6 +38,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   } = useMst()
   const [state] = React.useState(new TaskState())
   if (active && !state.active) state.active = active
+  React.useEffect(() => (state.done = task.status === "DONE"), [])
 
   useClick(document, e => {
     if (
@@ -167,11 +169,16 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         [styles.done]: state.done,
         [styles.active]: state.active,
         [styles.selected]: selected === task.id,
+        [styles.colored]: task.colorTag !== null,
       })}
+      style={{
+        "--task-color": task.colorTag?.color,
+      }}
       onClick={onTaskClick}
     >
       <div className={styles.line}>
         <Checkbox
+          color={task.colorTag?.color}
           ref={state.refs.checkbox}
           className={styles.check}
           onChange={onCheckboxChange}
@@ -279,8 +286,24 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         })}
       >
         {task.tags.map(tag => (
-          <span key={`task_${task.id}#tag_${tag.id}`} className={styles.tag}>
+          <span
+            key={`task_${task.id}#tag_${tag.id}`}
+            className={classNames({
+              [styles.tag]: true,
+              [styles.active]: task.colorTag === tag,
+            })}
+            style={{ "--tag-color": tag.color }}
+          >
             {tag.name}
+            <PalletIcon
+              onClick={() => {
+                if (task.colorTag === tag) {
+                  task.setColorTag(null)
+                } else {
+                  task.setColorTag(tag)
+                }
+              }}
+            />
           </span>
         ))}
       </div>
