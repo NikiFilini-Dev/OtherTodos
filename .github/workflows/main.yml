@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [windows-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v2
@@ -18,6 +18,13 @@ jobs:
         uses: actions/setup-node@v2.1.5
         with:
           node-version: v14.x
+
+      - name: Add MacOS certs
+        if: matrix.os == 'macos-latest'
+        run: chmod +x add-osx-cert.sh && ./add-osx-cert.sh
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
       
       - name: Cache node modules
         uses: actions/cache@v2
@@ -39,12 +46,15 @@ jobs:
       
       - name: Create .env file
         run: touch .env
-      
-      - name: Package
+
+      - name: Make
+        run: yarn make
         env:
+          IDENTITY: ${{ secrets.IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
           API_URL: ${{ secrets.API_URL }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-        run: yarn run make
       
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
