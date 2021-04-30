@@ -1,4 +1,4 @@
-import { getRoot, types } from "mobx-state-tree"
+import { getRoot, getParent, types, getType } from "mobx-state-tree"
 
 const Category = types
   .model("ProjectCategory", {
@@ -18,6 +18,17 @@ const Category = types
       tasks.sort((a, b) => parseInt(b.id) - parseInt(a.id))
       tasks.sort((a, b) => a.done - b.done)
       return tasks
+    },
+    get syncable() {
+      console.log("PARENT:", getType(getParent(getParent(self))))
+      return getParent(getParent(self)) === getRoot(self)
+    },
+    get syncName() {
+      return "ProjectCategory"
+    },
+    isReference(path) {
+      const re = /^\/categories\/\d+$/
+      return !re.test(path)
     },
   }))
   .actions(self => ({

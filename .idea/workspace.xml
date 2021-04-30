@@ -6,17 +6,31 @@
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/RootStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/RootStore.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/migrations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/migrations.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Checkbox/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Checkbox/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Checkbox/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Checkbox/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Checkbox/styles.styl.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Checkbox/styles.styl.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Task/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Task/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Task/styles.styl.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/styles.styl.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphql/tasks.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/tasks.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Task.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Task.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/syncMachine/types/task.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/syncMachine/types/task.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -41,12 +55,12 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js.linters.configure.manually.selectedeslint" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/syncMachine/types" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.detected.package.stylelint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
-    <property name="node.js.path.for.package.eslint" value="/usr/local/bin/node" />
+    <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.path.for.package.standard" value="project" />
     <property name="node.js.path.for.package.stylelint" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
@@ -56,21 +70,23 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="prettier.import.notification.dismissed" value="true" />
-    <property name="prettierjs.PrettierConfiguration.NodeInterpreter" value="/usr/local/bin/node" />
+    <property name="prettierjs.PrettierConfiguration.NodeInterpreter" value="node" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
-    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/syncMachine/types" />
+      <recent name="$PROJECT_DIR$/src/graphql" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/assets/awesome" />
       <recent name="$PROJECT_DIR$/src/external" />
-      <recent name="$PROJECT_DIR$/src/components/Screens" />
-      <recent name="$PROJECT_DIR$/src/assets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/contexts" />
+      <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/src/components/Timeline" />
       <recent name="$PROJECT_DIR$/src/components" />
     </key>
@@ -111,6 +127,24 @@
       <workItem from="1613477216628" duration="6196000" />
       <workItem from="1613484401706" duration="30982000" />
       <workItem from="1613682588762" duration="6250000" />
+      <workItem from="1617621760918" duration="9331000" />
+      <workItem from="1617786106619" duration="13611000" />
+      <workItem from="1617880271435" duration="8082000" />
+      <workItem from="1617892119191" duration="1206000" />
+      <workItem from="1617966545493" duration="17795000" />
+      <workItem from="1618056188520" duration="12781000" />
+      <workItem from="1618137961679" duration="24489000" />
+      <workItem from="1618220768479" duration="7554000" />
+      <workItem from="1618394620311" duration="9256000" />
+      <workItem from="1618564836105" duration="6278000" />
+      <workItem from="1618651899035" duration="28817000" />
+      <workItem from="1618739126542" duration="20611000" />
+      <workItem from="1618765303250" duration="8133000" />
+      <workItem from="1618781669817" duration="4131000" />
+      <workItem from="1618835024592" duration="6290000" />
+      <workItem from="1618857173054" duration="1198000" />
+      <workItem from="1619167099849" duration="3389000" />
+      <workItem from="1619692745846" duration="4640000" />
     </task>
     <task id="LOCAL-00001" summary="Базовый туду лист">
       <created>1607444199027</created>
@@ -357,7 +391,42 @@
       <option name="project" value="LOCAL" />
       <updated>1613839276933</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Implemented sync">
+      <created>1618694152811</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1618694152811</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Submit form on enter">
+      <created>1618741959323</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1618741959323</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Dotenv">
+      <created>1618835816479</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1618835816479</updated>
+    </task>
+    <task id="LOCAL-00039" summary="API_URL in .env">
+      <created>1618842091019</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1618842091019</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Fix OTHERTASK-F">
+      <created>1619193132194</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1619193132194</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -376,12 +445,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Выбор задачи двумя кликами, автоувеличение поля заметок, меню тегов везде" />
-    <MESSAGE value="Отображение точкой в календаре текущего дня" />
-    <MESSAGE value="Нормальный скрол в экранах" />
-    <MESSAGE value="Сочетания клавиш" />
-    <MESSAGE value="Фикс сохранения и текущей даты при переключении на раздел сегодня" />
-    <MESSAGE value="Version bump" />
     <MESSAGE value="Fix hydrating" />
     <MESSAGE value="Bugfixes" />
     <MESSAGE value="Перемещение тэгов, миграции" />
@@ -401,7 +464,13 @@
     <MESSAGE value="Скролл всплывающих меню" />
     <MESSAGE value="Переход на uuid, изменение алгоритма повторящихся задач" />
     <MESSAGE value="Удаление тэгов" />
-    <option name="LAST_COMMIT_MESSAGE" value="Удаление тэгов" />
+    <MESSAGE value="Web init" />
+    <MESSAGE value="Implemented sync" />
+    <MESSAGE value="Submit form on enter" />
+    <MESSAGE value="Dotenv" />
+    <MESSAGE value="API_URL in .env" />
+    <MESSAGE value="Fix OTHERTASK-F" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix OTHERTASK-F" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

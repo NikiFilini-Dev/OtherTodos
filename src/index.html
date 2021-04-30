@@ -6,10 +6,11 @@
     <script>
       const { remote } = require('electron')
       window.remote = remote
+      if (process.platform === "darwin") document.body.style.background = "transparent"
     </script>
     <style>
       body {
-        /*background: #9c9c9cd9;*/
+          background: #ececec;
       }
       #titlebar {
         height: 36px;

@@ -9,7 +9,9 @@
     "plugin:react/recommended",
     "plugin:import/warnings",
     "plugin:prettier/recommended",
-    "prettier/react"
+    "prettier/react",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -24,7 +26,8 @@
   "plugins": [
     "babel",
     "react",
-    "prettier"
+    "prettier",
+    "@typescript-eslint"
   ],
   "rules": {
     "no-useless-escape": "off",
@@ -47,9 +50,13 @@
       120
     ],
     "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "react/jsx-uses-vars": "error",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-extra-semi": "off"
   },
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "settings": {
     "import/parser": "babel-eslint",
     "import/resolve": {
@@ -62,5 +69,8 @@
       "version": "16"
     }
   },
-  "globals": {}
+  "globals": {
+    "IS_WEB": false
+  },
+  "ignorePatterns": ["", "*_dist/**/*.*"]
 }

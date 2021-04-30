@@ -203,9 +203,9 @@ export default class MarkdownDocument extends Document {
   }
 
   mark(styleName: string, range: [number, number]): number {
-    let before: string = "",
-      start: string = "",
-      end: string = ""
+    let before = "",
+      start = "",
+      end = ""
     if (range[0] > 0 && this.text[range[0] - 1] !== "\n") before = "\n"
     switch (styleName) {
       case "bold":

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Others Task</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png">
+  <link rel="manifest" href="/public/site.webmanifest">
+  <link rel="mask-icon" href="/public/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="msapplication-config" content="/public/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+  <script>
+    window.IS_WEB = true
+    window.remote = {}
+  </script>
+  <style>
+      body {
+          background: #ececec;
+      }
+
+      :root {
+          --button-size: -1px;
+          --editor-padding: 6px;
+          --border-radius: 5px;
+      }
+
+      baka-editor {
+          width: 100%;
+          max-height: 400px;
+          overflow: auto;
+          font-size: .9em;
+      }
+
+      #wrapper {
+          width: 100%;
+          height: 100%;
+          background: transparent;
+          cursor: text;
+          display: flex;
+          align-items: stretch;
+          overflow: hidden;
+          position: relative;
+      }
+
+      #buttons {
+          display: none;
+      }
+
+      #placeholder {
+          position: absolute;
+          width: 100%;
+          height: auto;
+          top: var(--editor-padding);
+          left: calc(var(--editor-padding) + 1px + var(--button-size));
+          opacity: 0.6;
+          z-index: 0;
+      }
+
+      #placeholder.invisible {
+          opacity: 0;
+      }
+
+      #editor {
+          width: 100%;
+          height: auto;
+          min-height: 4em;
+          padding: calc(var(--editor-padding) - 1px);
+          background: transparent;
+          z-index: 1;
+          /*border-radius: 0px var(--border-radius) var(--border-radius) 0;*/
+          border: 1px solid transparent;
+          transition: border-color 0.2s;
+      }
+
+      #editor {
+          white-space: pre-wrap;
+      }
+
+      #editor:focus {
+          outline: 0px solid transparent;
+          border-color: rgba(0, 0, 255, 0.24);
+      }
+
+      #editor .empty {
+          height: 1em;
+      }
+
+      #editor:active {
+          outline: none;
+      }
+
+      #editor .monospace {
+          font-family: Monospace, monospace;
+          background: rgba(0, 0, 2555, .1);
+          padding: 2px;
+          border-radius: 4px;
+          display: inline-block;
+      }
+
+      #editor .service {
+          filter: opacity(50%);
+
+      }
+
+      #editor .code {
+          color: #53bf6b;
+      }
+
+      #editor h1,
+      #editor h2 {
+          white-space: pre-wrap;
+          display: inline;
+          margin: 16px 0 8px 0;
+      }
+
+      #editor blockquote {
+          display: inline;
+          margin: 0;
+          padding: 0;
+          color: #419eff;
+      }
+
+      #editor .service_link_title {
+          color: violet;
+      }
+
+      #editor .service_image_title {
+          color: darkorange;
+      }
+
+      #modals {
+          position: absolute;
+          width: 100vw;
+          height: 100vh;
+          left: 0;
+          top: 0;
+          pointer-events: none;
+      }
+
+      #modals > div {
+          position: absolute;
+          width: 100vw;
+          height: 100vh;
+          left: 0;
+          top: 0;
+          pointer-events: none;
+      }
+
+      #modals > div > * {
+          pointer-events: all;
+      }
+  </style>
+</head>
+<body class="web">
+<div id="app">
+  <div>
+  </div>
+</div>
+<div id="modals"></div>
+</body>
+<script src="/static/main.js"></script>
+<svg height="0" width="0">
+  <defs>
+    <clipPath id="tail">
+      <path d="M 1 12 Q 10 10 12 0  Q 13 9 24 12" stroke="blue" stroke-width="1" fill="none" />
+    </clipPath>
+  </defs>
+</svg>
+</html>

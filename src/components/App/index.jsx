@@ -9,13 +9,17 @@ import Project from "components/Screens/Project"
 import Inbox from "components/Screens/Inbox"
 import Log from "components/Screens/Log"
 import TaskTags from "components/Screens/TaskTags"
+import Auth from "components/Screens/Auth"
 import Sidebar from "components/Sidebar"
 import { DragDropContext } from "react-beautiful-dnd"
 import Timeline from "../Timeline"
+import { noop } from "lodash"
 
 const App = observer(() => {
   const {
+    user,
     screen,
+    setScreen,
     sidebarWidth,
     setSidebarWidth,
     timelineWidth,
@@ -38,13 +42,21 @@ const App = observer(() => {
     case "TAGS":
       Screen = TaskTags
       break
+    case "AUTH":
+      Screen = Auth
+      break
+  }
+
+  if (screen !== "AUTH" && !user?.id) {
+    Screen = Auth
+    setScreen("AUTH")
   }
 
   React.useEffect(
     () =>
       (window.onDragEndFunc = window.onDragEndFunc
         ? window.onDragEndFunc
-        : () => {}),
+        : noop),
     [],
   )
 

@@ -1,40 +1,46 @@
 const {
   app,
-  autoUpdater,
-  dialog,
+  // autoUpdater,
+  // dialog,
   BrowserWindow,
   Menu,
   MenuItem,
 } = require("electron")
 
-const server = "https://hazel.lunavod.vercel.app"
-const feed = `${server}/update/${process.platform}/${app.getVersion()}`
+import * as Sentry from "@sentry/electron"
 
-autoUpdater.setFeedURL(feed)
-autoUpdater.addListener("error", e => {
-  console.error(e)
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
 })
-setInterval(() => {
-  try {
-    autoUpdater.checkForUpdates()
-  } catch (err) {
-    console.error(err)
-  }
-}, 10000)
-autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName) => {
-  const dialogOpts = {
-    type: "info",
-    buttons: ["Restart", "Later"],
-    title: "Application Update",
-    message: process.platform === "win32" ? releaseNotes : releaseName,
-    detail:
-      "A new version has been downloaded. Restart the application to apply the updates.",
-  }
 
-  dialog.showMessageBox(dialogOpts).then(returnValue => {
-    if (returnValue.response === 0) autoUpdater.quitAndInstall()
-  })
-})
+// const server = "https://hazel.lunavod.vercel.app"
+// const feed = `${server}/update/${process.platform}/${app.getVersion()}`
+
+// autoUpdater.setFeedURL(feed)
+// autoUpdater.addListener("error", e => {
+//   console.error(e)
+// })
+// setInterval(() => {
+//   try {
+//     autoUpdater.checkForUpdates()
+//   } catch (err) {
+//     console.error(err)
+//   }
+// }, 10000)
+// autoUpdater.on("update-downloaded", (event, releaseNotes, releaseName) => {
+//   const dialogOpts = {
+//     type: "info",
+//     buttons: ["Restart", "Later"],
+//     title: "Application Update",
+//     message: process.platform === "win32" ? releaseNotes : releaseName,
+//     detail:
+//       "A new version has been downloaded. Restart the application to apply the updates.",
+//   }
+//
+//   dialog.showMessageBox(dialogOpts).then(returnValue => {
+//     if (returnValue.response === 0) autoUpdater.quitAndInstall()
+//   })
+// })
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -65,9 +71,11 @@ const createWindow = () => {
     }
   })
 
-  const electronVibrancy = require("electron-vibrancy")
-  let material = 0
-  electronVibrancy.SetVibrancy(mainWindow, material)
+  if (process.platform === "darwin") {
+    const electronVibrancy = require("electron-vibrancy")
+    let material = 0
+    electronVibrancy.SetVibrancy(mainWindow, material)
+  }
 
   // and load the index.html of the app.
   if (process.env.P_ENV === "debug") mainWindow.webContents.openDevTools()

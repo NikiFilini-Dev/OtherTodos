@@ -23,7 +23,7 @@ const Tag = types
   .model("Tag", {
     id: types.identifier,
     name: types.string,
-    project: types.maybeNull(types.reference(Project)),
+    // project: types.maybeNull(types.reference(Project)),
     index: types.number,
     color: types.maybeNull(types.string, randomTagColor()),
     type: types.optional(
@@ -35,17 +35,44 @@ const Tag = types
     get tasks() {
       return getRoot(self).tasks.filter(task => task.tags.indexOf(self >= 0))
     },
+    get syncable() {
+      return true
+    },
+    get syncName() {
+      return "Tag"
+    },
+    isReference(path) {
+      const re = /^\/tags\/\d+$/
+      return !re.test(path)
+    },
   }))
-  .actions(self => ({
-    setColor(val) {
+  .actions(self => {
+    const actions = {}
+    const actionsMap = {}
+
+    actions.setColor = val => {
       self.color = val
-    },
-    setIndex(i) {
+    }
+    actionsMap.setColor = ["color"]
+
+    actions.setIndex = i => {
       self.index = i
-    },
-    setName(val) {
+    }
+    actionsMap.setIndex = ["index"]
+
+    actions.setName = val => {
       self.name = val
-    },
-  }))
+    }
+    actionsMap.setName = ["name"]
+
+    actions.getActionsMap = () => actionsMap
+
+    return actions
+  })
+
+export function factory(data) {
+  if (data.project === "") data.project = null
+  return data
+}
 
 export default Tag

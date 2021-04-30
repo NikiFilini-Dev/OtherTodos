@@ -2,7 +2,7 @@
 import React from "react"
 import { observer } from "mobx-react"
 import styles from "./styles.styl"
-import moment from "moment"
+import { DateTime } from "luxon"
 import ChevronLeft from "assets/awesome/solid/chevron-left.svg"
 import ChevronRight from "assets/awesome/solid/chevron-right.svg"
 import DaySelector from "components/DaySelector"
@@ -10,7 +10,7 @@ import Event from "./Event"
 import { useMst } from "models/RootStore"
 const ipc = require("electron").ipcRenderer
 import { useScrollEmitter } from "../../tools/hooks"
-import ScrollContext from "../Screens/scrollContext"
+import ScrollContext from "../../contexts/scrollContext"
 
 const Timeline = observer(() => {
   const { events, createEvent, timelineDate, setTimelineDate } = useMst()
@@ -29,7 +29,7 @@ const Timeline = observer(() => {
 
   const [nowOffset, setNowOffset] = React.useState(fontSize)
   const calcOffset = s => {
-    if (!s) s = moment().format("HH:mm")
+    if (!s) s = DateTime.now().toFormat("HH:mm")
     let offset = fontSize
     const hours = parseInt(s.split(":")[0])
     offset += hours * (fontSize + hourHeight)
@@ -66,17 +66,17 @@ const Timeline = observer(() => {
 
   const onPrevClick = () => {
     setTimelineDate(
-      moment(timelineDate)
-        .subtract(1, "days")
-        .format("YYYY-MM-DD"),
+      DateTime.fromFormat(timelineDate, "M/d/yyyy")
+        .minus({ days: 1 })
+        .toFormat("M/d/yyyy"),
     )
   }
 
   const onNextClick = () => {
     setTimelineDate(
-      moment(timelineDate)
-        .add(1, "days")
-        .format("YYYY-MM-DD"),
+      DateTime.fromFormat(timelineDate, "M/d/yyyy")
+        .plus({ days: 1 })
+        .toFormat("M/d/yyyy"),
     )
   }
 
@@ -105,7 +105,6 @@ const Timeline = observer(() => {
       name: "Новое событие",
     })
   }
-  console.log(isDragging)
 
   const newRefs = {}
   todayEvents.forEach(e => {
@@ -114,7 +113,6 @@ const Timeline = observer(() => {
     }
   })
   if (Object.keys(newRefs).length) setEventRefs({ ...eventRefs, ...newRefs })
-  console.log(todayEvents.map(e => e.toJSON()))
 
   const onDragStart = (getInitialData, processMove, prevent = () => false) => {
     return (event, e) => {
@@ -149,18 +147,13 @@ const Timeline = observer(() => {
   const onMoveStart = onDragStart(
     event => ({ initialStart: event.start, initialDuration: event.duration }),
     (event, add, { initialStart }) => {
-      const minimum =
-        0 -
-        moment
-          .duration(
-            moment(initialStart, "HH:mm").diff(moment("00:00", "HH:mm")),
-          )
-          .asMinutes()
+      const start = DateTime.fromFormat("00:00", "HH:mm")
+      const end = DateTime.fromFormat(initialStart, "HH:mm")
+      const minimum = 0 - end.diff(start).shiftTo("minutes").values.minutes
       if (add < minimum) add = minimum
-      console.log(add)
-      let newStart = moment(initialStart, "HH:mm")
-        .add(add, "minutes")
-        .format("HH:mm")
+      let newStart = DateTime.fromFormat(initialStart, "HH:mm")
+        .plus({ minutes: add })
+        .toFormat("HH:mm")
       event.processSetStart(newStart)
     },
     (event, e) => {
@@ -171,7 +164,6 @@ const Timeline = observer(() => {
   const [initialScrolled, setInitialScrolled] = React.useState(false)
 
   React.useEffect(() => {
-    console.log("TOP CHANGED", nowRef.current.offsetTop)
     if (initialScrolled) return
     ref.current.scrollTop =
       nowRef.current.offsetTop - ref.current.getBoundingClientRect().height / 2
@@ -185,10 +177,12 @@ const Timeline = observer(() => {
       <DaySelector />
       <div className={styles.currentDate}>
         <span className={styles.dayName}>
-          {timelineDate === moment().format("YYYY-MM-DD") ? "Сегодня" : ""}
+          {timelineDate === DateTime.now().toFormat("M/d/yyyy")
+            ? "Сегодня"
+            : ""}
         </span>
         <span className={styles.dayDetail}>
-          {moment(timelineDate).format("dd, DD MMM")}
+          {DateTime.fromFormat(timelineDate, "M/d/yyyy").toFormat("DD")}
         </span>
         <span className={styles.action} onClick={onPrevClick}>
           <ChevronLeft />
@@ -230,8 +224,10 @@ const Timeline = observer(() => {
                 className={styles.eventContainer}
                 style={{
                   "--start": `${calcOffset(event.start)}px`,
-                  "--end": `${((hourHeight + fontSize) / 60) * event.duration +
-                    calcOffset(event.start)}px`,
+                  "--end": `${
+                    ((hourHeight + fontSize) / 60) * event.duration +
+                    calcOffset(event.start)
+                  }px`,
                 }}
                 draggable={true}
                 onDragStart={e => onMoveStart(event, e)}
@@ -253,12 +249,12 @@ const Timeline = observer(() => {
             style={{ "--now-offset": `${nowOffset}px` }}
             ref={nowRef}
           >
-            <span>{moment().format("HH:mm")}</span>
+            <span>{DateTime.now().toFormat("HH:mm")}</span>
             <div className={styles.line} />
           </div>
-          {arr.map(i => (
+          {arr.map((i, index) => (
             <div
-              key={i}
+              key={index}
               className={styles.hour}
               style={{
                 "--hour-height": `${hourHeight}px`,

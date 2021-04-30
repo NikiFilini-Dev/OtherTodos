@@ -1,25 +1,28 @@
 import { types, destroy, getParent } from "mobx-state-tree"
-import Task from "./Task"
-import moment from "moment"
+import Task, { factory } from "./Task"
+import { DateTime } from "luxon"
 
 const TaskList = types
   .model("TaskList", {
     all: types.array(Task),
-    selected: types.maybeNull(types.reference(Task)),
+    selected: types.maybeNull(types.string), //types.maybeNull(types.reference(Task)),
   })
   .views(self => ({
     get today() {
-      return self.all.filter(
-        task =>
-          task.date && moment(task.date).isSame(moment().format("YYYY-MM-DD")),
-      )
+      return self.all.filter(task => {
+        return (
+          task.date &&
+          DateTime.fromFormat(task.date, "M/d/yyyy") ===
+            DateTime.now().startOf("day")
+        )
+      })
     },
     expired() {
-      console.log("Updating expired")
       return self.all.filter(
         task =>
           task.date &&
-          moment(task.date).isBefore(moment(moment().format("YYYY-MM-DD"))),
+          DateTime.fromFormat(task.date, "M/d/yyyy").startOf("day") <
+            DateTime.now().startOf("day"),
       )
     },
     get inbox() {
@@ -28,8 +31,8 @@ const TaskList = types
   }))
   .actions(self => ({
     select(task) {
-      if (task === getParent(self).tempTask) return
-      self.selected = task
+      if (task === getParent(self).tempTask && task !== null) return
+      self.selected = task?.id
     },
     add(task) {
       if (getParent(self).tempTask === task) getParent(self).detachTempTask()
@@ -37,9 +40,13 @@ const TaskList = types
     },
     deleteTask(task) {
       if (self.selected === task) self.selected = null
-      task.unconnectEvent()
+      if (task.event) task.unconnectEvent()
       self.all.splice(self.all.indexOf(task), 1)
+      window.syncMachine.registerDelete(task.id, "task")
       destroy(task)
+    },
+    loadTasksFromData(tasksData) {
+      self.all = tasksData.map(data => factory(data.id, data))
     },
   }))
 

@@ -16,6 +16,11 @@ module.exports = [
     },
   },
   {
+    test: /\.mjs$/,
+    include: /node_modules/,
+    type: "javascript/auto",
+  },
+  {
     test: /\.(m?js|jsx)$/,
     exclude: /(node_modules|bower_components)/,
     use: {
@@ -44,6 +49,7 @@ module.exports = [
       {
         loader: "style-loader",
       },
+      "@teamsupercell/typings-for-css-modules-loader",
       {
         loader: "css-loader",
         options: {
@@ -68,24 +74,34 @@ module.exports = [
       },
     ],
   },
+  // {
+  //   test: /\.(png|woff|woff2|eot|ttf)$/,
+  //   loader: "url-loader?limit=100000",
+  // },
   {
-    test: /\.(png|woff|woff2|eot|ttf)$/,
-    loader: "url-loader?limit=100000",
+    test: /\.(otf|eot|ttf|woff|woff2)$/,
+    loader: "file-loader",
+    query: {
+      outputPath: "fonts/",
+      publicPath: "../fonts/", // That's the important part
+    },
   },
   // Put your webpack loader rules in this array.  This is where you would put
   // your ts-loader configuration for instance:
   /**
    * Typescript Example:
    *
-   * {
-   *   test: /\.tsx?$/,
-   *   exclude: /(node_modules|.webpack)/,
-   *   loaders: [{
-   *     loader: 'ts-loader',
-   *     options: {
-   *       transpileOnly: true
-   *     }
-   *   }]
-   * }
    */
+  {
+    test: /\.tsx?$/,
+    exclude: /(node_modules|.webpack)/,
+    loaders: [
+      {
+        loader: "ts-loader",
+        options: {
+          transpileOnly: true,
+        },
+      },
+    ],
+  },
 ]

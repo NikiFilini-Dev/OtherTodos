@@ -2,7 +2,6 @@ import React from "react"
 import { observer } from "mobx-react"
 import { useMst } from "models/RootStore"
 import styles from "./styles.styl"
-import moment from "moment"
 import classNames from "classnames"
 
 import TaskList from "components/TaskList"
@@ -17,8 +16,9 @@ import Task from "components/Task"
 import TagsFilter from "components/TagsFilter"
 import { useTrap } from "tools/hooks"
 
-import ScrollContext from "../scrollContext"
+import ScrollContext from "../../../contexts/scrollContext"
 import Emitter from "events"
+import { DateTime } from "luxon"
 
 function toTitleCase(str) {
   return str
@@ -39,10 +39,17 @@ const Today = observer(() => {
   } = useMst()
 
   const [viewMode, setViewMode] = React.useState("projects")
-  const today = moment().format("YYYY-MM-DD")
-  let tasks = all.filter(
-    task => task.date && task.date === selectedDate && !task.done,
-  )
+  const today = DateTime.now().toFormat("M/d/yyyy")
+  let tasks = all.filter(task => {
+    return (
+      task.date &&
+      DateTime.fromFormat(task.date, "M/d/yyyy").startOf("day").toMillis() ===
+        DateTime.fromFormat(selectedDate, "M/d/yyyy")
+          .startOf("day")
+          .toMillis() &&
+      !task.done
+    )
+  })
 
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
   const [isDateSelectorShown, setIsDateSelectorShown] = React.useState(false)
@@ -114,7 +121,7 @@ const Today = observer(() => {
       last_known_scroll_position = e.target.scrollTop
 
       if (!ticking) {
-        window.requestAnimationFrame(function() {
+        window.requestAnimationFrame(function () {
           scrollEmitter.emit("scroll", last_known_scroll_position)
           ticking = false
         })
@@ -128,31 +135,36 @@ const Today = observer(() => {
     return () => current?.removeEventListener("scroll", onScroll)
   })
 
+  const onPlusClick = () => {
+    setIsNewTaskShown(true)
+  }
+
   return (
     <div className={styles.screen}>
       <div className={styles.info}>
         <span className={styles.title}>
           {selectedDate === today
             ? "Сегодня"
-            : toTitleCase(moment(selectedDate).format("dd DD MMM"))}
+            : toTitleCase(
+                DateTime.fromFormat(selectedDate, "M/d/yyyy").toFormat("dd.MM"),
+              )}
         </span>
         {selectedDate === today && (
           <span className={styles.additional}>
-            {toTitleCase(moment().format("dd DD MMM"))}
+            {toTitleCase(DateTime.now().toFormat("dd.MM"))}
           </span>
         )}
         <div className={styles.actions}>
           <span
+            onClick={() =>
+              setViewMode(viewMode === "list" ? "projects" : "list")
+            }
             className={classNames({
               [styles.viewSwitch]: true,
               [styles.active]: viewMode === "list",
             })}
           >
-            <ListIcon
-              onClick={() =>
-                setViewMode(viewMode === "list" ? "projects" : "list")
-              }
-            />
+            <ListIcon />
           </span>
           <span className={styles.calendar} ref={ref}>
             <CalendarIcon
@@ -170,7 +182,7 @@ const Today = observer(() => {
           <Button
             icon={PlusIcon}
             activated={isNewTaskShown}
-            onClick={() => setIsNewTaskShown(!isNewTaskShown)}
+            onClick={() => onPlusClick()}
           />
         </div>
       </div>

@@ -1,5 +1,6 @@
-import storage from "electron-json-storage"
+const storage = require("electron-json-storage")
 console.log(storage.getDataPath())
+
 const promisify = (func, args = [], cb = null) => {
   return new Promise((resolve, reject) => {
     func(...args, (error, data) => {
@@ -30,6 +31,7 @@ const jsonStorage = {
     return promisify(storage.keys, [], cb)
   },
   getDefaultDataPath() {
+    if (storage.getDefaultDataPath === undefined) return ""
     return storage.getDefaultDataPath()
   },
 }

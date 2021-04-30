@@ -8,11 +8,11 @@ import ArrowLeft from "assets/arrow_left.svg"
 import ArrowRight from "assets/arrow_right.svg"
 import { buildCalendar } from "tools/date"
 
-import moment from "moment"
 import Checkbox from "../Checkbox"
 import FloatMenu from "../FloatMenu"
 import TimeSelector from "../TimeSelector"
 import TagsSelector from "../TagsSelector"
+import { DateTime } from "luxon"
 
 const padTime = s => {
   if (!s) return "00:00"
@@ -27,7 +27,8 @@ const TaskDateSelector = observer(
       value = new Date()
     }
 
-    if (typeof value === "string") value = moment(value)._d
+    if (typeof value === "string")
+      value = DateTime.fromFormat(value, "M/d/yyyy").toJSDate()
 
     const {
       tasks: { all },
@@ -74,7 +75,8 @@ const TaskDateSelector = observer(
 
     const selectDate = day => {
       let date = day.date
-      if (moment.isDate(date)) date = moment(date).format("YYYY-MM-DD")
+      if (date instanceof Date)
+        date = DateTime.fromJSDate(date).toFormat("M/d/yyyy")
       task.setDate(date)
     }
 

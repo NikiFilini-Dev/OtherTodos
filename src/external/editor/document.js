@@ -71,7 +71,7 @@ export default class Document {
   //    text = 'aabb\nbbaa\n'
   text = ""
   history: Array<InsertEvent | DeleteEvent | SetTextEvent | ReplaceEvent> = []
-  historyOffset: number = -1
+  historyOffset = -1
 
   set styles(value: any) {}
   get styles() {
@@ -170,12 +170,7 @@ export default class Document {
     this.fireUpdate(historyItem)
   }
 
-  insert(
-    start: number,
-    value: string,
-    save: boolean = true,
-    update: boolean = true,
-  ): void {
+  insert(start: number, value: string, save = true, update = true): void {
     const historyItem: InsertEvent = { type: "insert", value, start }
     if (save) {
       this.history.push(historyItem)
@@ -195,8 +190,8 @@ export default class Document {
     start: number,
     end: number,
     value: string,
-    save: boolean = true,
-    update: boolean = true,
+    save = true,
+    update = true,
   ): void {
     const historyItem: ReplaceEvent = {
       type: "replace",
@@ -218,8 +213,8 @@ export default class Document {
     start: number,
     n: number,
     dir: "back" | "forward" = "back",
-    save: boolean = true,
-    update: boolean = true,
+    save = true,
+    update = true,
   ) {
     const historyItem: DeleteEvent = {
       type: "delete",
@@ -252,7 +247,7 @@ export default class Document {
     }
   }
 
-  fireUpdate(event: mixed, type: string = "update"): void {
+  fireUpdate(event: mixed, type = "update"): void {
     const callbacks = this.listeners[type]
     if (!callbacks) return
     callbacks.forEach(callback => callback(event))
@@ -329,7 +324,7 @@ export default class Document {
       return myArr
     }
 
-    const sortedByPriority = (arr: Array<string>, asc: boolean = false) => {
+    const sortedByPriority = (arr: Array<string>, asc = false) => {
       let newArr = [...arr]
       newArr.sort((a, b) => {
         let aPriority = this.styles[a].priority

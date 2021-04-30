@@ -7,12 +7,12 @@ import Label from "../Label/index.jsx"
 import ListIcon from "../../assets/list.svg"
 import { observer } from "mobx-react"
 import { useMst } from "../../models/RootStore"
-import moment from "moment"
 import classNames from "classnames"
 import ChevronRight from "../../assets/awesome/solid/chevron-right.svg"
 import TrashIcon from "../../assets/awesome/regular/trash-alt.svg"
 import { Draggable, Droppable } from "react-beautiful-dnd"
 import { useInput } from "../../tools/hooks"
+import { DateTime } from "luxon"
 
 const TaskList = observer(
   ({
@@ -36,7 +36,7 @@ const TaskList = observer(
       task =>
         !task.repeating ||
         (task.date === selectedDate && screen === "TODAY") ||
-        moment(task.date, "YYYY-MM-DD")._d <= new Date(),
+        DateTime.fromFormat(task.date, "M/d/yyyy").toJSDate() <= new Date(),
     )
 
     tasks.sort((a, b) => b.id - a.id)
@@ -52,31 +52,30 @@ const TaskList = observer(
     const Content = observer(({ provided }) => {
       return (
         <div className={styles.tasks} ref={provided.innerRef}>
-          {!folded &&
-            tasks.map((task, index) => (
-              <Draggable
-                key={`task_${task.id}`}
-                draggableId={`task_${task.id}`}
-                type={"TASK"}
-                index={index}
-              >
-                {provided => (
-                  <div>
-                    <div
-                      id={`task_${task.id}`}
-                      style={provided.draggableStyle}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      ref={provided.innerRef}
-                      className={styles.project}
-                    >
-                      <Task key={`task_${task.id}`} task={task} />
-                    </div>
-                    {provided.placeholder}
+          {tasks.map((task, index) => (
+            <Draggable
+              key={`task_${task.id}`}
+              draggableId={`task_${task.id}`}
+              type={"TASK"}
+              index={index}
+            >
+              {provided => (
+                <div>
+                  <div
+                    id={`task_${task.id}`}
+                    style={provided.draggableStyle}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    ref={provided.innerRef}
+                    className={styles.project}
+                  >
+                    <Task key={`task_${task.id}`} task={task} />
                   </div>
-                )}
-              </Draggable>
-            ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Draggable>
+          ))}
           {provided.placeholder}
         </div>
       )
@@ -115,15 +114,22 @@ const TaskList = observer(
             <Label icon={ListIcon} text={totalCount} />
           </div>
         </div>
-        <Droppable
-          droppableId={dnd || Math.random() + "cat"}
-          type={"TASK"}
-          isDropDisabled={!dnd}
+        <div
+          className={classNames({
+            [styles.listWrapper]: true,
+            [styles.folded]: folded,
+          })}
         >
-          {(provided, snapshot) => (
-            <Content provided={provided} snapshot={snapshot} />
-          )}
-        </Droppable>
+          <Droppable
+            droppableId={dnd || Math.random() + "cat"}
+            type={"TASK"}
+            isDropDisabled={!dnd}
+          >
+            {(provided, snapshot) => (
+              <Content provided={provided} snapshot={snapshot} />
+            )}
+          </Droppable>
+        </div>
       </div>
     )
   },
