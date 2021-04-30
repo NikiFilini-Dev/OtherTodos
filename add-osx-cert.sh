@@ -4,7 +4,7 @@ KEY_CHAIN=build.keychain
 CERTIFICATE_P12=certificate.p12
 
 # Recreate the certificate from the secure environment variable
-echo $CERTIFICATE_OSX_APPLICATION | base64 --decode > $MACOS_CERTIFICATE
+echo $MACOS_CERTIFICATE | base64 --decode > $CERTIFICATE_P12
 
 #create a keychain
 security create-keychain -p actions $KEY_CHAIN
@@ -18,6 +18,8 @@ security unlock-keychain -p actions $KEY_CHAIN
 security import $CERTIFICATE_P12 -k $KEY_CHAIN -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign;
 
 security set-key-partition-list -S apple-tool:,apple: -s -k actions $KEY_CHAIN
+
+security find-identity
 
 # remove certs
 rm -fr *.p12

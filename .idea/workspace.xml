@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/main.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/main.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/forge.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/forge.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/add-osx-cert.sh" beforeDir="false" afterPath="$PROJECT_DIR$/add-osx-cert.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -427,7 +426,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619815860827</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="Fix identity in macos flow">
+      <created>1619818015657</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1619818015658</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -446,7 +452,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fix hydrating" />
     <MESSAGE value="Bugfixes" />
     <MESSAGE value="Перемещение тэгов, миграции" />
     <MESSAGE value="Сортировка проектов, переключение вида в разделе сегодня" />
@@ -471,7 +476,8 @@
     <MESSAGE value="Dotenv" />
     <MESSAGE value="API_URL in .env" />
     <MESSAGE value="Fix OTHERTASK-F" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix OTHERTASK-F" />
+    <MESSAGE value="Fix identity in macos flow" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix identity in macos flow" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
