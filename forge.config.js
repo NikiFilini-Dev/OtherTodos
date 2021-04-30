@@ -19,7 +19,7 @@ module.exports = {
       prod: "com.othertodos",
     }),
     osxSign: {
-      identity: process.env.IDENTITY,
+      identity: process.env.APPLE_IDENTITY,
       "hardened-runtime": true,
       entitlements: "entitlements.plist",
       "entitlements-inherit": "entitlements.plist",

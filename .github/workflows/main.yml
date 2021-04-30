@@ -50,7 +50,7 @@ jobs:
       - name: Make
         run: yarn make
         env:
-          IDENTITY: ${{ secrets.IDENTITY }}
+          APPLE_IDENTITY: ${{ secrets.APPLE_IDENTITY }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
           API_URL: ${{ secrets.API_URL }}
