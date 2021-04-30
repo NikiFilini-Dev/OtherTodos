@@ -5,9 +5,11 @@ const {
   BrowserWindow,
   Menu,
   MenuItem,
+  nativeImage,
 } = require("electron")
 
 import * as Sentry from "@sentry/electron"
+import Icon from "../icons/png/64x64.png"
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
@@ -53,13 +55,15 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 1200,
     height: 700,
-    transparent: true,
+    // transparent: true,
     titleBarStyle: "hiddenInset",
     // frame: false,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
     },
+    icon: nativeImage.createFromDataURL(Icon),
+    resizable: true,
   })
 
   //todo Проверять, существует ли окно
