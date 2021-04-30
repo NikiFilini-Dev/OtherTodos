@@ -23,9 +23,11 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: chmod +x add-osx-cert.sh && ./add-osx-cert.sh
         env:
-          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
-          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
-      
+          MACOS_CERTIFICATE_APP: ${{ secrets.MACOS_CERTIFICATE_APP }}
+          MACOS_CERTIFICATE_INST: ${{ secrets.MACOS_CERTIFICATE_INST }}
+          MACOS_CERTIFICATE_APP_PWD: ${{ secrets.MACOS_CERTIFICATE_APP_PWD }}
+          MACOS_CERTIFICATE_INST_PWD: ${{ secrets.MACOS_CERTIFICATE_INST_PWD }}
+
       - name: Cache node modules
         uses: actions/cache@v2
         env:
