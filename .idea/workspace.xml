@@ -6,15 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Checkbox/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Checkbox/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Checkbox/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Checkbox/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Checkbox/styles.styl.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Checkbox/styles.styl.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Task/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Task/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/styles.styl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Task/styles.styl.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/styles.styl.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphql/tasks.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/tasks.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Task.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Task.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/syncMachine/types/task.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/syncMachine/types/task.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/forge.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/forge.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons/mac/icon.icns" beforeDir="false" afterPath="$PROJECT_DIR$/icons/icon.icns" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons/win/icon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/icons/icon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webpack.rules.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.rules.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +69,7 @@
     <property name="prettierjs.PrettierConfiguration.NodeInterpreter" value="node" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
     <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
-    <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
+    <property name="ts.external.directory.path" value="C:\Users\yegor\AppData\Local\JetBrains\Toolbox\apps\WebStorm\ch-0\203.7148.54\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -85,6 +81,7 @@
       <recent name="$PROJECT_DIR$/src/external" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\yegor\WebstormProjects\OtherTask\icons" />
       <recent name="$PROJECT_DIR$/src/contexts" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/src/components/Timeline" />

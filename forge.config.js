@@ -13,7 +13,7 @@ module.exports = {
   },
   buildIdentifier: process.env.IS_BETA ? "beta" : "prod",
   packagerConfig: {
-    icon: "icons/mac/icon.icns",
+    icon: "icons/icon",
     appBundleId: fromBuildIdentifier({
       beta: "com.beta.othertodos",
       prod: "com.othertodos",
