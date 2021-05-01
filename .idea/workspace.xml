@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.github/workflows/main.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/main.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -462,7 +461,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619868502667</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="Separated package and make">
+      <created>1619869775603</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1619869775603</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -481,7 +487,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Фильтр по тэгам в журнале" />
     <MESSAGE value="Рич эдитор бета" />
     <MESSAGE value="FontAwesome, категории в проектах" />
     <MESSAGE value="Автоматическое версионирование" />
@@ -506,7 +511,8 @@
     <MESSAGE value="Updated mac config" />
     <MESSAGE value="Updated mac config [2]" />
     <MESSAGE value="Updated mac config [3]" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated mac config [3]" />
+    <MESSAGE value="Separated package and make" />
+    <option name="LAST_COMMIT_MESSAGE" value="Separated package and make" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
