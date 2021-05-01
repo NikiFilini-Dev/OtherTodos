@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/forge.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/forge.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/main.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/main.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -454,7 +455,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619868156877</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="Updated mac config [3]">
+      <created>1619868502667</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1619868502667</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -473,7 +481,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Небольшие улучшения" />
     <MESSAGE value="Фильтр по тэгам в журнале" />
     <MESSAGE value="Рич эдитор бета" />
     <MESSAGE value="FontAwesome, категории в проектах" />
@@ -498,7 +505,8 @@
     <MESSAGE value="Fix identity in macos flow [5]" />
     <MESSAGE value="Updated mac config" />
     <MESSAGE value="Updated mac config [2]" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated mac config [2]" />
+    <MESSAGE value="Updated mac config [3]" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated mac config [3]" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
