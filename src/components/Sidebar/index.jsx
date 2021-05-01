@@ -2,7 +2,7 @@ import React from "react"
 import { observer } from "mobx-react"
 import { useMst } from "models/RootStore"
 import styles from "./styles.styl"
-import Logo from "assets/logo.svg"
+import Logo from "!file-loader!assets/logo.svg"
 import classNames from "classnames"
 import ArrowRightIcon from "assets/arrow_right.svg"
 import FolderIcon from "assets/folder.svg"
@@ -17,7 +17,7 @@ import propTypes from "prop-types"
 import { useContextMenu, useInput } from "tools/hooks"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import { DateTime } from "luxon"
-import { noop } from "lodash"
+import noop from "lodash-es/noop"
 
 const Element = observer(
   ({
@@ -290,7 +290,7 @@ const Sidebar = observer(() => {
   return (
     <React.Fragment>
       <div className={styles.logoWrapper}>
-        <Logo className={styles.logo} />
+        <img className={styles.logo} src={Logo} />
         <span className={styles.logoTitle}>Task</span>
       </div>
       <div className={styles.sidebar}>

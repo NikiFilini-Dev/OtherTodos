@@ -65,6 +65,7 @@
     "@types/webpack": "^5.28.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
+    "babel-plugin-lodash": "^3.3.4",
     "css-loader": "^4.3.0",
     "dotenv": "^8.2.0",
     "electron": "11.0.3",
@@ -79,6 +80,7 @@
     "eslint-plugin-sonarjs": "^0.5.0",
     "file-loader": "^6.2.0",
     "husky": "^5.0.8",
+    "lodash-webpack-plugin": "^0.11.6",
     "node-loader": "^1.0.2",
     "nodemon": "^2.0.7",
     "react-svg-loader": "^3.0.3",
@@ -89,6 +91,7 @@
     "stylus": "^0.54.8",
     "stylus-loader": "^4.3.1",
     "ttf-loader": "^1.0.2",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.44.2",
     "webpack-bundle-analyzer": "^4.4.1",
     "webpack-cli": "^4.6.0"
@@ -133,6 +136,7 @@
     "graphql-request": "^3.3.0",
     "json-pointer": "^0.6.1",
     "lodash": "^4.17.20",
+    "lodash-es": "^4.17.21",
     "luxon": "^1.26.0",
     "mdlog": "^1.0.3",
     "mobx": "^6.0.4",
@@ -162,5 +166,9 @@
   },
   "browserslist": [
     "last 1 version"
+  ],
+  "sideEffects": [
+    "*.css",
+    "*.styl"
   ]
 }

@@ -2,7 +2,7 @@ import React from "react"
 import { observer } from "mobx-react"
 import classNames from "classnames"
 import styles from "./styles.styl"
-import { noop } from "lodash"
+import noop from "lodash-es/noop"
 
 const Input = observer(
   ({

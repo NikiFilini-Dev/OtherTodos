@@ -8,6 +8,15 @@ rules.push({
   use: [{ loader: "style-loader" }, { loader: "css-loader" }],
 })
 
+rules.push({
+  test: /\.(otf|eot|ttf|woff|woff2)$/,
+  loader: "file-loader",
+  query: {
+    outputPath: "fonts/",
+    publicPath: "../fonts/", // That's the important part
+  },
+})
+
 module.exports = {
   // Put your normal webpack config below here
   module: {

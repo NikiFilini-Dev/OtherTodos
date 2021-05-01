@@ -13,7 +13,7 @@ import Auth from "components/Screens/Auth"
 import Sidebar from "components/Sidebar"
 import { DragDropContext } from "react-beautiful-dnd"
 import Timeline from "../Timeline"
-import { noop } from "lodash"
+import noop from "lodash-es/noop"
 
 const App = observer(() => {
   const {

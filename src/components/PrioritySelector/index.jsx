@@ -4,7 +4,7 @@ import styles from "./styles.styl"
 import PriorityIndicator from "../PriorityIndicator/index.jsx"
 import FloatMenu from "../FloatMenu/index.jsx"
 import { useClick } from "../../tools/hooks"
-import { noop } from "lodash"
+import noop from "lodash-es/noop"
 
 const PrioritySelector = ({ priority, onSelect = noop }) => {
   const ref = React.useRef(null)

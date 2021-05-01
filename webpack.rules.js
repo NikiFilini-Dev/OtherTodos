@@ -39,6 +39,7 @@ module.exports = [
           "@babel/plugin-proposal-class-properties",
           "@babel/plugin-proposal-optional-chaining",
           "react-hot-loader/babel",
+          "babel-plugin-lodash",
         ],
       },
     },
@@ -78,14 +79,6 @@ module.exports = [
   //   test: /\.(png|woff|woff2|eot|ttf)$/,
   //   loader: "url-loader?limit=100000",
   // },
-  {
-    test: /\.(otf|eot|ttf|woff|woff2)$/,
-    loader: "file-loader",
-    query: {
-      outputPath: "fonts/",
-      publicPath: "../fonts/", // That's the important part
-    },
-  },
   {
     test: /\.(png)$/,
     loader: "url-loader",
