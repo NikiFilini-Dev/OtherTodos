@@ -12,19 +12,29 @@ module.exports = {
     prerelease: false,
   },
   buildIdentifier: process.env.IS_BETA ? "beta" : "prod",
+  builderConfig: {
+    gatekeeperAssess: false,
+  },
   packagerConfig: {
     icon: "icons/icon",
     appBundleId: fromBuildIdentifier({
       beta: "com.beta.othertodos",
       prod: "com.othertodos",
     }),
+    ignore: function (path) {
+      const ignore =
+        path && path !== "/package.json" && !path.startsWith("/.webpack")
+      return ignore
+    },
     osxSign: {
       identity: process.env.APPLE_IDENTITY,
       "hardened-runtime": true,
       entitlements: "entitlements.plist",
       "entitlements-inherit": "entitlements.plist",
       "signature-flags": "library",
+      "gatekeeper-assess": false,
     },
+    gatekeeperAssess: false,
     osxNotarize: {
       appleId: process.env.APPLE_ID,
       appleIdPassword: process.env.APPLE_ID_PASSWORD,

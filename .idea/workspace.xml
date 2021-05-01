@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/main.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/main.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/add-osx-cert.sh" beforeDir="false" afterPath="$PROJECT_DIR$/add-osx-cert.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/forge.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/forge.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -460,7 +459,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Перемещение тэгов, миграции" />
     <MESSAGE value="Сортировка проектов, переключение вида в разделе сегодня" />
     <MESSAGE value="Небольшие улучшения" />
     <MESSAGE value="Фильтр по тэгам в журнале" />
@@ -485,7 +483,8 @@
     <MESSAGE value="Fix OTHERTASK-F" />
     <MESSAGE value="Fix identity in macos flow" />
     <MESSAGE value="Fix identity in macos flow [5]" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix identity in macos flow [5]" />
+    <MESSAGE value="Updated mac config" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated mac config" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
