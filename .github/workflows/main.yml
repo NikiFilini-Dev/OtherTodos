@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   workflow_dispatch:
 
 jobs:
@@ -59,12 +59,20 @@ jobs:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
       - name: Make
-        run: yarn make --skip-package
+        run: yarn make --skip-package --write-results make_results.json
         env:
           APPLE_IDENTITY: ${{ secrets.APPLE_IDENTITY }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
           DEBUG: "*"
+
+      - name: Publish
+        run: yarn cli publish --from-make-results make_results.json
+        env:
+          NUCLEUS_HOST: ${{ secrets.NUCLEUS_HOST }}
+          NUCLEUS_TOKEN: ${{ secrets.NUCLEUS_DEV_TOKEN }}
+          NUCLEUS_APP_ID: ${{ secrets.NUCLEUS_APP_ID }}
+          NUCLEUS_CHANNEL_ID: ${{ secrets.NUCLEUS_DEV_CHANNEL_ID }}
 
       - uses: actions/upload-artifact@v2
         with:

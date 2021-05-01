@@ -16,22 +16,13 @@ module.exports = {
     gatekeeperAssess: false,
   },
   packagerConfig: {
-    // afterCopy: [() => new Promise(resolve => resolve())],
-    // afterExtract: [
-    //   () => {
-    //     process.env.DEBUG = "electron-osx-sign@*"
-    //     return new Promise(resolve => resolve())
-    //   },
-    // ],
     icon: "icons/icon",
     appBundleId: fromBuildIdentifier({
       beta: "com.beta.othertodos",
       prod: "com.othertodos",
     }),
     ignore: function (path) {
-      const ignore =
-        path && path !== "/package.json" && !path.startsWith("/.webpack")
-      return ignore
+      return path && path !== "/package.json" && !path.startsWith("/.webpack")
     },
     osxSign: {
       identity: process.env.APPLE_IDENTITY,
@@ -49,16 +40,12 @@ module.exports = {
   },
   publishers: [
     {
-      name: "@electron-forge/publisher-github",
+      name: "@electron-forge/publisher-nucleus",
       config: {
-        repository: {
-          owner: "lunavod",
-          name: "OtherTask",
-          draft: false,
-          prerelease: false,
-        },
-        prerelease: false,
-        authToken: process.env.GITHUB_TOKEN,
+        host: process.env.NUCLEUS_HOST,
+        appId: process.env.NUCLEUS_APP_ID,
+        channelId: process.env.NUCLEUS_CHANNEL_ID,
+        token: process.env.NUCLEUS_TOKEN,
       },
     },
   ],
@@ -71,7 +58,6 @@ module.exports = {
     },
     {
       name: "@electron-forge/maker-zip",
-      platforms: ["darwin"],
     },
     {
       name: "@electron-forge/maker-pkg",
