@@ -1,5 +1,4 @@
 import { getRoot, types } from "mobx-state-tree"
-import Project from "./Project"
 
 export function randomTagColor() {
   const colors = [
