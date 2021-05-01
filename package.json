@@ -1,13 +1,13 @@
 {
   "name": "othertodos",
   "productName": "OtherTodos",
-  "version": "1.9.9910",
+  "version": "1.9.9911",
   "description": "Best app for tasks",
   "main": ".webpack/main",
   "scripts": {
     "cli": "better-forge-cli",
     "start": "electron-forge start",
-    "package": "better-forge-cli package",
+    "package": "electron-forge package",
     "make": "better-forge-cli make",
     "ef:publish": "better-forge-cli publish",
     "lint": "eslint . --fix --ext js --ext jsx --ext ts --ext tsx",
