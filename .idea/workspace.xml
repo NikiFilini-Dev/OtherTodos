@@ -468,7 +468,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619869775603</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="Make with debug">
+      <created>1619869901530</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1619869901530</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -487,7 +494,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Рич эдитор бета" />
     <MESSAGE value="FontAwesome, категории в проектах" />
     <MESSAGE value="Автоматическое версионирование" />
     <MESSAGE value="Автоматический линтинг" />
@@ -512,7 +518,8 @@
     <MESSAGE value="Updated mac config [2]" />
     <MESSAGE value="Updated mac config [3]" />
     <MESSAGE value="Separated package and make" />
-    <option name="LAST_COMMIT_MESSAGE" value="Separated package and make" />
+    <MESSAGE value="Make with debug" />
+    <option name="LAST_COMMIT_MESSAGE" value="Make with debug" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
