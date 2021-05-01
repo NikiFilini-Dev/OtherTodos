@@ -7,12 +7,12 @@ security create-keychain -p keychainPassword build.keychain
 security default-keychain -s build.keychain
 security unlock-keychain -p keychainPassword build.keychain
 
-security import certificate_app.p12 -k build.keychain -P $MACOS_CERTIFICATE_APP_PWD -T /usr/bin/codesign
-security import certificate_inst.p12 -k build.keychain -P $MACOS_CERTIFICATE_INST_PWD -T /usr/bin/codesign
+security import certificate_app.p12 -k build.keychain -P $MACOS_CERTIFICATE_APP_PWD -A /usr/bin/codesign
+security import certificate_inst.p12 -k build.keychain -P $MACOS_CERTIFICATE_INST_PWD -A /usr/bin/codesign
 
 security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k keychainPassword build.keychain
 
 security find-identity
 
-# remove certs
-rm -fr *.p12
+## remove certs
+#rm -fr *.p12

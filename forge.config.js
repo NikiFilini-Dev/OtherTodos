@@ -16,6 +16,13 @@ module.exports = {
     gatekeeperAssess: false,
   },
   packagerConfig: {
+    // afterCopy: [() => new Promise(resolve => resolve())],
+    // afterExtract: [
+    //   () => {
+    //     process.env.DEBUG = "electron-osx-sign@*"
+    //     return new Promise(resolve => resolve())
+    //   },
+    // ],
     icon: "icons/icon",
     appBundleId: fromBuildIdentifier({
       beta: "com.beta.othertodos",
@@ -35,10 +42,10 @@ module.exports = {
       "gatekeeper-assess": false,
     },
     gatekeeperAssess: false,
-    osxNotarize: {
-      appleId: process.env.APPLE_ID,
-      appleIdPassword: process.env.APPLE_ID_PASSWORD,
-    },
+    // osxNotarize: {
+    //   appleId: process.env.APPLE_ID,
+    //   appleIdPassword: process.env.APPLE_ID_PASSWORD,
+    // },
   },
   publishers: [
     {
