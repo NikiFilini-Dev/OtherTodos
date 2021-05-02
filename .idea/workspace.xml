@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +67,7 @@
     <property name="prettierjs.PrettierConfiguration.NodeInterpreter" value="node" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
     <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
-    <property name="ts.external.directory.path" value="C:\Users\yegor\AppData\Local\JetBrains\Toolbox\apps\WebStorm\ch-0\203.7148.54\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="ts.external.directory.path" value="C:\Users\yegor\WebstormProjects\OtherTask\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -138,13 +140,6 @@
       <workItem from="1618857173054" duration="1198000" />
       <workItem from="1619167099849" duration="3389000" />
       <workItem from="1619692745846" duration="4640000" />
-    </task>
-    <task id="LOCAL-00001" summary="Базовый туду лист">
-      <created>1607444199027</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1607444199027</updated>
     </task>
     <task id="LOCAL-00002" summary="Заметки">
       <created>1607959887244</created>
@@ -475,7 +470,21 @@
       <option name="project" value="LOCAL" />
       <updated>1619869901530</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="feat: Linux-style linebreak">
+      <created>1619953572827</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1619953572827</updated>
+    </task>
+    <task id="LOCAL-00050" summary="feat: Linux-style linebreak">
+      <created>1619953636589</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1619953636590</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -494,7 +503,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="FontAwesome, категории в проектах" />
     <MESSAGE value="Автоматическое версионирование" />
     <MESSAGE value="Автоматический линтинг" />
     <MESSAGE value="Таймлайн" />
@@ -519,7 +527,8 @@
     <MESSAGE value="Updated mac config [3]" />
     <MESSAGE value="Separated package and make" />
     <MESSAGE value="Make with debug" />
-    <option name="LAST_COMMIT_MESSAGE" value="Make with debug" />
+    <MESSAGE value="feat: Linux-style linebreak" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Linux-style linebreak" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
