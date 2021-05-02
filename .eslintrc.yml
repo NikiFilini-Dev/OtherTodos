@@ -1,0 +1,47 @@
+env:
+  browser: true
+  es6: true
+  node: true
+extends:
+  - 'eslint:recommended'
+  - 'plugin:react/recommended'
+  - 'plugin:import/warnings'
+  - prettier/react
+  - 'plugin:@typescript-eslint/eslint-recommended'
+  - 'plugin:@typescript-eslint/recommended'
+parserOptions:
+  ecmaFeatures: {modules: true, jsx: true}
+  modules: true
+  experimentalObjectRestSpread: true
+  ecmaVersion: 2018
+  sourceType: module
+plugins:
+  - babel
+  - react
+  - prettier
+  - '@typescript-eslint'
+rules:
+  linebreak-style: [error, unix]
+  no-useless-escape: off
+  react/react-in-jsx-scope: off
+  indent: off
+  quotes: [error, double, {avoidEscape: true}]
+  semi: [error, never]
+  no-console: off
+  max-len: [2, 120]
+  react/jsx-uses-react: error
+  react/jsx-uses-vars: error
+  '@typescript-eslint/no-explicit-any': off
+  '@typescript-eslint/no-var-requires': off
+  '@typescript-eslint/explicit-module-boundary-types': off
+  '@typescript-eslint/no-extra-semi': off
+parser: '@typescript-eslint/parser'
+settings:
+  import/parser: babel-eslint
+  import/resolve: {moduleDirectory: [node_modules, src]}
+  react: {version: '16'}
+globals:
+  IS_WEB: false
+ignorePatterns:
+  - ""
+  - '*_dist/**/*.*'
