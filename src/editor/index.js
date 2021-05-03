@@ -280,7 +280,6 @@ export default class BakaEditor extends HTMLElement {
   }
 
   initEditor() {
-    console.log(this.elms.editor)
     this.elms.editor.initIO(this.document)
   }
 }

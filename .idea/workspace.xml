@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TagsSelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TagsSelector/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TagsSelector/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TagsSelector/styles.styl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +68,7 @@
     <property name="prettier.import.notification.dismissed" value="true" />
     <property name="prettierjs.PrettierConfiguration.NodeInterpreter" value="node" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
-    <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="ts.external.directory.path" value="C:\Users\yegor\WebstormProjects\OtherTask\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -144,14 +143,7 @@
       <workItem from="1619167099849" duration="3389000" />
       <workItem from="1619692745846" duration="4640000" />
       <workItem from="1620035281686" duration="4550000" />
-      <workItem from="1620051249663" duration="14499000" />
-    </task>
-    <task id="LOCAL-00015" summary="Фикс сохранения и текущей даты при переключении на раздел сегодня">
-      <created>1610474959575</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1610474959576</updated>
+      <workItem from="1620051249663" duration="14820000" />
     </task>
     <task id="LOCAL-00016" summary="Version bump">
       <created>1610475414760</created>
@@ -489,7 +481,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620074706034</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="fix: Fixed hight for tags menu">
+      <created>1620075222550</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1620075222550</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -508,7 +507,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Submit form on enter" />
     <MESSAGE value="Dotenv" />
     <MESSAGE value="API_URL in .env" />
     <MESSAGE value="Fix OTHERTASK-F" />
@@ -533,7 +531,8 @@
     <MESSAGE value="fix(ci): echo .env" />
     <MESSAGE value="fix: Windows fixes (editor)" />
     <MESSAGE value="feat(web): Hash in assets filenames" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(web): Hash in assets filenames" />
+    <MESSAGE value="fix: Fixed hight for tags menu" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: Fixed hight for tags menu" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
