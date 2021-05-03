@@ -140,14 +140,7 @@
       <workItem from="1619167099849" duration="3389000" />
       <workItem from="1619692745846" duration="4640000" />
       <workItem from="1620035281686" duration="4550000" />
-      <workItem from="1620051249663" duration="5478000" />
-    </task>
-    <task id="LOCAL-00009" summary="Отображение информации о задачах в одну строку">
-      <created>1610369746677</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1610369746677</updated>
+      <workItem from="1620051249663" duration="6331000" />
     </task>
     <task id="LOCAL-00010" summary="Прозрачный фон">
       <created>1610387765463</created>
@@ -485,7 +478,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620064966419</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="fix(ci): Store .env in secrets">
+      <created>1620065875180</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1620065875180</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -504,7 +504,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Фиксы" />
     <MESSAGE value="Скролл всплывающих меню" />
     <MESSAGE value="Переход на uuid, изменение алгоритма повторящихся задач" />
     <MESSAGE value="Удаление тэгов" />
@@ -529,7 +528,8 @@
     <MESSAGE value="fix: Project categories removal" />
     <MESSAGE value="feat(ci): Web deploy" />
     <MESSAGE value="fix(ci): Valid .env file in CI" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix(ci): Valid .env file in CI" />
+    <MESSAGE value="fix(ci): Store .env in secrets" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(ci): Store .env in secrets" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

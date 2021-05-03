@@ -48,7 +48,9 @@ jobs:
         run: yarn install
       
       - name: Create .env file
-        run: echo ${{ secrets.ENV }} > .env
+        run: |
+          echo "${{ secrets.ENV }}" > .env
+          cat .env
 
       - name: Package
         run: yarn package
