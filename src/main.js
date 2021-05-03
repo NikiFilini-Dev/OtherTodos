@@ -15,10 +15,16 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN,
 })
 
-// const server = "https://hazel.lunavod.vercel.app"
-// const feed = `${server}/update/${process.platform}/${app.getVersion()}`
-
-// autoUpdater.setFeedURL(feed)
+// const DOMAIN = "https://nucleus.lunavod.ru/"
+// const suffix =
+//   process.platform === "darwin"
+//     ? `/RELEASES.json?method=JSON&version=${app.getVersion()}`
+//     : ""
+// autoUpdater.setFeedURL({
+//   url: `${DOMAIN}/OtherTask/3865b1bb66d18e93ffe2662909dd9ed4/${process.platform}/${process.arch}${suffix}`,
+//   serverType: "json",
+// })
+//
 // autoUpdater.addListener("error", e => {
 //   console.error(e)
 // })
