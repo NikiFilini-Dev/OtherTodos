@@ -31,16 +31,28 @@ const Category = types
       return !re.test(path)
     },
   }))
-  .actions(self => ({
-    setName(name) {
+  .actions(self => {
+    const actions = {}
+    const actionsMap = {}
+
+    actions.setName = name => {
       self.name = name
-    },
-    setIndex(val) {
+    }
+    actionsMap.setName = ["name"]
+
+    actions.setIndex = val => {
       self.index = val
-    },
-    setFolded(val) {
+    }
+    actionsMap.setIndex = ["index"]
+
+    actions.setFolded = val => {
       self.folded = val
-    },
-  }))
+    }
+    actionsMap.setFolded = ["folded"]
+
+    actions.getActionsMap = () => actionsMap
+
+    return actions
+  })
 
 export default Category

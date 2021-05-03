@@ -145,15 +145,19 @@ const RootStore = types
       if (self.selectedTag === tag) {
         self.selectedTag = null
       }
+      window.syncMachine.registerDelete(tag.id, tag.syncName)
       destroy(tag)
     },
+
     deleteProject(project) {
       if (self.selectedProject === project) {
         self.selectedProject = null
         if (self.screen === "PROJECT") self.screen = "INBOX"
       }
+      window.syncMachine.registerDelete(project.id, project.syncName)
       destroy(project)
     },
+
     deleteEvent(event, force = false) {
       if (event.task && !force) {
         return event.task.unconnectEvent()
@@ -161,6 +165,16 @@ const RootStore = types
       window.syncMachine.registerDelete(event.id, event.syncName)
       destroy(event)
     },
+
+    deleteCategory(category) {
+      self.projects.forEach(project => {
+        if (project.categories.includes(category))
+          project.removeCategory(category)
+      })
+      window.syncMachine.registerDelete(category.id, category.syncName)
+      destroy(category)
+    },
+
     removeAllEvents() {
       while (self.events.length) self.events.pop()
     },

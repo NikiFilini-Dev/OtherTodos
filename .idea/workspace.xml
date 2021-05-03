@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/main.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/main.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Project.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Project.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/ProjectCategory.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ProjectCategory.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/RootStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/RootStore.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -142,14 +146,7 @@
       <workItem from="1619167099849" duration="3389000" />
       <workItem from="1619692745846" duration="4640000" />
       <workItem from="1620035281686" duration="4550000" />
-      <workItem from="1620051249663" duration="949000" />
-    </task>
-    <task id="LOCAL-00005" summary="MVP">
-      <created>1609331902301</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1609331902302</updated>
+      <workItem from="1620051249663" duration="3299000" />
     </task>
     <task id="LOCAL-00006" summary="Удаление проектов и тэгов">
       <created>1609356592116</created>
@@ -487,7 +484,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620050777302</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="feat(dev-env): Releaser integration">
+      <created>1620052305626</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1620052305626</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -506,7 +510,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Переход к текущему времени при фокусе" />
     <MESSAGE value="Выход из редактирования категории по энтеру" />
     <MESSAGE value="Удаление задачи через кнопку" />
     <MESSAGE value="Автоапдейт" />
@@ -531,7 +534,8 @@
     <MESSAGE value="fix[ci] Removes publish step" />
     <MESSAGE value="fix(ci): Auto tag in publish" />
     <MESSAGE value="fix(ci): Disables pre-release" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix(ci): Disables pre-release" />
+    <MESSAGE value="feat(dev-env): Releaser integration" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(dev-env): Releaser integration" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

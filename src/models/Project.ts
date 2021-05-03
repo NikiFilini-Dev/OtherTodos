@@ -61,7 +61,7 @@ const Project = types
     actionsMap.addCategory = ["categories"]
 
     actions.removeCategory = category => {
-      destroy(category)
+      self.categories.splice(self.categories.indexOf(category), 1)
     }
     actionsMap.removeCategory = ["categories"]
 

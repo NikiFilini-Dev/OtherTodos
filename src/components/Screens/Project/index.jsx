@@ -24,6 +24,7 @@ const Project = observer(() => {
     createTask,
     setTempTask,
     insertTempTask,
+    deleteCategory,
   } = useMst()
 
   const inputRef = React.useRef()
@@ -147,7 +148,7 @@ const Project = observer(() => {
           showEmpty
           dnd={`tasklist_${category.id}`}
           deletable={!category.tasks.length}
-          onDelete={() => selectedProject.removeCategory(category)}
+          onDelete={() => deleteCategory(category)}
           onNameChange={e => category.setName(e.target.value)}
         />
       </div>
