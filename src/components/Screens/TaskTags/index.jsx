@@ -60,15 +60,26 @@ const TaskTags = observer(() => {
       detail: 'Удалить тэг "' + tag.name + '"?',
     }
 
-    dialog.showMessageBox(dialogOpts).then(returnValue => {
-      if (returnValue.response === 0) {
-        all.forEach(task => task.removeTag(tag))
-        events.forEach(event =>
-          event.setTag(event.tag === tag ? null : event.tag),
-        )
-        deleteTag(tag)
+    const del = () => {
+      all.forEach(task => task.removeTag(tag))
+      events.forEach(event =>
+        event.setTag(event.tag === tag ? null : event.tag),
+      )
+      deleteTag(tag)
+    }
+
+    if (!IS_WEB) {
+      dialog.showMessageBox(dialogOpts).then(returnValue => {
+        if (returnValue.response === 0) {
+          del()
+        }
+      })
+    } else {
+      const result = confirm("Удалить тэг?")
+      if (result) {
+        del()
       }
-    })
+    }
   }
 
   const Tag = observer(({ tag, provided }) => {

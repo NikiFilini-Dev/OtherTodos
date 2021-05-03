@@ -18,6 +18,5 @@
       "es2020", "dom", "dom.iterable"
     ],
     "downlevelIteration": true
-  },
-  "exclude": ["src/external"]
+  }
 }

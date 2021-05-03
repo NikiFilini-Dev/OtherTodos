@@ -61,6 +61,7 @@ const createWindow = () => {
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
+      contextIsolation: false,
     },
     icon: nativeImage.createFromDataURL(Icon),
     resizable: true,

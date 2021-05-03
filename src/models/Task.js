@@ -139,8 +139,9 @@ const Task = types
     actions.removeTag = tag => {
       if (self.tags.indexOf(tag) === -1) return
       self.tags.splice(self.tags.indexOf(tag), 1)
+      if (self.colorTag === tag) self.colorTag = null
     }
-    actionsMap.removeTag = ["tags"]
+    actionsMap.removeTag = ["tags", "colorTag"]
 
     actions.setText = text => {
       self.text = text

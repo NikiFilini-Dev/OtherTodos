@@ -1,10 +1,13 @@
-// @flow
+//
 
 import Document from "./markdown_document"
 import Editable from "./editable"
 import "./baka_link"
+import { noop } from "lodash-es"
 
-class BakaEditor extends HTMLElement {
+noop("baka-editable", Editable)
+
+export default class BakaEditor extends HTMLElement {
   template = `<div id="wrapper">
         <div id="buttons">
             <a href="#" id="bold" tabindex="-1">B</a>
@@ -37,20 +40,10 @@ class BakaEditor extends HTMLElement {
 
   debug = false
 
-  elms: {
-    editor: Editable,
-    placeholder: HTMLElement,
-    wrapper: HTMLElement,
-    buttons: {
-      [string]: HTMLElement,
-    },
-    popupButtons: {
-      [string]: HTMLElement,
-    },
-  } = {}
+  elms = {}
 
-  outputContainer: HTMLElement | void | null
-  originalOutputContainer: HTMLElement | void | null
+  outputContainer
+  originalOutputContainer
 
   static get observedAttributes() {
     return ["placeholder", "output", "originaloutput", "debug"]
@@ -122,7 +115,7 @@ class BakaEditor extends HTMLElement {
       image: this.elms.wrapper.querySelector("#buttons #image"),
     }
 
-    const onPopupButtonClick = (styleName: "link" | "image", e: MouseEvent) => {
+    const onPopupButtonClick = (styleName, e) => {
       const button = this.elms.popupButtons[styleName]
       const popup = button.querySelector(".popup")
       const urlInput = popup.querySelector("input.url")
@@ -133,7 +126,7 @@ class BakaEditor extends HTMLElement {
         return
       }
 
-      const closePopup = (keydownListener?: () => {}) => {
+      const closePopup = keydownListener => {
         urlInput.value = ""
         titleInput.value = ""
         button.classList.remove("active")
@@ -143,7 +136,7 @@ class BakaEditor extends HTMLElement {
         }
       }
 
-      const getMarkup = (styleName: "link" | "image") => {
+      const getMarkup = styleName => {
         if (styleName === "link") {
           return `[${titleInput.value}](${urlInput.value})`
         }
@@ -287,6 +280,7 @@ class BakaEditor extends HTMLElement {
   }
 
   initEditor() {
+    console.log(this.elms.editor)
     this.elms.editor.initIO(this.document)
   }
 }

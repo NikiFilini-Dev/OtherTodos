@@ -1,6 +1,6 @@
-// @flow
+//
 
-export function escapeHtml(unsafe: string): string {
+export function escapeHtml(unsafe) {
   return unsafe
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")

@@ -4,12 +4,14 @@ import App from "./components/App/index.jsx"
 import RootStore, { Provider } from "./models/RootStore"
 import jsonStorage from "tools/jsonStorage"
 import migrations from "models/migrations"
-
-import "./external/editor"
 import "./index.css"
 import { persist } from "mst-persist"
 import SyncMachine from "./syncMachine"
 import { DateTime } from "luxon"
+import BakaEditor from "./editor"
+import { noop } from "lodash-es"
+
+noop("EDITOR", BakaEditor)
 
 if (!IS_WEB) {
   const Sentry = require("@sentry/electron")

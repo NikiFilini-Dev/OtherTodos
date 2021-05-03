@@ -1,79 +1,15 @@
-// @flow
+//
 
 import { escapeHtml } from "./utils"
-
-type InsertEvent = {
-  type: "insert",
-  start: number,
-  value: string,
-}
-
-type DeleteEvent = {
-  type: "delete",
-  start: number,
-  n: number,
-  value: string,
-  dir: "back" | "forward",
-}
-
-type ReplaceEvent = {
-  type: "replace",
-  start: number,
-  end: number,
-  from: string,
-  to: string,
-}
-
-type SetTextEvent = {
-  type: "set text",
-  text: string,
-}
-
-type MyNode = {
-  styles: string[],
-  text: string,
-  start: number,
-  end: number,
-}
-
-export interface IO {
-  text: string;
-  styles: {
-    [string]: {
-      openTag: string,
-      closeTag: string,
-      ranges: [[number, number]],
-    },
-  };
-
-  history: Array<InsertEvent | DeleteEvent | SetTextEvent | ReplaceEvent>;
-  addEventListener: (
-    event: string,
-    item: InsertEvent | DeleteEvent | SetTextEvent | ReplaceEvent,
-  ) => {};
-
-  undo(): void;
-
-  redo(): void;
-
-  delete(start: number, n: number, direction?: string): void;
-
-  insert(start: number, text: string): void;
-
-  replace(start: number, end: number, text: string): void;
-
-  mark(styleName: string, range: [number, number]): number;
-
-  toHtml(): string;
-}
 
 export default class Document {
   //    text = 'aabb\nbbaa\n'
   text = ""
-  history: Array<InsertEvent | DeleteEvent | SetTextEvent | ReplaceEvent> = []
+  history = []
   historyOffset = -1
 
-  set styles(value: any) {}
+  set styles(value) {}
+
   get styles() {
     return []
   }
@@ -122,15 +58,15 @@ export default class Document {
   }
 
   // eslint-disable-next-line no-unused-vars
-  beforeDelete(start: number, n: number) {}
+  beforeDelete(start, n) {}
 
   // eslint-disable-next-line no-unused-vars
-  beforeInsert(start: number, text: string) {}
+  beforeInsert(start, text) {}
 
   // eslint-disable-next-line no-unused-vars
-  mark(styleName: string, range: [number, number]): number {}
+  mark(styleName, range) {}
 
-  getStylesAtOffset(offset: number) {
+  getStylesAtOffset(offset) {
     let styles = {}
     for (let styleName of Object.keys(this.styles)) {
       for (let i = 0; i < this.styles[styleName].ranges.length; i++) {
@@ -142,7 +78,7 @@ export default class Document {
     return styles
   }
 
-  getStylesAtRange(start: number, end: number) {
+  getStylesAtRange(start, end) {
     let styles = []
     for (let styleName of Object.keys(this.styles)) {
       for (let i = 0; i < this.styles[styleName].ranges.length; i++) {
@@ -164,14 +100,14 @@ export default class Document {
   }
 
   setText(text) {
-    const historyItem: SetTextEvent = { type: "set text", text }
+    const historyItem = { type: "set text", text }
     this.history = [historyItem]
     this.text = text
     this.fireUpdate(historyItem)
   }
 
-  insert(start: number, value: string, save = true, update = true): void {
-    const historyItem: InsertEvent = { type: "insert", value, start }
+  insert(start, value, save = true, update = true) {
+    const historyItem = { type: "insert", value, start }
     if (save) {
       this.history.push(historyItem)
       this.historyOffset = -1
@@ -186,14 +122,8 @@ export default class Document {
     if (update) this.fireUpdate(historyItem)
   }
 
-  replace(
-    start: number,
-    end: number,
-    value: string,
-    save = true,
-    update = true,
-  ): void {
-    const historyItem: ReplaceEvent = {
+  replace(start, end, value, save = true, update = true) {
+    const historyItem = {
       type: "replace",
       start,
       end,
@@ -209,14 +139,8 @@ export default class Document {
     if (update) this.fireUpdate(historyItem)
   }
 
-  delete(
-    start: number,
-    n: number,
-    dir: "back" | "forward" = "back",
-    save = true,
-    update = true,
-  ) {
-    const historyItem: DeleteEvent = {
+  delete(start, n, dir = "back", save = true, update = true) {
+    const historyItem = {
       type: "delete",
       n,
       start,
@@ -237,9 +161,9 @@ export default class Document {
     if (update) this.fireUpdate(historyItem)
   }
 
-  listeners: { [string]: Array<(event: mixed) => void> } = {}
+  listeners = {}
 
-  addEventListener(event: string, callback: (event: mixed) => void): void {
+  addEventListener(event, callback) {
     if (this.listeners[event]) {
       this.listeners[event].push(callback)
     } else {
@@ -247,17 +171,17 @@ export default class Document {
     }
   }
 
-  fireUpdate(event: mixed, type = "update"): void {
+  fireUpdate(event, type = "update") {
     const callbacks = this.listeners[type]
     if (!callbacks) return
     callbacks.forEach(callback => callback(event))
   }
 
-  toHtml(): string {
+  toHtml() {
     if (!this.text.length) return ""
-    let allRanges: Array<{ style: string, range: [number, number] }> = []
+    let allRanges = []
     let lines = [[]]
-    let nodes: Array<MyNode> = []
+    let nodes = []
     let result = ""
 
     for (let styleName of Object.keys(this.styles)) {
@@ -266,7 +190,7 @@ export default class Document {
       }
     }
 
-    const getStylesAtOffset = (offset: number): string[] => {
+    const getStylesAtOffset = offset => {
       return allRanges
         .filter(rangeData => {
           let range = rangeData.range
@@ -275,12 +199,12 @@ export default class Document {
         .map(rangeData => rangeData.style)
     }
 
-    const stylesEqual = (a: string[], b: string[]) => {
+    const stylesEqual = (a, b) => {
       if (a.length !== b.length) return false
       return !a.filter(el => b.indexOf(el) < 0).length
     }
 
-    let currentNode: MyNode = {
+    let currentNode = {
       styles: getStylesAtOffset(0),
       text: this.text[0],
       start: 0,
@@ -324,7 +248,7 @@ export default class Document {
       return myArr
     }
 
-    const sortedByPriority = (arr: Array<string>, asc = false) => {
+    const sortedByPriority = (arr, asc = false) => {
       let newArr = [...arr]
       newArr.sort((a, b) => {
         let aPriority = this.styles[a].priority

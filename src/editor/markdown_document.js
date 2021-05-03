@@ -1,14 +1,13 @@
-// @flow
+//
 
 import Document from "./document"
 
 // noinspection RegExpRedundantEscape,RegExpSingleCharAlternation
 export default class MarkdownDocument extends Document {
-  set styles(value: any) {}
+  set styles(value) {}
+
   get styles() {
-    let ranges: {
-      [string]: [number, number][],
-    } = {
+    let ranges = {
       bold: [],
       italic: [],
       underline: [],
@@ -81,8 +80,8 @@ export default class MarkdownDocument extends Document {
     }
 
     // const replaced_occurrences = []
-    const escapeMarkup = (regexp: RegExp, n: number) => {
-      text = text.replace(regexp, (full: string, match: string) => {
+    const escapeMarkup = (regexp, n) => {
+      text = text.replace(regexp, (full, match) => {
         return (
           full.slice(0, n) +
           match.replace(/[*`_#~]/gm, "Ɇ") +
@@ -202,7 +201,7 @@ export default class MarkdownDocument extends Document {
     }
   }
 
-  mark(styleName: string, range: [number, number]): number {
+  mark(styleName, range) {
     let before = "",
       start = "",
       end = ""
@@ -251,10 +250,8 @@ export default class MarkdownDocument extends Document {
     return range[1] + start.length
   }
 
-  getStylesAtOffset(offset: number) {
-    let styles: {
-      [string]: [number, number],
-    } = {}
+  getStylesAtOffset(offset) {
+    let styles = {}
     for (let styleName of Object.keys(this.styles)) {
       for (let i = 0; i < this.styles[styleName].ranges.length; i++) {
         let range = this.styles[styleName].ranges[i]
@@ -265,11 +262,11 @@ export default class MarkdownDocument extends Document {
     return styles
   }
 
-  getStylesAtRange(start: number, end: number) {
-    let styles: string[] = []
+  getStylesAtRange(start, end) {
+    let styles = []
     for (let styleName of Object.keys(this.styles)) {
       for (let i = 0; i < this.styles[styleName].ranges.length; i++) {
-        let range: [number, number] = this.styles[styleName].ranges[i]
+        let range = this.styles[styleName].ranges[i]
         if (
           !(
             (
