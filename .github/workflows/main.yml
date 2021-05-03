@@ -48,10 +48,7 @@ jobs:
         run: yarn install
       
       - name: Create .env file
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_API_URL: ${{ secrets.API_URL }}
-          envkey_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        run: echo ${{ secrets.ENV }} > .env
 
       - name: Package
         run: yarn package

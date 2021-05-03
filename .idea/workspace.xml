@@ -7,7 +7,6 @@
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.github/workflows/main.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/main.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphql/client.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/client.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,14 +140,7 @@
       <workItem from="1619167099849" duration="3389000" />
       <workItem from="1619692745846" duration="4640000" />
       <workItem from="1620035281686" duration="4550000" />
-      <workItem from="1620051249663" duration="4685000" />
-    </task>
-    <task id="LOCAL-00008" summary="Фиксы, зум">
-      <created>1610363328442</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1610363328443</updated>
+      <workItem from="1620051249663" duration="5478000" />
     </task>
     <task id="LOCAL-00009" summary="Отображение информации о задачах в одну строку">
       <created>1610369746677</created>
@@ -486,7 +478,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620054920413</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="fix(ci): Valid .env file in CI">
+      <created>1620064966419</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1620064966419</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -505,7 +504,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Автоапдейт" />
     <MESSAGE value="Фиксы" />
     <MESSAGE value="Скролл всплывающих меню" />
     <MESSAGE value="Переход на uuid, изменение алгоритма повторящихся задач" />
@@ -530,7 +528,8 @@
     <MESSAGE value="feat(dev-env): Releaser integration" />
     <MESSAGE value="fix: Project categories removal" />
     <MESSAGE value="feat(ci): Web deploy" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(ci): Web deploy" />
+    <MESSAGE value="fix(ci): Valid .env file in CI" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(ci): Valid .env file in CI" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
