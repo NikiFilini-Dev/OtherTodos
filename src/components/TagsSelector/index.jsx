@@ -69,7 +69,7 @@ const TagsSelector = observer(({ selected, select, unselect, type }) => {
         {results.map(tag => (
           <TagMenu
             tag={tag}
-            key={`search-${tag.name}`}
+            key={`search-${tag.id}`}
             className={styles.tagMenu}
           >
             <span className={styles.tag} onClick={() => onSelectClick(tag)}>

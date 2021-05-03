@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.eslintignore" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.html.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.web.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.web.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TagsSelector/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TagsSelector/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TagsSelector/styles.styl" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TagsSelector/styles.styl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,14 +52,17 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../releaser" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.detected.package.stlint" value="true" />
     <property name="node.js.detected.package.stylelint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.path.for.package.stlint" value="project" />
     <property name="node.js.path.for.package.stylelint" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.standard" value="" />
+    <property name="node.js.selected.package.stlint" value="(autodetect)" />
     <property name="node.js.selected.package.stylelint" value="$PROJECT_DIR$/node_modules/stylelint" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -146,14 +144,7 @@
       <workItem from="1619167099849" duration="3389000" />
       <workItem from="1619692745846" duration="4640000" />
       <workItem from="1620035281686" duration="4550000" />
-      <workItem from="1620051249663" duration="13931000" />
-    </task>
-    <task id="LOCAL-00014" summary="Сочетания клавиш">
-      <created>1610473282484</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1610473282486</updated>
+      <workItem from="1620051249663" duration="14499000" />
     </task>
     <task id="LOCAL-00015" summary="Фикс сохранения и текущей даты при переключении на раздел сегодня">
       <created>1610474959575</created>
@@ -491,7 +482,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620073637454</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="feat(web): Hash in assets filenames">
+      <created>1620074706034</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1620074706034</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -510,7 +508,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented sync" />
     <MESSAGE value="Submit form on enter" />
     <MESSAGE value="Dotenv" />
     <MESSAGE value="API_URL in .env" />
@@ -535,7 +532,8 @@
     <MESSAGE value="fix: Remove husky" />
     <MESSAGE value="fix(ci): echo .env" />
     <MESSAGE value="fix: Windows fixes (editor)" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: Windows fixes (editor)" />
+    <MESSAGE value="feat(web): Hash in assets filenames" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(web): Hash in assets filenames" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
