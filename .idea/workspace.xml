@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,13 +139,6 @@
       <workItem from="1619167099849" duration="3389000" />
       <workItem from="1619692745846" duration="4640000" />
       <workItem from="1620035281686" duration="4550000" />
-    </task>
-    <task id="LOCAL-00003" summary="Рабочие теги и экраны">
-      <created>1609169504289</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1609169504291</updated>
     </task>
     <task id="LOCAL-00004" summary="Добавление тегов и проектов">
       <created>1609320299986</created>
@@ -484,7 +476,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620039930150</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="fix(ci): Auto tag in publish">
+      <created>1620046508134</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1620046508134</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -503,7 +502,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Автоматический линтинг" />
     <MESSAGE value="Таймлайн" />
     <MESSAGE value="Переход к текущему времени при фокусе" />
     <MESSAGE value="Выход из редактирования категории по энтеру" />
@@ -528,7 +526,8 @@
     <MESSAGE value="Make with debug" />
     <MESSAGE value="feat: Linux-style linebreak" />
     <MESSAGE value="fix[ci] Removes publish step" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix[ci] Removes publish step" />
+    <MESSAGE value="fix(ci): Auto tag in publish" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(ci): Auto tag in publish" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
