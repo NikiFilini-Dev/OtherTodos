@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/main.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/main.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar/index.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -140,14 +141,7 @@
       <workItem from="1618857173054" duration="1198000" />
       <workItem from="1619167099849" duration="3389000" />
       <workItem from="1619692745846" duration="4640000" />
-      <workItem from="1620035281686" duration="2421000" />
-    </task>
-    <task id="LOCAL-00002" summary="Заметки">
-      <created>1607959887244</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1607959887246</updated>
+      <workItem from="1620035281686" duration="4550000" />
     </task>
     <task id="LOCAL-00003" summary="Рабочие теги и экраны">
       <created>1609169504289</created>
@@ -485,7 +479,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619953636590</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="fix[ci] Removes publish step">
+      <created>1620039930148</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1620039930150</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -504,7 +505,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Автоматическое версионирование" />
     <MESSAGE value="Автоматический линтинг" />
     <MESSAGE value="Таймлайн" />
     <MESSAGE value="Переход к текущему времени при фокусе" />
@@ -529,7 +529,8 @@
     <MESSAGE value="Separated package and make" />
     <MESSAGE value="Make with debug" />
     <MESSAGE value="feat: Linux-style linebreak" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: Linux-style linebreak" />
+    <MESSAGE value="fix[ci] Removes publish step" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix[ci] Removes publish step" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

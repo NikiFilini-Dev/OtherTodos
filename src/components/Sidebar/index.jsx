@@ -2,7 +2,7 @@ import React from "react"
 import { observer } from "mobx-react"
 import { useMst } from "models/RootStore"
 import styles from "./styles.styl"
-import Logo from "!file-loader!assets/logo.svg"
+import Logo from "assets/logo.svg"
 import classNames from "classnames"
 import ArrowRightIcon from "assets/arrow_right.svg"
 import FolderIcon from "assets/folder.svg"
@@ -290,7 +290,7 @@ const Sidebar = observer(() => {
   return (
     <React.Fragment>
       <div className={styles.logoWrapper}>
-        <img className={styles.logo} src={Logo} />
+        <Logo className={styles.logo} />
         <span className={styles.logoTitle}>Task</span>
       </div>
       <div className={styles.sidebar}>

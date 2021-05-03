@@ -79,3 +79,14 @@ jobs:
         with:
           name: build-result-${{ matrix.os }}
           path: out/prod/make/**/*.*
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+     - uses: actions/download-artifact@v2
+     - uses: "marvinpinto/action-automatic-releases@latest"
+       with:
+         repo_token: "${{ secrets.GITHUB_TOKEN }}"
+         automatic_release_tag: "latest"
+         files: ./**/*.*
