@@ -7,6 +7,9 @@ const {
   MenuItem,
   nativeImage,
 } = require("electron")
+const log = require("electron-log")
+
+log.catchErrors()
 
 import * as Sentry from "@sentry/electron"
 import Icon from "../icons/png/64x64.png"
@@ -15,17 +18,19 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN,
 })
 
-const server = "https://hazel.lunavod.vercel.app"
+const server = "https://hazel-lunavod.vercel.app"
 const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 
 autoUpdater.setFeedURL(feed)
 autoUpdater.addListener("error", e => {
   console.error(e)
+  log.error(e)
 })
 setInterval(() => {
   try {
     autoUpdater.checkForUpdates()
   } catch (err) {
+    log.error(err)
     console.error(err)
   }
 }, 10000)
@@ -66,6 +71,15 @@ const createWindow = () => {
     icon: nativeImage.createFromDataURL(Icon),
     resizable: true,
   })
+
+  // const dialogOpts = {
+  //   type: "info",
+  //   buttons: ["Restart", "Later"],
+  //   title: "Error",
+  //   detail: "test",
+  //   message: "Hi",
+  // }
+  // dialog.showMessageBox(dialogOpts).then(console.log)
 
   //todo Проверять, существует ли окно
   app.on("browser-window-focus", () => {

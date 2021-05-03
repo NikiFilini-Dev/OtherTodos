@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/Project/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,14 +145,7 @@
       <workItem from="1619167099849" duration="3389000" />
       <workItem from="1619692745846" duration="4640000" />
       <workItem from="1620035281686" duration="4550000" />
-      <workItem from="1620051249663" duration="14820000" />
-    </task>
-    <task id="LOCAL-00016" summary="Version bump">
-      <created>1610475414760</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1610475414760</updated>
+      <workItem from="1620051249663" duration="16806000" />
     </task>
     <task id="LOCAL-00017" summary="Fix hydrating">
       <created>1610476613051</created>
@@ -488,7 +483,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620075222550</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="fix: Multiple tags error">
+      <created>1620075551820</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1620075551820</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -507,7 +509,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Dotenv" />
     <MESSAGE value="API_URL in .env" />
     <MESSAGE value="Fix OTHERTASK-F" />
     <MESSAGE value="Fix identity in macos flow" />
@@ -532,7 +533,8 @@
     <MESSAGE value="fix: Windows fixes (editor)" />
     <MESSAGE value="feat(web): Hash in assets filenames" />
     <MESSAGE value="fix: Fixed hight for tags menu" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: Fixed hight for tags menu" />
+    <MESSAGE value="fix: Multiple tags error" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: Multiple tags error" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

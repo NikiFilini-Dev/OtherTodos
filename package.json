@@ -1,7 +1,7 @@
 {
   "name": "othertodos",
   "productName": "OtherTodos",
-  "version": "1.12.0",
+  "version": "1.12.1",
   "description": "Best app for tasks",
   "main": ".webpack/main",
   "scripts": {
@@ -130,6 +130,7 @@
     "classnames": "^2.2.6",
     "dotenv-webpack": "^7.0.2",
     "electron-json-storage": "^4.3.0",
+    "electron-log": "^4.3.5",
     "electron-squirrel-startup": "^1.0.0",
     "electron-vibrancy": "https://github.com/lunavod/electron-vibrancy.git",
     "es-abstract": "^1.18.0-next.1",
