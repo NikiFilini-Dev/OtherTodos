@@ -90,3 +90,16 @@ jobs:
          repo_token: "${{ secrets.GITHUB_TOKEN }}"
          prerelease: false
          files: ./**/*.*
+
+  deployWeb:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Run ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.WEB_SSH_HOST }}
+          username: ${{ secrets.WEB_SSH_USERNAME }}
+          key: ${{ secrets.WEB_SSH_KEY }}
+          script: ${{ secrets.WEB_SSH_DEPLOY_COMMAND }}
