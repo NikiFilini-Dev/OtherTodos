@@ -1,7 +1,7 @@
 {
   "name": "othertodos",
   "productName": "OtherTodos",
-  "version": "1.13.0",
+  "version": "1.13.1",
   "description": "Best app for tasks",
   "main": ".webpack/main",
   "scripts": {
