@@ -7,18 +7,12 @@
     <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.eslintignore" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Screens/TaskTags/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Screens/TaskTags/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Task/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/external/editor/baka_link.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/editor/baka_link.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/external/editor/document.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/editor/document.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/external/editor/editable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/editor/editable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/external/editor/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/editor/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/external/editor/markdown_document.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/editor/markdown_document.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/external/editor/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/editor/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Task.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Task.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/renderer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.html.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webpack.web.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.web.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,14 +146,7 @@
       <workItem from="1619167099849" duration="3389000" />
       <workItem from="1619692745846" duration="4640000" />
       <workItem from="1620035281686" duration="4550000" />
-      <workItem from="1620051249663" duration="12955000" />
-    </task>
-    <task id="LOCAL-00013" summary="Нормальный скрол в экранах">
-      <created>1610468691101</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1610468691103</updated>
+      <workItem from="1620051249663" duration="13931000" />
     </task>
     <task id="LOCAL-00014" summary="Сочетания клавиш">
       <created>1610473282484</created>
@@ -497,7 +484,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620068372626</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="fix: Windows fixes (editor)">
+      <created>1620073637454</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1620073637454</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

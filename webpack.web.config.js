@@ -4,6 +4,8 @@ const path = require("path")
 const Dotenv = require("dotenv-webpack")
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin")
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
+const WebpackAssetsManifest = require("webpack-assets-manifest")
+const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 
 rules.push({
   test: /\.css$/,
@@ -26,6 +28,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, "web_dist"),
+    filename: "[name]-[hash].js",
     publicPath: "/static/",
   },
   // Put your normal webpack config below here
@@ -63,6 +66,8 @@ module.exports = {
       ],
     }),
     new LodashModuleReplacementPlugin(),
+    new WebpackAssetsManifest({}),
+    new CleanWebpackPlugin(),
     // new BundleAnalyzerPlugin(),
   ],
   devtool: "eval-source-map",
