@@ -15,7 +15,8 @@
     "postinstall": "husky install",
     "web:build": "webpack --config=webpack.web.config.js --progress --color --mode=development",
     "web:watch": "webpack --config=webpack.web.config.js --progress --color --mode=development --watch",
-    "web:server": "nodemon web/server.js"
+    "web:server": "nodemon web/server.js",
+    "release": "releaser"
   },
   "keywords": [],
   "author": {
@@ -47,6 +48,7 @@
     "@electron-forge/plugin-webpack": "^6.0.0-beta.54",
     "@electron-forge/publisher-github": "^6.0.0-beta.54",
     "@electron-forge/publisher-nucleus": "^6.0.0-beta.54",
+    "@lunavod/releaser": "^1.0.0",
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
     "@types/babel__core": "^7.1.14",
     "@types/babel__preset-env": "^7.9.1",
