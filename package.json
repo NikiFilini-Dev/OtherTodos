@@ -25,11 +25,6 @@
   },
   "license": "MIT",
   "config": {
-    "electronRebuildConfig": {
-      "extraModules": [
-        "electron-vibrancy"
-      ]
-    },
     "forge": "./forge.config.js"
   },
   "devDependencies": {
@@ -132,7 +127,6 @@
     "electron-json-storage": "^4.3.0",
     "electron-log": "^4.3.5",
     "electron-squirrel-startup": "^1.0.0",
-    "electron-vibrancy": "https://github.com/lunavod/electron-vibrancy.git",
     "es-abstract": "^1.18.0-next.1",
     "events": "^3.3.0",
     "express": "^4.17.1",
