@@ -147,11 +147,11 @@ const Timeline = observer(() => {
   const onMoveStart = onDragStart(
     event => ({ initialStart: event.start, initialDuration: event.duration }),
     (event, add, { initialStart }) => {
-      const start = DateTime.fromFormat("00:00", "HH:mm")
-      const end = DateTime.fromFormat(initialStart, "HH:mm")
+      const start = DateTime.fromFormat("00:00", "H:mm")
+      const end = DateTime.fromFormat(initialStart, "H:mm")
       const minimum = 0 - end.diff(start).shiftTo("minutes").values.minutes
       if (add < minimum) add = minimum
-      let newStart = DateTime.fromFormat(initialStart, "HH:mm")
+      let newStart = DateTime.fromFormat(initialStart, "H:mm")
         .plus({ minutes: add })
         .toFormat("HH:mm")
       event.processSetStart(newStart)
