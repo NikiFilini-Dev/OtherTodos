@@ -8,9 +8,17 @@ import ChevronRight from "assets/awesome/solid/chevron-right.svg"
 import DaySelector from "components/DaySelector"
 import Event from "./Event"
 import { useMst } from "models/RootStore"
+
 const ipc = require("electron").ipcRenderer
 import { useScrollEmitter } from "../../tools/hooks"
 import ScrollContext from "../../contexts/scrollContext"
+
+function parseTime(s) {
+  let date = DateTime.fromFormat(s, "HH:mm")
+  if (!date.isValid) date = DateTime.fromFormat(s, "H:mm")
+  if (!date.isValid) date = DateTime.fromFormat(s, "H:m")
+  return date
+}
 
 const Timeline = observer(() => {
   const { events, createEvent, timelineDate, setTimelineDate } = useMst()
@@ -148,10 +156,11 @@ const Timeline = observer(() => {
     event => ({ initialStart: event.start, initialDuration: event.duration }),
     (event, add, { initialStart }) => {
       const start = DateTime.fromFormat("00:00", "H:mm")
-      const end = DateTime.fromFormat(initialStart, "H:mm")
+      const end = parseTime(initialStart)
+      console.log(start, end)
       const minimum = 0 - end.diff(start).shiftTo("minutes").values.minutes
       if (add < minimum) add = minimum
-      let newStart = DateTime.fromFormat(initialStart, "H:mm")
+      let newStart = parseTime(initialStart)
         .plus({ minutes: add })
         .toFormat("HH:mm")
       event.processSetStart(newStart)
