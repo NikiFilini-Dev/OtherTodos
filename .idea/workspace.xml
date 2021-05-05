@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="" />
+    <list default="true" id="5fc5afc8-b869-442e-b063-099e9efe4ef3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Task/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Task/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tools/hooks.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/hooks.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tools/logger.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/logger.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -140,21 +145,9 @@
       <workItem from="1619167099849" duration="3389000" />
       <workItem from="1619692745846" duration="4640000" />
       <workItem from="1620035281686" duration="4550000" />
-      <workItem from="1620051249663" duration="17575000" />
-    </task>
-    <task id="LOCAL-00019" summary="Bugfixes">
-      <created>1610559714417</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1610559714417</updated>
-    </task>
-    <task id="LOCAL-00020" summary="Перемещение тэгов, миграции">
-      <created>1611070905089</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1611070905089</updated>
+      <workItem from="1620051249663" duration="18807000" />
+      <workItem from="1620129395803" duration="1422000" />
+      <workItem from="1620207965589" duration="814000" />
     </task>
     <task id="LOCAL-00021" summary="Сортировка проектов, переключение вида в разделе сегодня">
       <created>1611074452185</created>
@@ -485,7 +478,21 @@
       <option name="project" value="LOCAL" />
       <updated>1620078705054</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="Tmp">
+      <created>1620079883299</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1620079883299</updated>
+    </task>
+    <task id="LOCAL-00069" summary="fix: Timeline events movement">
+      <created>1620208344491</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1620208344492</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -504,8 +511,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fix identity in macos flow" />
-    <MESSAGE value="Fix identity in macos flow [5]" />
     <MESSAGE value="Updated mac config" />
     <MESSAGE value="Updated mac config [2]" />
     <MESSAGE value="Updated mac config [3]" />
@@ -529,7 +534,9 @@
     <MESSAGE value="fix: Multiple tags error" />
     <MESSAGE value="feat[main]: Logging" />
     <MESSAGE value="feat(main): Logging" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(main): Logging" />
+    <MESSAGE value="Tmp" />
+    <MESSAGE value="fix: Timeline events movement" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: Timeline events movement" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

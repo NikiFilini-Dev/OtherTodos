@@ -16,7 +16,7 @@ const inRef = (ref, el) => {
 
 export function useClickOutsideRef(ref, callback) {
   useClick(document, e => {
-    if (!inRef(ref, e.target)) callback()
+    if (!inRef(ref, e.target)) callback(e)
   })
 }
 

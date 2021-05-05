@@ -24,7 +24,7 @@ const newLogger = (label?: string) => {
     consoleFormats.unshift(winston.format.label({ label, message: true }))
 
   const logger = winston.createLogger({
-    level: "info",
+    level: process.env.LOG_LEVEL ? process.env.LOG_LEVEL : "info",
     format: winston.format.splat(),
     transports: [
       new winston.transports.Console({

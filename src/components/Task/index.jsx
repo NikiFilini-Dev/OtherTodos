@@ -60,8 +60,10 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
     [state.refs.menus.tags.menu, state.refs.menus.tags.trigger],
     () => state.closeMenu("tags"),
   )
-  useClickOutsideRef(state.refs.container, () => {
+  useClickOutsideRef(state.refs.container, e => {
     if (!state.allMenusClosed) return
+    if (e.target.classList.contains(styles.taskText)) return
+    if (state.active) console.log("Click outside ref", e)
 
     if (!active) state.active = false
     if (selected === task.id) {
