@@ -1,4 +1,4 @@
-import { destroy, getRoot, Instance, types } from "mobx-state-tree"
+import { getRoot, Instance, types } from "mobx-state-tree"
 import ProjectCategory from "./ProjectCategory"
 import { v4 as uuidv4 } from "uuid"
 import RootStore, { IRootStore } from "./RootStore"
