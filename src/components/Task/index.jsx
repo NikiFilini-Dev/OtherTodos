@@ -80,6 +80,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
   })
 
   useKeyListener("Escape", () => {
+    if (active) return
     if (state.active || selected) {
       state.active = false
       select(null)
