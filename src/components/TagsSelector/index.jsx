@@ -15,7 +15,7 @@ const TagsSelector = observer(({ selected, select, unselect, type }) => {
 
   let results = tags.filter(
     tag =>
-      tag.name.startsWith(search) &&
+      tag.name.toLowerCase().startsWith(search.toLowerCase()) &&
       !selected.includes(tag) &&
       tag.type === type,
   )
