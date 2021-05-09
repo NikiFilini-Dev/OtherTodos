@@ -36,6 +36,9 @@ const Task = types
     get syncable() {
       return getParent(self).tempTask === undefined
     },
+    get isNote() {
+      return self.text.startsWith(":")
+    }
   }))
   .actions(self => {
     const actions = {}

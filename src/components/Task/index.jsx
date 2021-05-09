@@ -182,13 +182,15 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
       onClick={onTaskClick}
     >
       <div className={styles.line}>
-        <Checkbox
+        {!task.isNote &&<Checkbox
           color={task.colorTag?.color}
           ref={state.refs.checkbox}
           className={styles.check}
           onChange={onCheckboxChange}
           checked={state.done}
-        />
+        /> }
+        {task.isNote && <div className={styles.checkPlaceholder} />}
+
         {!state.active && <span className={styles.taskText}>{task.text}</span>}
         {state.active && (
           <input
