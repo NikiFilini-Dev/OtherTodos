@@ -191,7 +191,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         /> }
         {task.isNote && <div className={styles.checkPlaceholder} />}
 
-        {!state.active && <span className={styles.taskText}>{task.text}</span>}
+        {!state.active && <span className={styles.taskText}>{task.isNote ? task.noteText : task.text}</span>}
         {state.active && (
           <input
             ref={state.refs.input}

@@ -38,6 +38,12 @@ const Task = types
     },
     get isNote() {
       return self.text.startsWith(":")
+    },
+    get noteText() {
+      if (!this.isNote) return self.text
+      if (self.text.startsWith(": ")) return self.text.slice(2)
+      if (self.text.startsWith(":")) return self.text.slice(1)
+      return self.text
     }
   }))
   .actions(self => {
