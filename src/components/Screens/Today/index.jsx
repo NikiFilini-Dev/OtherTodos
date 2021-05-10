@@ -139,6 +139,28 @@ const Today = observer(() => {
     setIsNewTaskShown(true)
   }
 
+  let onDragEnd = args => {
+    console.log(args)
+    if (!args) return
+    let { destination, source, draggableId } = args
+    if (!destination) return
+    console.log(destination, source, draggableId)
+
+    const id = draggableId.match(/.+?_(.+)/)[1]
+
+    if (draggableId.startsWith("task") && destination.droppableId.startsWith("project")) {
+      let match = destination.droppableId.match(/.+?_(.+)/)
+      const targetProject = match ? match[1] : null
+
+      let task = all.find(t => t.id === id)
+      task.setProject(targetProject)
+      //
+      // console.log("SET CATEGORY", task)
+    }
+  }
+  React.useEffect(() => (window.onDragEndFunc = onDragEnd))
+  window.onDragEndFunc = onDragEnd
+
   return (
     <div className={styles.screen}>
       <div className={styles.info}>
@@ -217,6 +239,7 @@ const Today = observer(() => {
               <TaskList tasks={withoutProject} name={"Входящие"} />
               {projects.map(project => (
                 <TaskList
+                  dnd={"project_"+project.id}
                   key={`task_list_${project.name}`}
                   tasks={tasks.filter(task => task.project === project)}
                   name={project.name}
