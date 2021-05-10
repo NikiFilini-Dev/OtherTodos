@@ -33,7 +33,7 @@ const Project = observer(() => {
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
   const [isEditingTitle, setIsEditingTitle] = React.useState(false)
 
-  let tasks = all.filter(task => task.project === selectedProject)
+  let tasks = all.filter(task => task.project === selectedProject && task.done === false)
 
   const initialTaskData = {
     project: selectedProject,
