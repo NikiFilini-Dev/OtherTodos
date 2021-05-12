@@ -13,6 +13,7 @@ const ProjectSelector = observer(({ selected, onSelect }) => {
   const filteredProjects = projects.filter(project =>
     project.name.startsWith(search),
   )
+  filteredProjects.sort((a,b) => a.index - b.index)
 
   return (
     <div className={styles.wrapper}>
