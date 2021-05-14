@@ -30,6 +30,53 @@ import {
 import { useMst } from "models/RootStore"
 import TaskState from "./state"
 import { DateTime } from "luxon"
+import Tag from "../../syncMachine/types/tag"
+
+const Tags = observer(({ task }) => {
+  const [selectedTagId, setSelectedTagId] = React.useState(null)
+  const ref = React.useRef(null)
+  const onTagClick = (tag) => {
+    if (tag.id === selectedTagId) {
+      task.removeTag(tag)
+      setSelectedTagId(null)
+    } else {
+      setSelectedTagId(tag.id)
+    }
+  }
+  useClickOutsideRef(ref, () => setSelectedTagId(null))
+  return <div
+    ref={ref}
+    className={classNames({
+      [styles.line]: true,
+      [styles.padding]: true,
+      [styles.fullOnly]: true,
+    })}
+  >
+    {task.tags.map(tag => (
+      <span
+        key={`task_${task.id}#tag_${tag.id}`}
+        className={classNames({
+          [styles.tag]: true,
+          [styles.active]: task.colorTag === tag,
+        })}
+        style={{ "--tag-color": tag.color }}
+      >
+        <span onClick={() => onTagClick(tag)} style={{ userSelect: tag.id === selectedTagId ? "none" : "auto" }}>
+          {tag.name}
+        </span>
+        <PalletIcon
+          onClick={() => {
+            if (task.colorTag === tag) {
+              task.setColorTag(null)
+            } else {
+              task.setColorTag(tag)
+            }
+          }}
+        />
+          </span>
+    ))}
+  </div>
+})
 
 const Task = observer(({ task, active = false, onConfirm, expired }) => {
   const {
@@ -182,13 +229,13 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
       onClick={onTaskClick}
     >
       <div className={styles.line}>
-        {!task.isNote &&<Checkbox
+        {!task.isNote && <Checkbox
           color={task.colorTag?.color}
           ref={state.refs.checkbox}
           className={styles.check}
           onChange={onCheckboxChange}
           checked={state.done}
-        /> }
+        />}
         {task.isNote && <div className={styles.checkPlaceholder} />}
 
         {!state.active && <span className={styles.taskText}>{task.isNote ? task.noteText : task.text}</span>}
@@ -204,18 +251,18 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         <div className={styles.puller} />
         <div className={styles.tags}>
           {!state.active &&
-            Boolean(task.tags.length) &&
-            tags.map(tag => (
-              <span
-                key={`inline_tag_${tag.id}`}
-                className={classNames({
-                  [styles.tag]: true,
-                  [styles.inline]: true,
-                })}
-              >
+          Boolean(task.tags.length) &&
+          tags.map(tag => (
+            <span
+              key={`inline_tag_${tag.id}`}
+              className={classNames({
+                [styles.tag]: true,
+                [styles.inline]: true,
+              })}
+            >
                 {tag.name}
               </span>
-            ))}
+          ))}
         </div>
         {!state.active && Boolean(expired) && Boolean(task.project) && (
           <span
@@ -285,35 +332,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
       >
         <baka-editor ref={editorRef} />
       </div>
-      <div
-        className={classNames({
-          [styles.line]: true,
-          [styles.padding]: true,
-          [styles.fullOnly]: true,
-        })}
-      >
-        {task.tags.map(tag => (
-          <span
-            key={`task_${task.id}#tag_${tag.id}`}
-            className={classNames({
-              [styles.tag]: true,
-              [styles.active]: task.colorTag === tag,
-            })}
-            style={{ "--tag-color": tag.color }}
-          >
-            {tag.name}
-            <PalletIcon
-              onClick={() => {
-                if (task.colorTag === tag) {
-                  task.setColorTag(null)
-                } else {
-                  task.setColorTag(tag)
-                }
-              }}
-            />
-          </span>
-        ))}
-      </div>
+      <Tags task={task} />
       <div
         className={classNames({
           [styles.line]: true,
@@ -331,8 +350,8 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             {task.date === DateTime.now().toFormat("M/d/yyyy")
               ? "Сегодня"
               : task.date
-              ? DateTime.fromFormat(task.date, "M/d/yyyy").toFormat("dd LLL")
-              : "Без даты"}
+                ? DateTime.fromFormat(task.date, "M/d/yyyy").toFormat("dd LLL")
+                : "Без даты"}
           </span>
         </div>
         {!active && (
