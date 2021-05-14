@@ -56,6 +56,10 @@ const Today = observer(() => {
 
   const ref = React.useRef(null)
 
+  useTrap("alt+n", () => {
+    setIsNewTaskShown(!isNewTaskShown)
+  })
+
   useTrap("command+n", () => {
     setIsNewTaskShown(!isNewTaskShown)
   })

@@ -23,6 +23,10 @@ const Inbox = observer(() => {
 
   const buttonRef = React.createRef()
 
+  useTrap("alt+n", () => {
+    setIsNewTaskShown(!isNewTaskShown)
+  })
+
   useTrap("command+n", () => {
     setIsNewTaskShown(!isNewTaskShown)
   })

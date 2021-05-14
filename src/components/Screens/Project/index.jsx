@@ -47,6 +47,10 @@ const Project = observer(() => {
     setTempTask(task)
   }
 
+  useTrap("alt+n", () => {
+    setIsNewTaskShown(!isNewTaskShown)
+  })
+
   useTrap("command+n", () => {
     setIsNewTaskShown(!isNewTaskShown)
   })
