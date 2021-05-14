@@ -78,6 +78,22 @@ export default class SyncMachine {
     applySnapshot(this.store, JSON.parse(s))
   }
 
+  healthCheck(snapshot) {
+    snapshot.tasks.all.forEach(task => {
+      if (task.event && !snapshot.events.find(e => e.id === task.event)) {
+        syncLogger.warn("Task %s has invalid event ref %s", task.id, task.event)
+        task.event = null
+      }
+    })
+    snapshot.events.forEach(event => {
+      if (event.task && !snapshot.tasks.all.find(t => t.id === event.task)) {
+        syncLogger.warn("Event %s has invalid task ref %s", event.id, event.task)
+        event.task = null
+      }
+    })
+    return snapshot
+  }
+
   loadAll(timer: NodeJS.Timeout | null) {
     if (!window.getToken()) return
     if (this.timer !== timer) return
@@ -92,8 +108,8 @@ export default class SyncMachine {
         let snapshot = JSON.parse(JSON.stringify(getSnapshot(this.store)))
         results.forEach(func => {
           snapshot = func(snapshot)
-          // console.log(snapshot)
         })
+        snapshot = this.healthCheck(snapshot)
         this.applying = true
         applySnapshot(this.store, snapshot)
         this.applying = false

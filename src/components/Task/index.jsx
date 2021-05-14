@@ -203,8 +203,6 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
 
   const editorRef = React.useRef(null)
   React.useEffect(() => {
-    // if (editorRef.current && !editorRef.current.setText)
-    //   console.log("Current:", editorRef.current)
     if (!editorRef.current || !editorRef.current.setText) return
     editorRef.current.setText(task.note)
     editorRef.current.addEventListener("change", e => {

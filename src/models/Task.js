@@ -23,7 +23,9 @@ const Task = types
     repeatEvery: types.maybeNull(types.optional(types.integer, 0)),
     repeating: types.optional(types.boolean, false),
     category: types.maybeNull(types.reference(ProjectCategory)),
-    event: types.maybeNull(types.reference(types.late(LateTimelineEvent))),
+    event: types.maybeNull(
+      types.reference(types.late(LateTimelineEvent)),
+    ),
     colorTag: types.maybeNull(types.reference(Tag)),
   })
   .views(self => ({
@@ -44,7 +46,7 @@ const Task = types
       if (self.text.startsWith(": ")) return self.text.slice(2)
       if (self.text.startsWith(":")) return self.text.slice(1)
       return self.text
-    }
+    },
   }))
   .actions(self => {
     const actions = {}
