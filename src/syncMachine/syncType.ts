@@ -71,80 +71,93 @@ export default abstract class SyncType {
     this.dumpUpdates()
   }
 
+  sendUpdate(id) {
+    const updates = { ...this.updates }
+    return new Promise<void>((resolve, reject) => {
+      const item = updates[id]
+
+      const onError = error => {
+        syncLogger.error(error)
+        console.error(error)
+        reject()
+      }
+
+      if (item.state === "alive") {
+        const onSuccess = () => {
+          Object.keys(this.updates[id].fields).forEach(fieldName => {
+            const field = this.updates[id].fields[fieldName]
+            if (field.date === item.fields[fieldName].date) {
+              delete this.updates[id].fields[fieldName]
+            }
+          })
+          if (Object.keys(this.updates[id].fields).length === 0)
+            delete this.updates[id]
+          this.dumpUpdates()
+          resolve()
+        }
+
+        const changes = {}
+        const dates = {}
+
+        Object.keys(item.fields).forEach(name => {
+          if (name === "id") return
+          changes[name] = item.fields[name].value
+          if (changes[name] === null) changes[name] = ""
+          if (changes[name]?.id) changes[name] = changes[name].id
+          dates[name] = item.fields[name].date
+        })
+
+        gqlClient
+          .query(this.UPDATE_MUTATION, { id, changes, dates })
+          .toPromise()
+          .then(result => {
+            if (result.error) {
+              onError(result.error)
+            } else {
+              onSuccess()
+            }
+          })
+      } else {
+        const onSuccess = () => {
+          delete this.updates[id]
+          this.dumpUpdates()
+        }
+
+        gqlClient
+          .query(this.DELETE_MUTATION, { id })
+          .toPromise()
+          .then(result => {
+            if (result.error) {
+              onError(result.error)
+            } else {
+              onSuccess()
+            }
+          })
+      }
+    })
+  }
+
   sendUpdates() {
     const updates = { ...this.updates }
     this.state = "updating"
 
-    const promises = Object.keys(updates).map(
-      id =>
-        new Promise<void>((resolve, reject) => {
-          const item = updates[id]
+    const ids = Object.keys(updates)
+    let i = 0
 
-          const onError = error => {
-            syncLogger.error(error)
-            console.error(error)
-            reject()
-          }
+    const update = resolve => {
+      if (i < ids.length) {
+        this.sendUpdate(ids[i]).then(() => {
+          i++
+          update(resolve)
+        })
+      } else {
+        resolve()
+      }
+    }
 
-          if (item.state === "alive") {
-            const onSuccess = () => {
-              Object.keys(this.updates[id].fields).forEach(fieldName => {
-                const field = this.updates[id].fields[fieldName]
-                if (field.date === item.fields[fieldName].date) {
-                  delete this.updates[id].fields[fieldName]
-                }
-              })
-              if (Object.keys(this.updates[id].fields).length === 0)
-                delete this.updates[id]
-              this.dumpUpdates()
-              resolve()
-            }
-
-            const changes = {}
-            const dates = {}
-
-            Object.keys(item.fields).forEach(name => {
-              if (name === "id") return
-              changes[name] = item.fields[name].value
-              if (changes[name] === null) changes[name] = ""
-              if (changes[name]?.id) changes[name] = changes[name].id
-              dates[name] = item.fields[name].date
-            })
-
-            gqlClient
-              .query(this.UPDATE_MUTATION, { id, changes, dates })
-              .toPromise()
-              .then(result => {
-                if (result.error) {
-                  onError(result.error)
-                } else {
-                  onSuccess()
-                }
-              })
-          } else {
-            const onSuccess = () => {
-              delete this.updates[id]
-              this.dumpUpdates()
-            }
-
-            gqlClient
-              .query(this.DELETE_MUTATION, { id })
-              .toPromise()
-              .then(result => {
-                if (result.error) {
-                  onError(result.error)
-                } else {
-                  onSuccess()
-                }
-              })
-          }
-        }),
-    )
-
-    Promise.allSettled(promises).then(() => {
+    return new Promise<void>((resolve) => update(() => {
+      resolve()
       this.state = "waiting"
-    })
-
-    return promises
+    }))
   }
 }

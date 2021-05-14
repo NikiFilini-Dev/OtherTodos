@@ -74,6 +74,10 @@ export default class SyncMachine {
     }, this.intervalTimeout)
   }
 
+  applyData(s: string) {
+    applySnapshot(this.store, JSON.parse(s))
+  }
+
   loadAll(timer: NodeJS.Timeout | null) {
     if (!window.getToken()) return
     if (this.timer !== timer) return
