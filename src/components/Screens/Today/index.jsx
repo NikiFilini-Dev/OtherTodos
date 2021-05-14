@@ -154,8 +154,6 @@ const Today = observer(() => {
 
       let task = all.find(t => t.id === id)
       task.setProject(targetProject)
-      //
-      // console.log("SET CATEGORY", task)
     }
   }
   React.useEffect(() => (window.onDragEndFunc = onDragEnd))
@@ -221,7 +219,10 @@ const Today = observer(() => {
         tags={tags}
         selected={selectedTag}
         select={tag => {
-          if (isNewTaskShown && tag) task.addTag(tag)
+          if (!isNewTaskShown && tag) {
+            task.removeTag(selectedTag)
+            task.addTag(tag)
+          }
           setSelectedTag(tag)
         }}
       />
