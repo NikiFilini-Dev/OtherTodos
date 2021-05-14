@@ -30,7 +30,7 @@ import {
 import { useMst } from "models/RootStore"
 import TaskState from "./state"
 import { DateTime } from "luxon"
-import Tag from "../../syncMachine/types/tag"
+import TextareaAutosize from "react-textarea-autosize"
 
 const Tags = observer(({ task }) => {
   const [selectedTagId, setSelectedTagId] = React.useState(null)
@@ -240,7 +240,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
 
         {!state.active && <span className={styles.taskText}>{task.isNote ? task.noteText : task.text}</span>}
         {state.active && (
-          <input
+          <TextareaAutosize
             ref={state.refs.input}
             className={styles.taskTextEdit}
             value={task.text}

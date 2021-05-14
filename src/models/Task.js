@@ -153,6 +153,7 @@ const Task = types
     actionsMap.removeTag = ["tags", "colorTag"]
 
     actions.setText = text => {
+      text = text.replaceAll("\n", "")
       self.text = text
     }
     actionsMap.setText = ["text"]
