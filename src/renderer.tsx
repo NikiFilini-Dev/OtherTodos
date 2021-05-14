@@ -139,6 +139,7 @@ const initStorage = async () => {
       registerInitialData(v)
     }
 
+    v = window.syncMachine.healthCheck(v)
     await jsonStorage.setItem("root_store", JSON.stringify(v))
     hydrate()
 
