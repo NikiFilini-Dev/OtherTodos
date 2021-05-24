@@ -9,10 +9,10 @@ export default class BakaLink extends HTMLElement {
 
     this.ctrlPressed = false
     document.addEventListener("keydown", e => {
-      if (e.key === "Meta") this.ctrlPressed = true
+      if (e.key === "Meta" || e.key === "Control") this.ctrlPressed = true
     })
     document.addEventListener("keyup", e => {
-      if (e.key === "Meta") this.ctrlPressed = false
+      if (e.key === "Meta" || e.key === "Control") this.ctrlPressed = false
     })
 
     observer.observe(this, { childList: true })
@@ -27,7 +27,12 @@ export default class BakaLink extends HTMLElement {
     el.innerText = this.innerText
     el.addEventListener("click", () => {
       if (!this.ctrlPressed) return
-      require("electron").shell.openExternal(el.href)
+      if (!IS_WEB) {
+        require("electron").shell.openExternal(el.href)
+      } else {
+        window.open(el.href)
+      }
+
       this.ctrlPressed = false
     })
     this.innerHTML = ""

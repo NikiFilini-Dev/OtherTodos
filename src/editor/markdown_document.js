@@ -39,46 +39,6 @@ export default class MarkdownDocument extends Document {
       })
     }
 
-    const processLinks = () => {
-      text.replace(
-        /(?<!!)\[([^\n\r\[\]\\]*?)\]\(([^\n\r]+?)\)/gm,
-        (fullMatch, title, link, index) => {
-          ranges["service"].push([index, index + 1])
-          ranges["service"].push([
-            index + 1 + title.length,
-            index + 1 + title.length + 1,
-          ])
-          ranges["link_title"].push([index + 1, index + 1 + title.length])
-
-          let linkStart = index + 1 + title.length + 2
-          let linkEnd = linkStart + link.length
-          ranges["service"].push([linkStart - 1, linkStart])
-          ranges["service"].push([linkEnd, linkEnd + 1])
-          ranges["link"].push([linkStart, linkEnd])
-        },
-      )
-    }
-
-    const processImages = () => {
-      text.replace(
-        /\!\[([^\n\r\]\[\\]*?)\]\(([^\n\r]+?)\)/gm,
-        (fullMatch, title, link, index) => {
-          ranges["service"].push([index, index + 2])
-          ranges["service"].push([
-            index + 2 + title.length,
-            index + 2 + title.length + 1,
-          ])
-          ranges["image_title"].push([index + 2, index + 2 + title.length])
-
-          let linkStart = index + 2 + title.length + 2
-          let linkEnd = linkStart + link.length
-          ranges["service"].push([linkStart - 1, linkStart])
-          ranges["service"].push([linkEnd, linkEnd + 1])
-          ranges["image"].push([linkStart, linkEnd])
-        },
-      )
-    }
-
     // const replaced_occurrences = []
     const escapeMarkup = (regexp, n) => {
       text = text.replace(regexp, (full, match) => {
@@ -89,37 +49,26 @@ export default class MarkdownDocument extends Document {
         )
       })
     }
-
-    escapeMarkup(/```\n([^`]+?)\n```/gm, 4)
-    escapeMarkup(
-      /(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/gm,
-      0,
-    )
-    escapeMarkup(/(?<!`|\\)`([^`\n\r]+?)`/gm, 1)
-
-    processLinks()
-    processImages()
+    escapeMarkup(/`([^`\n\r]+?)`/gm, 1)
 
     process(
       ["link"],
-      /(?<!\]\()(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/gm,
+      /(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/gm,
       0,
     )
 
-    process(["bold"], /(?<!\*|\\\*)\*{2}([^*]+)\*{2}(?!\*|\\)/gm, 2)
-    process(["italic"], /(?<!\*|\\)\*([^*]+)(?<!\\|\*)\*/gm, 1)
+    process(["bold", "italic"], /\*{3}([^*]+)\*{3}/gm, 3)
 
-    process(["bold", "italic"], /(?<!\*|\\)\*{3}([^*]+)\*{3}(?!\*)/gm, 3)
+    process(["bold"], /[^*]\*{2}([^*]+)\*{2}[^*]/gm, 3)
+    process(["bold"], /^\*{2}([^*]+)\*{2}/gm, 2)
+
+    process(["italic"], /[^*]\*([^*]+)\*[^*]/gm, 2)
+    process(["italic"], /^\*([^*]+)\*/gm, 1)
 
     process(["underline"], /__(.+?)__/gm, 2)
     process(["strike"], /~~(.+?)~~/gm, 2)
-
-    // process(['quote'], /(?<!`|\\)``\n([^`]+?)\n``/gm, 3)
-    process(["monospace"], /(?<!`|\\)`([^`\n\r]+?)`/gm, 1)
-    // process(['code'], /```\n([^`]+?)\n```/gm, 4)
-
-    // processOneLine(['header_first'], /(?<!#|[^\n])# ([^\r\n]+)/gm, 2)
-    // processOneLine(['header_second'], /(?<![^\n])## ([^\r\n#]+)/gm, 3)
+    //
+    process(["monospace"], /`([^`\n\r]+?)`/gm, 1)
 
     return {
       bold: {
@@ -147,50 +96,10 @@ export default class MarkdownDocument extends Document {
         closeTag: "</span>",
         ranges: ranges.monospace,
       },
-      // code: {
-      //   openTag: '<span class="code">',
-      //   closeTag: "</span>",
-      //   ranges: ranges.code,
-      //   block: true,
-      // },
-      // header_first: {
-      //   openTag: "<h1>",
-      //   closeTag: "</h1>",
-      //   ranges: ranges.header_first,
-      //   block: true,
-      // },
-      // header_second: {
-      //   openTag: "<h2>",
-      //   closeTag: "</h2>",
-      //   ranges: ranges.header_second,
-      //   block: true,
-      // },
-      // quote: {
-      //   openTag: "<blockquote>",
-      //   closeTag: "</blockquote>",
-      //   ranges: ranges.quote,
-      //   priority: 10,
-      //   block: true,
-      // },
       link: {
         openTag: '<baka-link class="link">',
         closeTag: "</baka-link>",
         ranges: ranges.link,
-      },
-      link_title: {
-        openTag: '<span class="service_link_title">',
-        closeTag: "</span>",
-        ranges: ranges.link_title,
-      },
-      image: {
-        openTag: '<baka-link class="image_link">',
-        closeTag: "</baka-link>",
-        ranges: ranges.image,
-      },
-      image_title: {
-        openTag: '<span class="service_image_title">',
-        closeTag: "</span>",
-        ranges: ranges.image_title,
       },
       service: {
         openTag: '<span class="service">',
@@ -287,47 +196,10 @@ export default class MarkdownDocument extends Document {
     let html = this.toHtml()
 
     html = html.replace(
-      /(?<!<span class="service">\]\(<\/span>)<baka-link class="link">(.+)<\/baka-link>/gm,
+      /<baka-link class="link">(.+)<\/baka-link>/gm,
       (fullMatch, link) => `<a href="${link}" target="_blank">${link}</a>`,
     )
 
-    const link_titles = []
-    this.text.replace(
-      /(?<!!)\[([^\n\r\]\[]*?)\]\(([^\n\r\(\)]+?)\)/gm,
-      (full, title, link) => {
-        console.log(title, link)
-        link_titles.push(title ? title : link)
-      },
-    )
-
-    let linkCounter = -1
-    html = html.replace(
-      /<baka-link class="link">(.+?)<\/baka-link>/gm,
-      (full, link) => {
-        console.log(full, link)
-        linkCounter++
-        return `<a href="${link}" target="_blank">${link_titles[linkCounter]}</a>`
-      },
-    )
-
-    const image_titles = []
-    this.text.replace(
-      /!\[([^\n\r\[\]]*?)\]\(([^\n\r\(\)]+?)\)/gm,
-      (full, title, link) => {
-        console.log(title, link)
-        image_titles.push(title ? title : "")
-      },
-    )
-
-    let imageCounter = -1
-    html = html.replace(
-      /<baka-link class="image_link">(.+)<\/baka-link>/gm,
-      (full, link) => {
-        console.log(full, link)
-        imageCounter++
-        return `<img src="${link}" title="${image_titles[imageCounter]}" />`
-      },
-    )
 
     html = html.replace(/\\\*/gm, "*")
     html = html.replace(/\\`/gm, "`")
