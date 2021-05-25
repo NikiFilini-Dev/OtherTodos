@@ -2,6 +2,7 @@ declare namespace StylesStylNamespace {
   export interface IStylesStyl {
     actions: string
     addCategory: string
+    head: string
     info: string
     listOfLists: string
     nameEdit: string

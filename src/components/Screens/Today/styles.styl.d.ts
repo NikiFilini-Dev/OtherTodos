@@ -4,6 +4,7 @@ declare namespace StylesStylNamespace {
     active: string
     additional: string
     calendar: string
+    head: string
     info: string
     listOfLists: string
     newTaskActions: string

@@ -73,6 +73,7 @@ const RootStore = types
       detach(self.tempTask)
     },
     setTempTask(task) {
+      task = taskFactory(uuidv4(), task)
       if (self.tempTask !== null) {
         if (self.tempTask.toJSON().event) this.deleteEvent(self.tempTask.event)
       }
@@ -100,15 +101,14 @@ const RootStore = types
     },
     createTag(name, type) {
       const newId = uuidv4()
-      let lastIndex = -1
       self.tags.forEach(tag => {
         if (tag.type !== type) return
-        if (tag.index > lastIndex) lastIndex = tag.index
+        tag.index = tag.index + 1
       })
       const tag = Tag.create({
         id: newId,
         name,
-        index: lastIndex + 1,
+        index: -1,
         color: randomTagColor(),
         type: type || "TASK",
       })
@@ -145,6 +145,12 @@ const RootStore = types
       if (self.selectedTag === tag) {
         self.selectedTag = null
       }
+      self.tasks.all.forEach(task => {
+        if (task.tags.includes(tag)) task.removeTag(tag)
+      })
+      self.events.forEach(event => {
+        if (event.tag === tag) event.setTag(null)
+      })
       window.syncMachine.registerDelete(tag.id, tag.syncName)
       destroy(tag)
     },

@@ -2,6 +2,7 @@ import React from "react"
 import Mousetrap from "mousetrap"
 import ScrollContext from "contexts/scrollContext"
 import Emitter from "events"
+import { DateTime } from "luxon"
 
 export function useClick(target, callback) {
   React.useEffect(() => {
@@ -141,4 +142,12 @@ export function useContextMenu(ref, items = []) {
       false,
     )
   }, [ref.current])
+}
+
+export function useDateFormat(date, from, to) {
+  const [result, setResult] = React.useState("")
+  React.useEffect(() => {
+    if (date) setResult(DateTime.fromFormat(date, from).toFormat(to))
+  }, [])
+  return result
 }

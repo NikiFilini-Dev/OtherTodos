@@ -14,13 +14,14 @@ import ListIcon from "assets/list.svg"
 import PlusIcon from "assets/plus.svg"
 import Task from "components/Task"
 import TagsFilter from "components/TagsFilter"
-import { useTrap } from "tools/hooks"
+import { useDateFormat, useTrap } from "tools/hooks"
 
 import ScrollContext from "../../../contexts/scrollContext"
 import Emitter from "events"
 import { DateTime } from "luxon"
 
 function toTitleCase(str) {
+  if (!str) return ""
   return str
     .split(" ")
     .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
@@ -29,13 +30,14 @@ function toTitleCase(str) {
 
 const Today = observer(() => {
   const {
-    tasks: { all, expired },
+    tasks: { all },
     selectedDate,
     selectDate,
     createTask,
     setTempTask,
     insertTempTask,
     setScreen,
+    tempTask
   } = useMst()
 
   const [viewMode, setViewMode] = React.useState("projects")
@@ -84,34 +86,32 @@ const Today = observer(() => {
 
   const withoutProject = tasks.filter(task => !task.project)
 
-  let expiredTasks = selectedDate === today ? expired() : []
-  expiredTasks = expiredTasks.filter(
-    task => !task.done && (!selectedTag || task.tags.indexOf(selectedTag) >= 0),
-  )
+  let expiredTasks = selectedDate === today ? tasks.filter(
+    task =>
+      task.date &&
+      DateTime.fromFormat(task.date, "M/d/yyyy").startOf("day") <
+      DateTime.now().startOf("day") && !task.done && (!selectedTag || task.tags.indexOf(selectedTag) >= 0)) : []
 
   const initialTaskData = { date: selectedDate }
   if (selectedTag) initialTaskData.tags = [selectedTag]
-  const [task, setTask] = React.useState(createTask(initialTaskData))
-  setTempTask(task)
+  React.useEffect(() => setTempTask(initialTaskData), [])
 
   const setDate = date => {
     if (date === null) return setScreen("INBOX")
     selectDate(date)
     setIsDateSelectorShown(false)
-    task.setDate(date)
+    tempTask.setDate(date)
   }
 
   const onReject = () => {
-    setTask(createTask({}))
+    setTempTask(initialTaskData)
     setIsNewTaskShown(false)
   }
 
   const onConfirm = () => {
-    if (!task.text) return
+    if (!tempTask.text) return
     insertTempTask()
-    let next = createTask(initialTaskData)
-    setTempTask(next)
-    setTask(next)
+    setTempTask(initialTaskData)
     setIsNewTaskShown(false)
   }
 
@@ -140,7 +140,7 @@ const Today = observer(() => {
   })
 
   const onPlusClick = () => {
-    setIsNewTaskShown(true)
+    setIsNewTaskShown(!isNewTaskShown)
   }
 
   let onDragEnd = args => {
@@ -160,22 +160,23 @@ const Today = observer(() => {
       task.setProject(targetProject)
     }
   }
-  React.useEffect(() => (window.onDragEndFunc = onDragEnd))
+  React.useEffect(() => (window.onDragEndFunc = onDragEnd), [])
   window.onDragEndFunc = onDragEnd
+
+  const date = toTitleCase(useDateFormat(selectedDate, "M/d/yyyy", "dd.MM"))
 
   return (
     <div className={styles.screen}>
+      <div className={styles.head}>
       <div className={styles.info}>
         <span className={styles.title}>
           {selectedDate === today
             ? "Сегодня"
-            : toTitleCase(
-                DateTime.fromFormat(selectedDate, "M/d/yyyy").toFormat("dd.MM"),
-              )}
+            : date}
         </span>
         {selectedDate === today && (
           <span className={styles.additional}>
-            {toTitleCase(DateTime.now().toFormat("dd.MM"))}
+            {date}
           </span>
         )}
         <div className={styles.actions}>
@@ -210,29 +211,27 @@ const Today = observer(() => {
           />
         </div>
       </div>
-      {isNewTaskShown && (
-        <div>
-          <Task task={task} active onConfirm={onConfirm} />
-          <div className={styles.newTaskActions}>
-            <Button text={"Добавить"} onClick={onConfirm} />
-            <Button text={"Отменить"} secondary onClick={onReject} />
-          </div>
-        </div>
-      )}
       <TagsFilter
         tags={tags}
         selected={selectedTag}
         select={tag => {
           if (!isNewTaskShown && tag) {
-            task.removeTag(selectedTag)
-            task.addTag(tag)
+            tempTask.removeTag(selectedTag)
+            tempTask.addTag(tag)
           }
           setSelectedTag(tag)
         }}
       />
+      </div>
       <ScrollContext.Provider value={scrollEmitter}>
         <div className={styles.listOfLists} ref={scrollRef}>
           {!!expiredTasks.length && <ExpiredTasks tasks={expiredTasks} />}
+
+          {isNewTaskShown && tempTask !== null && (
+            <div style={{marginBottom: "24px"}}>
+              <Task task={tempTask} active onConfirm={onConfirm} newPrompt onReject={onReject} />
+            </div>
+          )}
 
           {viewMode === "list" ? (
             <TaskList

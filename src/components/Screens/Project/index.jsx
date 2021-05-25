@@ -16,9 +16,63 @@ import {
 } from "../../../tools/hooks"
 import { Droppable, Draggable } from "react-beautiful-dnd"
 
+const Content = observer(({ provided, selectedProject, deleteCategory, setIsNewTaskShown, tasks }) => {
+  const categories = [...selectedProject.categories]
+  categories.sort((a, b) => a.index - b.index)
+  const Category = observer(({ provided, category }) => (
+    <div
+      style={provided.draggableStyle}
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}
+      ref={provided.innerRef}
+      className={styles.project}
+    >
+      <TaskList
+        tasks={category.sortedTasks}
+        name={category.name}
+        renamable
+        showEmpty
+        dnd={`tasklist_${category.id}`}
+        deletable={!category.tasks.length}
+        onDelete={() => deleteCategory(category)}
+        onNameChange={e => category.setName(e.target.value)}
+      />
+    </div>
+  ))
+  return (
+    <div className={styles.listOfLists} ref={provided.innerRef}>
+      <TaskList
+        tasks={tasks.filter(t => !t.category)}
+        name={"Без категории"}
+        showEmpty
+        dnd={"nocategory"}
+      />
+      {categories.map((category, index) => (
+        <Draggable
+          key={`category_${category.id}`}
+          draggableId={`category_${category.id}`}
+          type={"CATEGORY"}
+          index={index}
+        >
+          {provided => <Category provided={provided} category={category} />}
+        </Draggable>
+      ))}
+      {provided.placeholder}
+      <div
+        className={styles.addCategory}
+        onClick={() => setIsNewTaskShown(true)}
+      >
+        <PlusIcon />
+        Добавить задачу
+      </div>
+    </div>
+  )
+})
+
 const Project = observer(() => {
   const {
     selectedProject,
+    projects,
     tempTask,
     tasks: { all },
     createTask,
@@ -32,20 +86,16 @@ const Project = observer(() => {
   const [selectedTag, setSelectedTag] = React.useState(null)
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
   const [isEditingTitle, setIsEditingTitle] = React.useState(false)
+  React.useEffect(() => {
+    setTempTask(initialTaskData)
+  }, [])
 
   let tasks = all.filter(task => task.project === selectedProject && task.done === false)
 
   const initialTaskData = {
-    project: selectedProject,
+    project: projects.find(project => project.id === selectedProject) || selectedProject,
   }
   if (selectedTag) initialTaskData.tags = [selectedTag]
-
-  let task
-  if (tempTask) task = tempTask
-  else {
-    task = createTask(initialTaskData)
-    setTempTask(task)
-  }
 
   useTrap("alt+n", () => {
     setIsNewTaskShown(!isNewTaskShown)
@@ -72,17 +122,13 @@ const Project = observer(() => {
     tasks = tasks.filter(task => task.tags.indexOf(selectedTag) >= 0)
 
   const onReject = () => {
-    task = createTask(initialTaskData)
-    setTempTask(task)
+    setTempTask(initialTaskData)
     setIsNewTaskShown(false)
   }
   const onConfirm = () => {
-    if (!task.text) return
+    if (!tempTask.text) return
     insertTempTask()
-    let next = createTask(initialTaskData)
-    setTempTask(next)
-    task = createTask(initialTaskData)
-    setTempTask(task)
+    setTempTask(initialTaskData)
     setIsNewTaskShown(false)
   }
 
@@ -134,118 +180,66 @@ const Project = observer(() => {
   React.useEffect(() => (window.onDragEndFunc = onDragEnd))
   window.onDragEndFunc = onDragEnd
 
-  const Content = observer(({ provided }) => {
-    const categories = [...selectedProject.categories]
-    categories.sort((a, b) => a.index - b.index)
-    const Category = observer(({ provided, category }) => (
-      <div
-        style={provided.draggableStyle}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-        ref={provided.innerRef}
-        className={styles.project}
-      >
-        <TaskList
-          tasks={category.sortedTasks}
-          name={category.name}
-          renamable
-          showEmpty
-          dnd={`tasklist_${category.id}`}
-          deletable={!category.tasks.length}
-          onDelete={() => deleteCategory(category)}
-          onNameChange={e => category.setName(e.target.value)}
-        />
-      </div>
-    ))
-    return (
-      <div className={styles.listOfLists} ref={provided.innerRef}>
-        <TaskList
-          tasks={tasks.filter(t => !t.category)}
-          name={"Без категории"}
-          showEmpty
-          dnd={"nocategory"}
-        />
-        {categories.map((category, index) => (
-          <Draggable
-            key={`category_${category.id}`}
-            draggableId={`category_${category.id}`}
-            type={"CATEGORY"}
-            index={index}
-          >
-            {provided => <Category provided={provided} category={category} />}
-          </Draggable>
-        ))}
-        {provided.placeholder}
-        <div
-          className={styles.addCategory}
-          onClick={() => setIsNewTaskShown(true)}
-        >
-          <PlusIcon />
-          Добавить задачу
-        </div>
-      </div>
-    )
-  })
 
   return (
     <div className={styles.screen}>
-      <div className={styles.info}>
-        {isEditingTitle ? (
-          <input
-            type={"text"}
-            value={selectedProject.name}
-            className={styles.nameEdit}
-            onChange={e => selectedProject.setName(e.target.value)}
-            ref={inputRef}
-            autoFocus={true}
-          />
-        ) : (
-          <span
-            onClick={() => setIsEditingTitle(true)}
-            className={styles.title}
-          >
+      <div className={styles.head}>
+        <div className={styles.info}>
+          {isEditingTitle ? (
+            <input
+              type={"text"}
+              value={selectedProject.name}
+              className={styles.nameEdit}
+              onChange={e => selectedProject.setName(e.target.value)}
+              ref={inputRef}
+              autoFocus={true}
+            />
+          ) : (
+            <span
+              onClick={() => setIsEditingTitle(true)}
+              className={styles.title}
+            >
             {selectedProject.name}
           </span>
-        )}
+          )}
 
-        <div className={styles.actions}>
-          <Button
-            icon={FolderPlusIcon}
-            awesome={true}
-            onClick={() => addCategory()}
-            secondary={true}
-          />
-          <Button
-            icon={PlusIcon}
-            onClick={() => setIsNewTaskShown(!isNewTaskShown)}
-            activated={isNewTaskShown}
-          />
-        </div>
-      </div>
-      {isNewTaskShown && (
-        <div>
-          <Task task={task} active onConfirm={onConfirm} />
-          <div className={styles.newTaskActions}>
-            <Button text={"Добавить"} onClick={onConfirm} />
-            <Button text={"Отменить"} secondary onClick={onReject} />
+          <div className={styles.actions}>
+            <Button
+              icon={FolderPlusIcon}
+              awesome={true}
+              onClick={() => addCategory()}
+              secondary={true}
+            />
+            <Button
+              icon={PlusIcon}
+              onClick={() => setIsNewTaskShown(!isNewTaskShown)}
+              activated={isNewTaskShown}
+            />
           </div>
         </div>
+        <TagsFilter
+          selected={selectedTag}
+          select={tag => {
+            if (!isNewTaskShown && tag) {
+              tempTask.removeTag(selectedTag)
+              tempTask.addTag(tag)
+            }
+            setSelectedTag(tag)
+          }}
+          tags={tags}
+        />
+      </div>
+
+      {isNewTaskShown && tempTask !== null && (
+        <div style={{marginBottom: "24px"}}>
+          <Task task={tempTask} active onConfirm={onConfirm} onReject={onReject} newPrompt />
+        </div>
       )}
-      <TagsFilter
-        selected={selectedTag}
-        select={tag => {
-          if (!isNewTaskShown && tag) {
-            task.removeTag(selectedTag)
-            task.addTag(tag)
-          }
-          setSelectedTag(tag)
-        }}
-        tags={tags}
-      />
 
       <Droppable droppableId={"projectsList"} type={"PROJECT"}>
         {(provided, snapshot) => (
-          <Content provided={provided} snapshot={snapshot} />
+          <Content provided={provided} snapshot={snapshot} selectedProject={selectedProject}
+                   deleteCategory={deleteCategory} setIsNewTaskShown={setIsNewTaskShown} tasks={tasks} />
         )}
       </Droppable>
     </div>

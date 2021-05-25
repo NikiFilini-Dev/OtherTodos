@@ -41,10 +41,12 @@ const Log = observer(() => {
 
   return (
     <div className={styles.screen}>
-      <div className={styles.info}>
-        <span className={styles.title}>Закрытые задачи</span>
+      <div className={styles.head}>
+        <div className={styles.info}>
+          <span className={styles.title}>Закрытые задачи</span>
+        </div>
+        <TagsFilter tags={tags} select={onTagSelect} selected={selectedTag} />
       </div>
-      <TagsFilter tags={tags} select={onTagSelect} selected={selectedTag} />
       <div className={styles.listOfLists}>
         {reversedDays.map(day => (
           <TaskList

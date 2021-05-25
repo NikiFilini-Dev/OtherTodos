@@ -6,7 +6,52 @@ import PlusIcon from "../../../assets/plus.svg"
 import TagIcon from "assets/awesome/solid/tag.svg"
 import TrashIcon from "assets/awesome/solid/trash-alt.svg"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
+import Button from "../../Button"
+
 const { dialog } = require("electron").remote
+
+const Tag = observer(({ tag, provided, onTagDelete }) => {
+  return (
+    <div
+      className={styles.tag}
+      key={tag.id}
+      ref={provided.innerRef}
+      id={tag.id}
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}
+    >
+      <TagIcon
+        className={styles.colorIndicator}
+        style={{ "--tag-color": tag.color }}
+      />
+      <input
+        value={tag.name}
+        onChange={e => tag.setName(e.target.value)}
+        className={styles.tagName}
+      />
+      <div className={styles.delete} onClick={() => onTagDelete(tag)}>
+        <TrashIcon />
+      </div>
+      <input
+        type={"color"}
+        className={styles.colorInput}
+        onChange={e => tag.setColor(e.target.value)}
+        defaultValue={tag.color}
+      />
+    </div>
+  )
+})
+
+const Content = observer(({ provided, onTagDelete, list }) => (
+  <div className={styles.list} ref={provided.innerRef}>
+    {list.map((tag, i) => (
+      <Draggable draggableId={tag.id} type={"TAG"} index={i} key={tag.id}>
+        {provided => <Tag tag={tag} provided={provided} onTagDelete={onTagDelete} />}
+      </Draggable>
+    ))}
+    {provided.placeholder}
+  </div>
+))
 
 const TaskTags = observer(() => {
   const {
@@ -14,8 +59,6 @@ const TaskTags = observer(() => {
     createTag,
     selectedTagType,
     deleteTag,
-    tasks: { all },
-    events,
   } = useMst()
 
   const type = selectedTagType
@@ -57,93 +100,40 @@ const TaskTags = observer(() => {
       type: "info",
       buttons: ["Удалить", "отмена"],
       title: "Удаление тэга",
-      detail: 'Удалить тэг "' + tag.name + '"?',
-    }
-
-    const del = () => {
-      all.forEach(task => task.removeTag(tag))
-      events.forEach(event =>
-        event.setTag(event.tag === tag ? null : event.tag),
-      )
-      deleteTag(tag)
+      detail: "Удалить тэг \"" + tag.name + "\"?",
     }
 
     if (!IS_WEB) {
       dialog.showMessageBox(dialogOpts).then(returnValue => {
         if (returnValue.response === 0) {
-          del()
+          deleteTag(tag)
         }
       })
     } else {
       const result = confirm("Удалить тэг?")
       if (result) {
-        del()
+        deleteTag(tag)
       }
     }
   }
 
-  const Tag = observer(({ tag, provided }) => {
-    return (
-      <div
-        className={styles.tag}
-        key={tag.id}
-        ref={provided.innerRef}
-        id={tag.id}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-      >
-        <TagIcon
-          className={styles.colorIndicator}
-          style={{ "--tag-color": tag.color }}
-        />
-        <input
-          value={tag.name}
-          onChange={e => tag.setName(e.target.value)}
-          className={styles.tagName}
-        />
-        <div className={styles.delete} onClick={() => onTagDelete(tag)}>
-          <TrashIcon />
-        </div>
-        <input
-          type={"color"}
-          className={styles.colorInput}
-          onChange={e => tag.setColor(e.target.value)}
-          defaultValue={tag.color}
-        />
-      </div>
-    )
-  })
-
-  const Content = observer(({ provided }) => (
-    <div className={styles.list} ref={provided.innerRef}>
-      {list.map((tag, i) => (
-        <Draggable draggableId={tag.id} type={"TAG"} index={i} key={tag.id}>
-          {provided => <Tag tag={tag} provided={provided} />}
-        </Draggable>
-      ))}
-      {provided.placeholder}
-    </div>
-  ))
-
   return (
     <div className={styles.screen}>
-      <div className={styles.info}>
-        <span className={styles.title}>
-          {type === "TASK" ? "Метки задач" : "Метки событий"}
-        </span>
+      <div className={styles.head}>
+        <div className={styles.info}>
+          <span className={styles.title}>
+            {type === "TASK" ? "Метки задач" : "Метки событий"}
+          </span>
+          <div className={styles.actions}>
+            <Button icon={PlusIcon} onClick={() => createTag("Новый тэг", type)} />
+          </div>
+        </div>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId={"tagsList"} type={"TAG"}>
-          {provided => <Content provided={provided} />}
+          {provided => <Content provided={provided} list={list} onTagDelete={onTagDelete} />}
         </Droppable>
       </DragDropContext>
-      <div
-        className={styles.addTag}
-        onClick={() => createTag("Новый тэг", type)}
-      >
-        <PlusIcon />
-        Добавить метку
-      </div>
     </div>
   )
 })

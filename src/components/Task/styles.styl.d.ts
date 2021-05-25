@@ -15,11 +15,14 @@ declare namespace StylesStylNamespace {
     hasEvent: string
     inline: string
     line: string
+    note: string
     notes: string
     padding: string
     priorityWrapper: string
     project: string
     projectIcon: string
+    promptButton: string
+    promptButtons: string
     puller: string
     redo: string
     repeatCount: string

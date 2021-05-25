@@ -20,7 +20,7 @@ accent = #FB2B76
   font-style italic
 
 :root
-  --brand #2F45C5
+  --brand rgb(28, 59, 241)
   --accent #FB2B76
 
 *
@@ -33,7 +33,7 @@ body
   width 100vw
   height 100vh
   overflow hidden
-  //background #9c9c9cd9
+  background #F7F7F7
 
   display flex
   justify-content center
@@ -71,24 +71,23 @@ body
   background white
   padding: 36px 0
   width var(--sidebar-width)
-  border-radius 8.5px
+  border-radius 24px
   overflow-y auto
   margin-right 8px
   position relative
+  border 1px solid rgba(0,0,0,.1)
 
 .main
-  padding 36px 16px
-  background white
-  border-radius 8.5px
   margin 0 8px
   width mainWidth
 
 .timeline
   width var(--timeline-width)
   background white
-  border-radius 8.5px
+  border-radius 24px
   padding mainBlockPadding
   margin-left 8px
+  border 1px solid rgba(0,0,0,.1)
 
 *::-webkit-scrollbar {
   width: 3px;

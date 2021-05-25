@@ -1,5 +1,6 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
+    head: string
     info: string
     listOfLists: string
     screen: string

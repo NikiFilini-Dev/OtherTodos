@@ -24,13 +24,14 @@ import {
   useClick,
   useClickOutsideRef,
   useClickOutsideRefs,
-  useContextMenu,
+  useContextMenu, useDateFormat,
   useKeyListener,
 } from "tools/hooks"
 import { useMst } from "models/RootStore"
 import TaskState from "./state"
 import { DateTime } from "luxon"
 import TextareaAutosize from "react-textarea-autosize"
+import Button from "../Button"
 
 const Tags = observer(({ task }) => {
   const [selectedTagId, setSelectedTagId] = React.useState(null)
@@ -78,14 +79,19 @@ const Tags = observer(({ task }) => {
   </div>
 })
 
-const Task = observer(({ task, active = false, onConfirm, expired }) => {
+const Task = observer(({ task, active = false, onConfirm, onReject, expired, newPrompt = false }) => {
   const {
     createTag,
     tasks: { deleteTask, selected, select },
   } = useMst()
   const [state] = React.useState(new TaskState())
-  if (active && !state.active) state.active = active
-  React.useEffect(() => (state.done = task.status === "DONE"), [])
+
+  React.useEffect(() => {
+    if (state.done !== (task.status === "DONE"))
+      state.done = task.status === "DONE"
+    if (state.active !== active)
+      state.active = active
+  }, [task.status, active])
 
   useClick(document, e => {
     if (
@@ -211,6 +217,8 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
     })
   }, [])
 
+  const date = useDateFormat(task.date, "M/d/yyyy", "dd LLL")
+
   return (
     <div
       ref={state.refs.container}
@@ -239,6 +247,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         {!state.active && <span className={styles.taskText}>{task.isNote ? task.noteText : task.text}</span>}
         {state.active && (
           <TextareaAutosize
+            autoFocus={newPrompt}
             ref={state.refs.input}
             className={styles.taskTextEdit}
             value={task.text}
@@ -290,7 +299,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             })}
           >
             <CalendarIcon className={styles.dateIcon} />
-            {DateTime.fromFormat(task.date, "M/d/yyyy").toFormat("dd LLL")}
+            {date}
           </span>
         )}
         <div className={styles.priorityWrapper}>
@@ -317,7 +326,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
         {task.date && !state.active && (
           <span className={styles.date}>
             <CalendarIcon className={styles.dateIcon} />
-            {DateTime.fromFormat(task.date, "M/d/yyyy").toFormat("dd LLL")}
+            {date}
           </span>
         )}
       </div>
@@ -328,7 +337,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
           [styles.fullOnly]: true,
         })}
       >
-        <baka-editor ref={editorRef} />
+        <baka-editor class={styles.note} ref={editorRef} />
       </div>
       <Tags task={task} />
       <div
@@ -348,15 +357,10 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             {task.date === DateTime.now().toFormat("M/d/yyyy")
               ? "Сегодня"
               : task.date
-                ? DateTime.fromFormat(task.date, "M/d/yyyy").toFormat("dd LLL")
+                ? date
                 : "Без даты"}
           </span>
         </div>
-        {!active && (
-          <div className={styles.delete} onClick={() => deleteTask(task)}>
-            <TrashIcon />
-          </div>
-        )}
         <div
           className={classNames({
             [styles.redo]: true,
@@ -371,7 +375,7 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             onChange={e => task.setRepeatEvery(e.target.value)}
             min={0}
           />{" "}
-          д.
+          дней
         </div>
         <div
           style={{ position: "relative" }}
@@ -385,8 +389,19 @@ const Task = observer(({ task, active = false, onConfirm, expired }) => {
             onClick={() => state.openMenu("tags")}
           >
             <TagsIcon className={styles.tagsTriggerIcon} />
+            Тэги
           </div>
         </div>
+        {!active && (
+          <div className={styles.delete} onClick={() => deleteTask(task)}>
+            <TrashIcon />
+          </div>
+        )}
+        {newPrompt && <div className={styles.promptButtons}>
+          <div className={styles.promptButton}><Button text={"Добавить"} onClick={onConfirm} /></div>
+          <div className={styles.promptButton}><Button text={"Отменить"} onClick={onReject} secondary /></div>
+        </div>}
+
       </div>
 
       {state.menus.tags && (

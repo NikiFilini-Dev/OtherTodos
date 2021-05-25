@@ -14,6 +14,38 @@ import { Draggable, Droppable } from "react-beautiful-dnd"
 import { useInput } from "../../tools/hooks"
 import { DateTime } from "luxon"
 
+const Content = observer(({ provided, tasks }) => {
+  return (
+    <div className={styles.tasks} ref={provided.innerRef}>
+      {tasks.map((task, index) => (
+        <Draggable
+          key={`task_${task.id}`}
+          draggableId={`task_${task.id}`}
+          type={"TASK"}
+          index={index}
+        >
+          {provided => (
+            <div>
+              <div
+                id={`task_${task.id}`}
+                style={provided.draggableStyle}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                ref={provided.innerRef}
+                className={styles.project}
+              >
+                <Task key={`task_${task.id}`} task={task} />
+              </div>
+              {provided.placeholder}
+            </div>
+          )}
+        </Draggable>
+      ))}
+      {provided.placeholder}
+    </div>
+  )
+})
+
 const TaskList = observer(
   ({
     tasks,
@@ -49,51 +81,10 @@ const TaskList = observer(
       inputRef.current.blur()
     })
 
-    const Content = observer(({ provided }) => {
-      return (
-        <div className={styles.tasks} ref={provided.innerRef}>
-          {tasks.map((task, index) => (
-            <Draggable
-              key={`task_${task.id}`}
-              draggableId={`task_${task.id}`}
-              type={"TASK"}
-              index={index}
-            >
-              {provided => (
-                <div>
-                  <div
-                    id={`task_${task.id}`}
-                    style={provided.draggableStyle}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}
-                    className={styles.project}
-                  >
-                    <Task key={`task_${task.id}`} task={task} />
-                  </div>
-                  {provided.placeholder}
-                </div>
-              )}
-            </Draggable>
-          ))}
-          {provided.placeholder}
-        </div>
-      )
-    })
-
     if (!tasks.length && !showEmpty) return <div />
     return (
       <div className={styles.wrapper}>
         <div className={styles.info}>
-          <div
-            className={classNames({
-              [styles.fold]: true,
-              [styles.active]: folded,
-            })}
-            onClick={() => setIsFolded(!folded)}
-          >
-            <ChevronRight />
-          </div>
           {renamable ? (
             <input
               value={name}
@@ -111,7 +102,18 @@ const TaskList = observer(
                 <TrashIcon />
               </div>
             )}
-            <Label icon={ListIcon} text={totalCount} />
+            <div className={styles.count}>
+              <ListIcon /> <span>{totalCount}</span>
+            </div>
+          </div>
+          <div
+            className={classNames({
+              [styles.fold]: true,
+              [styles.active]: folded,
+            })}
+            onClick={() => setIsFolded(!folded)}
+          >
+            <ChevronRight />
           </div>
         </div>
         <div
@@ -126,7 +128,7 @@ const TaskList = observer(
             isDropDisabled={!dnd}
           >
             {(provided, snapshot) => (
-              <Content provided={provided} snapshot={snapshot} />
+              <Content provided={provided} snapshot={snapshot} tasks={tasks} />
             )}
           </Droppable>
         </div>

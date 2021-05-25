@@ -15,11 +15,13 @@ const Inbox = observer(() => {
     createTask,
     setTempTask,
     insertTempTask,
+    tempTask,
   } = useMst()
 
-  const [task, setTask] = React.useState(createTask({}))
   const [isNewTaskShown, setIsNewTaskShown] = React.useState(false)
-  setTempTask(task)
+  React.useEffect(() => {
+    setTempTask({})
+  }, [])
 
   const buttonRef = React.createRef()
 
@@ -34,39 +36,37 @@ const Inbox = observer(() => {
   const inbox = all.filter(task => !task.done && !task.project)
 
   const onReject = () => {
-    setTask(createTask(""))
+    setTempTask({})
     setIsNewTaskShown(false)
   }
   const onConfirm = () => {
-    if (!task.text) return
+    if (!tempTask.text) return
     insertTempTask()
-    let next = createTask({})
-    setTempTask(next)
-    setTask(next)
+    setTempTask({})
     setIsNewTaskShown(false)
   }
 
   return (
     <div className={styles.screen}>
-      <div className={styles.info}>
-        <span className={styles.title}>Входящие</span>
-        <Button
-          icon={PlusIcon}
-          onClick={() => setIsNewTaskShown(!isNewTaskShown)}
-          activated={isNewTaskShown}
-        />
-      </div>
-      {isNewTaskShown && (
-        <div>
-          <Task
-            task={task}
-            active
-            onConfirm={() => buttonRef.current.click()}
+      <div className={styles.head}>
+        <div className={styles.info}>
+          <span className={styles.title}>Входящие</span>
+          <Button
+            icon={PlusIcon}
+            onClick={() => setIsNewTaskShown(!isNewTaskShown)}
+            activated={isNewTaskShown}
           />
-          <div className={styles.newTaskActions}>
-            <Button text={"Добавить"} onClick={onConfirm} ref={buttonRef} />
-            <Button text={"Отменить"} secondary onClick={onReject} />
-          </div>
+        </div>
+      </div>
+      {isNewTaskShown && tempTask !== null && (
+        <div style={{marginBottom: "24px"}}>
+          <Task
+            task={tempTask}
+            active
+            onConfirm={onConfirm}
+            onReject={onReject}
+            newPrompt
+          />
         </div>
       )}
       <div className={styles.listOfLists}>

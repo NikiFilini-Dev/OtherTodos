@@ -5,6 +5,7 @@ declare namespace StylesStylNamespace {
     colorIndicator: string
     colorInput: string
     delete: string
+    head: string
     info: string
     list: string
     screen: string

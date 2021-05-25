@@ -6,11 +6,15 @@
 .info
   display flex
   align-items center
-  border-bottom 1px solid lightgray
+  //border-bottom 1px solid lightgray
   min-height 42px
-  margin 0 20px
-  padding 8px 0
-  margin-bottom 6px
+  //margin 0 20px
+  padding 8px 24px
+  margin-bottom 16px
+  background #DDE2FD
+  border 1px solid #D0D6F6
+  border-radius 16px
+  color #1C3BF1
 
 .actions
   margin-left auto
@@ -34,10 +38,18 @@
   flex-direction column
   min-height 16px
 
+.count
+  display flex
+  align-items center
+
+  svg
+    fill #1C3BF1
+    margin-right 12px
+
 .fold
   width 12px
   height 12px
-  margin-right 8px
+  margin-left 24px
   display flex
   align-items center
   justify-content center
@@ -68,6 +80,8 @@
 .listWrapper
   max-height: 50000px;
   transition: max-height 0.55s ease-in;
+  padding-left 24px
+  margin-bottom 24px
   &.folded
     max-height: 0;
     transition: max-height 0.35s ease-out;

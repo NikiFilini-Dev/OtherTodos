@@ -3,6 +3,7 @@ declare namespace StylesStylNamespace {
     addButton: string
     addIcon: string
     additional: string
+    head: string
     info: string
     listOfLists: string
     newTaskActions: string

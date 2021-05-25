@@ -23,8 +23,8 @@
 
       :root {
           --button-size: -1px;
-          --editor-padding: 6px;
-          --border-radius: 5px;
+          --editor-padding: 24px;
+          --border-radius: 16px;
       }
 
       i {
@@ -61,6 +61,7 @@
           left: calc(var(--editor-padding) + 1px + var(--button-size));
           opacity: 0.6;
           z-index: 0;
+          color: black;
       }
 
       #placeholder.invisible {
@@ -72,9 +73,8 @@
           height: auto;
           min-height: 4em;
           padding: calc(var(--editor-padding) - 1px);
-          background: transparent;
           z-index: 1;
-          /*border-radius: 0px var(--border-radius) var(--border-radius) 0;*/
+          border-radius: var(--border-radius);
           border: 1px solid transparent;
           transition: border-color 0.2s;
       }
@@ -167,7 +167,7 @@
 </body>
 <script src="/static/<%= assets["runtime.js"] %>"></script>
 <script src="/static/<%= assets["vendor.js"] %>"></script>
-<script src="/static/<%= assets["sentry.js"] %>"></script>
+<!--<script src="/static/<%= assets["sentry.js"] %>"></script>-->
 <script src="/static/<%= assets["main.js"] %>"></script>
 <svg height="0" width="0">
   <defs>
