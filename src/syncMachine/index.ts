@@ -12,6 +12,8 @@ import Project from "./types/project"
 import ProjectCategory from "./types/project_category"
 import TimelineEvent from "./types/timeline_event"
 import Tag from "./types/tag"
+import Habit from "./types/habit"
+import HabitRecord from "./types/habit_record"
 import jsonStorage from "../tools/jsonStorage"
 
 const syncLogger = createLogger("SYNC")
@@ -23,6 +25,8 @@ export default class SyncMachine {
     new ProjectCategory(),
     new Project(),
     new Task(),
+    new Habit(),
+    new HabitRecord(),
   ]
 
   state = "initial"

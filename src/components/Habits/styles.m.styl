@@ -1,0 +1,132 @@
+.list
+  display flex
+  margin-bottom 16px
+  overflow-x auto
+  flex-shrink 0
+  padding 3px 0
+
+.habit
+  min-width 155px
+  background white
+  height 72px
+  border 1px solid rgba(0,0,0,.1)
+  border-radius 16px
+  margin-right 8px
+  padding 16px
+  font-size 14px
+  display flex
+  flex-direction column
+  position relative
+  overflow hidden
+  flex-shrink 0
+
+  .edit
+    position absolute
+    top 4px
+    right 4px
+    border-radius 50%
+    background #f0f2f6
+    //display flex
+    justify-content center
+    align-items center
+    display none
+    width 24px
+    height 24px
+    z-index 2
+    cursor pointer
+
+    svg
+      height 16px
+
+  &:hover .edit
+    display flex
+
+  .background
+    display block
+    width var(--donePercent)
+    background var(--habitColor)
+    height calc(100% + 1px)
+    position absolute
+    top 0
+    left -1px
+    z-index 0
+    opacity .25
+    transition all .2s
+
+    &.invisible
+      left -15px
+
+    &::before
+      content " "
+      display block
+      height 100%
+      width 24px
+      border-radius 50%
+      background var(--habitColor)
+      position absolute
+      right -11px
+      top 0
+      clip-path inset(0% 0% 0% 50%)
+
+  .info
+    display flex
+    z-index 1
+    color #161938
+    align-items center
+    font-weight 500
+
+    span
+      white-space nowrap
+
+    svg
+      height 1.3em
+      min-width 1.3em
+      margin-right 6px
+
+  .records
+    display flex
+    align-items center
+    margin-top 9px
+    z-index 1
+
+    .done
+      width 16px
+      height 16px
+      border-radius 50%
+      background var(--habitColor)
+      margin-right 6px
+      display flex
+      align-items center
+      justify-content center
+
+    .waiting
+      width 16px
+      height 16px
+      margin-right 6px
+      display flex
+      justify-content center
+      align-items center
+
+      &::before
+        width 4px
+        height 4px
+        display block
+        content " "
+        border-radius 50%
+        border 1px solid #161938
+        box-sizing border-box
+
+.addHabit
+  width 155px
+  height 72px
+  border 2px solid #DEE4F5
+  color #9BABC5
+  border-radius 16px
+  display flex
+  justify-content center
+  align-items center
+  flex-shrink 0
+
+  svg
+    height 16px
+    margin-right 6px

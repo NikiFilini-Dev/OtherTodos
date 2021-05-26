@@ -17,6 +17,9 @@
     "lib": [
       "es2020", "dom", "dom.iterable"
     ],
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "paths": {
+      "~/": ["./src"],
+    }
   }
 }

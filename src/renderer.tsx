@@ -32,6 +32,8 @@ const data = {
   projects: [],
   tasks: { all: [] },
   events: [],
+  habits: [],
+  habitRecords: [],
 }
 const Store = RootStore.create(data)
 

@@ -17,6 +17,9 @@ import { v4 as uuidv4 } from "uuid"
 import User from "./User"
 import ProjectCategory from "./ProjectCategory"
 import jsonStorage from "../tools/jsonStorage"
+import Habit, { IHabit } from "./Habit"
+import HabitRecord, { IHabitRecord } from "./HabitRecord"
+import { toJS } from "mobx"
 
 const RootStore = types
   .model("Store", {
@@ -42,8 +45,53 @@ const RootStore = types
     _storeVersion: types.optional(types.number, 0),
     sidebarWidth: types.optional(types.number, 250),
     timelineWidth: types.optional(types.number, 350),
+    habits: types.array(Habit),
+    habitRecords: types.array(HabitRecord),
+    tempHabit: types.maybeNull(Habit)
   })
   .actions(self => ({
+    setTempHabit(initialData?: Partial<IHabit>) {
+      const id = uuidv4()
+
+      self.tempHabit = {
+        name: "",
+        type: "daily",
+        recordsPerDay: 1,
+        color: "blue",
+        icon: "win",
+        // @ts-ignore
+        weeklyDays: [],
+        // @ts-ignore
+        monthlyDays: [],
+        ...JSON.parse(JSON.stringify(initialData)),
+        id
+      }
+
+    },
+    rejectTempHabit() {
+      self.tempHabit = null
+    },
+    insertTempHabit() {
+      if (!self.tempHabit) return
+      const id = uuidv4()
+      const habit = {...JSON.parse(JSON.stringify(self.tempHabit)), id}
+      self.habits.push(habit)
+      this.rejectTempHabit()
+    },
+    saveTempHabit(id: string) {
+      const habit = self.habits.find(habit => habit.id === id)
+      if (!habit || !self.tempHabit) return
+
+      if (habit.name !== self.tempHabit.name) habit.setName(self.tempHabit.name)
+      if (habit.recordsPerDay !== self.tempHabit.recordsPerDay) habit.setRecordsPerDay(self.tempHabit.recordsPerDay)
+      if (habit.color !== self.tempHabit.color) habit.setColor(self.tempHabit.color)
+      if (habit.icon !== self.tempHabit.icon) habit.setIcon(self.tempHabit.icon)
+      if (habit.type !== self.tempHabit.type) habit.setType(self.tempHabit.type)
+      if (habit.monthlyDays !== self.tempHabit.monthlyDays) habit.setMonthlyDays([...self.tempHabit.monthlyDays])
+      if (habit.weeklyDays !== self.tempHabit.weeklyDays) habit.setWeeklyDays([...self.tempHabit.weeklyDays])
+
+      this.rejectTempHabit()
+    },
     setUser(user) {
       if (window.IS_WEB) {
         localStorage.setItem("user", JSON.stringify(user))
@@ -114,6 +162,11 @@ const RootStore = types
       })
       self.tags.push(tag)
       return tag
+    },
+    createHabitRecord(habitRecord) {
+      const newId = uuidv4()
+      self.habitRecords.push({ ...habitRecord, id: newId })
+      return newId
     },
     createEvent(data) {
       const newId = uuidv4()
@@ -223,6 +276,8 @@ const RootStore = types
         })
       })
     },
+
+
   }))
 
 export default RootStore

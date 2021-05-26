@@ -35,6 +35,7 @@ rules:
   '@typescript-eslint/no-var-requires': off
   '@typescript-eslint/explicit-module-boundary-types': off
   '@typescript-eslint/no-extra-semi': off
+  '@typescript-eslint/ban-ts-comment': off
 parser: '@typescript-eslint/parser'
 settings:
   import/parser: babel-eslint

@@ -14,9 +14,9 @@ const FloatMenu = observer(
 
     const [el] = React.useState(document.createElement("div"))
     React.useEffect(() => {
-      document.querySelector("#modals").appendChild(el)
+      document.querySelector("#floats").appendChild(el)
       return () => {
-        document.querySelector("#modals").removeChild(el)
+        document.querySelector("#floats").removeChild(el)
       }
     }, [])
 

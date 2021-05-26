@@ -14,6 +14,7 @@ import Sidebar from "components/Sidebar"
 import { DragDropContext } from "react-beautiful-dnd"
 import Timeline from "../Timeline"
 import noop from "lodash-es/noop"
+import HabitForm from "../HabitForm"
 
 const App = observer(() => {
   const {
@@ -125,6 +126,7 @@ const App = observer(() => {
       <div className={styles.timeline} ref={timelineRef}>
         <Timeline />
       </div>
+
     </div>
   )
 })

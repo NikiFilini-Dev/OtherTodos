@@ -19,6 +19,7 @@ import { useDateFormat, useTrap } from "tools/hooks"
 import ScrollContext from "../../../contexts/scrollContext"
 import Emitter from "events"
 import { DateTime } from "luxon"
+import Habits from "../../Habits"
 
 function toTitleCase(str) {
   if (!str) return ""
@@ -168,6 +169,7 @@ const Today = observer(() => {
 
   return (
     <div className={styles.screen}>
+      <Habits date={selectedDate} />
       <div className={styles.head}>
       <div className={styles.info}>
         <span className={styles.title}>
