@@ -86,7 +86,8 @@ const Today = observer(() => {
 
   const withoutProject = tasks.filter(task => !task.project)
 
-  let expiredTasks = selectedDate === today ? tasks.filter(
+
+  let expiredTasks = selectedDate === today ? all.filter(
     task =>
       task.date &&
       DateTime.fromFormat(task.date, "M/d/yyyy").startOf("day") <
