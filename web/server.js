@@ -7,13 +7,24 @@ const fs = require("fs-extra")
 const { template } = require("lodash")
 const fetch = require("node-fetch")
 
+const WDS_MODE = process.argv.includes("--wds")
+const WDS_HOST = "http://localhost:8080"
+
 app.use("/static", express.static("./web_dist"))
 app.use("/public", express.static("./web/public"))
 
 app.get("/", async (req, res) => {
-  const manifest = await (
-    await fetch("http://localhost:8080/static/manifest.json")
-  ).json()
+  let manifest
+  if (WDS_MODE) {
+    manifest = await (
+      await fetch("http://localhost:8080/static/manifest.json")
+    ).json()
+    Object.keys(manifest).forEach(key => manifest[key] = `${WDS_HOST}/static/${manifest[key]}`)
+  } else {
+    manifest = await fs.readJson(path.resolve("./web_dist/manifest.json"))
+    Object.keys(manifest).forEach(key => manifest[key] = `/static/${manifest[key]}`)
+  }
+
   const html = fs.readFileSync(path.resolve("./web/index.html.ejs"), "utf-8")
   const tmpl = template(html)
   const s = tmpl({
