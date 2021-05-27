@@ -5,7 +5,7 @@
   "description": "Best app for tasks",
   "main": ".webpack/main",
   "scripts": {
-    "web:wds": "webpack serve --config=webpack.web.config.js --color --mode=development --progress --hot",
+    "web:wds": "cross-env WDS_MODE=true webpack serve --config=webpack.web.config.js --color --mode=development --progress --hot",
     "cli": "better-forge-cli",
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -16,7 +16,8 @@
     "web:build": "webpack --config=webpack.web.config.js --color --mode=development",
     "web:watch": "webpack --config=webpack.web.config.js --progress --color --mode=development --watch",
     "web:server": "nodemon web/server.js",
-    "web:dev": "npm-run-all --parallel web:server web:watch",
+    "web:wdsserver": "nodemon web/server.js --wds",
+    "web:dev": "npm-run-all --parallel web:wdsserver web:wds",
     "release": "releaser"
   },
   "keywords": [],
@@ -64,6 +65,7 @@
     "babel-plugin-lodash": "^3.3.4",
     "better-forge-cli": "^0.1.6",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^4.3.0",
     "dotenv": "^8.2.0",
     "electron": "11.0.3",

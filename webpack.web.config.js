@@ -17,7 +17,7 @@ rules.push({
   loader: "file-loader",
   query: {
     outputPath: "fonts/",
-    publicPath: "/static/fonts/", // That's the important part
+    publicPath: process.env.WDS_MODE ? "http://localhost:8080/static/fonts/" : "/static/fonts/", // That's the important part
   },
 })
 
@@ -89,6 +89,11 @@ module.exports = {
     contentBase: "./web_dist",
     hot: true,
     transportMode: "ws",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+    }
   },
   target: "web",
 }
