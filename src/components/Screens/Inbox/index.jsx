@@ -56,7 +56,7 @@ const Inbox = observer(() => {
         </div>
       </div>
       {isNewTaskShown && tempTask !== null && (
-        <div style={{marginBottom: "24px"}}>
+        <div style={{ marginBottom: "24px" }}>
           <Task
             task={tempTask}
             active

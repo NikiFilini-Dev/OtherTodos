@@ -16,58 +16,60 @@ import {
 } from "../../../tools/hooks"
 import { Droppable, Draggable } from "react-beautiful-dnd"
 
-const Content = observer(({ provided, selectedProject, deleteCategory, setIsNewTaskShown, tasks }) => {
-  const categories = [...selectedProject.categories]
-  categories.sort((a, b) => a.index - b.index)
-  const Category = observer(({ provided, category }) => (
-    <div
-      style={provided.draggableStyle}
-      {...provided.draggableProps}
-      {...provided.dragHandleProps}
-      ref={provided.innerRef}
-      className={styles.project}
-    >
-      <TaskList
-        tasks={category.sortedTasks}
-        name={category.name}
-        renamable
-        showEmpty
-        dnd={`tasklist_${category.id}`}
-        deletable={!category.tasks.length}
-        onDelete={() => deleteCategory(category)}
-        onNameChange={e => category.setName(e.target.value)}
-      />
-    </div>
-  ))
-  return (
-    <div className={styles.listOfLists} ref={provided.innerRef}>
-      <TaskList
-        tasks={tasks.filter(t => !t.category)}
-        name={"Без категории"}
-        showEmpty
-        dnd={"nocategory"}
-      />
-      {categories.map((category, index) => (
-        <Draggable
-          key={`category_${category.id}`}
-          draggableId={`category_${category.id}`}
-          type={"CATEGORY"}
-          index={index}
-        >
-          {provided => <Category provided={provided} category={category} />}
-        </Draggable>
-      ))}
-      {provided.placeholder}
+const Content = observer(
+  ({ provided, selectedProject, deleteCategory, setIsNewTaskShown, tasks }) => {
+    const categories = [...selectedProject.categories]
+    categories.sort((a, b) => a.index - b.index)
+    const Category = observer(({ provided, category }) => (
       <div
-        className={styles.addCategory}
-        onClick={() => setIsNewTaskShown(true)}
+        style={provided.draggableStyle}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        ref={provided.innerRef}
+        className={styles.project}
       >
-        <PlusIcon />
-        Добавить задачу
+        <TaskList
+          tasks={category.sortedTasks}
+          name={category.name}
+          renamable
+          showEmpty
+          dnd={`tasklist_${category.id}`}
+          deletable={!category.tasks.length}
+          onDelete={() => deleteCategory(category)}
+          onNameChange={e => category.setName(e.target.value)}
+        />
       </div>
-    </div>
-  )
-})
+    ))
+    return (
+      <div className={styles.listOfLists} ref={provided.innerRef}>
+        <TaskList
+          tasks={tasks.filter(t => !t.category)}
+          name={"Без категории"}
+          showEmpty
+          dnd={"nocategory"}
+        />
+        {categories.map((category, index) => (
+          <Draggable
+            key={`category_${category.id}`}
+            draggableId={`category_${category.id}`}
+            type={"CATEGORY"}
+            index={index}
+          >
+            {provided => <Category provided={provided} category={category} />}
+          </Draggable>
+        ))}
+        {provided.placeholder}
+        <div
+          className={styles.addCategory}
+          onClick={() => setIsNewTaskShown(true)}
+        >
+          <PlusIcon />
+          Добавить задачу
+        </div>
+      </div>
+    )
+  },
+)
 
 const Project = observer(() => {
   const {
@@ -89,10 +91,14 @@ const Project = observer(() => {
     setTempTask(initialTaskData)
   }, [])
 
-  let tasks = all.filter(task => task.project === selectedProject && task.done === false)
+  let tasks = all.filter(
+    task => task.project === selectedProject && task.done === false,
+  )
 
   const initialTaskData = {
-    project: projects.find(project => project.id === selectedProject) || selectedProject,
+    project:
+      projects.find(project => project.id === selectedProject) ||
+      selectedProject,
   }
   if (selectedTag) initialTaskData.tags = [selectedTag]
 
@@ -179,7 +185,6 @@ const Project = observer(() => {
   React.useEffect(() => (window.onDragEndFunc = onDragEnd))
   window.onDragEndFunc = onDragEnd
 
-
   return (
     <div className={styles.screen}>
       <div className={styles.head}>
@@ -198,8 +203,8 @@ const Project = observer(() => {
               onClick={() => setIsEditingTitle(true)}
               className={styles.title}
             >
-            {selectedProject.name}
-          </span>
+              {selectedProject.name}
+            </span>
           )}
 
           <div className={styles.actions}>
@@ -230,15 +235,27 @@ const Project = observer(() => {
       </div>
 
       {isNewTaskShown && tempTask !== null && (
-        <div style={{marginBottom: "24px"}}>
-          <Task task={tempTask} active onConfirm={onConfirm} onReject={onReject} newPrompt />
+        <div style={{ marginBottom: "24px" }}>
+          <Task
+            task={tempTask}
+            active
+            onConfirm={onConfirm}
+            onReject={onReject}
+            newPrompt
+          />
         </div>
       )}
 
       <Droppable droppableId={"projectsList"} type={"PROJECT"}>
         {(provided, snapshot) => (
-          <Content provided={provided} snapshot={snapshot} selectedProject={selectedProject}
-                   deleteCategory={deleteCategory} setIsNewTaskShown={setIsNewTaskShown} tasks={tasks} />
+          <Content
+            provided={provided}
+            snapshot={snapshot}
+            selectedProject={selectedProject}
+            deleteCategory={deleteCategory}
+            setIsNewTaskShown={setIsNewTaskShown}
+            tasks={tasks}
+          />
         )}
       </Droppable>
     </div>

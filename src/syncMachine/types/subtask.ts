@@ -1,6 +1,10 @@
 import SyncType from "../syncType"
 import gqlClient from "../../graphql/client"
-import { DELETE_SUBTASK, GET_SUBTASKS, UPDATE_SUBTASK } from "../../graphql/subtasks"
+import {
+  DELETE_SUBTASK,
+  GET_SUBTASKS,
+  UPDATE_SUBTASK,
+} from "../../graphql/subtasks"
 
 export default class Subtask extends SyncType {
   name = "Subtask"

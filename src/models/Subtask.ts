@@ -2,7 +2,6 @@ import { Instance, types } from "mobx-state-tree"
 import { DateTime } from "luxon"
 import Task from "./Task"
 
-
 export const SubtaskStatuses: SubtaskStatus[] = ["ACTIVE", "DONE"]
 export type SubtaskStatus = "ACTIVE" | "DONE"
 
@@ -21,7 +20,7 @@ const DateString = types.custom<string, string>({
   getValidationMessage(value: string): string {
     if (value && DateTime.fromFormat(value, "M/d/yyyy").isValid) return "" // OK
     return `'${value}' doesn't look like a valid decimal number`
-  }
+  },
 })
 
 const Subtask = types
@@ -64,7 +63,6 @@ const Subtask = types
     actions.getActionsMap = () => actionsMap
     return actions
   })
-
 
 export function factory(data) {
   return data

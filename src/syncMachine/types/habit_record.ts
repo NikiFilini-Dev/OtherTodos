@@ -1,6 +1,10 @@
 import SyncType from "../syncType"
 import gqlClient from "../../graphql/client"
-import { DELETE_HABIT_RECORD, GET_HABIT_RECORDS, UPDATE_HABIT_RECORD } from "../../graphql/habit_records"
+import {
+  DELETE_HABIT_RECORD,
+  GET_HABIT_RECORDS,
+  UPDATE_HABIT_RECORD,
+} from "../../graphql/habit_records"
 
 export default class HabitRecord extends SyncType {
   name = "HabitRecord"

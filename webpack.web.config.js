@@ -33,7 +33,6 @@ module.exports = {
   },
   // Put your normal webpack config below here
   module: {
-
     rules,
   },
   resolve: {
@@ -91,5 +90,5 @@ module.exports = {
     hot: true,
     transportMode: "ws",
   },
-  target: "web"
+  target: "web",
 }

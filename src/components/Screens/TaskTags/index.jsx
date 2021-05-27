@@ -46,7 +46,9 @@ const Content = observer(({ provided, onTagDelete, list }) => (
   <div className={styles.list} ref={provided.innerRef}>
     {list.map((tag, i) => (
       <Draggable draggableId={tag.id} type={"TAG"} index={i} key={tag.id}>
-        {provided => <Tag tag={tag} provided={provided} onTagDelete={onTagDelete} />}
+        {provided => (
+          <Tag tag={tag} provided={provided} onTagDelete={onTagDelete} />
+        )}
       </Draggable>
     ))}
     {provided.placeholder}
@@ -54,12 +56,7 @@ const Content = observer(({ provided, onTagDelete, list }) => (
 ))
 
 const TaskTags = observer(() => {
-  const {
-    tags,
-    createTag,
-    selectedTagType,
-    deleteTag,
-  } = useMst()
+  const { tags, createTag, selectedTagType, deleteTag } = useMst()
 
   const type = selectedTagType
 
@@ -100,7 +97,7 @@ const TaskTags = observer(() => {
       type: "info",
       buttons: ["Удалить", "отмена"],
       title: "Удаление тэга",
-      detail: "Удалить тэг \"" + tag.name + "\"?",
+      detail: 'Удалить тэг "' + tag.name + '"?',
     }
 
     if (!IS_WEB) {
@@ -125,13 +122,22 @@ const TaskTags = observer(() => {
             {type === "TASK" ? "Метки задач" : "Метки событий"}
           </span>
           <div className={styles.actions}>
-            <Button icon={PlusIcon} onClick={() => createTag("Новый тэг", type)} />
+            <Button
+              icon={PlusIcon}
+              onClick={() => createTag("Новый тэг", type)}
+            />
           </div>
         </div>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId={"tagsList"} type={"TAG"}>
-          {provided => <Content provided={provided} list={list} onTagDelete={onTagDelete} />}
+          {provided => (
+            <Content
+              provided={provided}
+              list={list}
+              onTagDelete={onTagDelete}
+            />
+          )}
         </Droppable>
       </DragDropContext>
     </div>

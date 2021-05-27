@@ -16,11 +16,28 @@ declare global {
   }
 }
 // eslint-disable-next-line max-len
-declare type PrependNextNum<A extends Array<unknown>> = A["length"] extends infer T ? ((t: T, ...a: A) => void) extends ((...x: infer X) => void) ? X : never : never;
+declare type PrependNextNum<
+  A extends Array<unknown>
+> = A["length"] extends infer T
+  ? ((t: T, ...a: A) => void) extends (...x: infer X) => void
+    ? X
+    : never
+  : never
 
 // eslint-disable-next-line max-len
-declare type EnumerateInternal<A extends Array<unknown>, N extends number> = { 0: A, 1: EnumerateInternal<PrependNextNum<A>, N> }[N extends A["length"] ? 0 : 1];
+declare type EnumerateInternal<A extends Array<unknown>, N extends number> = {
+  0: A
+  1: EnumerateInternal<PrependNextNum<A>, N>
+}[N extends A["length"] ? 0 : 1]
 
-declare type Enumerate<N extends number> = EnumerateInternal<[], N> extends (infer E)[] ? E : never;
+declare type Enumerate<N extends number> = EnumerateInternal<
+  [],
+  N
+> extends (infer E)[]
+  ? E
+  : never
 
-declare type CustomRange<FROM extends number, TO extends number> = Exclude<Enumerate<TO>, Enumerate<FROM>>;
+declare type CustomRange<FROM extends number, TO extends number> = Exclude<
+  Enumerate<TO>,
+  Enumerate<FROM>
+>

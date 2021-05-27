@@ -25,9 +25,7 @@ const Task = types
     repeatEvery: types.maybeNull(types.optional(types.integer, 0)),
     repeating: types.optional(types.boolean, false),
     category: types.maybeNull(types.reference(ProjectCategory)),
-    event: types.maybeNull(
-      types.reference(types.late(LateTimelineEvent)),
-    ),
+    event: types.maybeNull(types.reference(types.late(LateTimelineEvent))),
     colorTag: types.maybeNull(types.reference(Tag)),
   })
   .views(self => ({
@@ -50,20 +48,24 @@ const Task = types
       return self.text
     },
     get subtasks() {
-      const subtasks = getRoot<IRootStore>(self).subtasks.filter((subtask: ISubtask) => subtask.task === self)
-      subtasks.sort((a,b) => a.index - b.index)
+      const subtasks = getRoot<IRootStore>(self).subtasks.filter(
+        (subtask: ISubtask) => subtask.task === self,
+      )
+      subtasks.sort((a, b) => a.index - b.index)
       return subtasks
     },
     get doneSubtasks() {
-      return getRoot<IRootStore>(self)
-        .subtasks
-        .filter(
-          (subtask: ISubtask) => subtask.task === self && subtask.status === "DONE"
-        )
+      return getRoot<IRootStore>(self).subtasks.filter(
+        (subtask: ISubtask) =>
+          subtask.task === self && subtask.status === "DONE",
+      )
     },
     get progress() {
-      return this.subtasks.filter(st => st.status === "DONE").length * (100 / this.subtasks.length)
-    }
+      return (
+        this.subtasks.filter(st => st.status === "DONE").length *
+        (100 / this.subtasks.length)
+      )
+    },
   }))
   .actions(self => {
     const actions: Record<string, any> = {}

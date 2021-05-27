@@ -5,7 +5,7 @@ const HabitRecord = types
   .model("HabitRecord", {
     id: types.identifier,
     date: types.string,
-    habit: types.reference(Habit)
+    habit: types.reference(Habit),
   })
   .views(() => ({
     get syncable() {
@@ -31,7 +31,6 @@ const HabitRecord = types
     actions.getActionsMap = () => actionsMap
     return actions
   })
-
 
 export function factory(data) {
   return data

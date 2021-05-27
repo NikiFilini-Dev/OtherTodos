@@ -9,7 +9,7 @@ const Checkbox = (
     checked,
     className,
     color,
-    circle
+    circle,
   }: {
     onChange?: (checked: boolean) => void
     checked?: boolean
@@ -31,7 +31,7 @@ const Checkbox = (
           [styles.checkbox]: true,
           [styles.checked]: checked,
           [styles.colored]: !!color,
-          [styles.circle]: circle
+          [styles.circle]: circle,
         }) +
         " " +
         className

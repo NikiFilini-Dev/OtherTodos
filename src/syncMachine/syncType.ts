@@ -155,9 +155,11 @@ export default abstract class SyncType {
       }
     }
 
-    return new Promise<void>((resolve) => update(() => {
-      resolve()
-      this.state = "waiting"
-    }))
+    return new Promise<void>(resolve =>
+      update(() => {
+        resolve()
+        this.state = "waiting"
+      }),
+    )
   }
 }

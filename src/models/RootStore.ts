@@ -1,4 +1,11 @@
-import { applySnapshot, destroy, detach, getSnapshot, Instance, types } from "mobx-state-tree"
+import {
+  applySnapshot,
+  destroy,
+  detach,
+  getSnapshot,
+  Instance,
+  types,
+} from "mobx-state-tree"
 import { createContext, useContext } from "react"
 import TaskList from "./TaskList"
 import Task, { factory as taskFactory } from "./Task"
@@ -49,7 +56,8 @@ const RootStore = types
       const id = initialData.id ? initialData.id : uuidv4()
       if ("index" in initialData) {
         initialData.task.subtasks.forEach(st => {
-          if (st.index >= (initialData.index as number)) st.setIndex(st.index+1)
+          if (st.index >= (initialData.index as number))
+            st.setIndex(st.index + 1)
         })
       }
       self.subtasks.push({
@@ -57,9 +65,12 @@ const RootStore = types
         text: "",
         closedAt: null,
         task: initialData.task,
-        index: self.subtasks.reduce(
-          (acc: number, subtask: ISubtask) => subtask.index > acc ? subtask.index : acc, -1
-        ) + 1,
+        index:
+          self.subtasks.reduce(
+            (acc: number, subtask: ISubtask) =>
+              subtask.index > acc ? subtask.index : acc,
+            -1,
+          ) + 1,
         ...initialData,
         id,
       })
@@ -83,7 +94,7 @@ const RootStore = types
       if (!subtask) return false
 
       subtask.task.subtasks.forEach(st => {
-        if (st.index > subtask.index) st.setIndex(st.index-1)
+        if (st.index > subtask.index) st.setIndex(st.index - 1)
       })
 
       window.syncMachine.registerDelete(subtask.id, subtask.syncName)
@@ -123,14 +134,33 @@ const RootStore = types
       if (!habit || !self.tempHabit) return
 
       if (habit.name !== self.tempHabit.name) habit.setName(self.tempHabit.name)
-      if (habit.recordsPerDay !== self.tempHabit.recordsPerDay) habit.setRecordsPerDay(self.tempHabit.recordsPerDay)
-      if (habit.color !== self.tempHabit.color) habit.setColor(self.tempHabit.color)
+      if (habit.recordsPerDay !== self.tempHabit.recordsPerDay)
+        habit.setRecordsPerDay(self.tempHabit.recordsPerDay)
+      if (habit.color !== self.tempHabit.color)
+        habit.setColor(self.tempHabit.color)
       if (habit.icon !== self.tempHabit.icon) habit.setIcon(self.tempHabit.icon)
       if (habit.type !== self.tempHabit.type) habit.setType(self.tempHabit.type)
-      if (habit.monthlyDays !== self.tempHabit.monthlyDays) habit.setMonthlyDays([...self.tempHabit.monthlyDays])
-      if (habit.weeklyDays !== self.tempHabit.weeklyDays) habit.setWeeklyDays([...self.tempHabit.weeklyDays])
+      if (habit.monthlyDays !== self.tempHabit.monthlyDays)
+        habit.setMonthlyDays([...self.tempHabit.monthlyDays])
+      if (habit.weeklyDays !== self.tempHabit.weeklyDays)
+        habit.setWeeklyDays([...self.tempHabit.weeklyDays])
 
       this.rejectTempHabit()
+    },
+    deleteHabitRecord(id: string): boolean {
+      const record = self.habitRecords.find(hr => hr.id === id)
+      if (!record) return false
+      window.syncMachine.registerDelete(id, record.syncName)
+      destroy(record)
+      return true
+    },
+    deleteHabit(id: string): boolean {
+      const habit = self.habits.find(h => h.id === id)
+      if (!habit) return false
+      habit.records.forEach(r => this.deleteHabitRecord(r.id))
+      window.syncMachine.registerDelete(id, habit.syncName)
+      destroy(habit)
+      return true
     },
     setUser(user) {
       if (window.IS_WEB) {
@@ -316,8 +346,6 @@ const RootStore = types
         })
       })
     },
-
-
   }))
 
 export default RootStore

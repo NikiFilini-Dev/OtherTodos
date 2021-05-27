@@ -11,7 +11,9 @@ app.use("/static", express.static("./web_dist"))
 app.use("/public", express.static("./web/public"))
 
 app.get("/", async (req, res) => {
-  const manifest = await (await fetch("http://localhost:8080/static/manifest.json")).json()
+  const manifest = await (
+    await fetch("http://localhost:8080/static/manifest.json")
+  ).json()
   const html = fs.readFileSync(path.resolve("./web/index.html.ejs"), "utf-8")
   const tmpl = template(html)
   const s = tmpl({

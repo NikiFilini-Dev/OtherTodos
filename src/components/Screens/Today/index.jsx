@@ -37,7 +37,7 @@ const Today = observer(() => {
     setTempTask,
     insertTempTask,
     setScreen,
-    tempTask
+    tempTask,
   } = useMst()
 
   const [viewMode, setViewMode] = React.useState("projects")
@@ -86,12 +86,17 @@ const Today = observer(() => {
 
   const withoutProject = tasks.filter(task => !task.project)
 
-
-  let expiredTasks = selectedDate === today ? all.filter(
-    task =>
-      task.date &&
-      DateTime.fromFormat(task.date, "M/d/yyyy").startOf("day") <
-      DateTime.now().startOf("day") && !task.done && (!selectedTag || task.tags.indexOf(selectedTag) >= 0)) : []
+  let expiredTasks =
+    selectedDate === today
+      ? all.filter(
+          task =>
+            task.date &&
+            DateTime.fromFormat(task.date, "M/d/yyyy").startOf("day") <
+              DateTime.now().startOf("day") &&
+            !task.done &&
+            (!selectedTag || task.tags.indexOf(selectedTag) >= 0),
+        )
+      : []
 
   const initialTaskData = { date: selectedDate }
   if (selectedTag) initialTaskData.tags = [selectedTag]
@@ -153,7 +158,10 @@ const Today = observer(() => {
 
     const id = draggableId.match(/.+?_(.+)/)[1]
 
-    if (draggableId.startsWith("task") && destination.droppableId.startsWith("project")) {
+    if (
+      draggableId.startsWith("task") &&
+      destination.droppableId.startsWith("project")
+    ) {
       let match = destination.droppableId.match(/.+?_(.+)/)
       const targetProject = match ? match[1] : null
 
@@ -170,68 +178,70 @@ const Today = observer(() => {
     <div className={styles.screen}>
       <Habits date={selectedDate} />
       <div className={styles.head}>
-      <div className={styles.info}>
-        <span className={styles.title}>
-          {selectedDate === today
-            ? "Сегодня"
-            : date}
-        </span>
-        {selectedDate === today && (
-          <span className={styles.additional}>
-            {date}
+        <div className={styles.info}>
+          <span className={styles.title}>
+            {selectedDate === today ? "Сегодня" : date}
           </span>
-        )}
-        <div className={styles.actions}>
-          <span
-            onClick={() =>
-              setViewMode(viewMode === "list" ? "projects" : "list")
-            }
-            className={classNames({
-              [styles.viewSwitch]: true,
-              [styles.active]: viewMode === "list",
-            })}
-          >
-            <ListIcon />
-          </span>
-          <span className={styles.calendar} ref={ref}>
-            <CalendarIcon
-              onClick={() => setIsDateSelectorShown(!isDateSelectorShown)}
-            />
-            {isDateSelectorShown && (
-              <DateSelector
-                right
-                triggerRef={ref}
-                onSelect={day => setDate(day.date)}
-                value={selectedDate}
+          {selectedDate === today && (
+            <span className={styles.additional}>{date}</span>
+          )}
+          <div className={styles.actions}>
+            <span
+              onClick={() =>
+                setViewMode(viewMode === "list" ? "projects" : "list")
+              }
+              className={classNames({
+                [styles.viewSwitch]: true,
+                [styles.active]: viewMode === "list",
+              })}
+            >
+              <ListIcon />
+            </span>
+            <span className={styles.calendar} ref={ref}>
+              <CalendarIcon
+                onClick={() => setIsDateSelectorShown(!isDateSelectorShown)}
               />
-            )}
-          </span>
-          <Button
-            icon={PlusIcon}
-            activated={isNewTaskShown}
-            onClick={() => onPlusClick()}
-          />
+              {isDateSelectorShown && (
+                <DateSelector
+                  right
+                  triggerRef={ref}
+                  onSelect={day => setDate(day.date)}
+                  value={selectedDate}
+                />
+              )}
+            </span>
+            <Button
+              icon={PlusIcon}
+              activated={isNewTaskShown}
+              onClick={() => onPlusClick()}
+            />
+          </div>
         </div>
-      </div>
-      <TagsFilter
-        tags={tags}
-        selected={selectedTag}
-        select={tag => {
-          if (!isNewTaskShown && tag) {
-            tempTask.removeTag(selectedTag)
-            tempTask.addTag(tag)
-          }
-          setSelectedTag(tag)
-        }}
-      />
+        <TagsFilter
+          tags={tags}
+          selected={selectedTag}
+          select={tag => {
+            if (!isNewTaskShown && tag) {
+              tempTask.removeTag(selectedTag)
+              tempTask.addTag(tag)
+            }
+            setSelectedTag(tag)
+          }}
+        />
       </div>
       <ScrollContext.Provider value={scrollEmitter}>
         <div className={styles.listOfLists} ref={scrollRef}>
           {!!expiredTasks.length && <ExpiredTasks tasks={expiredTasks} />}
 
           {isNewTaskShown && tempTask !== null && (
-            <div style={{marginBottom: "24px"}}>
-              <Task task={tempTask} active onConfirm={onConfirm} newPrompt onReject={onReject} />
+            <div style={{ marginBottom: "24px" }}>
+              <Task
+                task={tempTask}
+                active
+                onConfirm={onConfirm}
+                newPrompt
+                onReject={onReject}
+              />
             </div>
           )}
 
@@ -245,7 +255,7 @@ const Today = observer(() => {
               <TaskList tasks={withoutProject} name={"Входящие"} />
               {projects.map(project => (
                 <TaskList
-                  dnd={"project_"+project.id}
+                  dnd={"project_" + project.id}
                   key={`task_list_${project.name}`}
                   tasks={tasks.filter(task => task.project === project)}
                   name={project.name}

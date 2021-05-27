@@ -21,6 +21,7 @@ declare namespace StylesMStylNamespace {
     repeatDetails: string
     separator: string
     title: string
+    trash: string
     week: string
     wrapper: string
   }

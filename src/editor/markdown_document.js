@@ -200,7 +200,6 @@ export default class MarkdownDocument extends Document {
       (fullMatch, link) => `<a href="${link}" target="_blank">${link}</a>`,
     )
 
-
     html = html.replace(/\\\*/gm, "*")
     html = html.replace(/\\`/gm, "`")
     html = html.replace(/\\_/gm, "_")

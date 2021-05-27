@@ -117,7 +117,9 @@ const TaskDateSelector = observer(
           </div>
           <div
             className={styles.fixedElement}
-            onClick={() => selectDate({ date: DateTime.now().plus({days: 1}).toJSDate() })}
+            onClick={() =>
+              selectDate({ date: DateTime.now().plus({ days: 1 }).toJSDate() })
+            }
           >
             Завтра
           </div>

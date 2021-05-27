@@ -125,7 +125,6 @@ const App = observer(() => {
       <div className={styles.timeline} ref={timelineRef}>
         <Timeline />
       </div>
-
     </div>
   )
 })

@@ -28,7 +28,7 @@ export default class SyncMachine {
     new Task(),
     new Habit(),
     new HabitRecord(),
-    new Subtask()
+    new Subtask(),
   ]
 
   state = "initial"
@@ -93,7 +93,11 @@ export default class SyncMachine {
     })
     snapshot.events.forEach(event => {
       if (event.task && !snapshot.tasks.all.find(t => t.id === event.task)) {
-        syncLogger.warn("Event %s has invalid task ref %s", event.id, event.task)
+        syncLogger.warn(
+          "Event %s has invalid task ref %s",
+          event.id,
+          event.task,
+        )
         event.task = null
       }
     })
