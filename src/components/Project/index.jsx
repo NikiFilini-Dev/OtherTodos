@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import { observer } from "mobx-react"
 import styles from "./styles.styl"
-import Task from "../Task/index.jsx"
+import Task from "../Task"
 
 const Project = observer(({ project }) => {
   const tasks = project.sortedTasks

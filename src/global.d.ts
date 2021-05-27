@@ -1,5 +1,4 @@
 import SyncMachine from "./syncMachine"
-import React from "react"
 import winston from "winston"
 import { IRootStore } from "./models/RootStore"
 
@@ -16,13 +15,6 @@ declare global {
     Store: IRootStore
   }
 }
-
-declare module "*.svg" {
-  export const ReactComponent: React.SFC<React.SVGProps<SVGSVGElement>>
-  const src: string
-  export default ReactComponent
-}
-
 // eslint-disable-next-line max-len
 declare type PrependNextNum<A extends Array<unknown>> = A["length"] extends infer T ? ((t: T, ...a: A) => void) extends ((...x: infer X) => void) ? X : never : never;
 

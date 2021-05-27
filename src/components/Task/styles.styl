@@ -77,9 +77,62 @@
   &::-webkit-input-placeholder
     color #9A9A9A
 
-.note
+.subtasksProgressInfo
+  color rgba(155, 171, 197, 1)
+  font-size 12px
+
+.subtasksProgress
+  width 100%
+  height 8px
+  border-radius 4px
+  position relative
+  background #EEF0FF
+  margin-left 16px
+
+  &::before
+    content " "
+    display block
+    position absolute
+    height 100%
+    border-radius 4px
+    background var(--brand)
+    width var(--donePercent)
+    transition width .2s
+
+.noteWrapper
   background #F7F7F7
   border-radius 16px
+  width 100%
+
+  .note
+    border-radius 16px 16px 0 0
+
+  .subtasks
+    display flex
+    flex-direction column
+    padding 23px
+    padding-top 0
+
+    .subtask
+      display flex
+      width 100%
+      align-items center
+      margin-bottom 16px
+
+      textarea
+        border 0
+        font-size 16px
+        background transparent
+        width 100%
+        margin-left 8px
+
+        &:active, &:focus
+          outline none
+
+    .addNew
+      color rgba(155, 171, 197, 1)
+      font-size 15px
+      cursor pointer
 
 .line
   display flex

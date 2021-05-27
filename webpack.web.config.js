@@ -33,6 +33,7 @@ module.exports = {
   },
   // Put your normal webpack config below here
   module: {
+
     rules,
   },
   resolve: {
@@ -85,4 +86,10 @@ module.exports = {
       },
     },
   },
+  devServer: {
+    contentBase: "./web_dist",
+    hot: true,
+    transportMode: "ws",
+  },
+  target: "web"
 }

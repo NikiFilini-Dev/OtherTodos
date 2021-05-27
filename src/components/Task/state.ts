@@ -35,29 +35,29 @@ export default class TaskState {
   }
 
   refs = {
-    container: React.createRef(),
-    input: React.createRef<HTMLInputElement>(),
+    container: React.createRef<HTMLDivElement>(),
+    input: React.createRef<HTMLTextAreaElement>(),
     checkbox: React.createRef<HTMLInputElement>(),
 
     menus: {
       datePicker: {
-        trigger: React.createRef(),
+        trigger: React.createRef<HTMLSpanElement>(),
         menu: React.createRef(),
       },
       datePicker_start: {
-        trigger: React.createRef(),
+        trigger: React.createRef<HTMLSpanElement>(),
         menu: React.createRef(),
       },
       datePicker_end: {
-        trigger: React.createRef(),
+        trigger: React.createRef<HTMLSpanElement>(),
         menu: React.createRef(),
       },
       project: {
-        trigger: React.createRef(),
+        trigger: React.createRef<HTMLSpanElement>(),
         menu: React.createRef(),
       },
       tags: {
-        trigger: React.createRef(),
+        trigger: React.createRef<HTMLDivElement>(),
         menu: React.createRef(),
       },
     },

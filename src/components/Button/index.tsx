@@ -11,7 +11,7 @@ const Button = (
     activated = false,
     awesome = false,
   }: {
-    icon: any
+    icon?: any
     text?: string
     onClick?: React.MouseEventHandler<HTMLDivElement>
     secondary?: boolean

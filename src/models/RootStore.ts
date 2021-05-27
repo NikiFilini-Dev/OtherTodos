@@ -1,16 +1,9 @@
-import {
-  types,
-  detach,
-  Instance,
-  destroy,
-  getSnapshot,
-  applySnapshot,
-} from "mobx-state-tree"
+import { applySnapshot, destroy, detach, getSnapshot, Instance, types } from "mobx-state-tree"
 import { createContext, useContext } from "react"
 import TaskList from "./TaskList"
 import Task, { factory as taskFactory } from "./Task"
 import Project from "./Project"
-import Tag, { randomTagColor, factory as tagFactory } from "./Tag"
+import Tag, { factory as tagFactory, randomTagColor } from "./Tag"
 import TimelineEvent, { factory as timelineEventFactory } from "./TimelineEvent"
 import { DateTime } from "luxon"
 import { v4 as uuidv4 } from "uuid"
@@ -18,8 +11,8 @@ import User from "./User"
 import ProjectCategory from "./ProjectCategory"
 import jsonStorage from "../tools/jsonStorage"
 import Habit, { IHabit } from "./Habit"
-import HabitRecord, { IHabitRecord } from "./HabitRecord"
-import { toJS } from "mobx"
+import HabitRecord from "./HabitRecord"
+import Subtask, { ISubtask } from "./Subtask"
 
 const RootStore = types
   .model("Store", {
@@ -47,9 +40,57 @@ const RootStore = types
     timelineWidth: types.optional(types.number, 350),
     habits: types.array(Habit),
     habitRecords: types.array(HabitRecord),
-    tempHabit: types.maybeNull(Habit)
+    tempHabit: types.maybeNull(Habit),
+    subtasks: types.array(Subtask),
   })
   .actions(self => ({
+    addSubtask(initialData: Partial<ISubtask>) {
+      if (!initialData.task) return
+      const id = initialData.id ? initialData.id : uuidv4()
+      if ("index" in initialData) {
+        initialData.task.subtasks.forEach(st => {
+          if (st.index >= (initialData.index as number)) st.setIndex(st.index+1)
+        })
+      }
+      self.subtasks.push({
+        status: "ACTIVE",
+        text: "",
+        closedAt: null,
+        task: initialData.task,
+        index: self.subtasks.reduce(
+          (acc: number, subtask: ISubtask) => subtask.index > acc ? subtask.index : acc, -1
+        ) + 1,
+        ...initialData,
+        id,
+      })
+      return id
+    },
+    moveSubtask(id: string, newIndex: number): boolean {
+      const subtask = self.subtasks.find(st => st.id === id)
+      if (!subtask) return false
+      const taskSubtasks: ISubtask[] = subtask.task.subtasks
+      if (newIndex > taskSubtasks.length - 1) newIndex = taskSubtasks.length - 1
+
+      taskSubtasks
+        .filter(st => st.index > subtask.index && st.index <= newIndex)
+        .forEach(st => st.setIndex(st.index - 1))
+      subtask.setIndex(newIndex)
+
+      return true
+    },
+    deleteSubtask(id: string): boolean {
+      const subtask = self.subtasks.find(st => st.id === id)
+      if (!subtask) return false
+
+      subtask.task.subtasks.forEach(st => {
+        if (st.index > subtask.index) st.setIndex(st.index-1)
+      })
+
+      window.syncMachine.registerDelete(subtask.id, subtask.syncName)
+
+      destroy(subtask)
+      return true
+    },
     setTempHabit(initialData?: Partial<IHabit>) {
       const id = uuidv4()
 
@@ -64,9 +105,8 @@ const RootStore = types
         // @ts-ignore
         monthlyDays: [],
         ...JSON.parse(JSON.stringify(initialData)),
-        id
+        id,
       }
-
     },
     rejectTempHabit() {
       self.tempHabit = null
@@ -74,7 +114,7 @@ const RootStore = types
     insertTempHabit() {
       if (!self.tempHabit) return
       const id = uuidv4()
-      const habit = {...JSON.parse(JSON.stringify(self.tempHabit)), id}
+      const habit = { ...JSON.parse(JSON.stringify(self.tempHabit)), id }
       self.habits.push(habit)
       this.rejectTempHabit()
     },

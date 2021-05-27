@@ -15,6 +15,7 @@ import Tag from "./types/tag"
 import Habit from "./types/habit"
 import HabitRecord from "./types/habit_record"
 import jsonStorage from "../tools/jsonStorage"
+import Subtask from "./types/subtask"
 
 const syncLogger = createLogger("SYNC")
 
@@ -27,6 +28,7 @@ export default class SyncMachine {
     new Task(),
     new Habit(),
     new HabitRecord(),
+    new Subtask()
   ]
 
   state = "initial"

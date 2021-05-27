@@ -34,7 +34,6 @@ const Today = observer(() => {
     tasks: { all },
     selectedDate,
     selectDate,
-    createTask,
     setTempTask,
     insertTempTask,
     setScreen,

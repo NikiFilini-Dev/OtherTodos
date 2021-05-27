@@ -7,7 +7,7 @@ const HabitRecord = types
     date: types.string,
     habit: types.reference(Habit)
   })
-  .views(self => ({
+  .views(() => ({
     get syncable() {
       return true
     },

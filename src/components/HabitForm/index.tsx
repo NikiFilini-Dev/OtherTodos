@@ -6,12 +6,12 @@ import CheckboxIcon from "../../assets/customIcons/checkmark.svg"
 import TimesIcon from "../../assets/customIcons/times.svg"
 import RepeatIcon from "../../assets/customIcons/repeat.svg"
 import classNames from "classnames"
-import { HabitColorMap, HabitIconMap, IHabit } from "../../models/Habit"
+import { HabitColorMap, HabitIconMap } from "../../models/Habit"
 import range from "../../tools/range"
 import { IRootStore, useMst } from "../../models/RootStore"
 
-const HabitForm = observer(({habitId, onDone}: {habitId: string | null, onDone: () => void}) => {
-  const {tempHabit, rejectTempHabit, insertTempHabit, saveTempHabit}: IRootStore = useMst()
+const HabitForm = observer(({ habitId, onDone }: { habitId: string | null, onDone: () => void }) => {
+  const { tempHabit, rejectTempHabit, insertTempHabit, saveTempHabit }: IRootStore = useMst()
   const wrapperRef = React.useRef<HTMLDivElement>(null)
   const [el] = React.useState(document.createElement("div"))
   React.useEffect(() => {
@@ -42,7 +42,9 @@ const HabitForm = observer(({habitId, onDone}: {habitId: string | null, onDone: 
         [styles.modalPart]: true,
         [styles.head]: true,
       })}>
-        <input placeholder={"Название привычки"} value={tempHabit.name} onChange={e => tempHabit.setName(e.target.value)} />
+        <input
+          placeholder={"Название привычки"} value={tempHabit.name}
+          onChange={e => tempHabit.setName(e.target.value)} />
         <div className={styles.actions}>
           <span className={styles.add} onClick={onSave}><CheckboxIcon /> Сохранить</span>
           <div className={styles.separator} />
@@ -116,36 +118,57 @@ const HabitForm = observer(({habitId, onDone}: {habitId: string | null, onDone: 
                 </div>
               </div>
               <div>
-                <div className={styles.week}>{range(0, 7).map(i => <div className={classNames({
-                  [styles.block]: true,
-                  [styles.active]: tempHabit.monthlyDays.includes(i+1)
-                })}
-                                                                        onClick={() => tempHabit.toggleMonthlyDay(i+1)}
-                                                                        key={`day_${i}`}>{i + 1}</div>)}</div>
-                <div className={styles.week}>{range(7, 14).map(i => <div className={classNames({
-                  [styles.block]: true,
-                  [styles.active]: tempHabit.monthlyDays.includes(i+1)
-                })}
-                                                                         onClick={() => tempHabit.toggleMonthlyDay(i+1)}
-                                                                         key={`day_${i}`}>{i + 1}</div>)}</div>
-                <div className={styles.week}>{range(14, 21).map(i => <div className={classNames({
-                  [styles.block]: true,
-                  [styles.active]: tempHabit.monthlyDays.includes(i+1)
-                })}
-                                                                          onClick={() => tempHabit.toggleMonthlyDay(i+1)}
-                                                                         key={`day_${i}`}>{i + 1}</div>)}</div>
-                <div className={styles.week}>{range(21, 28).map(i => <div className={classNames({
-                  [styles.block]: true,
-                  [styles.active]: tempHabit.monthlyDays.includes(i+1)
-                })}
-                                                                          onClick={() => tempHabit.toggleMonthlyDay(i+1)}
-                                                                         key={`day_${i}`}>{i + 1}</div>)}</div>
-                <div className={styles.week}>{range(28, 31).map(i => <div className={classNames({
-                  [styles.block]: true,
-                  [styles.active]: tempHabit.monthlyDays.includes(i+1)
-                })}
-                                                                          onClick={() => tempHabit.toggleMonthlyDay(i+1)}
-                                                                         key={`day_${i}`}>{i + 1}</div>)}</div>
+                <div className={styles.week}>
+                  {range(0, 7).map(i => (
+                    <div className={classNames({
+                      [styles.block]: true,
+                      [styles.active]: tempHabit.monthlyDays.includes(i + 1),
+                    })}
+                         onClick={() => tempHabit.toggleMonthlyDay(i + 1)}
+                         key={`day_${i}`}>{i + 1}</div>
+                  ))}
+                </div>
+                <div className={styles.week}>
+                  {range(7, 14).map(i => (
+                    <div className={classNames({
+                      [styles.block]: true,
+                      [styles.active]: tempHabit.monthlyDays.includes(i + 1),
+                    })}
+                         onClick={() => tempHabit.toggleMonthlyDay(i + 1)}
+                         key={`day_${i}`}>{i + 1}</div>
+                  ))}
+                </div>
+                <div className={styles.week}>
+                  {range(14, 21).map(i => (
+                    <div className={classNames({
+                      [styles.block]: true,
+                      [styles.active]: tempHabit.monthlyDays.includes(i + 1),
+                    })}
+                         onClick={() => tempHabit.toggleMonthlyDay(i + 1)}
+                         key={`day_${i}`}>{i + 1}</div>
+                  ))}
+                </div>
+                <div className={styles.week}>
+                  {range(21, 28).map(i => (
+                    <div className={classNames({
+                      [styles.block]: true,
+                      [styles.active]: tempHabit.monthlyDays.includes(i + 1),
+                    })}
+                         onClick={() => tempHabit.toggleMonthlyDay(i + 1)}
+                         key={`day_${i}`}>{i + 1}</div>
+                  ))}
+                </div>
+
+                <div className={styles.week}>
+                  {range(28, 31).map(i => (
+                    <div className={classNames({
+                      [styles.block]: true,
+                      [styles.active]: tempHabit.monthlyDays.includes(i + 1),
+                    })}
+                         onClick={() => tempHabit.toggleMonthlyDay(i + 1)}
+                         key={`day_${i}`}>{i + 1}</div>
+                  ))}
+                </div>
               </div>
             </React.Fragment>}
 
@@ -159,8 +182,8 @@ const HabitForm = observer(({habitId, onDone}: {habitId: string | null, onDone: 
                 <div className={styles.week}>
                   {weekdays.map((day, index) => <div className={classNames({
                     [styles.block]: true,
-                    [styles.active]: tempHabit.weeklyDays.includes(index+1)
-                  })} key={day} onClick={() => tempHabit.toggleWeeklyDay(index+1)}>{day}</div>)}
+                    [styles.active]: tempHabit.weeklyDays.includes(index + 1),
+                  })} key={day} onClick={() => tempHabit.toggleWeeklyDay(index + 1)}>{day}</div>)}
                 </div>
               </div>
             </React.Fragment>}
@@ -170,7 +193,8 @@ const HabitForm = observer(({habitId, onDone}: {habitId: string | null, onDone: 
           <div className={styles.name}>Повторений в день</div>
           <div className={styles.repeatCount}>
             <RepeatIcon />
-            <input type="number" value={tempHabit.recordsPerDay} onChange={e => tempHabit.setRecordsPerDay(parseInt(e.target.value))} min={1} max={10} />
+            <input type="number" value={tempHabit.recordsPerDay}
+                   onChange={e => tempHabit.setRecordsPerDay(parseInt(e.target.value))} min={1} max={10} />
             раз
           </div>
         </div>

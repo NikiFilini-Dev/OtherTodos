@@ -85,7 +85,6 @@
 
       #editor:focus {
           outline: 0px solid transparent;
-          border-color: rgba(0, 0, 255, 0.24);
       }
 
       #editor .empty {
@@ -166,10 +165,15 @@
 <div id="modals"></div>
 <div id="floats"></div>
 </body>
-<script src="/static/<%= assets["runtime.js"] %>"></script>
-<script src="/static/<%= assets["vendor.js"] %>"></script>
+<!--<script src="/static/<%= assets["runtime.js"] %>"></script>-->
+<!--<script src="/static/<%= assets["vendor.js"] %>"></script>-->
 <!--<script src="/static/<%= assets["sentry.js"] %>"></script>-->
-<script src="/static/<%= assets["main.js"] %>"></script>
+<!--<script src="/static/<%= assets["main.js"] %>"></script>-->
+
+<script src="http://localhost:8080/static/<%= assets["runtime.js"] %>"></script>
+<script src="http://localhost:8080/static/<%= assets["vendor.js"] %>"></script>
+<script src="http://localhost:8080/static/<%= assets["sentry.js"] %>"></script>
+<script src="http://localhost:8080/static/<%= assets["main.js"] %>"></script>
 <svg height="0" width="0">
   <defs>
     <clipPath id="tail">

@@ -52,13 +52,18 @@ const Habits = observer(({ date }: { date: string }) => {
   const [editingHabitId, setEditingHabitId] = React.useState<null | string>(null)
   return <React.Fragment>
     <div className={styles.list}>
-      {habits.filter(habit => habit.hasDate(date)).map(habit => <Habit habit={habit} key={habit.id}
-                                                                       records={habitRecords.filter(record =>
-                                                                         record.habit === habit && record.date === date)}
-                                                                       onEditClick={() => {
-                                                                         setEditingHabitId(habit.id)
-                                                                         setTempHabit({ ...habit })
-                                                                       }} />)}
+      {habits
+        .filter(habit => habit.hasDate(date))
+        .map(habit => (
+          <Habit
+            habit={habit}
+            key={habit.id}
+            records={habitRecords.filter(record => record.habit === habit && record.date === date)}
+            onEditClick={() => {
+              setEditingHabitId(habit.id)
+              setTempHabit({ ...habit })
+            }} />
+          ))}
       <div className={styles.addHabit} onClick={() => setTempHabit({})}>
         <PlusIcon />Добавить
       </div>

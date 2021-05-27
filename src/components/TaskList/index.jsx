@@ -1,8 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import styles from "./styles.styl"
-import Task from "../Task/index.jsx"
-import Label from "../Label/index.jsx"
+import Task from "../Task"
 
 import ListIcon from "../../assets/list.svg"
 import { observer } from "mobx-react"

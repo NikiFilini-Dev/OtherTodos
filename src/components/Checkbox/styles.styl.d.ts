@@ -3,6 +3,7 @@ declare namespace StylesStylNamespace {
     checkbox: string
     checked: string
     checkmark: string
+    circle: string
     colored: string
   }
 }

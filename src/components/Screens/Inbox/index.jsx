@@ -12,7 +12,6 @@ import { useTrap } from "../../../tools/hooks"
 const Inbox = observer(() => {
   const {
     tasks: { all },
-    createTask,
     setTempTask,
     insertTempTask,
     tempTask,
@@ -22,8 +21,6 @@ const Inbox = observer(() => {
   React.useEffect(() => {
     setTempTask({})
   }, [])
-
-  const buttonRef = React.createRef()
 
   useTrap("alt+n", () => {
     setIsNewTaskShown(!isNewTaskShown)

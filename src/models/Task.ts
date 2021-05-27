@@ -5,6 +5,8 @@ import ProjectCategory from "./ProjectCategory"
 import { v4 as uuidv4 } from "uuid"
 import { LateTimelineEvent } from "./TimelineEvent"
 import { DateTime } from "luxon"
+import { IRootStore } from "./RootStore"
+import { ISubtask } from "./Subtask"
 
 const Task = types
   .model("Task", {
@@ -36,7 +38,7 @@ const Task = types
       return "Task"
     },
     get syncable() {
-      return getParent(self).tempTask === undefined
+      return !("tempTask" in getParent(self))
     },
     get isNote() {
       return self.text.startsWith(":")
@@ -47,16 +49,31 @@ const Task = types
       if (self.text.startsWith(":")) return self.text.slice(1)
       return self.text
     },
+    get subtasks() {
+      const subtasks = getRoot<IRootStore>(self).subtasks.filter((subtask: ISubtask) => subtask.task === self)
+      subtasks.sort((a,b) => a.index - b.index)
+      return subtasks
+    },
+    get doneSubtasks() {
+      return getRoot<IRootStore>(self)
+        .subtasks
+        .filter(
+          (subtask: ISubtask) => subtask.task === self && subtask.status === "DONE"
+        )
+    },
+    get progress() {
+      return this.subtasks.filter(st => st.status === "DONE").length * (100 / this.subtasks.length)
+    }
   }))
   .actions(self => {
-    const actions = {}
-    const actionsMap = {}
+    const actions: Record<string, any> = {}
+    const actionsMap: Record<string, any[]> = {}
 
     actions.unconnectEvent = () => {
       if (!self.event) return
       const id = self.event.id
       self.event = null
-      const root = getRoot(self)
+      const root = getRoot<IRootStore>(self)
       root.deleteEvent(
         root.events.find(e => e.id === id),
         true,
@@ -67,7 +84,7 @@ const Task = types
     actions.createAndConnectEvent = () => {
       if (self.event) return
       if (!self.date) self.date = DateTime.now().toFormat("M/d/yyyy")
-      const root = getRoot(self)
+      const root = getRoot<IRootStore>(self)
       self.event = root.createEvent({
         task: self.id,
         date: self.date,
@@ -107,7 +124,7 @@ const Task = types
           newTask.closeDate = null
           newTask.id = uuidv4()
           console.log(newTask)
-          const root = getRoot(self)
+          const root = getRoot<IRootStore>(self)
           root.tasks.add(root.createTask(newTask))
         }
       } else self.closeDate = null
@@ -130,7 +147,7 @@ const Task = types
       self.date = value
       if (self.event) {
         if (value) self.event.setDate(self.date)
-        else self.unconnectEvent()
+        else actions.unconnectEvent()
       }
     }
     actionsMap.setDate = ["date", "event"]
@@ -175,7 +192,7 @@ const Task = types
     return actions
   })
 
-export const factory = (id, data = {}) => {
+export const factory = (id, data: Record<string, any> = {}) => {
   if (data.project === "") data.project = null
   if (data.event === "") data.event = null
   if (data.category === "") data.category = null

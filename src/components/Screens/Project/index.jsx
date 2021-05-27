@@ -75,7 +75,6 @@ const Project = observer(() => {
     projects,
     tempTask,
     tasks: { all },
-    createTask,
     setTempTask,
     insertTempTask,
     deleteCategory,

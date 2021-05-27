@@ -1,6 +1,7 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
     active: string
+    addNew: string
     check: string
     checkPlaceholder: string
     colored: string
@@ -16,6 +17,7 @@ declare namespace StylesStylNamespace {
     inline: string
     line: string
     note: string
+    noteWrapper: string
     notes: string
     padding: string
     priorityWrapper: string
@@ -28,6 +30,10 @@ declare namespace StylesStylNamespace {
     repeatCount: string
     selected: string
     spaceBetween: string
+    subtask: string
+    subtasks: string
+    subtasksProgress: string
+    subtasksProgressInfo: string
     tag: string
     tags: string
     tagsTrigger: string
