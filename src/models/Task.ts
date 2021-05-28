@@ -47,22 +47,22 @@ const Task = types
       if (self.text.startsWith(":")) return self.text.slice(1)
       return self.text
     },
-    subtasks() {
+    get subtasks() {
       const subtasks = getRoot<IRootStore>(self).subtasks.filter(
         (subtask: ISubtask) => subtask.task === self,
       )
       subtasks.sort((a, b) => a.index - b.index)
       return subtasks
     },
-    doneSubtasks() {
+    get doneSubtasks() {
       return getRoot<IRootStore>(self).subtasks.filter(
         (subtask: ISubtask) =>
           subtask.task === self && subtask.status === "DONE",
       )
     },
-    progress() {
+    get progress() {
       return (
-        this.subtasks().filter(st => st.status === "DONE").length *
+        this.subtasks.filter(st => st.status === "DONE").length *
         (100 / this.subtasks.length)
       )
     },
@@ -75,6 +75,11 @@ const Task = types
       self.tags = val
     }
     actionsMap.setTags = ["tags"]
+
+    actions.setEvent = val => {
+      self.event = val
+    }
+    actionsMap.setEvent = ["event"]
 
     actions.unconnectEvent = () => {
       if (!self.event) return
@@ -103,14 +108,10 @@ const Task = types
     }
     actionsMap.createAndConnectEvent = ["event"]
 
-    actions.setCloseDate = val => {
-      self.closeDate = val
-    }
+    actions.setCloseDate = val => self.closeDate = val
     actionsMap.setCloseDate = ["closeDate"]
 
-    actions.setRepeating = val => {
-      self.repeating = val
-    }
+    actions.setRepeating = val => self.repeating = val
     actionsMap.setRepeating = ["repeating"]
 
     actions.setRepeatEvery = n => {
@@ -124,33 +125,48 @@ const Task = types
       if (value) {
         self.closeDate = DateTime.now().toFormat("M/d/yyyy")
         if (self.repeatEvery) {
-          const newTask = JSON.parse(JSON.stringify(self))
-          newTask.date = DateTime.fromFormat(
+          const newDate = DateTime.fromFormat(
             self.date || self.closeDate,
             "M/d/yyyy",
           )
             .plus({ days: self.repeatEvery })
             .toFormat("M/d/yyyy")
-          newTask.status = "active"
-          newTask.creationDate = DateTime.now().toFormat("M/d/yyyy")
-          newTask.closeDate = null
-          newTask.id = uuidv4()
-          console.log(newTask)
+
           const root = getRoot<IRootStore>(self)
+
+          const newTask = {
+            ...JSON.parse(JSON.stringify(self)),
+            date: newDate,
+            status: "active",
+            creationDate: DateTime.now().toFormat("M/d/yyyy"),
+            closeDate: null,
+            id: uuidv4(),
+          }
+
+          console.log(newTask)
           root.tasks.add(root.createTask(newTask))
+
+          self.subtasks.forEach(st => {
+            root.addSubtask({
+              ...st,
+              status: "ACTIVE",
+              task: newTask.id
+            })
+          })
+
+          if (self.event) {
+            const newEventId = root.createEvent({...self.event, task: newTask.id, date: newTask.date})
+            root.tasks.all.find(t => t.id === newTask.id).setEvent(newEventId)
+          }
         }
       } else self.closeDate = null
     }
     actionsMap.changeStatus = ["status", "closeDate"]
 
-    actions.setNote = value => {
-      self.note = value
-    }
+    actions.setNote = value => self.note = value
     actionsMap.setNote = ["note"]
 
-    actions.setPriority = value => {
-      self.priority = value
-    }
+    actions.setPriority = value => self.priority = value
     actionsMap.setPriority = ["priority"]
 
     actions.setDate = value => {
@@ -165,9 +181,10 @@ const Task = types
     actionsMap.setDate = ["date", "event"]
 
     actions.setProject = project => {
+      if (self.category && self.category.project !== project) self.category = null
       self.project = project
     }
-    actionsMap.setProject = ["project"]
+    actionsMap.setProject = ["project", "category"]
 
     actions.addTag = tag => {
       console.log(tag)

@@ -60,6 +60,10 @@ export default class TaskState {
         trigger: React.createRef<HTMLDivElement>(),
         menu: React.createRef(),
       },
+      priority: {
+        trigger: React.createRef<HTMLDivElement>(),
+        menu: React.createRef(),
+      },
     },
   }
 
@@ -104,12 +108,17 @@ export default class TaskState {
   }
 
   elementInAnyMenuOrTrigger(el) {
+    console.log(this.refs.menus)
     for (const name of Object.keys(this.menus)) {
       if (
         this.inRef(el, this.refs.menus[name].menu) ||
         this.inRef(el, this.refs.menus[name].trigger)
-      )
+      ){
+        console.log("IN MENU", name)
         return true
+      }
+
+
     }
     return false
   }

@@ -6,13 +6,13 @@ import FloatMenu from "../FloatMenu/index.jsx"
 import { useClick } from "../../tools/hooks"
 import noop from "lodash-es/noop"
 
-const PrioritySelector = ({ priority, onSelect = noop }) => {
+const PrioritySelector = ({ priority, menuRef, triggerRef, onSelect = noop }) => {
   const ref = React.useRef(null)
   const [isShown, setIsShown] = React.useState(false)
   const wrapperRef = React.useRef(null)
 
   const onPriorityClick = priority => {
-    setIsShown(false)
+    setTimeout(() => setIsShown(false), 100)
     onSelect(priority)
   }
 
@@ -23,17 +23,17 @@ const PrioritySelector = ({ priority, onSelect = noop }) => {
       e.target !== wrapperRef.current &&
       !wrapperRef.current.contains(e.target)
     )
-      setIsShown(false)
+      setTimeout(() => setIsShown(false), 100)
   })
 
   return (
     <div className={styles.wrapper} ref={wrapperRef}>
-      <div onClick={() => setIsShown(!isShown)}>
+      <div onClick={() => setIsShown(!isShown)} ref={triggerRef}>
         <PriorityIndicator priority={priority} ref={ref} />
       </div>
 
       {isShown && (
-        <FloatMenu target={ref} position={"vertical_right"}>
+        <FloatMenu target={ref} position={"vertical_right"} menuRef={menuRef}>
           <div className={styles.priorityList}>
             <div
               className={styles.priorityElement}
@@ -63,6 +63,8 @@ const PrioritySelector = ({ priority, onSelect = noop }) => {
 PrioritySelector.propTypes = {
   priority: PropTypes.number,
   onSelect: PropTypes.func,
+  menuRef: PropTypes.any,
+  triggerRef: PropTypes.any,
 }
 
 export default PrioritySelector

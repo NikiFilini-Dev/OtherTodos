@@ -21,24 +21,24 @@ const Content = observer(
     const categories = [...selectedProject.categories]
     categories.sort((a, b) => a.index - b.index)
     const Category = observer(({ provided, category }) => (
-      <div
-        style={provided.draggableStyle}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-        ref={provided.innerRef}
-        className={styles.project}
-      >
+      // <div
+      //   style={provided.draggableStyle}
+      //   {...provided.draggableProps}
+      //   {...provided.dragHandleProps}
+      //   ref={provided.innerRef}
+      //   className={styles.project}
+      // >
         <TaskList
           tasks={category.sortedTasks}
           name={category.name}
           renamable
           showEmpty
-          dnd={`tasklist_${category.id}`}
+          // dnd={`tasklist_${category.id}`}
           deletable={!category.tasks.length}
           onDelete={() => deleteCategory(category)}
           onNameChange={e => category.setName(e.target.value)}
         />
-      </div>
+      // </div>
     ))
     return (
       <div className={styles.listOfLists} ref={provided.innerRef}>
@@ -48,15 +48,8 @@ const Content = observer(
           showEmpty
           dnd={"nocategory"}
         />
-        {categories.map((category, index) => (
-          <Draggable
-            key={`category_${category.id}`}
-            draggableId={`category_${category.id}`}
-            type={"CATEGORY"}
-            index={index}
-          >
-            {provided => <Category provided={provided} category={category} />}
-          </Draggable>
+        {categories.map((category) => (
+          <Category provided={provided} category={category} key={category.id} />
         ))}
         {provided.placeholder}
         <div
@@ -185,6 +178,9 @@ const Project = observer(() => {
   React.useEffect(() => (window.onDragEndFunc = onDragEnd))
   window.onDragEndFunc = onDragEnd
 
+  const categories = [...selectedProject.categories]
+  categories.sort((a, b) => a.index - b.index)
+
   return (
     <div className={styles.screen}>
       <div className={styles.head}>
@@ -216,7 +212,10 @@ const Project = observer(() => {
             />
             <Button
               icon={PlusIcon}
-              onClick={() => setIsNewTaskShown(!isNewTaskShown)}
+              onClick={() => {
+                setTempTask(initialTaskData)
+                setIsNewTaskShown(!isNewTaskShown)
+              }}
               activated={isNewTaskShown}
             />
           </div>
@@ -224,7 +223,7 @@ const Project = observer(() => {
         <TagsFilter
           selected={selectedTag}
           select={tag => {
-            if (!isNewTaskShown && tag) {
+            if (!isNewTaskShown && tag && tempTask) {
               tempTask.removeTag(selectedTag)
               tempTask.addTag(tag)
             }
@@ -245,19 +244,23 @@ const Project = observer(() => {
           />
         </div>
       )}
-
-      <Droppable droppableId={"projectsList"} type={"PROJECT"}>
-        {(provided, snapshot) => (
-          <Content
-            provided={provided}
-            snapshot={snapshot}
-            selectedProject={selectedProject}
-            deleteCategory={deleteCategory}
-            setIsNewTaskShown={setIsNewTaskShown}
-            tasks={tasks}
-          />
-        )}
-      </Droppable>
+      <div className={styles.listOfLists}>
+        <TaskList
+          tasks={tasks.filter(t => !t.category)}
+          name={"Без категории"}
+          showEmpty
+          dnd={"nocategory"}
+        />
+      {categories.map(category => <TaskList tasks={category.sortedTasks}
+                                            key={category.id}
+                                     name={category.name}
+                                     renamable
+                                     showEmpty
+                                     dnd={`tasklist_${category.id}`}
+                                     deletable={!category.tasks.length}
+                                     onDelete={() => deleteCategory(category)}
+                                     onNameChange={e => category.setName(e.target.value)} /> )}
+      </div>
     </div>
   )
 })

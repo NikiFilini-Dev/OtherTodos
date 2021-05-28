@@ -101,7 +101,7 @@ export default class SyncMachine {
         event.task = null
       }
     })
-    const trash: string[] = []
+    let trash: string[] = []
     snapshot.subtasks.forEach((subtask, i) => {
       if (!snapshot.tasks.all.find(t => t.id === subtask.task)) {
         syncLogger.warn(
@@ -114,6 +114,21 @@ export default class SyncMachine {
     })
     trash.forEach(id => {
       snapshot.subtasks.splice(snapshot.subtasks.findIndex(st => st.id === id), 1)
+    })
+
+    trash = []
+    snapshot.habitRecords.forEach((record, i) => {
+      if (!snapshot.habits.find(h => h.id === record.habit)) {
+        syncLogger.warn(
+          "HabitRecord %s has invalid habit ref %s",
+          record.id,
+          record.habit,
+        )
+        trash.push(record.id)
+      }
+    })
+    trash.forEach(id => {
+      snapshot.habitRecords.splice(snapshot.habitRecords.findIndex(st => st.id === id), 1)
     })
     return snapshot
   }
@@ -195,7 +210,7 @@ export default class SyncMachine {
         date: new Date(),
       }
     })
-    syncLogger.info(fields)
+    syncLogger.info("Created fields: %s", JSON.stringify(fields))
     type.registerChange(fields, data.id)
     this.resetTimer()
   }
@@ -242,6 +257,7 @@ export default class SyncMachine {
       })
 
       logger.debug("Actions %s invoked", call.name)
+      syncLogger.info("Changed fields: %s", JSON.stringify(fields))
 
       type.registerChange(fields, call.context.id)
       this.resetTimer()

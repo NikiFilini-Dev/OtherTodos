@@ -172,7 +172,7 @@ const Today = observer(() => {
   React.useEffect(() => (window.onDragEndFunc = onDragEnd), [])
   window.onDragEndFunc = onDragEnd
 
-  const date = toTitleCase(useDateFormat(selectedDate, "M/d/yyyy", "dd.MM"))
+  const date = toTitleCase(DateTime.fromFormat(selectedDate, "M/d/yyyy").toFormat( "dd.MM"))
 
   return (
     <div className={styles.screen}>

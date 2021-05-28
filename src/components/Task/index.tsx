@@ -55,18 +55,18 @@ const Task = observer(
     const {
       tasks: { deleteTask, selected, select },
       addSubtask,
-      tempTask,
-      setTempTask
+      editingTask,
+      setEditingTask
     }: IRootStore = useMst()
     const [state] = React.useState(new TaskState())
     const [taskEmitter] = React.useState(new Emitter())
 
-    const task = state.active? tempTask : source
+    const task = state.active && !newPrompt? editingTask : source
 
     React.useEffect(() => {
       taskEmitter.on("*", console.log)
       taskEmitter.on("add_subtask", (index: number) => {
-        const id = addSubtask({ source, index })
+        const id = addSubtask({ task: source, index })
         setTimeout(() => taskEmitter.emit("focus_subtask", id), 200)
       })
     }, [taskEmitter])
@@ -79,37 +79,39 @@ const Task = observer(
 
     const onActivation = () => {
       const json = {...source.toJSON()}
+      json.project = source.project?.id
       json.id = v4()
-      setTempTask(json)
+      setEditingTask(json)
     }
 
     const onDeactivation = () => {
-      console.log("Deactivation", source.id)
+      if (!editingTask) return
+      if (editingTask.text !== source.text)
+        source.setText(editingTask.text)
+      if (editingTask.note !== source.note)
+        source.setNote(editingTask.note)
+      if (editingTask.project !== source.project)
+        source.setProject(editingTask.project)
+      if (!_.eq(editingTask.tags.map(t => t.id), source.tags.map(t => t.id)))
+        source.setTags(editingTask.tags.map(t => t.id))
+      if (editingTask.repeatEvery !== source.repeatEvery)
+        source.setRepeatEvery(editingTask.repeatEvery)
+      if (editingTask.status !== source.status)
+        source.setStatus(editingTask.status)
+      if (editingTask.priority !== source.priority)
+        source.setPriority(editingTask.priority)
+      if (editingTask.date !== source.date)
+        source.setDate(editingTask.date)
+      if (editingTask.repeating !== source.repeating)
+        source.setRepeating(editingTask.repeating)
+      if (editingTask.category !== source.category)
+        source.setRepeating(editingTask.category)
+      if (editingTask.event !== source.event)
+        source.setEvent(editingTask.event)
+      if (editingTask.colorTag !== source.colorTag)
+        source.setColorTag(editingTask.colorTag)
 
-      if (tempTask.text !== source.text)
-        source.setText(tempTask.text)
-      if (tempTask.note !== source.note)
-        source.setNote(tempTask.note)
-      if (tempTask.project !== source.project)
-        source.setProject(tempTask.project)
-      if (!_.eq(tempTask.tags.map(t => t.id), source.tags.map(t => t.id)))
-        source.setTags(tempTask.tags.map(t => t.id))
-      if (tempTask.repeatEvery !== source.repeatEvery)
-        source.setRepeatEvery(tempTask.repeatEvery)
-      if (tempTask.status !== source.status)
-        source.setStatus(tempTask.status)
-      if (tempTask.priority !== source.priority)
-        source.setPriority(tempTask.priority)
-      if (tempTask.date !== source.date)
-        source.setDate(tempTask.date)
-      if (tempTask.repeating !== source.repeating)
-        source.setRepeating(tempTask.repeating)
-      if (tempTask.category !== source.category)
-        source.setRepeating(tempTask.category)
-      if (tempTask.event !== source.event)
-        source.setEvent(tempTask.event)
-      if (tempTask.colorTag !== source.colorTag)
-        source.setColorTag(tempTask.colorTag)
+      setEditingTask({})
     }
 
     useClick(document, e => {
@@ -199,6 +201,7 @@ const Task = observer(
       )
         return
 
+
       if (selected === source.id && !state.active) {
         state.active = true
         onActivation()
@@ -209,7 +212,10 @@ const Task = observer(
     }
 
     const onPrioritySelect = priority => {
-      task.setPriority(priority)
+      if (editingTask)
+        editingTask.setPriority(priority)
+      else
+        source.setPriority(priority)
     }
 
     const selectTag = tag => task.addTag(tag)
@@ -230,7 +236,7 @@ const Task = observer(
     }
 
     const onAddSubtaskClick = () => {
-      const id = addSubtask({ source })
+      const id = addSubtask({ task: source })
       setTimeout(() => taskEmitter.emit("focus_subtask", id), 200)
     }
 
@@ -345,18 +351,20 @@ const Task = observer(
               <PrioritySelector
                 onSelect={onPrioritySelect}
                 priority={task.priority}
+                menuRef={state.refs.menus.priority.menu}
+                triggerRef={state.refs.menus.priority.trigger}
               />
             </div>
           </div>
-          {task.subtasks().length > 0 && (
+          {source.subtasks.length > 0 && (
             <div className={styles.line}>
               <span className={styles.subtasksProgressInfo}>
-                {task.doneSubtasks().length}/{task.subtasks().length}
+                {source.doneSubtasks.length}/{source.subtasks.length}
               </span>
               <div
                 className={styles.subtasksProgress}
                 style={
-                  { "--donePercent": `${task.progress()}%` } as CSSProperties
+                  { "--donePercent": `${source.progress}%` } as CSSProperties
                 }
               />
             </div>
@@ -397,7 +405,7 @@ const Task = observer(
               {/*@ts-ignore */}
               <baka-editor class={styles.note} ref={editorRef} />
               <div className={styles.subtasks}>
-                {source.subtasks().map(st => (
+                {source.subtasks.map(st => (
                   <Subtask subtask={st} key={st.id} />
                 ))}
                 <div className={styles.addNew} onClick={onAddSubtaskClick}>
@@ -460,7 +468,7 @@ const Task = observer(
               </div>
             </div>
             {!active && (
-              <div className={styles.delete} onClick={() => deleteTask(task)}>
+              <div className={styles.delete} onClick={() => deleteTask(source)}>
                 <TrashIcon />
               </div>
             )}

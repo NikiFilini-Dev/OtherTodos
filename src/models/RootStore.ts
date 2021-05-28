@@ -25,6 +25,7 @@ const RootStore = types
   .model("Store", {
     user: types.maybeNull(User),
     tempTask: types.maybeNull(Task),
+    editingTask: types.maybeNull(Task),
     events: types.array(TimelineEvent),
     tasks: TaskList,
     projects: types.array(Project),
@@ -55,7 +56,7 @@ const RootStore = types
       if (!initialData.task) return
       const id = initialData.id ? initialData.id : uuidv4()
       if ("index" in initialData && typeof(initialData.task) !== "string") {
-        initialData.task.subtasks().forEach(st => {
+        initialData.task.subtasks.forEach(st => {
           if (st.index >= (initialData.index as number))
             st.setIndex(st.index + 1)
         })
@@ -79,7 +80,7 @@ const RootStore = types
     moveSubtask(id: string, newIndex: number): boolean {
       const subtask = self.subtasks.find(st => st.id === id)
       if (!subtask) return false
-      const taskSubtasks: ISubtask[] = subtask.task.subtasks()
+      const taskSubtasks: ISubtask[] = subtask.task.subtasks
       if (newIndex > taskSubtasks.length - 1) newIndex = taskSubtasks.length - 1
 
       taskSubtasks
@@ -93,7 +94,7 @@ const RootStore = types
       const subtask = self.subtasks.find(st => st.id === id)
       if (!subtask) return false
 
-      subtask.task.subtasks().forEach(st => {
+      subtask.task.subtasks.forEach(st => {
         if (st.index > subtask.index) st.setIndex(st.index - 1)
       })
 
@@ -189,6 +190,10 @@ const RootStore = types
       if (self.tempTask.event) {
         self.tempTask.event.task = task.id
       }
+      self.tempTask.subtasks.forEach(st => {
+        st.task = task.id
+        window.syncMachine.registerCreate(st)
+      })
       detach(self.tempTask)
     },
     setTempTask(task) {
@@ -197,6 +202,21 @@ const RootStore = types
         if (self.tempTask.toJSON().event) this.deleteEvent(self.tempTask.event)
       }
       self.tempTask = task
+      if (self.tempTask !== null)
+        console.log("Temp task:", self.tempTask.toJSON())
+      else
+        console.log("Temp task:", self.tempTask)
+    },
+    setEditingTask(task) {
+      task = taskFactory(uuidv4(), task)
+      // if (self.tempTask !== null) {
+      //   if (self.tempTask.toJSON().event) this.deleteEvent(self.tempTask.event)
+      // }
+      self.editingTask = task
+      if (self.editingTask !== null)
+        console.log("Editing task:", self.editingTask.toJSON())
+      else
+        console.log("Editing task:", self.editingTask)
     },
     setTimelineDate(val) {
       if (val instanceof Date) {

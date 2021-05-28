@@ -7,16 +7,19 @@ import range from "../../tools/range"
 import CheckboxIcon from "../../assets/checkmark.svg"
 import EditIcon from "../../assets/customIcons/edit.svg"
 import PlusIcon from "../../assets/customIcons/plusCircle.svg"
-import { DateTime } from "luxon"
 import HabitForm from "../HabitForm"
 import classNames from "classnames"
 
 const Habit = observer(
-  ({ habit, onEditClick }: { habit: IHabit; onEditClick: () => void }) => {
+  ({ habit, onEditClick, date }: { habit: IHabit; onEditClick: () => void, date: string }) => {
     const { createHabitRecord, deleteHabitRecord } = useMst()
     const editRef = React.useRef<HTMLDivElement>(null)
-    const donePercent = (100 / habit.recordsPerDay) * habit.records.length
+
+    const records = habit.records.filter(r => r.date === date)
+
+    const donePercent = (100 / habit.recordsPerDay) * records.length
     const onHabitClick = e => {
+      const records = habit.records.filter(r => r.date === date)
       if (!editRef.current) return
       if (editRef.current === e.target || editRef.current.contains(e.target))
         onEditClick()
@@ -26,10 +29,10 @@ const Habit = observer(
         e.target.tagName === "path"
       )
         return
-      else if (habit.records.length < habit.recordsPerDay)
+      else if (records.length < habit.recordsPerDay)
         createHabitRecord({
           habit,
-          date: DateTime.now().toFormat("M/d/yyyy"),
+          date
         })
     }
     const Icon = HabitIconMap[habit.icon]
@@ -50,7 +53,7 @@ const Habit = observer(
         <div
           className={classNames({
             [styles.background]: true,
-            [styles.invisible]: !habit.records.length,
+            [styles.invisible]: !records.length,
           })}
         />
         <div className={styles.info}>
@@ -58,7 +61,7 @@ const Habit = observer(
           <span>{habit.name}</span>
         </div>
         <div className={styles.records}>
-          {habit.records.map(record => (
+          {records.map(record => (
             <div
               className={styles.done}
               key={record.id}
@@ -67,7 +70,7 @@ const Habit = observer(
               <CheckboxIcon />
             </div>
           ))}
-          {range(habit.recordsPerDay - habit.records.length).map(index => (
+          {range(habit.recordsPerDay - records.length).map(index => (
             <div className={styles.waiting} key={index} />
           ))}
         </div>
@@ -81,13 +84,16 @@ const Habits = observer(({ date }: { date: string }) => {
   const [editingHabitId, setEditingHabitId] = React.useState<null | string>(
     null,
   )
+  const arr = [...habits]
+  arr.sort((b,a) => b.isDone(date) - a.isDone(date))
   return (
     <React.Fragment>
       <div className={styles.list}>
-        {habits
+        {arr
           .filter(habit => habit.hasDate(date))
           .map(habit => (
             <Habit
+              date={date}
               habit={habit}
               key={habit.id}
               onEditClick={() => {

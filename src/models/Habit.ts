@@ -116,6 +116,9 @@ const Habit = types
         (hr: IHabitRecord) => hr.habit === self,
       )
     },
+    isDone(date: string) {
+      return this.records.filter(r => r.date === date).length > 0
+    }
   }))
   .actions(self => {
     const actions: Record<string, any> = {}

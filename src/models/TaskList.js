@@ -1,4 +1,4 @@
-import { types, destroy, getParent } from "mobx-state-tree"
+import { types, destroy, getParent, getRoot } from "mobx-state-tree"
 import Task, { factory } from "./Task"
 import { DateTime } from "luxon"
 
@@ -41,8 +41,12 @@ const TaskList = types
     deleteTask(task) {
       if (self.selected === task) self.selected = null
       if (task.event) task.unconnectEvent()
+      window.syncMachine.registerDelete(task.id, task.syncName)
+      const root = getRoot(self)
+      task.subtasks.forEach(st => {
+        root.deleteSubtask(st.id)
+      })
       self.all.splice(self.all.indexOf(task), 1)
-      window.syncMachine.registerDelete(task.id, "task")
       destroy(task)
     },
     loadTasksFromData(tasksData) {
