@@ -1,4 +1,4 @@
-import React from "react"
+import React, { CSSProperties } from "react"
 import styles from "./styles.styl"
 import classNames from "classnames"
 
@@ -10,6 +10,7 @@ const Button = (
     secondary = false,
     activated = false,
     awesome = false,
+    color = ""
   }: {
     icon?: any
     text?: string
@@ -17,6 +18,7 @@ const Button = (
     secondary?: boolean
     activated?: boolean
     awesome?: boolean
+    color?: string
   },
   ref,
 ) => {
@@ -28,6 +30,7 @@ const Button = (
         [styles.secondary]: secondary,
         [styles.activated]: activated,
       })}
+      style={{"--color": color} as CSSProperties}
       onClick={onClick}
       ref={ref}
     >

@@ -34,6 +34,7 @@ const ExpiredTasks = observer(({ tasks }) => {
               icon={MoveIcon}
               text={"Перенести"}
               onClick={() => setIsDatePickerOpen(true)}
+              color={"red"}
             />
             {isDatePickerOpen && (
               <DateSelector
