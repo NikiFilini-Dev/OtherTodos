@@ -59,6 +59,7 @@ const HabitForm = observer(
             })}
           >
             <input
+              autoFocus
               placeholder={"Название привычки"}
               value={tempHabit.name}
               onChange={e => tempHabit.setName(e.target.value)}
