@@ -47,22 +47,22 @@ const Task = types
       if (self.text.startsWith(":")) return self.text.slice(1)
       return self.text
     },
-    get subtasks() {
+    subtasks() {
       const subtasks = getRoot<IRootStore>(self).subtasks.filter(
         (subtask: ISubtask) => subtask.task === self,
       )
       subtasks.sort((a, b) => a.index - b.index)
       return subtasks
     },
-    get doneSubtasks() {
+    doneSubtasks() {
       return getRoot<IRootStore>(self).subtasks.filter(
         (subtask: ISubtask) =>
           subtask.task === self && subtask.status === "DONE",
       )
     },
-    get progress() {
+    progress() {
       return (
-        this.subtasks.filter(st => st.status === "DONE").length *
+        this.subtasks().filter(st => st.status === "DONE").length *
         (100 / this.subtasks.length)
       )
     },
@@ -70,6 +70,11 @@ const Task = types
   .actions(self => {
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, any[]> = {}
+
+    actions.setTags = val => {
+      self.tags = val
+    }
+    actionsMap.setTags = ["tags"]
 
     actions.unconnectEvent = () => {
       if (!self.event) return
@@ -102,6 +107,11 @@ const Task = types
       self.closeDate = val
     }
     actionsMap.setCloseDate = ["closeDate"]
+
+    actions.setRepeating = val => {
+      self.repeating = val
+    }
+    actionsMap.setRepeating = ["repeating"]
 
     actions.setRepeatEvery = n => {
       if (!n) n = 0

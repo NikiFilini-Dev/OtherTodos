@@ -68,9 +68,14 @@ export default class TaskState {
     this.menus[name] = true
   }
 
-  closeMenu(name: string) {
+  _closeMenu(name: string) {
     if (!(name in this.menus) || !this.menus[name]) return
     this.menus[name] = false
+  }
+
+  closeMenu(name: string) {
+    setTimeout(() => this._closeMenu(name), 100)
+    // this.menus[name] = false
   }
 
   inRef(el, ref) {

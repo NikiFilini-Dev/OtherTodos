@@ -101,6 +101,20 @@ export default class SyncMachine {
         event.task = null
       }
     })
+    const trash: string[] = []
+    snapshot.subtasks.forEach((subtask, i) => {
+      if (!snapshot.tasks.all.find(t => t.id === subtask.task)) {
+        syncLogger.warn(
+          "Subtask %s has invalid task ref %s",
+          subtask.id,
+          subtask.task,
+        )
+        trash.push(subtask.id)
+      }
+    })
+    trash.forEach(id => {
+      snapshot.subtasks.splice(snapshot.subtasks.findIndex(st => st.id === id), 1)
+    })
     return snapshot
   }
 
@@ -162,38 +176,42 @@ export default class SyncMachine {
     this.resetTimer()
   }
 
+  registerCreate(node) {
+    if (!node.syncable) return
+
+    const type = this.types.find(
+      type => type.name.toLowerCase() === node.syncName.toLowerCase(),
+    )
+    if (!type) {
+      syncLogger.warn("TYPE %s NOT REGISTERED", node.syncName)
+      return
+    }
+
+    const data = node.toJSON()
+    const fields = {}
+    Object.keys(data).forEach(fieldName => {
+      fields[fieldName] = {
+        value: data[fieldName],
+        date: new Date(),
+      }
+    })
+    syncLogger.info(fields)
+    type.registerChange(fields, data.id)
+    this.resetTimer()
+  }
+
   hookCreate() {
     onPatch(this.store, patch => {
       if (!this.hydrated || this.applying) return
       if (patch.op === "add") {
         const node = pointer.get(this.store, patch.path)
         if (!node.syncable) return
-
         if (
           typeof node.isReference == "function" &&
           node.isReference(patch.path)
         )
           return
-
-        const type = this.types.find(
-          type => type.name.toLowerCase() === node.syncName.toLowerCase(),
-        )
-        if (!type) {
-          syncLogger.warn("TYPE %s NOT REGISTERED", node.syncName)
-          return
-        }
-
-        const data = node.toJSON()
-        const fields = {}
-        Object.keys(data).forEach(fieldName => {
-          fields[fieldName] = {
-            value: data[fieldName],
-            date: new Date(),
-          }
-        })
-
-        type.registerChange(fields, data.id)
-        this.resetTimer()
+        this.registerCreate(node)
       }
     })
   }

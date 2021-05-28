@@ -11,6 +11,9 @@ import ProjectSelector from "components/ProjectSelector"
 import FloatMenu from "components/FloatMenu"
 import TagsSelector from "components/TagsSelector"
 
+import Tags from "./components/Tags"
+import Subtask from "./components/Subtask"
+
 import FolderIcon from "assets/folder.svg"
 import CalendarIcon from "assets/calendar.svg"
 import StarIcon from "assets/star.svg"
@@ -18,7 +21,6 @@ import TrashIcon from "assets/awesome/regular/trash-alt.svg"
 import TagsIcon from "assets/awesome/solid/tags.svg"
 import RedoIcon from "assets/awesome/solid/redo.svg"
 import CalendarWeekIcon from "assets/awesome/solid/calendar-week.svg"
-import PalletIcon from "assets/line_awesome/palette-solid.svg"
 import {
   useClick,
   useClickOutsideRef,
@@ -33,117 +35,17 @@ import { DateTime } from "luxon"
 import TextareaAutosize from "react-textarea-autosize"
 import Button from "../Button"
 import BakaEditor from "../../editor"
-import { ISubtask } from "../../models/Subtask"
 import Emitter from "eventemitter3"
-import { noop } from "lodash"
+import _, { noop } from "lodash"
 import Tag from "components/Tag"
+import { toJS } from "mobx"
+import { v4 } from "uuid"
 
-const TaskContext = React.createContext(new Emitter())
-
-const Tags = observer(({ task }) => {
-  const [selectedTagId, setSelectedTagId] = React.useState(null)
-  const ref = React.useRef(null)
-  const onTagClick = tag => {
-    if (tag.id === selectedTagId) {
-      task.removeTag(tag)
-      setSelectedTagId(null)
-    } else {
-      setSelectedTagId(tag.id)
-    }
-  }
-  useClickOutsideRef(ref, () => setSelectedTagId(null))
-  return (
-    <div
-      ref={ref}
-      className={classNames({
-        [styles.line]: true,
-        [styles.padding]: true,
-        [styles.fullOnly]: true,
-      })}
-    >
-      {task.tags.map(tag => (
-        <span
-          key={`task_${task.id}#tag_${tag.id}`}
-          className={classNames({
-            [styles.tag]: true,
-            [styles.active]: task.colorTag === tag,
-          })}
-          style={{ "--tag-color": tag.color } as CSSProperties}
-        >
-          <span
-            onClick={() => onTagClick(tag)}
-            style={{ userSelect: tag.id === selectedTagId ? "none" : "auto" }}
-          >
-            {tag.name}
-          </span>
-          <PalletIcon
-            onClick={() => {
-              if (task.colorTag === tag) {
-                task.setColorTag(null)
-              } else {
-                task.setColorTag(tag)
-              }
-            }}
-          />
-        </span>
-      ))}
-    </div>
-  )
-})
-
-const Subtask = observer(({ subtask }: { subtask: ISubtask }) => {
-  const { deleteSubtask }: IRootStore = useMst()
-  const [lastText, setLastText] = React.useState("")
-  const inputRef = React.useRef<HTMLTextAreaElement | null>(null)
-  const emitter = React.useContext(TaskContext)
-
-  React.useEffect(() => {
-    emitter.on("focus_subtask", (subtaskId: string) => {
-      if (subtaskId !== subtask.id || !inputRef.current) return
-      inputRef.current.focus()
-    })
-  }, [emitter])
-
-  const onKeyUp = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Backspace" && lastText.length === 0) {
-      e.preventDefault()
-      const prev = subtask.task.subtasks.find(
-        st => st.index === subtask.index - 1,
-      )
-      if (prev) emitter.emit("focus_subtask", prev.id)
-      deleteSubtask(subtask.id)
-    }
-    setLastText((e.target as HTMLTextAreaElement).value)
-  }
-
-  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key !== "Enter") return
-    e.preventDefault()
-    emitter.emit("add_subtask", subtask.index + 1)
-  }
-
-  return (
-    <div key={subtask.id} className={styles.subtask}>
-      <Checkbox
-        checked={subtask.status === "DONE"}
-        circle
-        onChange={val => subtask.setStatus(val ? "DONE" : "ACTIVE")}
-      />
-      <TextareaAutosize
-        placeholder={"Новая подзадача"}
-        value={subtask.text}
-        onChange={e => subtask.setText(e.target.value)}
-        onKeyUp={onKeyUp}
-        onKeyDown={onKeyDown}
-        ref={inputRef}
-      />
-    </div>
-  )
-})
+export const TaskContext = React.createContext(new Emitter())
 
 const Task = observer(
   ({
-     task,
+     task: source,
      active = false,
      onConfirm,
      onReject,
@@ -153,14 +55,18 @@ const Task = observer(
     const {
       tasks: { deleteTask, selected, select },
       addSubtask,
+      tempTask,
+      setTempTask
     }: IRootStore = useMst()
     const [state] = React.useState(new TaskState())
     const [taskEmitter] = React.useState(new Emitter())
 
+    const task = state.active? tempTask : source
+
     React.useEffect(() => {
       taskEmitter.on("*", console.log)
       taskEmitter.on("add_subtask", (index: number) => {
-        const id = addSubtask({ task, index })
+        const id = addSubtask({ source, index })
         setTimeout(() => taskEmitter.emit("focus_subtask", id), 200)
       })
     }, [taskEmitter])
@@ -170,6 +76,41 @@ const Task = observer(
         state.done = task.status === "DONE"
       if (state.active !== active) state.active = active
     }, [task.status, active])
+
+    const onActivation = () => {
+      const json = {...source.toJSON()}
+      json.id = v4()
+      setTempTask(json)
+    }
+
+    const onDeactivation = () => {
+      console.log("Deactivation", source.id)
+
+      if (tempTask.text !== source.text)
+        source.setText(tempTask.text)
+      if (tempTask.note !== source.note)
+        source.setNote(tempTask.note)
+      if (tempTask.project !== source.project)
+        source.setProject(tempTask.project)
+      if (!_.eq(tempTask.tags.map(t => t.id), source.tags.map(t => t.id)))
+        source.setTags(tempTask.tags.map(t => t.id))
+      if (tempTask.repeatEvery !== source.repeatEvery)
+        source.setRepeatEvery(tempTask.repeatEvery)
+      if (tempTask.status !== source.status)
+        source.setStatus(tempTask.status)
+      if (tempTask.priority !== source.priority)
+        source.setPriority(tempTask.priority)
+      if (tempTask.date !== source.date)
+        source.setDate(tempTask.date)
+      if (tempTask.repeating !== source.repeating)
+        source.setRepeating(tempTask.repeating)
+      if (tempTask.category !== source.category)
+        source.setRepeating(tempTask.category)
+      if (tempTask.event !== source.event)
+        source.setEvent(tempTask.event)
+      if (tempTask.colorTag !== source.colorTag)
+        source.setColorTag(tempTask.colorTag)
+    }
 
     useClick(document, e => {
       if (
@@ -196,7 +137,10 @@ const Task = observer(
       if (e.target.classList.contains(styles.taskText)) return
       if (state.active) console.log("Click outside ref", e)
 
-      if (!active) state.active = false
+      if (!active && state.active) {
+        state.active = false
+        onDeactivation()
+      }
       if (selected === task.id) {
         select(null)
       }
@@ -212,8 +156,11 @@ const Task = observer(
 
     useKeyListener("Escape", () => {
       if (active) return
-      if (state.active || selected) {
+      if (state.active) {
         state.active = false
+        onDeactivation()
+      }
+      if (state.active || selected) {
         select(null)
       }
     })
@@ -226,11 +173,11 @@ const Task = observer(
     ])
 
     useKeyListener("Delete", () => {
-      if (selected === task.id && !state.active) deleteTask(task)
+      if (selected === task.id && !state.active) deleteTask(source)
     })
 
     useKeyListener("Backspace", () => {
-      if (selected === task.id && !state.active) deleteTask(task)
+      if (selected === task.id && !state.active) deleteTask(source)
     })
 
     const onTaskClick = e => {
@@ -242,6 +189,7 @@ const Task = observer(
         state.allMenusClosed
       ) {
         state.active = false
+        onDeactivation()
         return
       }
 
@@ -251,8 +199,11 @@ const Task = observer(
       )
         return
 
-      if (selected === task.id) state.active = true
-      else {
+      if (selected === source.id && !state.active) {
+        state.active = true
+        onActivation()
+      }
+      if (selected !== source.id) {
         select(task)
       }
     }
@@ -279,7 +230,7 @@ const Task = observer(
     }
 
     const onAddSubtaskClick = () => {
-      const id = addSubtask({ task })
+      const id = addSubtask({ source })
       setTimeout(() => taskEmitter.emit("focus_subtask", id), 200)
     }
 
@@ -397,15 +348,15 @@ const Task = observer(
               />
             </div>
           </div>
-          {task.subtasks.length > 0 && (
+          {task.subtasks().length > 0 && (
             <div className={styles.line}>
               <span className={styles.subtasksProgressInfo}>
-                {task.doneSubtasks.length}/{task.subtasks.length}
+                {task.doneSubtasks().length}/{task.subtasks().length}
               </span>
               <div
                 className={styles.subtasksProgress}
                 style={
-                  { "--donePercent": `${task.progress}%` } as CSSProperties
+                  { "--donePercent": `${task.progress()}%` } as CSSProperties
                 }
               />
             </div>
@@ -446,7 +397,7 @@ const Task = observer(
               {/*@ts-ignore */}
               <baka-editor class={styles.note} ref={editorRef} />
               <div className={styles.subtasks}>
-                {task.subtasks.map(st => (
+                {source.subtasks().map(st => (
                   <Subtask subtask={st} key={st.id} />
                 ))}
                 <div className={styles.addNew} onClick={onAddSubtaskClick}>

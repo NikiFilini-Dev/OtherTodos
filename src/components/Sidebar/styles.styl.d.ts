@@ -2,6 +2,7 @@ declare namespace StylesStylNamespace {
   export interface IStylesStyl {
     active: string
     addTrigger: string
+    beta: string
     colorInput: string
     groupElement: string
     groupElementAwesomeIcon: string

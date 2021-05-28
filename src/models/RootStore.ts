@@ -54,8 +54,8 @@ const RootStore = types
     addSubtask(initialData: Partial<ISubtask>) {
       if (!initialData.task) return
       const id = initialData.id ? initialData.id : uuidv4()
-      if ("index" in initialData) {
-        initialData.task.subtasks.forEach(st => {
+      if ("index" in initialData && typeof(initialData.task) !== "string") {
+        initialData.task.subtasks().forEach(st => {
           if (st.index >= (initialData.index as number))
             st.setIndex(st.index + 1)
         })
@@ -79,7 +79,7 @@ const RootStore = types
     moveSubtask(id: string, newIndex: number): boolean {
       const subtask = self.subtasks.find(st => st.id === id)
       if (!subtask) return false
-      const taskSubtasks: ISubtask[] = subtask.task.subtasks
+      const taskSubtasks: ISubtask[] = subtask.task.subtasks()
       if (newIndex > taskSubtasks.length - 1) newIndex = taskSubtasks.length - 1
 
       taskSubtasks
@@ -93,11 +93,12 @@ const RootStore = types
       const subtask = self.subtasks.find(st => st.id === id)
       if (!subtask) return false
 
-      subtask.task.subtasks.forEach(st => {
+      subtask.task.subtasks().forEach(st => {
         if (st.index > subtask.index) st.setIndex(st.index - 1)
       })
 
-      window.syncMachine.registerDelete(subtask.id, subtask.syncName)
+      if (subtask.syncable)
+        window.syncMachine.registerDelete(subtask.id, subtask.syncName)
 
       destroy(subtask)
       return true

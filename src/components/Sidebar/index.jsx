@@ -291,7 +291,8 @@ const Sidebar = observer(() => {
     <React.Fragment>
       <div className={styles.logoWrapper}>
         <Logo className={styles.logo} />
-        <span className={styles.logoTitle}>Task</span>
+        {!process.env.IS_DEV && <span className={styles.logoTitle}>Task</span>}
+        {Boolean(process.env.IS_DEV) && <span className={styles.logoTitle+" "+styles.beta}>Beta</span>}
       </div>
       <div className={styles.sidebar}>
         <div
