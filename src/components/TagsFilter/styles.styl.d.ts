@@ -1,8 +1,6 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
     list: string
-    selected: string
-    tag: string
   }
 }
 

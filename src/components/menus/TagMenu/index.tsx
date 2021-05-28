@@ -3,7 +3,14 @@ import { useMst } from "../../../models/RootStore"
 import { observer } from "mobx-react"
 import { useContextMenu } from "../../../tools/hooks"
 
-const TagMenu = observer(({ tag, tagId, className, children }) => {
+type Props = {
+  tag?: any
+  tagId?: string
+  className?: string
+  children: any
+}
+
+const TagMenu = observer(({ tag, tagId, className, children }: Props) => {
   const {
     deleteTag,
     tags,
@@ -18,7 +25,7 @@ const TagMenu = observer(({ tag, tagId, className, children }) => {
     deleteTag(tag)
   }
 
-  const ref = React.createRef()
+  const ref = React.useRef<HTMLDivElement|null>(null)
   useContextMenu(ref, [{ label: "Delete", click: () => onDelete() }])
 
   return (

@@ -35,6 +35,8 @@ import Button from "../Button"
 import BakaEditor from "../../editor"
 import { ISubtask } from "../../models/Subtask"
 import Emitter from "eventemitter3"
+import { noop } from "lodash"
+import Tag from "components/Tag"
 
 const TaskContext = React.createContext(new Emitter())
 
@@ -141,13 +143,13 @@ const Subtask = observer(({ subtask }: { subtask: ISubtask }) => {
 
 const Task = observer(
   ({
-    task,
-    active = false,
-    onConfirm,
-    onReject,
-    expired,
-    newPrompt = false,
-  }) => {
+     task,
+     active = false,
+     onConfirm,
+     onReject,
+     expired,
+     newPrompt = false,
+   }) => {
     const {
       tasks: { deleteTask, selected, select },
       addSubtask,
@@ -288,9 +290,10 @@ const Task = observer(
     React.useEffect(() => {
       if (!editorRef.current || !editorRef.current.setText) return
       editorRef.current.setText(task.note)
-      // @ts-ignore
+
       editorRef.current.addEventListener(
         "change",
+        // @ts-ignore
         (e: Event & { detail: { original: string } }) => {
           console.log(e.detail.original)
           task.setNote(e.detail.original)
@@ -349,18 +352,10 @@ const Task = observer(
             <div className={styles.puller} />
             <div className={styles.tags}>
               {!state.active &&
-                Boolean(task.tags.length) &&
-                tags.map(tag => (
-                  <span
-                    key={`inline_tag_${tag.id}`}
-                    className={classNames({
-                      [styles.tag]: true,
-                      [styles.inline]: true,
-                    })}
-                  >
-                    {tag.name}
-                  </span>
-                ))}
+              Boolean(task.tags.length) &&
+              tags.map(tag => (
+                <Tag tag={tag} key={tag.id} onClick={noop} selected={false} />
+              ))}
             </div>
             {!state.active && Boolean(expired) && Boolean(task.project) && (
               <span
@@ -478,8 +473,8 @@ const Task = observer(
                 {task.date === DateTime.now().toFormat("M/d/yyyy")
                   ? "Сегодня"
                   : task.date
-                  ? date
-                  : "Без даты"}
+                    ? date
+                    : "Без даты"}
               </span>
             </div>
             <div
