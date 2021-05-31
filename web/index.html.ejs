@@ -167,7 +167,7 @@
 </body>
 <script src="<%= assets["runtime.js"] %>"></script>
 <script src="<%= assets["vendor.js"] %>"></script>
-<% if (process.env.IS_DEV !== true) { %><script src="<%= assets["sentry.js"] %>"></script><% } %>
+<% if (process.env.IS_DEV !== "true") { %><script src="<%= assets["sentry.js"] %>"></script><% } %>
 <script src="<%= assets["main.js"] %>"></script>
 <svg height="0" width="0">
   <defs>

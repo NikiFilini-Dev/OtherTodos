@@ -7,6 +7,7 @@ declare namespace StylesStylNamespace {
     colored: string
     date: string
     dateIcon: string
+    dead: string
     delete: string
     done: string
     expired: string
@@ -16,6 +17,7 @@ declare namespace StylesStylNamespace {
     hasEvent: string
     inline: string
     line: string
+    moveHandle: string
     note: string
     noteWrapper: string
     notes: string
@@ -41,6 +43,7 @@ declare namespace StylesStylNamespace {
     task: string
     taskText: string
     taskTextEdit: string
+    trash: string
   }
 }
 

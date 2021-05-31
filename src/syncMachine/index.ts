@@ -151,6 +151,7 @@ export default class SyncMachine {
         snapshot = this.healthCheck(snapshot)
         this.applying = true
         applySnapshot(this.store, snapshot)
+        this.store.healthCheckSubtasks()
         this.applying = false
         this.state = "waiting"
         syncLogger.info("Loaded.")

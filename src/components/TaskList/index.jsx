@@ -13,7 +13,7 @@ import { Draggable, Droppable } from "react-beautiful-dnd"
 import { useInput } from "../../tools/hooks"
 import { DateTime } from "luxon"
 
-const Content = observer(({ provided, tasks }) => {
+const Content = observer(({ provided, tasks, selectedTaskId }) => {
   return (
     <div className={styles.tasks} ref={provided.innerRef}>
       {tasks.map((task, index) => (
@@ -22,6 +22,7 @@ const Content = observer(({ provided, tasks }) => {
           draggableId={`task_${task.id}`}
           type={"TASK"}
           index={index}
+          isDragDisabled={selectedTaskId === task.id}
         >
           {provided => (
             <div>
@@ -57,7 +58,7 @@ const TaskList = observer(
     onDelete,
     dnd,
   }) => {
-    const { selectedDate, screen } = useMst()
+    const { selectedDate, screen, tasks: {selected} } = useMst()
     if (!showHidden) tasks = tasks.filter(task => !task.done)
 
     const [folded, setIsFolded] = React.useState(false)
@@ -127,7 +128,7 @@ const TaskList = observer(
             isDropDisabled={!dnd}
           >
             {(provided, snapshot) => (
-              <Content provided={provided} snapshot={snapshot} tasks={tasks} />
+              <Content provided={provided} snapshot={snapshot} tasks={tasks} selectedTaskId={selected} />
             )}
           </Droppable>
         </div>

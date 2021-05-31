@@ -326,12 +326,16 @@ export default class Editable extends HTMLElement {
   }
 
   setCursorPos(offset) {
-    if (document.activeElement !== this) return
+    if (document.activeElement !== this) {
+      return
+    }
     let containerData = this.getContainerAtOffset(offset)
     let node = containerData.line
     let n = containerData.n
 
-    if (!node) return
+    if (!node) {
+      return
+    }
 
     if (node.firstChild) node = node.firstChild
 
@@ -340,9 +344,10 @@ export default class Editable extends HTMLElement {
     } catch (err) {
       return
     }
-    console.log(offset - n, offset, n)
     range.setEnd(node, offset - n)
     range.setStart(node, offset - n)
+    window.getSelection().removeAllRanges()
+    window.getSelection().addRange(range)
     this.cursorPos = offset
   }
 

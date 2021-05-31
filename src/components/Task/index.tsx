@@ -12,7 +12,6 @@ import FloatMenu from "components/FloatMenu"
 import TagsSelector from "components/TagsSelector"
 
 import Tags from "./components/Tags"
-import Subtask from "./components/Subtask"
 
 import FolderIcon from "assets/folder.svg"
 import CalendarIcon from "assets/calendar.svg"
@@ -39,6 +38,7 @@ import Emitter from "eventemitter3"
 import _, { noop } from "lodash"
 import Tag from "components/Tag"
 import { v4 } from "uuid"
+import SubtasksList from "./components/SubtasksList"
 
 export const TaskContext = React.createContext(new Emitter())
 
@@ -54,6 +54,7 @@ const Task = observer(
     const {
       tasks: { deleteTask, selected, select },
       addSubtask,
+      deleteSubtask,
       editingTask,
     }: IRootStore = useMst()
     const [state] = React.useState(new TaskState())
@@ -84,6 +85,10 @@ const Task = observer(
         task.setProject(state.project, true)
         state.resetProjectChanged()
       }
+
+      task.subtasks.forEach(st => {
+        if (!st.text.length) deleteSubtask(st.id)
+      })
     }
 
     useClick(document, e => {
@@ -373,14 +378,7 @@ const Task = observer(
             <div className={styles.noteWrapper} ref={noteAndSubtasksContainer}>
               {/*@ts-ignore */}
               <baka-editor class={styles.note} ref={editorRef} />
-              <div className={styles.subtasks}>
-                {source.subtasks.map(st => (
-                  <Subtask subtask={st} key={st.id} />
-                ))}
-                <div className={styles.addNew} onClick={onAddSubtaskClick}>
-                  + Добавить подзадачу
-                </div>
-              </div>
+              <SubtasksList task={task} />
             </div>
           </div>
           <Tags task={task} />

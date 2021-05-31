@@ -75,22 +75,46 @@ const RootStore = types
         ...initialData,
         id,
       })
+      this.healthCheckSubtasks()
       return id
     },
+    healthCheckSubtasks() {
+      const groups: {[key: string]: ISubtask[]} = {}
+      self.subtasks.forEach(st => {
+        if (st.task.id in groups) groups[st.task.id].push(st)
+        else groups[st.task.id] = [st]
+      })
+
+      Object.values(groups).forEach(group => {
+        group.sort((a,b) => a.index - b.index)
+        group.forEach((st, i) => {
+          if (st.index !== i) st.setIndex(i)
+        })
+      })
+    },
     moveSubtask(id: string, newIndex: number): boolean {
+      this.healthCheckSubtasks()
       const subtask = self.subtasks.find(st => st.id === id)
       if (!subtask) return false
       const taskSubtasks: ISubtask[] = subtask.task.subtasks
       if (newIndex > taskSubtasks.length - 1) newIndex = taskSubtasks.length - 1
 
-      taskSubtasks
-        .filter(st => st.index > subtask.index && st.index <= newIndex)
-        .forEach(st => st.setIndex(st.index - 1))
+      taskSubtasks.forEach(st => {
+        if (st.id === subtask.id) return
+        if (st.index < subtask.index && st.index >= newIndex) {
+          st.setIndex(st.index+1)
+        }
+        if (st.index > subtask.index && st.index <= newIndex) {
+          st.setIndex(st.index-1)
+        }
+      })
+
       subtask.setIndex(newIndex)
 
       return true
     },
     deleteSubtask(id: string): boolean {
+      this.healthCheckSubtasks()
       const subtask = self.subtasks.find(st => st.id === id)
       if (!subtask) return false
 

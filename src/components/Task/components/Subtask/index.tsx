@@ -6,12 +6,16 @@ import styles from "../../styles.styl"
 import Checkbox from "../../../Checkbox"
 import TextareaAutosize from "react-textarea-autosize"
 import { TaskContext } from "../../index"
+import TrashIcon from "../../../../assets/customIcons/times.svg"
+import GridIcon from "../../../../assets/customIcons/grid.svg"
+import classNames from "classnames"
 
-const Subtask = observer(({ subtask }: { subtask: ISubtask }) => {
+const Subtask = observer(({ subtask, provided }: { subtask: ISubtask, provided: any }) => {
   const { deleteSubtask }: IRootStore = useMst()
   const [lastText, setLastText] = React.useState("")
   const inputRef = React.useRef<HTMLTextAreaElement | null>(null)
   const emitter = React.useContext(TaskContext)
+  const [isDead, setIsDead] = React.useState(false)
 
   React.useEffect(() => {
     emitter.on("focus_subtask", (subtaskId: string) => {
@@ -39,7 +43,10 @@ const Subtask = observer(({ subtask }: { subtask: ISubtask }) => {
   }
 
   return (
-    <div key={subtask.id} className={styles.subtask}>
+    <div className={classNames({[styles.subtask]: true, [styles.dead]: isDead})} ref={provided.innerRef}
+         id={subtask.id}
+         {...provided.draggableProps}
+         {...provided.dragHandleProps}>
       <Checkbox
         checked={subtask.status === "DONE"}
         circle
@@ -55,8 +62,19 @@ const Subtask = observer(({ subtask }: { subtask: ISubtask }) => {
         onKeyDown={onKeyDown}
         ref={inputRef}
       />
+      <div className={styles.moveHandle}>
+        <GridIcon />
+      </div>
+      <div className={styles.trash} onClick={(e) => {
+        e.preventDefault()
+        setIsDead(true)
+        setTimeout(() => deleteSubtask(subtask.id), 400)
+      }}>
+        <TrashIcon />
+      </div>
     </div>
   )
+
 })
 
 export default Subtask
