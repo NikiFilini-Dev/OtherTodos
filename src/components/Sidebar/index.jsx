@@ -18,6 +18,7 @@ import { useContextMenu, useInput } from "tools/hooks"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import { DateTime } from "luxon"
 import noop from "lodash-es/noop"
+import { IconsMap } from "../../palette/icons"
 
 const Element = observer(
   ({
@@ -171,7 +172,7 @@ const Group = observer(
                   <Element
                     key={`${type}_${element.id}`}
                     text={element.name}
-                    icon={FolderIcon}
+                    icon={IconsMap[element.icon]}
                     active={isActive(element)}
                     onClick={onElementClick(element)}
                     deletable={!!onDelete}

@@ -10,8 +10,11 @@ import classNames from "classnames"
 import ChevronRight from "../../assets/awesome/solid/chevron-right.svg"
 import TrashIcon from "../../assets/awesome/regular/trash-alt.svg"
 import { Draggable, Droppable } from "react-beautiful-dnd"
-import { useInput } from "../../tools/hooks"
+import { useClick, useInput } from "../../tools/hooks"
 import { DateTime } from "luxon"
+import { IconsMap } from "../../palette/icons"
+import ListIconMenu from "../ListIconMenu"
+import { noop } from "lodash-es"
 
 const Content = observer(({ provided, tasks, selectedTaskId }) => {
   return (
@@ -57,6 +60,8 @@ const TaskList = observer(
     deletable,
     onDelete,
     dnd,
+    iconName,
+    setIcon
   }) => {
     const { selectedDate, screen, tasks: {selected} } = useMst()
     if (!showHidden) tasks = tasks.filter(task => !task.done)
@@ -81,10 +86,31 @@ const TaskList = observer(
       inputRef.current.blur()
     })
 
+    const Icon = IconsMap[iconName] || IconsMap["check_list"]
+
+    const triggerRef = React.useRef(null)
+    const menuRef = React.useRef(null)
+
+    const [menuOpen, setMenuOpen] = React.useState(false)
+    useClick(document, e => {
+      if (!menuOpen) return
+      const notInRef =
+        !triggerRef.current ||
+        (e.target !== triggerRef.current && !triggerRef.current.contains(e.target))
+      // const notInMenuRef =
+      //   !menuRef.current ||
+      //   (e.target !== menuRef.current && !menuRef.current.contains(e.target))
+      if (notInRef)
+        setMenuOpen(false)
+    })
+
     if (!tasks.length && !showEmpty) return <div />
     return (
       <div className={styles.wrapper}>
         <div className={styles.info}>
+          <span ref={triggerRef} onClick={() => setMenuOpen(true)}><Icon className={styles.icon} /></span>
+          {Boolean(setIcon) && menuOpen &&
+            <ListIconMenu triggerRef={triggerRef} menuRef={menuRef} setIcon={setIcon} currentIconName={iconName} />}
           {renamable ? (
             <input
               value={name}

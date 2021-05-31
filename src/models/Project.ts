@@ -2,6 +2,7 @@ import { getRoot, Instance, types } from "mobx-state-tree"
 import ProjectCategory from "./ProjectCategory"
 import { v4 as uuidv4 } from "uuid"
 import RootStore, { IRootStore } from "./RootStore"
+import { IconNames } from "../palette/icons"
 
 const Project = types
   .model("Project", {
@@ -9,6 +10,7 @@ const Project = types
     name: types.string,
     index: types.number,
     categories: types.array(types.reference(ProjectCategory)),
+    icon: types.optional(types.enumeration("Icons", IconNames), "check_list")
   })
   .views(self => ({
     get tasks() {
@@ -64,6 +66,9 @@ const Project = types
       self.categories.splice(self.categories.indexOf(category), 1)
     }
     actionsMap.removeCategory = ["categories"]
+
+    actions.setIcon = val => self.icon = val
+    actionsMap.setIcon = ["icon"]
 
     actions.getActionsMap = () => actionsMap
 

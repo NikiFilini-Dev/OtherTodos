@@ -23,6 +23,7 @@ export const GET_PROJECTS = gql`
     projects {
       id
       name
+      icon
       index
       categories
     }

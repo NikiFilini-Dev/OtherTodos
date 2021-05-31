@@ -7,7 +7,8 @@ import TimesIcon from "../../assets/customIcons/times.svg"
 import TrashIcon from "../../assets/customIcons/trash.svg"
 import RepeatIcon from "../../assets/customIcons/repeat.svg"
 import classNames from "classnames"
-import { HabitColorMap, HabitIconMap } from "../../models/Habit"
+import { IconsMap } from "../../palette/icons"
+import { ColorsMap } from "../../palette/colors"
 import range from "../../tools/range"
 import { IRootStore, useMst } from "../../models/RootStore"
 
@@ -83,7 +84,7 @@ const HabitForm = observer(
             <div className={styles.group}>
               <span className={styles.name}>Выберите цвет</span>
               <div className={styles.colors}>
-                {Object.keys(HabitColorMap).map(color => (
+                {Object.keys(ColorsMap).map(color => (
                   <div
                     className={classNames({
                       [styles.color]: true,
@@ -91,7 +92,7 @@ const HabitForm = observer(
                     })}
                     key={color}
                     onClick={() => tempHabit.setColor(color)}
-                    style={{ "--color": HabitColorMap[color] } as CSSProperties}
+                    style={{ "--color": ColorsMap[color] } as CSSProperties}
                   />
                 ))}
               </div>
@@ -99,8 +100,8 @@ const HabitForm = observer(
             <div className={styles.group}>
               <div className={styles.name}>Значок привычки</div>
               <div className={styles.icons}>
-                {Object.keys(HabitIconMap).map(name => {
-                  const Icon = HabitIconMap[name]
+                {Object.keys(IconsMap).map(name => {
+                  const Icon = IconsMap[name]
                   return (
                     <div
                       key={name}

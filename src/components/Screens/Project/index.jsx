@@ -10,11 +10,14 @@ import Button from "../../Button"
 import PlusIcon from "../../../assets/plus.svg"
 import FolderPlusIcon from "assets/line_awesome/folder-plus-solid.svg"
 import {
+  useClick,
   useClickOutsideRef,
   useKeyListener,
   useTrap,
 } from "../../../tools/hooks"
 import { Droppable, Draggable } from "react-beautiful-dnd"
+import { IconsMap } from "../../../palette/icons"
+import ListIconMenu from "../../ListIconMenu"
 
 const Content = observer(
   ({ provided, selectedProject, deleteCategory, setIsNewTaskShown, tasks }) => {
@@ -31,6 +34,8 @@ const Content = observer(
         <TaskList
           tasks={category.sortedTasks}
           name={category.name}
+          iconName={category.icon}
+          setIcon={name => category.setIcon(name)}
           renamable
           showEmpty
           // dnd={`tasklist_${category.id}`}
@@ -180,11 +185,34 @@ const Project = observer(() => {
 
   const categories = [...selectedProject.categories]
   categories.sort((a, b) => a.index - b.index)
+  const Icon = IconsMap[selectedProject.icon]
+  const triggerRef = React.useRef(null)
+  const menuRef = React.useRef(null)
+  const [menuOpen, setMenuOpen] = React.useState(false)
+  useClick(document, e => {
+    if (!menuOpen) return
+    const notInRef =
+      !triggerRef.current ||
+      (e.target !== triggerRef.current && !triggerRef.current.contains(e.target))
+    if (notInRef)
+      setMenuOpen(false)
+  })
 
   return (
     <div className={styles.screen}>
       <div className={styles.head}>
         <div className={styles.info}>
+          <div className={styles.icon} onClick={() => setMenuOpen(true)} ref={triggerRef}>
+            <Icon />
+          </div>
+          {menuOpen &&
+            <ListIconMenu
+              triggerRef={triggerRef}
+              menuRef={menuRef}
+              setIcon={selectedProject.setIcon}
+              currentIconName={selectedProject.icon}
+            />
+          }
           {isEditingTitle ? (
             <input
               type={"text"}
@@ -256,6 +284,8 @@ const Project = observer(() => {
                                      name={category.name}
                                      renamable
                                      showEmpty
+                                            setIcon={category.setIcon}
+                                            iconName={category.icon}
                                      dnd={`tasklist_${category.id}`}
                                      deletable={!category.tasks.length}
                                      onDelete={() => deleteCategory(category)}

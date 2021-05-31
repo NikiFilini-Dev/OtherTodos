@@ -1,18 +1,8 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
-    actions: string
     active: string
-    count: string
-    delete: string
-    fold: string
-    folded: string
-    icon: string
-    info: string
-    listWrapper: string
-    name: string
-    nameInput: string
-    tasks: string
-    wrapper: string
+    block: string
+    list: string
   }
 }
 

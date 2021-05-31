@@ -3,6 +3,7 @@ declare namespace StylesStylNamespace {
     actions: string
     addCategory: string
     head: string
+    icon: string
     info: string
     listOfLists: string
     nameEdit: string

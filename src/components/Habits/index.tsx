@@ -2,13 +2,15 @@ import React, { CSSProperties } from "react"
 import styles from "./styles.m.styl"
 import { observer } from "mobx-react"
 import { useMst } from "../../models/RootStore"
-import { HabitColorMap, HabitIconMap, IHabit } from "../../models/Habit"
+import { IHabit } from "../../models/Habit"
 import range from "../../tools/range"
 import CheckboxIcon from "../../assets/checkmark.svg"
 import EditIcon from "../../assets/customIcons/edit.svg"
 import PlusIcon from "../../assets/customIcons/plusCircle.svg"
 import HabitForm from "../HabitForm"
 import classNames from "classnames"
+import { IconsMap } from "../../palette/icons"
+import { ColorsMap } from "../../palette/colors"
 
 const Habit = observer(
   ({ habit, onEditClick, date }: { habit: IHabit; onEditClick: () => void, date: string }) => {
@@ -35,14 +37,14 @@ const Habit = observer(
           date
         })
     }
-    const Icon = HabitIconMap[habit.icon]
+    const Icon = IconsMap[habit.icon]
     return (
       <div
         className={styles.habit}
         style={
           {
             "--donePercent": `${donePercent}%`,
-            "--habitColor": HabitColorMap[habit.color],
+            "--habitColor": ColorsMap[habit.color],
           } as CSSProperties
         }
         onClick={onHabitClick}

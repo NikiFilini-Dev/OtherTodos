@@ -23,6 +23,7 @@ export const GET_PROJECT_CATEGORIES = gql`
     projectCategories {
       id
       name
+      icon
       index
       folded
     }

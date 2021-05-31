@@ -70,6 +70,7 @@ const FloatMenu = observer(
               14 +
               "px",
           }
+          portal = true
           modifier = "top"
         } else {
           style = {

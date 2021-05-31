@@ -13,6 +13,7 @@ export default class ProjectCategory extends SyncType {
   DELETE_MUTATION = DELETE_PROJECT_CATEGORY
 
   preprocess(item) {
+    if (item.icon === "") item.icon = "check_list"
     return item
   }
 

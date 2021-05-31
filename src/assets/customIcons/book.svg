@@ -1,5 +1,5 @@
 <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M28.5 7.5H30C31.6575 7.5 33 8.8425 33 10.5V28.5C33 30.1575 31.6575 31.5 30 31.5H6C4.3425 31.5 3 30.1575 3 28.5V10.5C3 8.8425 4.3425 7.5 6 7.5H7.5" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M18 9C18 6.5145 15.9855 4.5 13.5 4.5H9C8.172 4.5 7.5 5.172 7.5 6V25.5C7.5 26.328 8.172 27 9 27H13.5C15.9855 27 18 29.0145 18 31.5C18 29.0145 20.0145 27 22.5 27H27C27.828 27 28.5 26.328 28.5 25.5V6C28.5 5.172 27.828 4.5 27 4.5H22.5C20.0145 4.5 18 6.5145 18 9Z" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M18 9V31.5" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M28.5 7.5H30C31.6575 7.5 33 8.8425 33 10.5V28.5C33 30.1575 31.6575 31.5 30 31.5H6C4.3425 31.5 3 30.1575 3 28.5V10.5C3 8.8425 4.3425 7.5 6 7.5H7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M18 9C18 6.5145 15.9855 4.5 13.5 4.5H9C8.172 4.5 7.5 5.172 7.5 6V25.5C7.5 26.328 8.172 27 9 27H13.5C15.9855 27 18 29.0145 18 31.5C18 29.0145 20.0145 27 22.5 27H27C27.828 27 28.5 26.328 28.5 25.5V6C28.5 5.172 27.828 4.5 27 4.5H22.5C20.0145 4.5 18 6.5145 18 9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M18 9V31.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

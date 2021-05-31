@@ -255,6 +255,8 @@ const Today = observer(() => {
               <TaskList tasks={withoutProject} name={"Входящие"} />
               {projects.map(project => (
                 <TaskList
+                  iconName={project.icon}
+                  setIcon={name => project.setIcon(name)}
                   dnd={"project_" + project.id}
                   key={`task_list_${project.name}`}
                   tasks={tasks.filter(task => task.project === project)}

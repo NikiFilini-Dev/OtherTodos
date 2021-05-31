@@ -6,80 +6,12 @@ import {
   ISimpleType,
   types,
 } from "mobx-state-tree"
-import BookmarkIcon from "../assets/customIcons/bookmark.svg"
-import ShipIcon from "../assets/customIcons/ship.svg"
-import BallIcon from "../assets/customIcons/ball.svg"
-import FireIcon from "../assets/customIcons/fire.svg"
-import CameraIcon from "../assets/customIcons/camera.svg"
-import WinIcon from "../assets/customIcons/win.svg"
-import PresentIcon from "../assets/customIcons/present.svg"
-import PoolIcon from "../assets/customIcons/pool.svg"
-import BookIcon from "../assets/customIcons/book.svg"
-import WalletIcon from "../assets/customIcons/wallet.svg"
 import { CustomRange } from "../global"
 import { DateTime } from "luxon"
 import { IRootStore } from "./RootStore"
 import { IHabitRecord } from "./HabitRecord"
-
-export const HabitColors = [
-  "blue",
-  "yellow",
-  "green",
-  "red",
-  "lightblue",
-  "purple",
-]
-export type HabitColor =
-  | "blue"
-  | "yellow"
-  | "green"
-  | "red"
-  | "lightblue"
-  | "purple"
-export const HabitColorMap: Record<HabitColor, string> = {
-  blue: "#1C3BF1",
-  yellow: "#FFAC0B",
-  green: "#29E072",
-  red: "#FB2B2B",
-  lightblue: "#2F80ED",
-  purple: "#9B51E0",
-}
-
-export const HabitIcons: HabitIcon[] = [
-  "bookmark",
-  "ship",
-  "ball",
-  "fire",
-  "camera",
-  "win",
-  "present",
-  "pool",
-  "book",
-  "wallet",
-]
-export type HabitIcon =
-  | "bookmark"
-  | "ship"
-  | "ball"
-  | "fire"
-  | "camera"
-  | "win"
-  | "present"
-  | "pool"
-  | "book"
-  | "wallet"
-export const HabitIconMap: Record<HabitIcon, any> = {
-  bookmark: BookmarkIcon,
-  ship: ShipIcon,
-  ball: BallIcon,
-  fire: FireIcon,
-  camera: CameraIcon,
-  win: WinIcon,
-  present: PresentIcon,
-  pool: PoolIcon,
-  book: BookIcon,
-  wallet: WalletIcon,
-}
+import { ColorName, ColorNames } from "../palette/colors"
+import { IconName, IconNames } from "../palette/icons"
 
 export const HabitTypes: HabitType[] = ["daily", "weekly", "monthly", "custom"]
 export type HabitType = "daily" | "weekly" | "monthly" | "custom"
@@ -89,8 +21,8 @@ const Habit = types
     id: types.identifier,
     name: types.string,
     recordsPerDay: types.number,
-    color: types.enumeration("HabitColor", HabitColors),
-    icon: types.enumeration("HabitIcon", HabitIcons),
+    color: types.enumeration("ColorNames", ColorNames),
+    icon: types.enumeration("IconNames", IconNames),
     type: types.enumeration("HabitType", HabitTypes),
     weeklyDays: types.array(types.number),
     monthlyDays: types.array(types.number),
@@ -134,12 +66,12 @@ const Habit = types
     }
     actionsMap.setRecordsPerDay = ["recordsPerDay"]
 
-    actions.setColor = (val: HabitColor) => {
+    actions.setColor = (val: ColorName) => {
       self.color = val
     }
     actionsMap.setColor = ["color"]
 
-    actions.setIcon = (val: HabitIcon) => {
+    actions.setIcon = (val: IconName) => {
       self.icon = val
     }
     actionsMap.setIcon = ["icon"]
