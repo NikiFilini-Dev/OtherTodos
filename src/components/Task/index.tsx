@@ -60,6 +60,7 @@ const Task = observer(
     }: IRootStore = useMst()
     const [state] = React.useState(new TaskState())
     const [taskEmitter] = React.useState(new Emitter())
+    const noteAndSubtasksContainer = React.useRef<HTMLDivElement | null>(null)
 
     const task = state.active && !newPrompt? editingTask : source
 
@@ -152,7 +153,8 @@ const Task = observer(
       if (state.refs.input.current && active) state.refs.input.current.focus()
     }, ["active"])
 
-    useKeyListener("Enter", () => {
+    useKeyListener("Enter", (e) => {
+      if (e.path.includes(noteAndSubtasksContainer.current)) return
       if (onConfirm) onConfirm()
     })
 
@@ -401,7 +403,7 @@ const Task = observer(
               [styles.fullOnly]: true,
             })}
           >
-            <div className={styles.noteWrapper}>
+            <div className={styles.noteWrapper} ref={noteAndSubtasksContainer}>
               {/*@ts-ignore */}
               <baka-editor class={styles.note} ref={editorRef} />
               <div className={styles.subtasks}>

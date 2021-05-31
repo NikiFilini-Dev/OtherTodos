@@ -48,7 +48,9 @@ const Subtask = observer(({ subtask }: { subtask: ISubtask }) => {
       <TextareaAutosize
         placeholder={"Новая подзадача"}
         value={subtask.text}
-        onChange={e => subtask.setText(e.target.value)}
+        onChange={e => {
+          subtask.setText(e.target.value)
+        }}
         onKeyUp={onKeyUp}
         onKeyDown={onKeyDown}
         ref={inputRef}

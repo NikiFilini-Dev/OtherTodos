@@ -10,7 +10,7 @@ const Tags = observer(({ task }) => {
   const ref = React.useRef(null)
   const onTagClick = tag => {
     if (tag.id === selectedTagId) {
-      task.removeTag(tag)
+      task.setColorTag(tag)
       setSelectedTagId(null)
     } else {
       setSelectedTagId(tag.id)
@@ -31,7 +31,8 @@ const Tags = observer(({ task }) => {
           key={`task_${task.id}#tag_${tag.id}`}
           className={classNames({
             [styles.tag]: true,
-            [styles.active]: task.colorTag === tag,
+            [styles.colored]: task.colorTag === tag,
+            [styles.selected]: selectedTagId === tag.id,
           })}
           style={{ "--tag-color": tag.color } as CSSProperties}
         >

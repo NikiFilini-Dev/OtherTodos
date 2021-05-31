@@ -114,7 +114,7 @@ export function useKeyListener(key, callback) {
   window.pressedKeys = window.pressedKeys ? window.pressedKeys : new Set()
   React.useEffect(() => {
     const onKeyup = e => {
-      if (e.key === key) callback()
+      if (e.key === key) callback(e)
     }
     document.addEventListener("keyup", onKeyup)
 

@@ -8,7 +8,7 @@ const { template } = require("lodash")
 const fetch = require("node-fetch")
 
 const WDS_MODE = process.argv.includes("--wds")
-const WDS_HOST = "http://localhost:8080"
+const WDS_HOST = "http://192.168.1.58:8080"
 
 app.use("/static", express.static("./web_dist"))
 app.use("/public", express.static("./web/public"))
@@ -17,7 +17,7 @@ app.get("/", async (req, res) => {
   let manifest
   if (WDS_MODE) {
     manifest = await (
-      await fetch("http://localhost:8080/static/manifest.json")
+      await fetch(WDS_HOST+"/static/manifest.json")
     ).json()
     Object.keys(manifest).forEach(key => manifest[key] = `${WDS_HOST}/static/${manifest[key]}`)
   } else {
