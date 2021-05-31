@@ -117,7 +117,7 @@ const Habit = types
       )
     },
     isDone(date: string) {
-      return this.records.filter(r => r.date === date).length > 0
+      return this.records.filter(r => r.date === date).length === self.recordsPerDay
     }
   }))
   .actions(self => {
