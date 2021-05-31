@@ -110,11 +110,12 @@ export function useTrap(combination, callback) {
   })
 }
 
-export function useKeyListener(key, callback) {
+export function useKeyListener(keys, callback) {
+  if (!Array.isArray(keys)) keys = [keys]
   window.pressedKeys = window.pressedKeys ? window.pressedKeys : new Set()
   React.useEffect(() => {
     const onKeyup = e => {
-      if (e.key === key) callback(e)
+      if (keys.includes(e.key)) callback(e)
     }
     document.addEventListener("keyup", onKeyup)
 

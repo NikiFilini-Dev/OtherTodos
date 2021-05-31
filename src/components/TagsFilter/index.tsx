@@ -9,7 +9,7 @@ const TagsFilter = observer(({ tags, selected, select }) => {
     <div className={styles.list}>
       <Tag tag={{name: "Все"}} selected={selected === null} onClick={() => select(null)} />
       {tags.map(tag => (
-        <Tag key={tag.id} tag={tag} selected={selected === tag} onClick={() => select(tag)} />
+        <Tag listed={true} key={tag.id} tag={tag} selected={selected === tag} onClick={() => select(tag)} />
       ))}
     </div>
   )

@@ -7,16 +7,18 @@ import TagMenu from "components/menus/TagMenu"
 type Props = {
   tag: any,
   selected: boolean,
-  onClick: () => void
+  onClick: () => void,
+  listed?: boolean
 }
 
-const Tag = observer(({ tag, selected, onClick }: Props) => {
+const Tag = observer(({ tag, selected, onClick, listed }: Props) => {
   return (
     <TagMenu tag={tag} key={`tag_${tag.id}`}>
       <span
         className={classNames({
           [styles.tag]: true,
           [styles.selected]: selected,
+          [styles.listed]: listed
         })}
         style={{"--tagColor": tag.color} as CSSProperties}
         onClick={() => onClick()}

@@ -55,7 +55,6 @@ const Task = observer(
       tasks: { deleteTask, selected, select },
       addSubtask,
       editingTask,
-      setEditingTask
     }: IRootStore = useMst()
     const [state] = React.useState(new TaskState())
     const [taskEmitter] = React.useState(new Emitter())
@@ -148,11 +147,7 @@ const Task = observer(
       },
     ])
 
-    useKeyListener("Delete", () => {
-      if (selected === task.id && !state.active) deleteTask(source)
-    })
-
-    useKeyListener("Backspace", () => {
+    useKeyListener(["Delete", "Backspace"], () => {
       if (selected === task.id && !state.active) deleteTask(source)
     })
 
