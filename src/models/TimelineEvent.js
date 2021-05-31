@@ -1,7 +1,7 @@
 import { types } from "mobx-state-tree"
 import { LateTask } from "./Task"
 import Tag, { randomTagColor } from "./Tag"
-import { DateTime } from "luxon"
+import { DateTime, Duration } from "luxon"
 
 const TimelineEvent = types
   .model("TimelineEvent", {
@@ -27,6 +27,13 @@ const TimelineEvent = types
     get syncable() {
       return true
     },
+    get formattedDuration() {
+      let format = "hh:mm"
+      if (self.duration < 60) format = "mм"
+      else if (self.duration % 60 === 0) format = "hч"
+      else format = "hч mм"
+      return Duration.fromObject( {minutes: self.duration}).normalize().toFormat(format)
+    }
   }))
   .actions(self => {
     const actions = {}

@@ -3,6 +3,7 @@ declare namespace StylesStylNamespace {
     allDayEvent: string
     colorVariant: string
     disabled: string
+    duration: string
     event: string
     eventAndMenuWrapper: string
     eventMenu: string
