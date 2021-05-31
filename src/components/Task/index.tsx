@@ -38,7 +38,6 @@ import BakaEditor from "../../editor"
 import Emitter from "eventemitter3"
 import _, { noop } from "lodash"
 import Tag from "components/Tag"
-import { toJS } from "mobx"
 import { v4 } from "uuid"
 
 export const TaskContext = React.createContext(new Emitter())
@@ -62,7 +61,8 @@ const Task = observer(
     const [taskEmitter] = React.useState(new Emitter())
     const noteAndSubtasksContainer = React.useRef<HTMLDivElement | null>(null)
 
-    const task = state.active && !newPrompt? editingTask : source
+    const task = source
+    if (state.project !== task.project && !state.projectChanged) state.setProject(task.project, true)
 
     React.useEffect(() => {
       taskEmitter.on("*", console.log)
@@ -78,41 +78,13 @@ const Task = observer(
       if (state.active !== active) state.active = active
     }, [task.status, active])
 
-    const onActivation = () => {
-      const json = {...source.toJSON()}
-      json.project = source.project?.id
-      json.id = v4()
-      setEditingTask(json)
-    }
+    const onActivation = noop
 
     const onDeactivation = () => {
-      if (!editingTask) return
-      if (editingTask.text !== source.text)
-        source.setText(editingTask.text)
-      if (editingTask.note !== source.note)
-        source.setNote(editingTask.note)
-      if (editingTask.project !== source.project)
-        source.setProject(editingTask.project)
-      if (!_.eq(editingTask.tags.map(t => t.id), source.tags.map(t => t.id)))
-        source.setTags(editingTask.tags.map(t => t.id))
-      if (editingTask.repeatEvery !== source.repeatEvery)
-        source.setRepeatEvery(editingTask.repeatEvery)
-      if (editingTask.status !== source.status)
-        source.setStatus(editingTask.status)
-      if (editingTask.priority !== source.priority)
-        source.setPriority(editingTask.priority)
-      if (editingTask.date !== source.date)
-        source.setDate(editingTask.date)
-      if (editingTask.repeating !== source.repeating)
-        source.setRepeating(editingTask.repeating)
-      if (editingTask.category !== source.category)
-        source.setRepeating(editingTask.category)
-      if (editingTask.event !== source.event)
-        source.setEvent(editingTask.event)
-      if (editingTask.colorTag !== source.colorTag)
-        source.setColorTag(editingTask.colorTag)
-
-      setEditingTask({})
+      if (state.projectChanged) {
+        task.setProject(state.project, true)
+        state.resetProjectChanged()
+      }
     }
 
     useClick(document, e => {
@@ -316,7 +288,7 @@ const Task = observer(
                 <Tag tag={tag} key={tag.id} onClick={noop} selected={false} />
               ))}
             </div>
-            {!state.active && Boolean(expired) && Boolean(task.project) && (
+            {!state.active && Boolean(expired) && state.project !== null && (
               <span
                 className={classNames({
                   [styles.project]: true,
@@ -324,7 +296,7 @@ const Task = observer(
                 })}
               >
                 <FolderIcon className={styles.projectIcon} />
-                {task.project.name}
+                {state.project.name}
               </span>
             )}
             {task.event && (
@@ -384,7 +356,7 @@ const Task = observer(
             >
               <span onClick={() => state.openMenu("project")}>
                 <FolderIcon className={styles.projectIcon} />
-                {task.project ? task.project.name : "Входящие"}
+                {state.project ? state.project.name : "Входящие"}
               </span>
             </span>
 
@@ -508,10 +480,10 @@ const Task = observer(
               position={"vertical_left"}
             >
               <ProjectSelector
-                selected={task.project ? task.project.id : null}
+                selected={state.project ? state.project?.id : null}
                 onSelect={project => {
                   state.closeMenu("project")
-                  task.setProject(project)
+                  state.setProject(project)
                 }}
               />
             </FloatMenu>

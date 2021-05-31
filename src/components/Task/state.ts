@@ -1,11 +1,24 @@
 import { makeAutoObservable } from "mobx"
 import React from "react"
+import { IProject } from "../../models/Project"
 
 export default class TaskState {
   constructor() {
     makeAutoObservable(this, {
       refs: false,
     })
+  }
+
+  project: null | IProject = null
+  projectChanged  = false
+
+  setProject(project, silent = false) {
+    this.project = project
+    if (!silent) this.projectChanged = true
+  }
+
+  resetProjectChanged() {
+    this.projectChanged = false
   }
 
   _active = false
