@@ -30,7 +30,7 @@ import {
 } from "tools/hooks"
 import { IRootStore, useMst } from "models/RootStore"
 import TaskState from "./state"
-import { DateTime } from "luxon"
+import { DateTime, Duration } from "luxon"
 import TextareaAutosize from "react-textarea-autosize"
 import Button from "../Button"
 import BakaEditor from "../../editor"
@@ -39,6 +39,7 @@ import _, { noop } from "lodash"
 import Tag from "components/Tag"
 import { v4 } from "uuid"
 import SubtasksList from "./components/SubtasksList"
+import Icon from "../Icon"
 
 export const TaskContext = React.createContext(new Emitter())
 
@@ -56,6 +57,7 @@ const Task = observer(
       addSubtask,
       deleteSubtask,
       editingTask,
+      startTimer
     }: IRootStore = useMst()
     const [state] = React.useState(new TaskState())
     const [taskEmitter] = React.useState(new Emitter())
@@ -265,6 +267,7 @@ const Task = observer(
             )}
             {task.isNote && <div className={styles.checkPlaceholder} />}
 
+            {!state.active && task.totalTimeSpent > 0 && <Icon name={"timer"} className={styles.hasTimeIcon} />}
             {!state.active && (
               <span className={styles.taskText}>
                 {task.isNote ? task.noteText : task.text}
@@ -317,7 +320,7 @@ const Task = observer(
                   [styles.expired]: expired,
                 })}
               >
-                <CalendarIcon className={styles.dateIcon} />
+                <Icon name={"calendar"} className={styles.dateIcon} />
                 {date}
               </span>
             )}
@@ -355,10 +358,24 @@ const Task = observer(
               ref={state.refs.menus.project.trigger}
             >
               <span onClick={() => state.openMenu("project")}>
-                <FolderIcon className={styles.projectIcon} />
+                <Icon name={state.project? state.project.icon : "check_list"} className={styles.projectIcon} />
                 {state.project ? state.project.name : "Входящие"}
               </span>
             </span>
+
+            <div className={styles.separator} />
+
+            <span className={styles.startTimer} onClick={() => startTimer(task)}>
+              <span><Icon name={"play"} /></span>
+              Начать
+            </span>
+
+            {task.totalTimeSpent > 0 && (
+              <span className={styles.totalTime}>
+                <Icon name={"timer"} />
+                {Duration.fromObject({seconds: task.totalTimeSpent}).toFormat("hh:mm:ss")}
+              </span>
+            )}
 
             {task.date && !state.active && (
               <span className={styles.date}>

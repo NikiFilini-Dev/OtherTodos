@@ -1,6 +1,6 @@
 calendarWidth = 250px
 sideBarWidth = 250px
-mainWidth = calc(100% - 16px - var(--sidebar-width) - 16px - var(--timeline-width))
+mainWidth = calc(100% - 16px - 16px - var(--timeline-width))
 
 mainBlockRadius = 8.5px
 mainBlockPadding = 36px 24px
@@ -22,6 +22,8 @@ accent = #FB2B76
 :root
   --brand rgb(28, 59, 241)
   --accent #FB2B76
+  //--topHeight 120px
+
 
 *
   box-sizing border-box
@@ -45,11 +47,8 @@ body
 
 :global(#app)
   padding 24px
-  padding-top 0
   font-family 'Arimo', Helvetica, Arial, sans-serif
-  //background #F7F7F7
   height calc(100vh - 36px)
-  //background #ffffff29
   left 0
   bottom 0
   width 100vw
@@ -76,6 +75,28 @@ body
   margin-right 8px
   position relative
   border 1px solid rgba(0,0,0,.1)
+
+.timerWrapper
+  //min-height var(--topHeight)
+  //max-height var(--topHeight)
+  //margin 24px 12px
+  padding 24px 12px
+  padding-top 0
+
+.timer
+  width 100%
+  min-height 72px
+  border-radius 16px
+  background var(--brand)
+
+
+.verticalWrapper
+  display flex
+  flex-direction column
+  width calc(100% - 16px - var(--sidebar-width))
+  .mainAndTimeline
+    display flex
+    height var(--bottomHeight)
 
 .main
   margin 0 8px

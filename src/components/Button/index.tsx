@@ -1,6 +1,8 @@
 import React, { CSSProperties } from "react"
 import styles from "./styles.styl"
 import classNames from "classnames"
+import { IconName } from "../../palette/icons"
+import Icon from "../Icon"
 
 const Button = (
   {
@@ -10,7 +12,10 @@ const Button = (
     secondary = false,
     activated = false,
     awesome = false,
-    color = ""
+    color = "",
+    textColor = "white",
+    iconName,
+    square = false,
   }: {
     icon?: any
     text?: string
@@ -19,28 +24,38 @@ const Button = (
     activated?: boolean
     awesome?: boolean
     color?: string
+    textColor?: string
+    iconName?: IconName
+    square?: boolean
   },
   ref,
 ) => {
-  const Icon = icon
+  const OwnIcon = icon
   return (
     <div
       className={classNames({
         [styles.button]: true,
         [styles.secondary]: secondary,
         [styles.activated]: activated,
+        [styles.square]: square
       })}
-      style={{"--color": color} as CSSProperties}
+      style={{"--color": color, "--textColor": textColor} as CSSProperties}
       onClick={onClick}
       ref={ref}
     >
       {icon && (
-        <Icon
+        <OwnIcon
           className={classNames({
             [styles.icon]: true,
             [styles.awesome]: awesome,
           })}
         />
+      )}
+      {iconName && (
+        <Icon name={iconName} className={classNames({
+          [styles.icon]: true,
+          [styles.awesome]: true,
+        })} />
       )}
       {text && <span className={styles.text}>{text}</span>}
     </div>

@@ -20,6 +20,7 @@ import jsonStorage from "../tools/jsonStorage"
 import Habit, { IHabit } from "./Habit"
 import HabitRecord from "./HabitRecord"
 import Subtask, { ISubtask } from "./Subtask"
+import TimerSession, { ITimerSession } from "./TimerSession"
 
 const RootStore = types
   .model("Store", {
@@ -50,8 +51,44 @@ const RootStore = types
     habitRecords: types.array(HabitRecord),
     tempHabit: types.maybeNull(Habit),
     subtasks: types.array(Subtask),
+    timerSessions: types.array(TimerSession),
+    runningTimerSession: types.maybeNull(types.reference(TimerSession)),
+    timerStatus: types.optional(types.enumeration("TimerStatuses", ["RUNNING", "PAUSE", "NONE"]), "NONE")
   })
   .actions(self => ({
+    resumeTimer() {
+      if (!self.runningTimerSession) return
+      self.timerStatus = "RUNNING"
+    },
+    completeTimer(seconds?: number) {
+      if (!self.runningTimerSession) return
+      if (seconds) self.runningTimerSession.addDuration(seconds)
+      self.timerStatus = "NONE"
+      self.runningTimerSession.task.changeStatus(true)
+      self.runningTimerSession = null
+    },
+    stopTimer(seconds?: number) {
+      console.log("STOP TIMER", seconds)
+      if (!self.runningTimerSession) return
+      if (seconds) self.runningTimerSession.addDuration(seconds)
+      self.timerStatus = "NONE"
+      self.runningTimerSession = null
+    },
+    pauseTimer() {
+      self.timerStatus = "PAUSE"
+    },
+    syncTimer(seconds: number) {
+      self.runningTimerSession!.addDuration(seconds)
+    },
+    startTimer(task) {
+      const newId = uuidv4()
+      self.timerSessions.push(
+        {task, date: DateTime.now().toFormat("M/d/yyyy"),
+          start: DateTime.now().toFormat("H:m"), duration: 0, id: newId } as ITimerSession)
+      // @ts-ignore
+      self.runningTimerSession = newId
+      self.timerStatus = "RUNNING"
+    },
     addSubtask(initialData: Partial<ISubtask>) {
       if (!initialData.task) return
       const id = initialData.id ? initialData.id : uuidv4()

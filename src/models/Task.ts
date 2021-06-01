@@ -66,6 +66,10 @@ const Task = types
         (100 / this.subtasks.length)
       )
     },
+    get totalTimeSpent(): number {
+      const root = getRoot<IRootStore>(self)
+      return root.timerSessions.filter(ts => ts.task === self).reduce((acc, ts) => acc + ts.duration, 0)
+    },
   }))
   .actions(self => {
     const actions: Record<string, any> = {}

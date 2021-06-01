@@ -1,12 +1,10 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
-    activated: string
-    awesome: string
-    button: string
-    icon: string
-    secondary: string
-    square: string
-    text: string
+    actions: string
+    time: string
+    timer: string
+    timerIcon: string
+    wrapper: string
   }
 }
 

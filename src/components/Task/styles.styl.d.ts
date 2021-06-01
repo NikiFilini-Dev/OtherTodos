@@ -15,6 +15,7 @@ declare namespace StylesStylNamespace {
     fullDateIcon: string
     fullOnly: string
     hasEvent: string
+    hasTimeIcon: string
     inline: string
     line: string
     moveHandle: string
@@ -31,7 +32,9 @@ declare namespace StylesStylNamespace {
     redo: string
     repeatCount: string
     selected: string
+    separator: string
     spaceBetween: string
+    startTimer: string
     subtask: string
     subtasks: string
     subtasksProgress: string
@@ -43,6 +46,7 @@ declare namespace StylesStylNamespace {
     task: string
     taskText: string
     taskTextEdit: string
+    totalTime: string
     trash: string
   }
 }

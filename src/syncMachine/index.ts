@@ -6,6 +6,8 @@ import {
   onPatch,
 } from "mobx-state-tree"
 import pointer from "json-pointer"
+import jsonStorage from "../tools/jsonStorage"
+
 import Task from "./types/task"
 import SyncType from "./syncType"
 import Project from "./types/project"
@@ -14,8 +16,8 @@ import TimelineEvent from "./types/timeline_event"
 import Tag from "./types/tag"
 import Habit from "./types/habit"
 import HabitRecord from "./types/habit_record"
-import jsonStorage from "../tools/jsonStorage"
 import Subtask from "./types/subtask"
+import TimerSession from "./types/timer_session"
 
 const syncLogger = createLogger("SYNC")
 
@@ -29,6 +31,7 @@ export default class SyncMachine {
     new Habit(),
     new HabitRecord(),
     new Subtask(),
+    new TimerSession(),
   ]
 
   state = "initial"

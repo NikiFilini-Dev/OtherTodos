@@ -2,9 +2,13 @@ declare namespace StylesStylNamespace {
   export interface IStylesStyl {
     app: string
     main: string
+    mainAndTimeline: string
     resizeHandle: string
     sideBar: string
     timeline: string
+    timer: string
+    timerWrapper: string
+    verticalWrapper: string
   }
 }
 

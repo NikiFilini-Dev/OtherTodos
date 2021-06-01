@@ -14,6 +14,7 @@ import Sidebar from "components/Sidebar"
 import { DragDropContext } from "react-beautiful-dnd"
 import Timeline from "../Timeline"
 import noop from "lodash-es/noop"
+import Timer from "../Timer"
 
 const App = observer(() => {
   const {
@@ -96,14 +97,36 @@ const App = observer(() => {
     },
   )
 
+  const topRef = React.useRef(null)
+  const [topSize, setTopSize] = React.useState(0)
+  React.useEffect(() => {
+    const resizeObserver = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        console.log("Resize", entry.contentRect.height, entries)
+        setTopSize(entry.contentRect.height)
+      }
+    })
+    if (topRef.current) {
+      console.log("Subscribe")
+      resizeObserver.observe(topRef.current)
+    }
+    return () => resizeObserver.unobserve(topRef.current)
+  }, [topRef.current])
+
+  const [timerShown, setTimerShown] = React.useState(false)
+  // setInterval(() => setTimerShown(!timerShown), 5000)
+
   return (
     <div
       className={styles.app}
       style={{
         "--sidebar-width": `${sidebarWidth}px`,
         "--timeline-width": `${timelineWidth}px`,
+        "--topHeight": `${topSize}px`,
+        "--bottomHeight": "calc(100% - var(--topHeight, 0px))"
       }}
     >
+      <div style={{position: "fixed", bottom: "32px", left: "32px", width: "32px", height: "32px", background: "green", borderRadius: "50%"}} onClick={() => setTimerShown(!timerShown)} />
       <div className={styles.sideBar} ref={sidebarRef}>
         <Sidebar />
       </div>
@@ -112,18 +135,25 @@ const App = observer(() => {
         draggable={true}
         onDragStart={e => onResizeSidebarStart(e)}
       />
-      <div className={styles.main}>
-        <DragDropContext onDragEnd={(...args) => window.onDragEndFunc(...args)}>
-          <Screen />
-        </DragDropContext>
-      </div>
-      <div
-        className={styles.resizeHandle}
-        draggable={true}
-        onDragStart={e => onResizeTimelineStart(e)}
-      />
-      <div className={styles.timeline} ref={timelineRef}>
-        <Timeline />
+      <div className={styles.verticalWrapper}>
+        <div ref={topRef}>
+          <Timer />
+        </div>
+        <div className={styles.mainAndTimeline}>
+          <div className={styles.main}>
+            <DragDropContext onDragEnd={(...args) => window.onDragEndFunc(...args)}>
+              <Screen />
+            </DragDropContext>
+          </div>
+          <div
+            className={styles.resizeHandle}
+            draggable={true}
+            onDragStart={e => onResizeTimelineStart(e)}
+          />
+          <div className={styles.timeline} ref={timelineRef}>
+            <Timeline />
+          </div>
+        </div>
       </div>
     </div>
   )

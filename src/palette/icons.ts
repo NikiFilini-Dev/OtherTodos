@@ -19,6 +19,11 @@ import SendIcon from "../assets/customIcons/send.svg"
 import TerminalIcon from "../assets/customIcons/terminal.svg"
 import TodoListIcon from "../assets/customIcons/todo_list.svg"
 import CheckListIcon from "../assets/customIcons/check_list.svg"
+import TimerIcon from "../assets/customIcons/timer.svg"
+import PlayIcon from "../assets/customIcons/play.svg"
+import PauseIcon from "../assets/customIcons/pause.svg"
+import StopIcon from "../assets/customIcons/stop.svg"
+import CalendarIcon from "../assets/customIcons/calendar.svg"
 
 export const IconNames: IconName[] = [
   "bookmark",
@@ -42,6 +47,11 @@ export const IconNames: IconName[] = [
   "terminal",
   "todo_list",
   "check_list",
+  "timer",
+  "play",
+  "pause",
+  "stop",
+  "calendar"
 ]
 
 export type IconName =
@@ -66,6 +76,11 @@ export type IconName =
   | "terminal"
   | "todo_list"
   | "check_list"
+  | "timer"
+  | "play"
+  | "pause"
+  | "stop"
+  | "calendar"
 
 export const IconsMap: Record<IconName, any> = {
   bookmark: BookmarkIcon,
@@ -89,4 +104,9 @@ export const IconsMap: Record<IconName, any> = {
   terminal: TerminalIcon,
   todo_list: TodoListIcon,
   check_list: CheckListIcon,
+  timer: TimerIcon,
+  play: PlayIcon,
+  pause: PauseIcon,
+  stop: StopIcon,
+  calendar: CalendarIcon,
 }

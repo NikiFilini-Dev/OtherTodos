@@ -7,7 +7,13 @@
   background var(--color, var(--brand))
   border 2px solid var(--color, var(--brand))
   cursor pointer
-  color white
+  color var(--textColor, white)
+  font-weight 600
+
+  &.square
+    width 32px
+    padding 0
+    justify-content center
 
   &.secondary
     background #e6e6e6
@@ -22,7 +28,7 @@
       fill currentColor
 
 .awesome
-  height 1em
+  height 24px
 
 .icon + .text
   margin-left 9px
