@@ -113,9 +113,6 @@ const App = observer(() => {
     return () => resizeObserver.unobserve(topRef.current)
   }, [topRef.current])
 
-  const [timerShown, setTimerShown] = React.useState(false)
-  // setInterval(() => setTimerShown(!timerShown), 5000)
-
   return (
     <div
       className={styles.app}
@@ -126,7 +123,6 @@ const App = observer(() => {
         "--bottomHeight": "calc(100% - var(--topHeight, 0px))"
       }}
     >
-      <div style={{position: "fixed", bottom: "32px", left: "32px", width: "32px", height: "32px", background: "green", borderRadius: "50%"}} onClick={() => setTimerShown(!timerShown)} />
       <div className={styles.sideBar} ref={sidebarRef}>
         <Sidebar />
       </div>
