@@ -157,6 +157,7 @@
     "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^17.0.1",
     "react-hot-loader": "^4.13.0",
+    "react-input-autosize": "^3.0.0",
     "react-mobx": "^0.0.4",
     "react-textarea-autosize": "^8.3.2",
     "stlint": "^1.0.65",

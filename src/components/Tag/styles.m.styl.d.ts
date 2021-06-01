@@ -1,7 +1,7 @@
 declare namespace StylesMStylNamespace {
   export interface IStylesMStyl {
     colored: string
-    listed: string
+    monotone: string
     selected: string
     tag: string
   }

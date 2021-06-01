@@ -6,14 +6,7 @@
 .info
   display flex
   align-items center
-  //border-bottom 1px solid lightgray
-  min-height 42px
-  //margin 0 20px
-  padding 12px 24px
-  margin-bottom 16px
-  background rgba(184, 184, 184, 0.11)
-  border 1px solid #E4E4E4
-  border-radius 16px
+  padding 23px 26px
   color rgba(22, 25, 56, 1)
 
 .icon
@@ -41,6 +34,10 @@
 
   &:active, &:focus
     outline none
+
+.tasksCount
+  color #9BABC5
+  margin-left 6px
 
 .tasks
   display flex
@@ -90,8 +87,7 @@
 .listWrapper
   max-height: 50000px;
   transition: max-height 0.55s ease-in;
-  padding-left 24px
-  margin-bottom 24px
+  //padding-left 24px
   &.folded
     max-height: 0;
     transition: max-height 0.35s ease-out;

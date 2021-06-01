@@ -3,7 +3,6 @@ import PropTypes from "prop-types"
 import styles from "./styles.styl"
 import Task from "../Task"
 
-import ListIcon from "../../assets/list.svg"
 import { observer } from "mobx-react"
 import { useMst } from "../../models/RootStore"
 import classNames from "classnames"
@@ -14,7 +13,7 @@ import { useClick, useInput } from "../../tools/hooks"
 import { DateTime } from "luxon"
 import { IconsMap } from "../../palette/icons"
 import ListIconMenu from "../ListIconMenu"
-import { noop } from "lodash-es"
+import AutosizeInput from "react-input-autosize"
 
 const Content = observer(({ provided, tasks, selectedTaskId }) => {
   return (
@@ -112,15 +111,16 @@ const TaskList = observer(
           {Boolean(setIcon) && menuOpen &&
             <ListIconMenu triggerRef={triggerRef} menuRef={menuRef} setIcon={setIcon} currentIconName={iconName} />}
           {renamable ? (
-            <input
+            <AutosizeInput
               value={name}
               onChange={onNameChange}
-              className={styles.nameInput}
-              ref={inputRef}
+              inputClassName={styles.nameInput}
+              inputRef={inputRef}
             />
           ) : (
             <span className={styles.name}>{name}</span>
           )}
+          <span className={styles.tasksCount}>({totalCount})</span>
 
           <div className={styles.actions}>
             {deletable && (
@@ -128,9 +128,6 @@ const TaskList = observer(
                 <TrashIcon />
               </div>
             )}
-            <div className={styles.count}>
-              <ListIcon /> <span>{totalCount}</span>
-            </div>
           </div>
           <div
             className={classNames({

@@ -18,7 +18,7 @@ const Tag = observer(({ tag, selected, onClick, listed }: Props) => {
         className={classNames({
           [styles.tag]: true,
           [styles.selected]: selected,
-          [styles.listed]: listed
+          [styles.monotone]: !listed
         })}
         style={{"--tagColor": tag.color} as CSSProperties}
         onClick={() => onClick()}

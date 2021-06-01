@@ -12,6 +12,7 @@ declare namespace StylesStylNamespace {
     name: string
     nameInput: string
     tasks: string
+    tasksCount: string
     wrapper: string
   }
 }
