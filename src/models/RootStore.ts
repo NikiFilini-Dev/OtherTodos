@@ -74,7 +74,9 @@ const RootStore = types
       self.timerStatus = "NONE"
       self.runningTimerSession = null
     },
-    pauseTimer() {
+    pauseTimer(seconds: number) {
+      if (!self.runningTimerSession) return
+      if (seconds) self.runningTimerSession.addDuration(seconds)
       self.timerStatus = "PAUSE"
     },
     syncTimer(seconds: number) {

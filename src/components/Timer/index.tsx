@@ -28,6 +28,8 @@ const Timer = observer(() => {
 
       if (localTimerStatus !== "RUNNING") {
         lastTime = new Date()
+        seconds = 0
+        setSeconds(0)
         return
       }
       seconds = seconds + (new Date().valueOf() - lastTime.valueOf()) / 1000
@@ -56,7 +58,7 @@ const Timer = observer(() => {
       <div className={styles.actions}>
         {timerStatus === "RUNNING" && (
           <Button color={"white"} iconName={"pause"}
-                  textColor={"var(--brand)"} square onClick={() => pauseTimer()} />)}
+                  textColor={"var(--brand)"} square onClick={() => pauseTimer(seconds)} />)}
         {timerStatus === "PAUSE" && (<
           Button color={"white"} iconName={"play"}
                  textColor={"var(--brand)"} square onClick={() => resumeTimer()} />)}
