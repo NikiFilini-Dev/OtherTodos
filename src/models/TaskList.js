@@ -46,6 +46,9 @@ const TaskList = types
       task.subtasks.forEach(st => {
         root.deleteSubtask(st.id)
       })
+      task.timerSessions.forEach(ts => {
+        root.deleteTimerSession(ts.id)
+      })
       self.all.splice(self.all.indexOf(task), 1)
       destroy(task)
     },

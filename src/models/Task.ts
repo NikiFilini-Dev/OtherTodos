@@ -67,9 +67,12 @@ const Task = types
       )
     },
     get totalTimeSpent(): number {
-      const root = getRoot<IRootStore>(self)
-      return root.timerSessions.filter(ts => ts.task === self).reduce((acc, ts) => acc + ts.duration, 0)
+      return this.timerSessions.reduce((acc, ts) => acc + ts.duration, 0)
     },
+    get timerSessions() {
+      const root = getRoot<IRootStore>(self)
+      return root.timerSessions.filter(ts => ts.task === self)
+    }
   }))
   .actions(self => {
     const actions: Record<string, any> = {}

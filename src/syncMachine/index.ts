@@ -105,7 +105,7 @@ export default class SyncMachine {
       }
     })
     let trash: string[] = []
-    snapshot.subtasks.forEach((subtask, i) => {
+    snapshot.subtasks.forEach((subtask) => {
       if (!snapshot.tasks.all.find(t => t.id === subtask.task)) {
         syncLogger.warn(
           "Subtask %s has invalid task ref %s",
@@ -120,7 +120,7 @@ export default class SyncMachine {
     })
 
     trash = []
-    snapshot.habitRecords.forEach((record, i) => {
+    snapshot.habitRecords.forEach((record) => {
       if (!snapshot.habits.find(h => h.id === record.habit)) {
         syncLogger.warn(
           "HabitRecord %s has invalid habit ref %s",
@@ -132,6 +132,21 @@ export default class SyncMachine {
     })
     trash.forEach(id => {
       snapshot.habitRecords.splice(snapshot.habitRecords.findIndex(st => st.id === id), 1)
+    })
+
+    trash = []
+    snapshot.timerSessions.forEach((session) => {
+      if (!snapshot.tasks.all.find(h => h.id === session.task)) {
+        syncLogger.warn(
+          "TimerSession %s has invalid task ref %s",
+          session.id,
+          session.task,
+        )
+        trash.push(session.id)
+      }
+    })
+    trash.forEach(id => {
+      snapshot.timerSessions.splice(snapshot.timerSessions.findIndex(st => st.id === id), 1)
     })
     return snapshot
   }

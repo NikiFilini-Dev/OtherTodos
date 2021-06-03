@@ -83,6 +83,7 @@ const RootStore = types
       self.runningTimerSession!.addDuration(seconds)
     },
     startTimer(task) {
+      if (task === self.tempTask) return
       const newId = uuidv4()
       self.timerSessions.push(
         {task, date: DateTime.now().toFormat("M/d/yyyy"),
@@ -165,6 +166,16 @@ const RootStore = types
         window.syncMachine.registerDelete(subtask.id, subtask.syncName)
 
       destroy(subtask)
+      return true
+    },
+    deleteTimerSession(id: string): boolean {
+      const session = self.timerSessions.find(ts => ts.id === id)
+      if (!session) return false
+
+      if (session.syncable)
+        window.syncMachine.registerDelete(session.id, session.syncName)
+
+      destroy(session)
       return true
     },
     setTempHabit(initialData?: Partial<IHabit>) {
