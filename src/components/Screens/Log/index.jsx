@@ -6,6 +6,7 @@ import styles from "./styles.styl"
 import TaskList from "components/TaskList"
 import { DateTime } from "luxon"
 import TagsFilter from "../../TagsFilter"
+import EndlessScroll from "react-endless-scroll"
 
 const Log = observer(() => {
   window.luxon = DateTime
@@ -13,6 +14,7 @@ const Log = observer(() => {
     tasks: { all },
   } = useMst()
   const [selectedTag, setSelectedTag] = React.useState(null)
+  const [shownDays, setShownDays] = React.useState(10)
 
   const days = []
   let tags = new Set()
@@ -48,14 +50,20 @@ const Log = observer(() => {
         <TagsFilter tags={tags} select={onTagSelect} selected={selectedTag} />
       </div>
       <div className={styles.listOfLists}>
-        {reversedDays.map(day => (
-          <TaskList
-            showHidden
-            key={`day_${day}`}
-            tasks={days[day]}
-            name={DateTime.fromFormat(day, "M/d/yyyy").toFormat("dd.MM.yyyy")}
-          />
-        ))}
+        <EndlessScroll
+          onReachBottom={() => setShownDays(shownDays+10)}
+          isLoading={false}
+          hasMore={reversedDays.length > shownDays}
+        >
+          {reversedDays.slice(0, shownDays).map(day => (
+            <TaskList
+              showHidden
+              key={`day_${day}`}
+              tasks={days[day]}
+              name={DateTime.fromFormat(day, "M/d/yyyy").toFormat("dd.MM.yyyy")}
+            />
+          ))}
+        </EndlessScroll>
       </div>
     </div>
   )

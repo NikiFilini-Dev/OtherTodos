@@ -62,6 +62,7 @@ const Task = observer(
     const [state] = React.useState(new TaskState())
     const [taskEmitter] = React.useState(new Emitter())
     const noteAndSubtasksContainer = React.useRef<HTMLDivElement | null>(null)
+    const editorRef = React.useRef<BakaEditor | null>(null)
 
     const task = source
     if (state.project !== task.project && !state.projectChanged) state.setProject(task.project, true)
@@ -80,7 +81,22 @@ const Task = observer(
       if (state.active !== active) state.active = active
     }, [task.status, active])
 
-    const onActivation = noop
+    const onActivation = () => {
+      setTimeout(() => {
+        console.log("Editor ref current:",editorRef.current )
+        if (!editorRef.current || !editorRef.current.setText) return
+        editorRef.current.setText(task.note)
+
+        editorRef.current.addEventListener(
+          "change",
+          // @ts-ignore
+          (e: Event & { detail: { original: string } }) => {
+            console.log(e.detail.original)
+            task.setNote(e.detail.original)
+          },
+        )
+      }, 300)
+    }
 
     const onDeactivation = () => {
       if (state.projectChanged) {
@@ -219,20 +235,9 @@ const Task = observer(
     const tags = [...task.tags]
     tags.sort((a, b) => a.index - b.index)
 
-    const editorRef = React.useRef<BakaEditor | null>(null)
-    React.useEffect(() => {
-      if (!editorRef.current || !editorRef.current.setText) return
-      editorRef.current.setText(task.note)
-
-      editorRef.current.addEventListener(
-        "change",
-        // @ts-ignore
-        (e: Event & { detail: { original: string } }) => {
-          console.log(e.detail.original)
-          task.setNote(e.detail.original)
-        },
-      )
-    }, [])
+    // React.useEffect(() => {
+    //
+    // }, [editorRef.current])
 
     const date = useDateFormat(task.date, "M/d/yyyy", "dd LLL")
 
@@ -346,7 +351,7 @@ const Task = observer(
               />
             </div>
           )}
-          <div
+          {state.active && <div
             className={classNames({
               [styles.line]: true,
               [styles.padding]: true,
@@ -383,9 +388,9 @@ const Task = observer(
                 {date}
               </span>
             )}
-          </div>
+          </div>}
 
-          <div
+          {state.active && <div
             className={classNames({
               [styles.line]: true,
               [styles.padding]: true,
@@ -397,9 +402,9 @@ const Task = observer(
               <baka-editor class={styles.note} ref={editorRef} />
               <SubtasksList task={task} />
             </div>
-          </div>
+          </div>}
           <Tags task={task} />
-          <div
+          {state.active && <div
             className={classNames({
               [styles.line]: true,
               [styles.padding]: true,
@@ -466,7 +471,7 @@ const Task = observer(
                 </div>
               </div>
             )}
-          </div>
+          </div>}
 
           {state.menus.tags && (
             <FloatMenu
