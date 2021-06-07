@@ -24,6 +24,7 @@ const Timeline = observer(() => {
   const { events, createEvent, timelineDate, setTimelineDate } = useMst()
   const todayEvents = events.filter(e => e.date === timelineDate)
   const [isDragging, setIsDragging] = React.useState(false)
+  const [isCreating, setIsCreating] = React.useState(false)
 
   const arr = []
   for (let i = 0; i < 24; i++) {
@@ -68,6 +69,8 @@ const Timeline = observer(() => {
     }
   }, [])
 
+  let _isCreating = false
+
   const ref = React.useRef(null)
   const nowRef = React.useRef(null)
   const [eventRefs, setEventRefs] = React.useState({})
@@ -89,7 +92,16 @@ const Timeline = observer(() => {
   }
 
   const onTimelineClick = e => {
-    if (isDragging) return
+    if (isDragging || isCreating || _isCreating) return
+
+    setIsCreating(true)
+    _isCreating = true
+
+    setTimeout(() => {
+      _isCreating = false
+      setIsCreating(false)
+    }, 300)
+
     const modalsEl = document.querySelector("#modals")
     if (e.target === modalsEl || modalsEl.contains(e.target)) return
     for (const id of Object.keys(eventRefs)) {
