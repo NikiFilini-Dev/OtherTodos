@@ -1,0 +1,40 @@
+import { Instance, SnapshotIn, types } from "mobx-state-tree"
+import { ColorName, ColorNames } from "../../palette/colors"
+import Collection from "./Collection"
+
+const CollectionTag = types
+  .model("CollectionTag", {
+    id: types.identifier,
+    name: types.string,
+    color: types.enumeration("Colors", ColorNames),
+    collection: types.reference(Collection)
+  })
+  .views(() => ({
+    get syncable() {
+      return false
+    },
+    get syncName() {
+      return "CollectionTag"
+    },
+  }))
+  .actions(self => {
+    const actions: Record<string, any> = {}
+    const actionsMap: Record<string, string[]> = {}
+
+    actions.setName = (val: string) => self.name = val
+    actionsMap.setName = ["name"]
+
+    actions.setColor = (val: ColorName) => self.color = val
+    actionsMap.setColor = ["color"]
+
+    actions.getActionsMap = () => actionsMap
+    return actions
+  })
+
+export function factory(data) {
+  return data
+}
+
+export default CollectionTag
+export type ICollectionTag = Instance<typeof CollectionTag>
+export type ICollectionTagSnapshot = SnapshotIn<typeof CollectionTag>

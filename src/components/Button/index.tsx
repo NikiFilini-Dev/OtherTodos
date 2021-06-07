@@ -48,6 +48,7 @@ const Button = (
           className={classNames({
             [styles.icon]: true,
             [styles.awesome]: awesome,
+            [styles.filled]: !awesome,
           })}
         />
       )}

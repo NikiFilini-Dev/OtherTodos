@@ -21,6 +21,7 @@ import Habit, { IHabit } from "./Habit"
 import HabitRecord from "./HabitRecord"
 import Subtask, { ISubtask } from "./Subtask"
 import TimerSession, { ITimerSession } from "./TimerSession"
+import CollectionsStore from "./collections/CollectionsStore"
 
 const RootStore = types
   .model("Store", {
@@ -34,8 +35,8 @@ const RootStore = types
     selectedDate: DateTime.now().toFormat("M/d/yyyy"),
     timelineDate: DateTime.now().toFormat("M/d/yyyy"),
     screen: types.optional(
-      types.enumeration(["INBOX", "TODAY", "PROJECT", "LOG", "TAGS", "AUTH"]),
-      "TODAY",
+      types.enumeration(["INBOX", "TODAY", "PROJECT", "LOG", "TAGS", "AUTH", "COLLECTION"]),
+      "COLLECTION",
     ),
     selectedProject: types.maybeNull(types.reference(Project)),
     tags: types.array(Tag),
@@ -53,7 +54,8 @@ const RootStore = types
     subtasks: types.array(Subtask),
     timerSessions: types.array(TimerSession),
     runningTimerSession: types.maybeNull(types.reference(TimerSession)),
-    timerStatus: types.optional(types.enumeration("TimerStatuses", ["RUNNING", "PAUSE", "NONE"]), "NONE")
+    timerStatus: types.optional(types.enumeration("TimerStatuses", ["RUNNING", "PAUSE", "NONE"]), "NONE"),
+    collectionsStore: CollectionsStore,
   })
   .actions(self => ({
     resumeTimer() {

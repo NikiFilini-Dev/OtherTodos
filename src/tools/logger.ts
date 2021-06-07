@@ -12,7 +12,7 @@ const myFormat = winston.format.printf(
 
 const newLogger = (label?: string) => {
   const consoleFormats = [
-    winston.format.colorize(),
+    // winston.format.colorize(),
     winston.format.simple(),
     winston.format.timestamp({
       format: "HH:mm:ss",

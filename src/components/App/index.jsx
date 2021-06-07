@@ -4,6 +4,7 @@ import styles from "./styles.styl"
 import { observer } from "mobx-react"
 import { useMst } from "models/RootStore"
 
+import Collection from "components/Screens/Collection"
 import Today from "components/Screens/Today"
 import Project from "components/Screens/Project"
 import Inbox from "components/Screens/Inbox"
@@ -45,6 +46,9 @@ const App = observer(() => {
       break
     case "AUTH":
       Screen = Auth
+      break
+    case "COLLECTION":
+      Screen = Collection
       break
   }
 

@@ -1,13 +1,8 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
-    activated: string
-    awesome: string
-    button: string
-    filled: string
-    icon: string
-    secondary: string
-    square: string
-    text: string
+    active: string
+    block: string
+    list: string
   }
 }
 

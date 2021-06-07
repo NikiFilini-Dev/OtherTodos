@@ -13,6 +13,7 @@
   <meta name="msapplication-config" content="/public/browserconfig.xml">
   <meta name="theme-color" content="#ffffff">
   <script>
+    if (!window.process) window.process = {env: {}}
     window.IS_WEB = true
     window.remote = {}
   </script>
@@ -71,7 +72,7 @@
       #editor {
           width: 100%;
           height: auto;
-          min-height: 4em;
+          min-height: var(--min-height, 4em);
           padding: calc(var(--editor-padding) - 1px);
           z-index: 1;
           border-radius: var(--border-radius);

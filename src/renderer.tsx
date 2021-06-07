@@ -10,6 +10,7 @@ import SyncMachine from "./syncMachine"
 import { DateTime } from "luxon"
 import BakaEditor from "./editor"
 import { noop } from "lodash-es"
+import CollectionsStore from "./models/collections/CollectionsStore"
 
 noop("EDITOR", BakaEditor)
 
@@ -24,7 +25,7 @@ const DEBUG = process.env.P_ENV === "debug"
 const rawUser = localStorage.getItem("user")
 const data = {
   user: rawUser ? JSON.parse(rawUser) : null,
-  screen: rawUser ? "TODAY" : "AUTH",
+  screen: rawUser ? "COLLECTION" : "AUTH",
   selectedProject: null,
   selectedTag: null,
   selectedDate: DateTime.now().toFormat("M/d/yyyy"),
@@ -34,6 +35,66 @@ const data = {
   events: [],
   habits: [],
   habitRecords: [],
+  collectionsStore: CollectionsStore.create({
+    collections: [{
+      id: "05e4b4c4-6de2-4aea-88bc-16c9d354ab7e",
+      name: "First collection"
+    }, {
+      id: "05e4b4c5-6de2-4aea-88bc-16c9d354ab7e",
+      name: "Second collection"
+    }],
+
+    columns: [{
+      id: "534a3193-adf0-411d-b551-e89404064ed5",
+      name: "First column",
+      color: "blue",
+      index: 0,
+      collection: "05e4b4c4-6de2-4aea-88bc-16c9d354ab7e"
+    }, {
+      id: "8586aefc-4748-462a-9537-f76320907daa",
+      name: "Second column",
+      color: "green",
+      index: 1,
+      collection: "05e4b4c4-6de2-4aea-88bc-16c9d354ab7e"
+    }, {
+      id: "8bb799ae-c12e-49c4-a7af-bcc5ad2dacb6",
+      name: "Third column",
+      color: "yellow",
+      index: 2,
+      collection: "05e4b4c4-6de2-4aea-88bc-16c9d354ab7e"
+    }],
+
+    cards: [{
+      id: "e6cc3092-0754-48ab-bce9-45b29131067e",
+      name: "First card",
+      text: null,
+      column: "534a3193-adf0-411d-b551-e89404064ed5",
+      collection: "05e4b4c4-6de2-4aea-88bc-16c9d354ab7e",
+      index: 0,
+      date: "6/8/2021"
+    }, {
+      id: "efd281b1-3b0e-4444-9c1c-8fee25025358",
+      name: "Second card",
+      text: "Detailed description",
+      column: "534a3193-adf0-411d-b551-e89404064ed5",
+      collection: "05e4b4c4-6de2-4aea-88bc-16c9d354ab7e",
+      index: 1,
+      date: "6/7/2021",
+    }, {
+      id: "9245ac8b-f138-4838-96b1-3c35bb8da074",
+      name: "Third card",
+      text: null,
+      column: "8586aefc-4748-462a-9537-f76320907daa",
+      collection: "05e4b4c4-6de2-4aea-88bc-16c9d354ab7e",
+      index: 0,
+      status: "DONE",
+      date: "6/6/2021"
+    }],
+
+    subtasks: [],
+
+    selectedCollection: "05e4b4c4-6de2-4aea-88bc-16c9d354ab7e"
+  })
 }
 const Store = RootStore.create(data)
 

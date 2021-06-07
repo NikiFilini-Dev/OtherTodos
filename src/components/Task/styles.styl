@@ -112,71 +112,71 @@
   .note
     border-radius 16px 16px 0 0
 
-  .subtasks
+.subtasks
+  display flex
+  flex-direction column
+  padding 23px
+  padding-top 0
+
+  .subtask
     display flex
-    flex-direction column
-    padding 23px
-    padding-top 0
+    width 100%
+    align-items center
+    margin-bottom 10px
+    padding 8px
+    border-radius 8px
+    background #f3f3f3
+    border 1px solid #e3e3e3
+    cursor default
+    transition opacity .4
 
-    .subtask
-      display flex
-      width 100%
+    &.dead
+      opacity 0
+
+    .trash
+      margin-left 12px
+      display inline-flex
       align-items center
-      margin-bottom 10px
-      padding 8px
-      border-radius 8px
-      background #f3f3f3
-      border 1px solid #e3e3e3
-      cursor default
-      transition opacity .4
-
-      &.dead
-        opacity 0
-
-      .trash
-        margin-left 12px
-        display inline-flex
-        align-items center
-        justify-content center
-        cursor pointer
-        width 1em
-        height 1em
-
-        svg
-          height .6em
-          color #9babc5
-
-      .moveHandle
-        margin-left 12px
-        display inline-flex
-        align-items center
-        justify-content center
-        width 1em
-        height 1em
-        cursor grab
-
-        svg
-          height 1em
-          color #9babc5
-
-      //&:hover, &:focus, &:active
-      //  background: rgba(0,0,0,.06);
-
-      textarea
-        border 0
-        font-size 16px
-        background transparent
-        width 100%
-        margin-left 8px
-
-        &:active, &:focus
-          outline none
-
-    .addNew
-      color rgba(155, 171, 197, 1)
-      font-size 15px
+      justify-content center
       cursor pointer
-      padding 8px
+      width 1em
+      height 1em
+
+      svg
+        height .6em
+        color #9babc5
+
+    .moveHandle
+      margin-left 12px
+      display inline-flex
+      align-items center
+      justify-content center
+      width 1em
+      height 1em
+      cursor grab
+
+      svg
+        height 1em
+        color #9babc5
+
+    //&:hover, &:focus, &:active
+    //  background: rgba(0,0,0,.06);
+
+    textarea
+      border 0
+      font-size 16px
+      background transparent
+      width 100%
+      margin-left 8px
+
+      &:active, &:focus
+        outline none
+
+  .addNew
+    color rgba(155, 171, 197, 1)
+    font-size 15px
+    cursor pointer
+    padding 8px
 
 .line
   display flex
