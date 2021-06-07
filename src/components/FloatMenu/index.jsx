@@ -48,12 +48,12 @@ const FloatMenu = observer(
         if (targetBox.y < window.innerHeight / 2) {
           style = {
             top: targetBox.top + targetBox.height + 12 + "px",
-            left: targetBox.left + targetBox.width / 2 - 19 + "px",
+            left: targetBox.left - targetBox.width / 2 + "px",
           }
         } else {
           style = {
             bottom: window.innerHeight - targetBox.y + 19 + "px",
-            left: targetBox.left + targetBox.width / 2 - 19 + "px",
+            left: targetBox.left - targetBox.width / 2 + "px",
           }
           modifier = "bottom"
         }

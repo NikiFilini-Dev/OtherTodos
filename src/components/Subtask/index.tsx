@@ -1,17 +1,18 @@
 import { observer } from "mobx-react"
-import { ISubtask } from "../../../../models/Subtask"
-import { IRootStore, useMst } from "../../../../models/RootStore"
+import { ISubtask } from "../../models/Subtask"
 import React from "react"
-import styles from "../../styles.styl"
-import Checkbox from "../../../Checkbox"
+import styles from "../Task/styles.styl"
+import Checkbox from "../Checkbox"
 import TextareaAutosize from "react-textarea-autosize"
-import { TaskContext } from "../../index"
-import TrashIcon from "../../../../assets/customIcons/times.svg"
-import GridIcon from "../../../../assets/customIcons/grid.svg"
+import { TaskContext } from "../Task"
+import TrashIcon from "../../assets/customIcons/times.svg"
+import GridIcon from "../../assets/customIcons/grid.svg"
 import classNames from "classnames"
+import { ICollectionSubtask } from "../../models/collections/CollectionSubtask"
 
-const Subtask = observer(({ subtask, provided }: { subtask: ISubtask, provided: any }) => {
-  const { deleteSubtask }: IRootStore = useMst()
+type Props = { subtask: ISubtask | ICollectionSubtask, provided: any, deleteSubtask: (id: string) => any, subtaskStyle?: any }
+
+const Subtask = observer(({ subtask, provided, deleteSubtask, subtaskStyle={} }: Props) => {
   const [lastText, setLastText] = React.useState("")
   const inputRef = React.useRef<HTMLTextAreaElement | null>(null)
   const emitter = React.useContext(TaskContext)
@@ -27,9 +28,16 @@ const Subtask = observer(({ subtask, provided }: { subtask: ISubtask, provided: 
   const onKeyUp = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Backspace" && lastText.length === 0) {
       e.preventDefault()
-      const prev = subtask.task.subtasks.find(
-        st => st.index === subtask.index - 1,
-      )
+      let prev
+      if ("task" in subtask) {
+        prev = subtask.task.subtasks.find(
+          st => st.index === subtask.index - 1,
+        )
+      } else if ("card" in subtask) {
+        prev = subtask.card.subtasks.find(
+          st => st.index === subtask.index - 1,
+        )
+      }
       if (prev) emitter.emit("focus_subtask", prev.id)
       deleteSubtask(subtask.id)
     }
@@ -46,7 +54,9 @@ const Subtask = observer(({ subtask, provided }: { subtask: ISubtask, provided: 
     <div className={classNames({[styles.subtask]: true, [styles.dead]: isDead})} ref={provided.innerRef}
          id={subtask.id}
          {...provided.draggableProps}
-         {...provided.dragHandleProps}>
+         {...provided.dragHandleProps}
+         style={{...subtaskStyle, ...provided.draggableProps.style}}
+    >
       <Checkbox
         checked={subtask.status === "DONE"}
         circle

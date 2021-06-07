@@ -38,7 +38,7 @@ import Emitter from "eventemitter3"
 import _, { noop } from "lodash"
 import Tag from "components/Tag"
 import { v4 } from "uuid"
-import SubtasksList from "./components/SubtasksList"
+import SubtasksList from "../SubtasksList"
 import Icon from "../Icon"
 
 export const TaskContext = React.createContext(new Emitter())
@@ -57,6 +57,7 @@ const Task = observer(
       addSubtask,
       deleteSubtask,
       editingTask,
+      moveSubtask,
       startTimer
     }: IRootStore = useMst()
     const [state] = React.useState(new TaskState())
@@ -400,7 +401,7 @@ const Task = observer(
             <div className={styles.noteWrapper} ref={noteAndSubtasksContainer}>
               {/*@ts-ignore */}
               <baka-editor class={styles.note} ref={editorRef} />
-              <SubtasksList task={task} />
+              <SubtasksList target={task} moveSubtask={moveSubtask} deleteSubtask={deleteSubtask} addNewShown />
             </div>
           </div>}
           <Tags task={task} />

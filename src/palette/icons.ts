@@ -24,6 +24,7 @@ import PlayIcon from "../assets/customIcons/play.svg"
 import PauseIcon from "../assets/customIcons/pause.svg"
 import StopIcon from "../assets/customIcons/stop.svg"
 import CalendarIcon from "../assets/customIcons/calendar.svg"
+import TimeIcon from "../assets/customIcons/time.svg"
 
 export const IconNames: IconName[] = [
   "bookmark",
@@ -51,7 +52,8 @@ export const IconNames: IconName[] = [
   "play",
   "pause",
   "stop",
-  "calendar"
+  "calendar",
+  "time"
 ]
 
 export type IconName =
@@ -81,6 +83,7 @@ export type IconName =
   | "pause"
   | "stop"
   | "calendar"
+  | "time"
 
 export const IconsMap: Record<IconName, any> = {
   bookmark: BookmarkIcon,
@@ -109,4 +112,5 @@ export const IconsMap: Record<IconName, any> = {
   pause: PauseIcon,
   stop: StopIcon,
   calendar: CalendarIcon,
+  time: TimeIcon,
 }

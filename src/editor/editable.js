@@ -33,7 +33,6 @@ export default class Editable extends HTMLElement {
     })
 
     const insertText = (text, range) => {
-      console.log(range)
       if (range.collapsed) {
         this.cursorPos = range.startOffset + text.length
         io.insert(range.startOffset, text)
@@ -48,7 +47,6 @@ export default class Editable extends HTMLElement {
       e.preventDefault()
       const clipboardData = e.clipboardData || window.clipboardData
       const pastedData = clipboardData.getData("Text").replace(/\r/gm, "")
-      console.log(pastedData, pastedData.length)
 
       let range =
         lastSelection && !lastSelection.collapsed
@@ -62,8 +60,6 @@ export default class Editable extends HTMLElement {
       if (e.inputType !== "insertText") return
 
       e.preventDefault()
-      console.log("Last vs new:")
-      console.log(lastSelection, this.getSelection())
 
       let range =
         lastSelection && !lastSelection.collapsed
@@ -79,8 +75,6 @@ export default class Editable extends HTMLElement {
       e.preventDefault()
 
       let range = this.getSelection()
-
-      console.log(range.startOffset)
 
       if (range.collapsed) {
         this.cursorPos = range.startOffset + 1
@@ -380,8 +374,6 @@ export default class Editable extends HTMLElement {
     let range
     try {
       range = window.getSelection().getRangeAt(0)
-      // console.log('Original range:', range)
-      // return range
     } catch (err) {
       return {
         startOffset: 0,
@@ -395,8 +387,6 @@ export default class Editable extends HTMLElement {
     let result = {}
     let firstOffset = this.getContainerOffset(range.startContainer)
     let secondOffset = this.getContainerOffset(range.endContainer)
-
-    // console.log('Offsets:', firstOffset, secondOffset)
 
     result.toString = () => range.toString()
 

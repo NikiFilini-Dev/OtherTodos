@@ -49,6 +49,7 @@ module.exports = {
         "mocks",
         "jsonStorage.js",
       ),
+      "electron-json-storage": path.resolve(__dirname, "web", "mocks", "electron-json-storage.js")
     },
   },
   node: {
