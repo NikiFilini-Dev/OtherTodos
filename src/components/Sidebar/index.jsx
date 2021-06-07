@@ -19,6 +19,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import { DateTime } from "luxon"
 import noop from "lodash-es/noop"
 import { IconsMap } from "../../palette/icons"
+import Icon from "../Icon"
 
 const Element = observer(
   ({
@@ -354,6 +355,18 @@ const Sidebar = observer(() => {
         >
           <TagsIcon className={styles.groupElementAwesomeIcon} />
           Метки событий
+        </div>
+        <div
+          className={classNames({
+            [styles.groupElement]: true,
+            [styles.active]: screen === "COLLECTION"
+          })}
+          onClick={() => {
+            setScreen("COLLECTION")
+          }}
+        >
+          <Icon name={"grid"} className={styles.groupElementIcon} />
+          Коллекции
         </div>
         <Group
           name={"Проекты"}

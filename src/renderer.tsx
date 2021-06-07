@@ -25,7 +25,7 @@ const DEBUG = process.env.P_ENV === "debug"
 const rawUser = localStorage.getItem("user")
 const data = {
   user: rawUser ? JSON.parse(rawUser) : null,
-  screen: rawUser ? "COLLECTION" : "AUTH",
+  screen: rawUser ? "TODAY" : "AUTH",
   selectedProject: null,
   selectedTag: null,
   selectedDate: DateTime.now().toFormat("M/d/yyyy"),
