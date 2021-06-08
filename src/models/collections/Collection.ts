@@ -11,7 +11,7 @@ const Collection = types
   })
   .views(self => ({
     get syncable() {
-      return false
+      return true
     },
     get syncName() {
       return "Collection"

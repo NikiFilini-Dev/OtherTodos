@@ -6,6 +6,7 @@ declare namespace StylesStylNamespace {
     colorTrigger: string
     column: string
     count: string
+    deleteTrigger: string
     name: string
     title: string
   }

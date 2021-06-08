@@ -6,6 +6,7 @@ import styles from "./styles.styl"
 import { ColorsMap } from "../../../../../palette/colors"
 import SmileysIcon from "../../../../../assets/customIcons/smileys.svg"
 import AngleIcon from "../../../../../assets/line_awesome/angle-down-solid.svg"
+import TrashIcon from "../../../../../assets/customIcons/trash.svg"
 import { Draggable, DraggableProvidedDragHandleProps, Droppable } from "react-beautiful-dnd"
 import { IRootStore, useMst } from "../../../../../models/RootStore"
 import AutosizeInput from "react-input-autosize"
@@ -16,7 +17,7 @@ const Column = observer(({
                            column,
                            handleProps,
                          }: { column: ICollectionColumn, handleProps?: DraggableProvidedDragHandleProps }) => {
-  const {collectionsStore: {createCard, selectCard}}: IRootStore = useMst()
+  const {collectionsStore: {createCard, selectCard, deleteColumn}}: IRootStore = useMst()
   const cards = [...column.cards]
   cards.sort((a,b) => a.index - b.index)
 
@@ -35,11 +36,15 @@ const Column = observer(({
     <div className={styles.title}
          style={{ "--columnColor": ColorsMap[column.color] } as CSSProperties} {...handleProps}>
       <AutosizeInput value={column.name} onChange={e => column.setName(e.target.value)} inputClassName={styles.name} />
+      <div className={styles.deleteTrigger} onClick={() => deleteColumn(column.id)}>
+        <TrashIcon  />
+      </div>
       <div className={styles.count}>{column.cards.length}</div>
       <div className={styles.colorTrigger} ref={triggerRef} onClick={() => setMenuShown(true)}>
         <AngleIcon />
       </div>
-      {menuShown && <ListColorMenu setColor={column.setColor} currentColorName={column.color} triggerRef={triggerRef} menuRef={menuRef} />}
+      {menuShown && <ListColorMenu setColor={column.setColor}
+                                   currentColorName={column.color} triggerRef={triggerRef} menuRef={menuRef} />}
     </div>
     <Droppable droppableId={column.id} type={"CARD"}>
       {(provided) => (

@@ -1,13 +1,11 @@
 import React from "react"
 import PropTypes from "prop-types"
-// import { observer } from "mobx-react"
-// import classNames from "classnames"
 import styles from "./styles.styl"
 import Task from "components/Task"
 import Button from "components/Button"
 import { observer } from "mobx-react"
 
-import MoveIcon from "assets/move.svg"
+import MoveIcon from "assets/line_awesome/arrow-right-solid.svg"
 import DateSelector from "../DateSelector"
 import { useClickOutsideRef } from "../../tools/hooks"
 

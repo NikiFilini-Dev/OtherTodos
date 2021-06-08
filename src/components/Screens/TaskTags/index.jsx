@@ -2,9 +2,9 @@ import React from "react"
 import { observer } from "mobx-react"
 import { useMst } from "models/RootStore"
 import styles from "./styles.styl"
-import PlusIcon from "../../../assets/plus.svg"
-import TagIcon from "assets/awesome/solid/tag.svg"
-import TrashIcon from "assets/awesome/solid/trash-alt.svg"
+import PlusIcon from "assets/line_awesome/plus-solid.svg"
+import TagIcon from "assets/line_awesome/tag-solid.svg"
+import TrashIcon from "assets/line_awesome/trash-alt.svg"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import Button from "../../Button"
 
@@ -123,6 +123,7 @@ const TaskTags = observer(() => {
           </span>
           <div className={styles.actions}>
             <Button
+              square
               icon={PlusIcon}
               onClick={() => createTag("Новый тэг", type)}
             />

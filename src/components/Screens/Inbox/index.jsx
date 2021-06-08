@@ -5,7 +5,7 @@ import styles from "./styles.styl"
 
 import TaskList from "components/TaskList"
 import Task from "components/Task"
-import PlusIcon from "assets/plus.svg"
+import PlusIcon from "assets/line_awesome/plus-solid.svg"
 import Button from "components/Button"
 import { useTrap } from "../../../tools/hooks"
 
@@ -50,6 +50,7 @@ const Inbox = observer(() => {
           <span className={styles.title}>Входящие</span>
           <Button
             icon={PlusIcon}
+            square
             onClick={() => setIsNewTaskShown(!isNewTaskShown)}
             activated={isNewTaskShown}
           />

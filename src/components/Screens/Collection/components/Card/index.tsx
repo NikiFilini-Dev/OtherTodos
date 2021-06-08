@@ -24,13 +24,13 @@ const Card = observer(({ card }: {card: ICollectionCard}) => {
       {card.doneSubtasks.length}/{card.subtasks.length}
       <div className={styles.progress} style={{"--donePercent": `${card.donePercent}%`} as CSSProperties} />
     </div>}
-    {(card.date !== null || tags.length) && <div className={styles.separator} /> }
-    <div className={styles.tags}>
+    {!!(card.date !== null || tags.length) && <div className={styles.separator} /> }
+    {tags.length > 0 && <div className={styles.tags}>
       {tags.map(tag => (
         <div className={styles.tag} style={{"--color": ColorsMap[tag.color]} as CSSProperties}
              key={"card_tag_"+tag.id}>{tag.name}</div>
       ))}
-    </div>
+    </div>}
     {card.date !== null && <div className={styles.bottom}>
       {card.date === DateTime.now().toFormat("M/d/yyyy") && (
         <div className={classNames({[styles.date]: true, [styles.today]: true})}><Icon name={"time"} /> Сегодня</div>

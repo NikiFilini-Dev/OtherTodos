@@ -1,4 +1,4 @@
-import { destroy, Instance, types } from "mobx-state-tree"
+import { destroy, getRoot, Instance, types } from "mobx-state-tree"
 import Collection, { ICollectionSnapshot } from "./Collection"
 import CollectionColumn, { ICollectionColumn, ICollectionColumnSnapshot } from "./CollectionColumn"
 import CollectionCard, { ICollectionCard, ICollectionCardSnapshot } from "./CollectionCard"
@@ -7,6 +7,7 @@ import CollectionLog from "./CollectionLog"
 import { v4 as uuidv4 } from "uuid"
 import CollectionSubtask, { ICollectionSubtask, ICollectionSubtaskSnapshot } from "./CollectionSubtask"
 import { move } from "../../tools/movement"
+import { IRootStore } from "../RootStore"
 
 const CollectionsStore = types
   .model("CollectionsStore", {
@@ -127,8 +128,20 @@ const CollectionsStore = types
         if (c.index > collection.index) c.setIndex(c.index - 1)
       })
 
-      if (self.selectedCollection === collection) self.selectedCollection = null
+      if (self.selectedCollection === collection) {
+        self.selectedCollection = null
+        if (!self.collections.filter(c => c.id !== id).length) {
+          const root = getRoot<IRootStore>(self)
+          root.setScreen("TODAY")
+        }
+      }
       if (self.editingCollection === collection) self.editingCollection = null
+
+
+
+
+      if (collection.syncable)
+        window.syncMachine.registerDelete(collection.id, collection.syncName)
 
       destroy(collection)
     },
@@ -140,7 +153,7 @@ const CollectionsStore = types
       const collection = self.collections.find(c => c.id === initialData.collection)
       if (!collection) throw new Error("collection not found")
 
-      const index = collection.columns.reduce((acc, c) => acc > c.index ? acc : c.index, 0)
+      const index = collection.columns.reduce((acc, c) => acc > c.index ? acc : c.index, -1)
 
       self.columns.push({
         collection: initialData.collection,
@@ -156,8 +169,13 @@ const CollectionsStore = types
 
       column.collection.columns.forEach(c => {
         if (c.id === id) return
-        if (c.index > column.id) c.setIndex(c.index - 1)
+        if (c.index > column.index) c.setIndex(c.index - 1)
       })
+
+      column.cards.forEach(c => this.deleteCard(c.id))
+
+      if (column.syncable)
+        window.syncMachine.registerDelete(column.id, column.syncName)
 
       destroy(column)
     },
@@ -193,6 +211,9 @@ const CollectionsStore = types
 
       self.cards.forEach(card => card.removeTag(id))
 
+      if (tag.syncable)
+        window.syncMachine.registerDelete(tag.id, tag.syncName)
+
       destroy(tag)
     },
     moveTag(id: string, newIndex: number) {
@@ -214,7 +235,7 @@ const CollectionsStore = types
       if (!column) throw new Error("column not found")
 
       let index = initialData.index
-      if (!index) index = column.cards.reduce((acc, c) => c.index > acc ? c.index : acc, 0)
+      if (!index) index = column.cards.reduce((acc, c) => c.index > acc ? c.index : acc, -1)
 
       // @ts-ignore
       self.cards.push({
@@ -237,6 +258,11 @@ const CollectionsStore = types
       if (!card) throw new Error("card not found")
 
       if (self.editingCard?.id === id) self.editingCard = null
+
+      card.subtasks.forEach(st => this.deleteSubtask(st.id))
+
+      if (card.syncable)
+        window.syncMachine.registerDelete(card.id, card.syncName)
 
       destroy(card)
     },

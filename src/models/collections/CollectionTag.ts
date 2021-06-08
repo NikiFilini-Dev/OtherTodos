@@ -12,7 +12,7 @@ const CollectionTag = types
   })
   .views(() => ({
     get syncable() {
-      return false
+      return true
     },
     get syncName() {
       return "CollectionTag"

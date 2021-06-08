@@ -11,7 +11,7 @@ import DateSelector from "components/DateSelector"
 
 import CalendarIcon from "assets/calendar_empty.svg"
 import ListIcon from "assets/list.svg"
-import PlusIcon from "assets/plus.svg"
+import PlusIcon from "assets/line_awesome/plus-solid.svg"
 import Task from "components/Task"
 import TagsFilter from "components/TagsFilter"
 import { useDateFormat, useTrap } from "tools/hooks"
@@ -212,6 +212,7 @@ const Today = observer(() => {
             </span>
             <Button
               icon={PlusIcon}
+              square
               activated={isNewTaskShown}
               onClick={() => onPlusClick()}
             />

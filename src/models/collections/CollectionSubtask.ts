@@ -13,7 +13,7 @@ const CollectionSubtask = types
   })
   .views(() => ({
     get syncable() {
-      return false
+      return true
     },
     get syncName() {
       return "CollectionSubtask"

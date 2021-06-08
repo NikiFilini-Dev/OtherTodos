@@ -13,7 +13,7 @@ const CollectionColumn = types
   })
   .views(self => ({
     get syncable() {
-      return false
+      return true
     },
     get syncName() {
       return "CollectionColumn"
@@ -31,14 +31,14 @@ const CollectionColumn = types
     actionsMap.setName = ["name"]
 
     actions.setColor = (val: ColorName) => self.color = val
-    actionsMap.setName = ["color"]
+    actionsMap.setColor = ["color"]
 
     actions.setIndex = (val: number) => self.index = val
-    actionsMap.setName = ["index"]
+    actionsMap.setIndex = ["index"]
 
     // @ts-ignore
     actions.setCollection = (val: string | ICollection) => self.collection = val
-    actionsMap.setName = ["collection"]
+    actionsMap.setCollection = ["collection"]
 
     actions.getActionsMap = () => actionsMap
     return actions

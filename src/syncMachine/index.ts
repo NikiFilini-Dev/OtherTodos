@@ -18,6 +18,11 @@ import Habit from "./types/habit"
 import HabitRecord from "./types/habit_record"
 import Subtask from "./types/subtask"
 import TimerSession from "./types/timer_session"
+import Collection from "./types/collection"
+import CollectionCard from "./types/collection_card"
+import CollectionColumn from "./types/collection_column"
+import CollectionTag from "./types/collection_tag"
+import CollectionSubtask from "./types/collection_subtask"
 
 const syncLogger = createLogger("SYNC")
 
@@ -32,6 +37,11 @@ export default class SyncMachine {
     new HabitRecord(),
     new Subtask(),
     new TimerSession(),
+    new Collection(),
+    new CollectionColumn(),
+    new CollectionTag(),
+    new CollectionCard(),
+    new CollectionSubtask(),
   ]
 
   state = "initial"
@@ -148,6 +158,22 @@ export default class SyncMachine {
     trash.forEach(id => {
       snapshot.timerSessions.splice(snapshot.timerSessions.findIndex(st => st.id === id), 1)
     })
+
+    trash = []
+    snapshot.collectionsStore.subtasks.forEach((subtask) => {
+      if (!snapshot.collectionsStore.cards.find(t => t.id === subtask.card)) {
+        syncLogger.warn(
+          "CollectionSubtask %s has invalid card ref %s",
+          subtask.id,
+          subtask.card,
+        )
+        trash.push(subtask.id)
+      }
+    })
+    trash.forEach(id => {
+      snapshot.collectionsStore.subtasks.splice(snapshot.collectionsStore.subtasks.findIndex(st => st.id === id), 1)
+    })
+
     return snapshot
   }
 
