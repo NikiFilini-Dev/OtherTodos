@@ -7,7 +7,8 @@ const CollectionTag = types
     id: types.identifier,
     name: types.string,
     color: types.enumeration("Colors", ColorNames),
-    collection: types.reference(Collection)
+    collection: types.reference(Collection),
+    index: types.number,
   })
   .views(() => ({
     get syncable() {
@@ -26,6 +27,9 @@ const CollectionTag = types
 
     actions.setColor = (val: ColorName) => self.color = val
     actionsMap.setColor = ["color"]
+
+    actions.setIndex = (val: number) => self.index = val
+    actionsMap.setIndex = ["index"]
 
     actions.getActionsMap = () => actionsMap
     return actions

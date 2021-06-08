@@ -63,7 +63,7 @@ const CollectionCard = types
 
     actions.removeTag = (val) => {
       if (!self.tags.includes(val)) return
-      self.tags.splice(self.tags.findIndex(val),1)
+      self.tags.splice(self.tags.indexOf(val),1)
     }
     actionsMap.removeTag = ["tags"]
 

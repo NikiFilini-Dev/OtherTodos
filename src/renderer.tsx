@@ -25,7 +25,7 @@ const DEBUG = process.env.P_ENV === "debug"
 const rawUser = localStorage.getItem("user")
 const data = {
   user: rawUser ? JSON.parse(rawUser) : null,
-  screen: rawUser ? "TODAY" : "AUTH",
+  screen: rawUser ? "COLLECTION" : "AUTH",
   selectedProject: null,
   selectedTag: null,
   selectedDate: DateTime.now().toFormat("M/d/yyyy"),
@@ -38,10 +38,12 @@ const data = {
   collectionsStore: CollectionsStore.create({
     collections: [{
       id: "05e4b4c4-6de2-4aea-88bc-16c9d354ab7e",
-      name: "First collection"
+      name: "First collection",
+      index: 0,
     }, {
       id: "05e4b4c5-6de2-4aea-88bc-16c9d354ab7e",
-      name: "Second collection"
+      name: "Second collection",
+      index: 1,
     }],
 
     columns: [{

@@ -7,9 +7,12 @@ import classNames from "classnames"
 import CheckboxIcon from "../../../../../assets/customIcons/checkmark.svg"
 import { DateTime } from "luxon"
 import Icon from "../../../../Icon"
+import { ColorsMap } from "../../../../../palette/colors"
 
 const Card = observer(({ card }: {card: ICollectionCard}) => {
   const { collectionsStore: { selectCard } }: IRootStore = useMst()
+  const tags = [...card.tags]
+  tags.sort((a,b) => a.index - b.index)
   return <div className={classNames({
     [styles.done]: card.status === "DONE",
     [styles.card]: true
@@ -21,7 +24,13 @@ const Card = observer(({ card }: {card: ICollectionCard}) => {
       {card.doneSubtasks.length}/{card.subtasks.length}
       <div className={styles.progress} style={{"--donePercent": `${card.donePercent}%`} as CSSProperties} />
     </div>}
-    {card.date !== null && <div className={styles.separator} /> }
+    {(card.date !== null || tags.length) && <div className={styles.separator} /> }
+    <div className={styles.tags}>
+      {tags.map(tag => (
+        <div className={styles.tag} style={{"--color": ColorsMap[tag.color]} as CSSProperties}
+             key={"card_tag_"+tag.id}>{tag.name}</div>
+      ))}
+    </div>
     {card.date !== null && <div className={styles.bottom}>
       {card.date === DateTime.now().toFormat("M/d/yyyy") && (
         <div className={classNames({[styles.date]: true, [styles.today]: true})}><Icon name={"time"} /> Сегодня</div>

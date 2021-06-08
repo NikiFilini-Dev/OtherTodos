@@ -9,6 +9,8 @@ declare namespace StylesStylNamespace {
     progress: string
     progressWrapper: string
     separator: string
+    tag: string
+    tags: string
     title: string
     today: string
   }

@@ -26,6 +26,10 @@ import StopIcon from "../assets/customIcons/stop.svg"
 import CalendarIcon from "../assets/customIcons/calendar.svg"
 import TimeIcon from "../assets/customIcons/time.svg"
 import GridIcon from "../assets/customIcons/grid.svg"
+import SmileIcon from "../assets/customIcons/smile.svg"
+import LabelIcon from "../assets/customIcons/label.svg"
+import CalendarCheckmarkIcon from "../assets/customIcons/calendar_checkmark.svg"
+import SettingsIcon from "../assets/customIcons/settings.svg"
 
 export const IconNames: IconName[] = [
   "bookmark",
@@ -55,7 +59,11 @@ export const IconNames: IconName[] = [
   "stop",
   "calendar",
   "time",
-  "grid"
+  "grid",
+  "label",
+  "smile",
+  "calendar_checkmark",
+  "settings"
 ]
 
 export type IconName =
@@ -87,6 +95,10 @@ export type IconName =
   | "calendar"
   | "time"
   | "grid"
+  | "label"
+  | "smile"
+  | "calendar_checkmark"
+  | "settings"
 
 export const IconsMap: Record<IconName, any> = {
   bookmark: BookmarkIcon,
@@ -117,4 +129,8 @@ export const IconsMap: Record<IconName, any> = {
   calendar: CalendarIcon,
   time: TimeIcon,
   grid: GridIcon,
+  label: LabelIcon,
+  smile: SmileIcon,
+  calendar_checkmark: CalendarCheckmarkIcon,
+  settings: SettingsIcon,
 }

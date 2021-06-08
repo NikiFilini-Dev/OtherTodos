@@ -1,10 +1,13 @@
 import { getRoot, Instance, SnapshotIn, types } from "mobx-state-tree"
 import { IRootStore } from "../RootStore"
+import { IconName, IconNames } from "../../palette/icons"
 
 const Collection = types
   .model("Collection", {
     id: types.identifier,
-    name: types.string
+    name: types.string,
+    icon: types.optional(types.enumeration("Icons", IconNames), "bookmark"),
+    index: types.number,
   })
   .views(self => ({
     get syncable() {
@@ -33,10 +36,14 @@ const Collection = types
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, string[]> = {}
 
-    actions.setName = (val: string) => {
-      self.name = val
-    }
+    actions.setName = (val: string) => self.name = val
     actionsMap.setName = ["name"]
+
+    actions.setIcon = (val: IconName) => self.icon = val
+    actionsMap.setIcon = ["icon"]
+
+    actions.setIndex = (val: number) => self.index = val
+    actionsMap.setIndex = ["index"]
 
     actions.getActionsMap = () => actionsMap
     return actions

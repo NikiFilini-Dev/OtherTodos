@@ -2,10 +2,11 @@ import { destroy, Instance, types } from "mobx-state-tree"
 import Collection, { ICollectionSnapshot } from "./Collection"
 import CollectionColumn, { ICollectionColumn, ICollectionColumnSnapshot } from "./CollectionColumn"
 import CollectionCard, { ICollectionCard, ICollectionCardSnapshot } from "./CollectionCard"
-import CollectionTag, { ICollectionTagSnapshot } from "./CollectionTag"
+import CollectionTag, { ICollectionTag, ICollectionTagSnapshot } from "./CollectionTag"
 import CollectionLog from "./CollectionLog"
 import { v4 as uuidv4 } from "uuid"
 import CollectionSubtask, { ICollectionSubtask, ICollectionSubtaskSnapshot } from "./CollectionSubtask"
+import { move } from "../../tools/movement"
 
 const CollectionsStore = types
   .model("CollectionsStore", {
@@ -16,18 +17,23 @@ const CollectionsStore = types
     logs: types.array(CollectionLog),
     subtasks: types.array(CollectionSubtask),
     selectedCollection: types.maybeNull(types.reference(Collection)),
-    editingCard: types.maybeNull(types.reference(CollectionCard))
+    editingCard: types.maybeNull(types.reference(CollectionCard)),
+    editingCollection: types.maybeNull(types.reference(Collection)),
   })
   .views(() => ({}))
   .actions(self => ({
-    selectCard(id: string | null) {
-      self.editingCard = id
+    selectCard(val) {
+      self.editingCard = val
+    },
+    selectEditingCollection(val) {
+      self.editingCollection = val
     },
     addSubtask(initialData: Partial<ICollectionSubtaskSnapshot>) {
       if (!initialData.card) return
 
       const id = initialData.id ? initialData.id : uuidv4()
       if ("index" in initialData && typeof(initialData.card) !== "string") {
+        // @ts-ignore
         initialData.card.subtasks.forEach(st => {
           if (st.index >= (initialData.index as number))
             st.setIndex(st.index + 1)
@@ -68,19 +74,8 @@ const CollectionsStore = types
       const subtask = self.subtasks.find(st => st.id === id)
       if (!subtask) return false
       const cardSubtasks: ICollectionSubtask[] = subtask.card.subtasks
-      if (newIndex > cardSubtasks.length - 1) newIndex = cardSubtasks.length - 1
 
-      cardSubtasks.forEach(st => {
-        if (st.id === subtask.id) return
-        if (st.index < subtask.index && st.index >= newIndex) {
-          st.setIndex(st.index+1)
-        }
-        if (st.index > subtask.index && st.index <= newIndex) {
-          st.setIndex(st.index-1)
-        }
-      })
-
-      subtask.setIndex(newIndex)
+      move(cardSubtasks, id, newIndex)
 
       return true
     },
@@ -114,10 +109,12 @@ const CollectionsStore = types
     createCollection(initialData: Partial<ICollectionSnapshot>) {
       const id = uuidv4()
       self.collections.push({
+        index: self.collections.reduce((acc, c) => c.index > acc ? c.index : acc, -1) + 1,
         name: "Новая коллекция",
         ...initialData,
         id
       })
+      return id
     },
     deleteCollection(id: string) {
       const collection = self.collections.find(c => c.id === id)
@@ -125,6 +122,13 @@ const CollectionsStore = types
 
       collection.columns.forEach(c => this.deleteColumn(c.id))
       collection.tags.forEach(c => this.deleteTag(c.id))
+
+      self.collections.forEach(c => {
+        if (c.index > collection.index) c.setIndex(c.index - 1)
+      })
+
+      if (self.selectedCollection === collection) self.selectedCollection = null
+      if (self.editingCollection === collection) self.editingCollection = null
 
       destroy(collection)
     },
@@ -160,22 +164,8 @@ const CollectionsStore = types
     moveColumn(id: string, newIndex: number) {
       const column = self.columns.find(c => c.id === id)
       if (!column) return false
-
       const collectionColumns: ICollectionColumn[] = column.collection.columns
-      if (newIndex > collectionColumns.length - 1) newIndex = collectionColumns.length - 1
-
-      collectionColumns.forEach(st => {
-        if (st.id === column.id) return
-        if (st.index < column.index && st.index >= newIndex) {
-          st.setIndex(st.index+1)
-        }
-        if (st.index > column.index && st.index <= newIndex) {
-          st.setIndex(st.index-1)
-        }
-      })
-
-      column.setIndex(newIndex)
-
+      move(collectionColumns, id, newIndex)
       return true
     },
 
@@ -190,6 +180,9 @@ const CollectionsStore = types
         collection: initialData.collection,
         color: "blue",
         name: "Новый тэг",
+        index: self.tags
+          .filter(t => t.collection === collection)
+          .reduce((acc, c) => c.index > acc ? c.index : acc, -1)+1,
         ...initialData,
         id
       })
@@ -201,6 +194,13 @@ const CollectionsStore = types
       self.cards.forEach(card => card.removeTag(id))
 
       destroy(tag)
+    },
+    moveTag(id: string, newIndex: number) {
+      const tag = self.tags.find(c => c.id === id)
+      if (!tag) throw new Error("tag not found")
+      const collectionTags: ICollectionTag[] = tag.collection.tags
+      move(collectionTags, id, newIndex)
+      return true
     },
 
     createCard(initialData: Partial<ICollectionCardSnapshot>) {

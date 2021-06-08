@@ -4,6 +4,7 @@ declare namespace StylesStylNamespace {
     head: string
     info: string
     screen: string
+    settingsTrigger: string
     title: string
   }
 }

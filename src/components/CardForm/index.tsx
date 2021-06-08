@@ -10,14 +10,16 @@ import { IRootStore, useMst } from "../../models/RootStore"
 import Select from "../Select"
 import { DateTime } from "luxon"
 import DateSelector from "../DateSelector"
-import { useClickOutsideRef } from "../../tools/hooks"
+import { useClickOutsideRef, useClickOutsideRefs } from "../../tools/hooks"
 import Emitter from "eventemitter3"
 import { TaskContext } from "../Task"
 import SubtasksList from "../SubtasksList"
 import BakaEditor from "../../editor"
+import { ColorsMap } from "../../palette/colors"
+import FloatMenu from "../FloatMenu"
 
 const CardForm = observer(
-  ({ cardId, onDone }: { cardId: string | null; onDone: () => void }) => {
+  ({ cardId }: { cardId: string | null }) => {
     const {
       collectionsStore: { cards, collections, addSubtask, deleteSubtask, moveSubtask, selectCard, deleteCard },
     }: IRootStore = useMst()
@@ -48,11 +50,6 @@ const CardForm = observer(
       selectCard(null)
     }
 
-    const onSave = () => {
-      card.setStatus("DONE")
-      // onDone()
-    }
-
     const onDeleteClick = () => {
       deleteCard(card.id)
     }
@@ -76,10 +73,22 @@ const CardForm = observer(
       )
     }, [editorRef.current])
 
+    const triggerRef = React.useRef(null)
+    const menuRef = React.useRef(null)
+    const [tagMenuOpen, setTagMenuOpen] = React.useState(false)
+
+    useClickOutsideRefs([triggerRef, menuRef], () => setTagMenuOpen(false))
+
     if (!card) return <React.Fragment />
 
     const subtasks = [...card.subtasks]
     subtasks.sort((a, b) => a.index - b.index)
+
+    const tags = [...card.tags]
+    tags.sort((a, b) => a.index - b.index)
+
+    const collectionTags = [...card.collection.tags.filter(t => !card.tags.includes(t))]
+    collectionTags.sort((a, b) => a.index - b.index)
 
     return ReactDOM.createPortal(
       <div className={styles.wrapper} ref={wrapperRef} onClick={onWrapperClick}>
@@ -188,6 +197,32 @@ const CardForm = observer(
                       value={card.date}
                     />
                   )}
+                </div>
+                <div className={styles.group}>
+                  <div className={styles.head}>
+                    <div className={styles.name}>Тэги</div>
+                    <div className={styles.action} onClick={() => setTagMenuOpen(true)}>
+                      <span ref={triggerRef}>+ Добавить тэг</span>
+                    </div>
+                    {tagMenuOpen && <FloatMenu target={triggerRef} position={"horizontal_left"} menuRef={menuRef}>
+                      <div className={styles.tagsMenu}>
+                        {collectionTags.map(tag => (
+                          <div key={tag.id} onClick={() => card.addTag(tag)}
+                               style={{"--color": ColorsMap[tag.color]} as CSSProperties} className={styles.tag}>
+                            {tag.name}
+                          </div>
+                        ))}
+                      </div>
+                    </FloatMenu>}
+                  </div>
+                  <div className={styles.tags}>
+                    {tags.map(tag => (
+                      <div className={styles.tag} style={{"--color": ColorsMap[tag.color]} as CSSProperties}
+                           key={"remove_tag_"+tag.id} onClick={() => card.removeTag(tag)}>
+                        {tag.name}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

@@ -5,37 +5,55 @@ import styles from "./styles.styl"
 import Column from "./components/Column"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import CardForm from "../../CardForm"
-import noop from "lodash-es/noop"
-import Select, { Variant } from "../../Select"
+import Select from "../../Select"
 import Button from "../../Button"
 import PlusIcon from "../../../assets/line_awesome/plus-solid.svg"
+import CollectionForm from "../../CollectionForm"
+import Icon from "../../Icon"
 
 const Collection = observer(() => {
-  const { collectionsStore: { collections, selectCollection, selectedCollection, moveColumn, moveCard, editingCard, createColumn } }: IRootStore = useMst()
+  const {
+    collectionsStore: {
+      collections,
+      selectCollection,
+      selectedCollection,
+      moveColumn,
+      moveCard,
+      editingCard,
+      createColumn,
+      selectEditingCollection,
+      editingCollection,
+    },
+  }: IRootStore = useMst()
 
   if (!selectedCollection) {
     selectCollection([...collections][0].id)
     return <div />
   }
 
+
   const columns = [...selectedCollection.columns]
-  columns.sort((a,b) => a.index - b.index)
+  columns.sort((a, b) => a.index - b.index)
 
   const onPlusClick = () => {
-    createColumn({name: "Новая колонка", collection: selectedCollection.id})
+    createColumn({ name: "Новая колонка", collection: selectedCollection.id })
   }
+
 
   return (
     <div className={styles.screen}>
       <div className={styles.head}>
         <div className={styles.info}>
-          <Select variants={collections.map(c => ({code: c.id, name: c.name, icon: "fire"}))}
+          <Select variants={collections.map(c => ({ code: c.id, name: c.name, icon: c.icon }))}
                   selected={selectedCollection.id} select={id => selectCollection(id)} />
+          <div className={styles.settingsTrigger} onClick={() => selectEditingCollection(selectedCollection)}><Icon
+            name={"settings"} /></div>
           <Button icon={PlusIcon} square onClick={onPlusClick} />
         </div>
       </div>
-      {editingCard !== null && <CardForm cardId={editingCard.id} onDone={noop} />}
-      <DragDropContext onDragEnd={({draggableId, destination, type}) => {
+      {editingCollection !== null && <CollectionForm />}
+      {editingCard !== null && <CardForm cardId={editingCard.id} />}
+      <DragDropContext onDragEnd={({ draggableId, destination, type }) => {
         if (!destination) return
         if (type === "COLUMN") {
           console.log(`moveColumn("${draggableId}", ${destination.index})`)

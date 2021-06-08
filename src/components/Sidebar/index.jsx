@@ -5,12 +5,7 @@ import styles from "./styles.styl"
 import Logo from "assets/logo.svg"
 import classNames from "classnames"
 import ArrowRightIcon from "assets/arrow_right.svg"
-import FolderIcon from "assets/folder.svg"
 import PlusIcon from "assets/plus.svg"
-import HistoryIcon from "assets/line_awesome/history-solid.svg"
-import TagsIcon from "assets/line_awesome/tags-solid.svg"
-import PlaneIcon from "assets/line_awesome/telegram-plane.svg"
-import EnvelopeIcon from "assets/line_awesome/envelope.svg"
 import UserCircleIcon from "assets/line_awesome/user-circle.svg"
 import SignOutAltIcon from "assets/line_awesome/sign-out-alt-solid.svg"
 import propTypes from "prop-types"
@@ -95,6 +90,7 @@ const Group = observer(
     type,
     initiallyFolded,
     colored,
+    namePrompt=true,
   }) => {
     const [isOpen, setIsOpen] = React.useState(!initiallyFolded)
     const [isAddActive, setIsAddActive] = React.useState(false)
@@ -126,6 +122,7 @@ const Group = observer(
     })
 
     const onAddClick = () => {
+      if (!namePrompt) return onAdd()
       setNewName("")
       setIsAddActive(!isAddActive)
     }
@@ -257,11 +254,24 @@ const Sidebar = observer(() => {
     setUser,
     clear,
     backup,
+    collectionsStore: {
+      collections,
+      selectedCollection,
+      selectCollection,
+      createCollection,
+      deleteCollection
+    }
   } = useMst()
 
   const addProject = name => {
     selectProject(createProject(name))
     setScreen("PROJECT")
+  }
+
+  const addCollection = () => {
+    const collectionId = createCollection({name: "Новая коллекция"})
+    selectCollection(collectionId)
+    setScreen("COLLECTION")
   }
 
   const rmProject = project => {
@@ -281,6 +291,9 @@ const Sidebar = observer(() => {
 
   const sortedTags = [...tags]
   sortedTags.sort((a, b) => a.index - b.index)
+
+  const sortedCollections = [...collections]
+  sortedCollections.sort((a, b) => a.index - b.index)
 
   const onSignOutClick = async () => {
     setUser(null)
@@ -304,7 +317,7 @@ const Sidebar = observer(() => {
           })}
           onClick={() => setScreen("INBOX")}
         >
-          <EnvelopeIcon className={styles.groupElementAwesomeIcon} />
+          <Icon name={"msg_bubble"} className={styles.groupElementIcon} />
           Входящие
         </div>
         <div
@@ -317,7 +330,7 @@ const Sidebar = observer(() => {
             selectDate(DateTime.now().toFormat("M/d/yyyy"))
           }}
         >
-          <PlaneIcon className={styles.groupElementAwesomeIcon} />
+          <Icon name={"smile"} className={styles.groupElementIcon} />
           Сегодня
         </div>
         <div
@@ -327,7 +340,7 @@ const Sidebar = observer(() => {
           })}
           onClick={() => setScreen("LOG")}
         >
-          <HistoryIcon className={styles.groupElementAwesomeIcon} />
+          <Icon name={"calendar_checkmark"} className={styles.groupElementIcon} />
           Журнал
         </div>
         <div
@@ -340,7 +353,7 @@ const Sidebar = observer(() => {
             selectTagType("TASK")
           }}
         >
-          <TagsIcon className={styles.groupElementAwesomeIcon} />
+          <Icon name={"label"} className={styles.groupElementIcon} />
           Метки задач
         </div>
         <div
@@ -353,21 +366,25 @@ const Sidebar = observer(() => {
             selectTagType("EVENT")
           }}
         >
-          <TagsIcon className={styles.groupElementAwesomeIcon} />
+          <Icon name={"label"} className={styles.groupElementIcon} />
           Метки событий
         </div>
-        <div
-          className={classNames({
-            [styles.groupElement]: true,
-            [styles.active]: screen === "COLLECTION"
-          })}
-          onClick={() => {
-            setScreen("COLLECTION")
+        <Group
+          name={"Коллекции"}
+          elements={sortedCollections}
+          isActive={collection =>
+            collection === selectedCollection && screen === "COLLECTION"
+          }
+          onElementClick={collection => {
+            return () => {
+              setScreen("COLLECTION")
+              selectCollection(collection.id)
+            }
           }}
-        >
-          <Icon name={"grid"} className={styles.groupElementIcon} />
-          Коллекции
-        </div>
+          namePrompt={false}
+          onAdd={addCollection}
+          onDelete={rmProject}
+        />
         <Group
           name={"Проекты"}
           elements={sortedProjects}
@@ -381,7 +398,7 @@ const Sidebar = observer(() => {
             }
           }}
           onAdd={addProject}
-          onDelete={rmProject}
+          onDelete={c => deleteCollection(c.id)}
         />
       </div>
       {user && (

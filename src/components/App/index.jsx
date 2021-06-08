@@ -150,9 +150,11 @@ const App = observer(() => {
             draggable={true}
             onDragStart={e => onResizeTimelineStart(e)}
           />
-          <div className={styles.timeline} ref={timelineRef}>
-            <Timeline />
-          </div>
+          {screen !== "COLLECTION" && (
+            <div className={styles.timeline} ref={timelineRef}>
+              <Timeline />
+            </div>
+          )}
         </div>
       </div>
     </div>

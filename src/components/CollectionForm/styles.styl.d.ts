@@ -5,30 +5,26 @@ declare namespace StylesStylNamespace {
     active: string
     add: string
     block: string
-    cardName: string
-    cardText: string
-    checkbox: string
-    dateTrigger: string
-    done: string
-    executor: string
+    color: string
+    description: string
     group: string
     head: string
-    main: string
-    mainPart: string
+    icons: string
+    info: string
     modal: string
     modalPart: string
     name: string
-    progress: string
-    progressWrapper: string
+    period: string
+    periods: string
     reject: string
+    repeatCount: string
+    repeatDetails: string
     separator: string
-    settings: string
-    subtask: string
-    subtasks: string
     tag: string
     tags: string
-    tagsMenu: string
+    title: string
     trash: string
+    week: string
     wrapper: string
   }
 }
