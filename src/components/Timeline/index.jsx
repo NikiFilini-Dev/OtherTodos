@@ -104,6 +104,10 @@ const Timeline = observer(() => {
 
     const modalsEl = document.querySelector("#modals")
     if (e.target === modalsEl || modalsEl.contains(e.target)) return
+
+    const floatsEl = document.querySelector("#floats")
+    if (e.target === floatsEl || floatsEl.contains(e.target)) return
+
     for (const id of Object.keys(eventRefs)) {
       const el = eventRefs[id].current
       if (el && (el === e.target || el.contains(e.target))) return
