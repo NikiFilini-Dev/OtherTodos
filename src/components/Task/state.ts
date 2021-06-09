@@ -39,6 +39,15 @@ export default class TaskState {
     this._done = val
   }
 
+  _noSelection = false
+  get noSelection(): boolean {
+    return this._noSelection
+  }
+
+  set noSelection(val) {
+    this._noSelection = val
+  }
+
   menus = {
     datePicker: false,
     datePicker_start: false,

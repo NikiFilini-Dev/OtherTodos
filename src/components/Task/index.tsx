@@ -1,18 +1,14 @@
 import React, { CSSProperties } from "react"
 import { observer } from "mobx-react"
 import classNames from "classnames"
-
 import styles from "./styles.styl"
-
 import Checkbox from "components/Checkbox"
 import PrioritySelector from "components/PrioritySelector"
 import TaskDateSelector from "components/TaskDateSelector"
 import ProjectSelector from "components/ProjectSelector"
 import FloatMenu from "components/FloatMenu"
 import TagsSelector from "components/TagsSelector"
-
 import Tags from "./components/Tags"
-
 import FolderIcon from "assets/folder.svg"
 import CalendarIcon from "assets/calendar.svg"
 import StarIcon from "assets/star.svg"
@@ -35,9 +31,8 @@ import TextareaAutosize from "react-textarea-autosize"
 import Button from "../Button"
 import BakaEditor from "../../editor"
 import Emitter from "eventemitter3"
-import _, { noop } from "lodash"
+import { noop } from "lodash"
 import Tag from "components/Tag"
-import { v4 } from "uuid"
 import SubtasksList from "../SubtasksList"
 import Icon from "../Icon"
 
@@ -83,8 +78,9 @@ const Task = observer(
     }, [task.status, active])
 
     const onActivation = () => {
+      state.noSelection = true
       setTimeout(() => {
-        console.log("Editor ref current:",editorRef.current )
+        state.noSelection = false
         if (!editorRef.current || !editorRef.current.setText) return
         editorRef.current.setText(task.note)
 
@@ -228,17 +224,8 @@ const Task = observer(
       setIsUpdated(false)
     }
 
-    const onAddSubtaskClick = () => {
-      const id = addSubtask({ task: source })
-      setTimeout(() => taskEmitter.emit("focus_subtask", id), 200)
-    }
-
     const tags = [...task.tags]
     tags.sort((a, b) => a.index - b.index)
-
-    // React.useEffect(() => {
-    //
-    // }, [editorRef.current])
 
     const date = useDateFormat(task.date, "M/d/yyyy", "dd LLL")
 
@@ -257,6 +244,7 @@ const Task = observer(
           style={
             {
               "--task-color": task.colorTag?.color,
+              "userSelect": state.noSelection || selected === task.id ? "none" : "auto"
             } as CSSProperties
           }
           onClick={onTaskClick}
