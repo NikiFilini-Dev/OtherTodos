@@ -24,6 +24,7 @@ export const GET_COLLECTION_COLUMNS = gql`
       id
       name
       color
+      icon
       collection
       index
     }

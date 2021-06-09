@@ -2,12 +2,14 @@ import { getRoot, Instance, SnapshotIn, types } from "mobx-state-tree"
 import { ColorName, ColorNames } from "../../palette/colors"
 import Collection, { ICollection } from "./Collection"
 import { IRootStore } from "../RootStore"
+import { IconName, IconNames } from "../../palette/icons"
 
 const CollectionColumn = types
   .model("CollectionColumn", {
     id: types.identifier,
     name: types.string,
     color: types.optional(types.enumeration("Color", ColorNames), "blue"),
+    icon: types.optional(types.enumeration("Icon", IconNames), "lightning"),
     index: types.number,
     collection: types.reference(Collection)
   })
@@ -32,6 +34,9 @@ const CollectionColumn = types
 
     actions.setColor = (val: ColorName) => self.color = val
     actionsMap.setColor = ["color"]
+
+    actions.setIcon = (val: IconName) => self.icon = val
+    actionsMap.setIcon = ["icon"]
 
     actions.setIndex = (val: number) => self.index = val
     actionsMap.setIndex = ["index"]
