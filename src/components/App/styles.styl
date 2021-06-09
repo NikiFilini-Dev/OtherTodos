@@ -54,7 +54,6 @@ body
   bottom 0
   width 100vw
   max-width 1920px
-  padding-top 24px
   position relative
 
 .app
@@ -63,8 +62,7 @@ body
 
 .resizeHandle
   height 100%
-  width 3px
-  //background var(--brand)
+  min-width 15px
   cursor col-resize
 
 .sideBar
@@ -102,10 +100,11 @@ body
 .main
   margin 0 8px
   flex-grow 1
-  max-width 100%
+  max-width calc(100% - 32px - var(--timeline-width));
 
 .timeline
   width var(--timeline-width)
+  min-width var(--timeline-width)
   background white
   border-radius 24px
   padding mainBlockPadding

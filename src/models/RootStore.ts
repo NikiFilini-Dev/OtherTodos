@@ -255,9 +255,11 @@ const RootStore = types
     },
     setSidebarWidth(val) {
       self.sidebarWidth = val
+      localStorage.setItem("sidebarWidth", val)
     },
     setTimelineWidth(val) {
       self.timelineWidth = val
+      localStorage.setItem("timelineWidth", val)
     },
     insertTempTask() {
       const task = JSON.parse(JSON.stringify(self.tempTask.toJSON()))

@@ -85,7 +85,8 @@ const App = observer(() => {
   const onResizeSidebarStart = onDragStart(
     () => ({}),
     e => {
-      const width = e.pageX - 32
+      const box = sidebarRef.current.getBoundingClientRect()
+      const width = e.pageX - 32 - box.left
       setSidebarWidth(width > 250 ? width : 250)
     },
   )
@@ -95,8 +96,8 @@ const App = observer(() => {
     () => ({}),
     e => {
       const box = timelineRef.current.getBoundingClientRect()
-      const width = box.right - e.pageX - 18
-      console.log(width)
+      const width = (window.innerWidth - e.pageX) - (window.innerWidth - box.right) - 18
+      // console.log(width, window.innerWidth, e.pageX, (window.innerWidth - box.right))
       setTimelineWidth(width > 350 ? width : 350)
     },
   )

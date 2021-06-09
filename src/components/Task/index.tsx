@@ -70,8 +70,8 @@ const Task = observer(
 
     React.useEffect(() => {
       taskEmitter.on("*", console.log)
-      taskEmitter.on("add_subtask", (index: number) => {
-        const id = addSubtask({ task: source, index })
+      taskEmitter.on("add_subtask", (index?: number) => {
+        const id = addSubtask({ task: source, index: index ?? 0 })
         setTimeout(() => taskEmitter.emit("focus_subtask", id), 200)
       })
     }, [taskEmitter])

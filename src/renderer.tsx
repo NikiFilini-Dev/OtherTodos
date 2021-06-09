@@ -41,7 +41,10 @@ const data = {
     cards: [],
     subtasks: [],
     selectedCollection: null
-  })
+  }),
+
+  sidebarWidth: JSON.parse(localStorage.getItem("sidebarWidth") || "250"),
+  timelineWidth: JSON.parse(localStorage.getItem("timelineWidth") || "350"),
 }
 const Store = RootStore.create(data)
 
