@@ -235,6 +235,26 @@ Group.propTypes = {
   onAdd: propTypes.func,
 }
 
+const Foldable = observer(({name, children}) => {
+  const [isOpen, setIsOpen] = React.useState(true)
+  const onTitleClick = e => {
+    setIsOpen(!isOpen)
+  }
+
+  return <div>
+    <div className={styles.groupTitle} onClick={onTitleClick}>
+      <ArrowRightIcon
+        className={classNames({
+          [styles.groupTitleIcon]: true,
+          [styles.groupTitleIconOpen]: isOpen,
+        })}
+      />
+      {name}
+    </div>
+    {isOpen && children}
+  </div>
+})
+
 const Sidebar = observer(() => {
   const {
     tasks: { all, deleteTask },
@@ -343,32 +363,7 @@ const Sidebar = observer(() => {
           <Icon name={"calendar_checkmark"} className={styles.groupElementIcon} />
           Журнал
         </div>
-        <div
-          className={classNames({
-            [styles.groupElement]: true,
-            [styles.active]: screen === "TAGS" && selectedTagType === "TASK",
-          })}
-          onClick={() => {
-            setScreen("TAGS")
-            selectTagType("TASK")
-          }}
-        >
-          <Icon name={"label"} className={styles.groupElementIcon} />
-          Метки задач
-        </div>
-        <div
-          className={classNames({
-            [styles.groupElement]: true,
-            [styles.active]: screen === "TAGS" && selectedTagType === "EVENT",
-          })}
-          onClick={() => {
-            setScreen("TAGS")
-            selectTagType("EVENT")
-          }}
-        >
-          <Icon name={"label"} className={styles.groupElementIcon} />
-          Метки событий
-        </div>
+
         <Group
           name={"Коллекции"}
           elements={sortedCollections}
@@ -400,6 +395,34 @@ const Sidebar = observer(() => {
           onAdd={addProject}
           onDelete={c => deleteCollection(c.id)}
         />
+        <Foldable name={"Метки"}>
+          <div
+            className={classNames({
+              [styles.groupElement]: true,
+              [styles.active]: screen === "TAGS" && selectedTagType === "TASK",
+            })}
+            onClick={() => {
+              setScreen("TAGS")
+              selectTagType("TASK")
+            }}
+          >
+            <Icon name={"label"} className={styles.groupElementIcon} />
+            Метки задач
+          </div>
+          <div
+            className={classNames({
+              [styles.groupElement]: true,
+              [styles.active]: screen === "TAGS" && selectedTagType === "EVENT",
+            })}
+            onClick={() => {
+              setScreen("TAGS")
+              selectTagType("EVENT")
+            }}
+          >
+            <Icon name={"label"} className={styles.groupElementIcon} />
+            Метки событий
+          </div>
+        </Foldable>
       </div>
       {user && (
         <div className={styles.userInfo}>
