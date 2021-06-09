@@ -8,6 +8,7 @@ declare namespace StylesStylNamespace {
     count: string
     icon: string
     name: string
+    scrollable: string
     title: string
   }
 }

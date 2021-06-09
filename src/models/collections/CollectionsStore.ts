@@ -235,7 +235,8 @@ const CollectionsStore = types
       if (!column) throw new Error("column not found")
 
       let index = initialData.index
-      if (!index) index = column.cards.reduce((acc, c) => c.index > acc ? c.index : acc, -1)
+      if (!index) index = column.cards.reduce((acc, c) => c.index > acc ? c.index : acc, -1)+1
+      index = index!
 
       // @ts-ignore
       self.cards.push({
@@ -247,10 +248,13 @@ const CollectionsStore = types
         tags: [],
         ...initialData,
         id,
-        index: 0
+        index
       })
 
-      if (index !== column.cards.length-1) this.moveCard(id, column.id, index as number)
+      column.cards.forEach(c => {
+        if (c.id === id) return
+        if (c.index >= index!) c.setIndex(index! + 1)
+      })
       return id
     },
     deleteCard(id: string) {
