@@ -232,8 +232,6 @@ const Today = observer(() => {
       </div>
       <ScrollContext.Provider value={scrollEmitter}>
         <div className={styles.listOfLists} ref={scrollRef}>
-          {!!expiredTasks.length && <ExpiredTasks tasks={expiredTasks} />}
-
           {isNewTaskShown && tempTask !== null && (
             <div style={{ marginBottom: "24px" }}>
               <Task
@@ -245,6 +243,8 @@ const Today = observer(() => {
               />
             </div>
           )}
+
+          {!!expiredTasks.length && <ExpiredTasks tasks={expiredTasks} />}
 
           {viewMode === "list" ? (
             <TaskList

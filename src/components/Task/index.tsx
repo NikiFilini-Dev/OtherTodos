@@ -145,7 +145,8 @@ const Task = observer(
     }, ["active"])
 
     useKeyListener("Enter", (e) => {
-      if (e.path.includes(noteAndSubtasksContainer.current)) return
+      const path = e.path || (e.composedPath && e.composedPath())
+      if (path.includes(noteAndSubtasksContainer.current)) return
       if (onConfirm) onConfirm()
     })
 
