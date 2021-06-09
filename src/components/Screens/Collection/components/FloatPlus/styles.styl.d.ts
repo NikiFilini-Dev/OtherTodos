@@ -1,16 +1,6 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
-    add: string
-    big: string
-    cards: string
-    colorTrigger: string
-    column: string
-    count: string
     floater: string
-    icon: string
-    name: string
-    scrollable: string
-    title: string
   }
 }
 

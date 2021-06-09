@@ -12,6 +12,7 @@ import AutosizeInput from "react-input-autosize"
 import { useClickOutsideRefs } from "../../../../../tools/hooks"
 import ColumnOptions from "../ColumnOptions"
 import Icon from "../../../../Icon"
+import FloatPlus from "../FloatPlus"
 
 const Column = observer(({
                            column,
@@ -43,6 +44,7 @@ const Column = observer(({
       <div className={styles.colorTrigger} ref={triggerRef} onClick={() => setMenuShown(true)}>
         <EllipsisIcon />
       </div>
+      <FloatPlus index={0} column={column} className={styles.floater} />
       {menuShown && <ColumnOptions column={column} triggerRef={triggerRef} menuRef={menuRef} />}
     </div>
 

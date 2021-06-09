@@ -234,8 +234,9 @@ const CollectionsStore = types
       const column = self.columns.find(c => c.id === initialData.column)
       if (!column) throw new Error("column not found")
 
+      console.log(initialData)
       let index = initialData.index
-      if (!index) index = column.cards.reduce((acc, c) => c.index > acc ? c.index : acc, -1)+1
+      if (index === undefined) index = column.cards.reduce((acc, c) => c.index > acc ? c.index : acc, -1)+1
       index = index!
 
       // @ts-ignore
@@ -253,7 +254,7 @@ const CollectionsStore = types
 
       column.cards.forEach(c => {
         if (c.id === id) return
-        if (c.index >= index!) c.setIndex(index! + 1)
+        if (c.index >= index!) c.setIndex(c.index + 1)
       })
       return id
     },

@@ -8,6 +8,7 @@ import CheckboxIcon from "../../../../../assets/customIcons/checkmark.svg"
 import { DateTime } from "luxon"
 import Icon from "../../../../Icon"
 import { ColorsMap } from "../../../../../palette/colors"
+import FloatPlus from "../FloatPlus"
 
 const Card = observer(({ card }: {card: ICollectionCard}) => {
   const { collectionsStore: { selectCard } }: IRootStore = useMst()
@@ -42,6 +43,7 @@ const Card = observer(({ card }: {card: ICollectionCard}) => {
         })}><Icon name={"time"} />{DateTime.fromFormat(card.date, "M/d/yyyy").toFormat("dd LLL, yyyy")}</div>
       )}
     </div> }
+    <FloatPlus index={card.index+1} column={card.column} className={styles.floater} />
   </div>
 })
 
