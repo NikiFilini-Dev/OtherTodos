@@ -3,6 +3,7 @@ declare namespace StylesStylNamespace {
     app: string
     main: string
     mainAndTimeline: string
+    noSidebar: string
     resizeHandle: string
     sideBar: string
     timeline: string

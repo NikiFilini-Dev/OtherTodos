@@ -16,6 +16,7 @@ import { DragDropContext } from "react-beautiful-dnd"
 import Timeline from "../Timeline"
 import noop from "lodash-es/noop"
 import Timer from "../Timer"
+import classNames from "classnames"
 
 const App = observer(() => {
   const {
@@ -141,7 +142,10 @@ const App = observer(() => {
           <Timer />
         </div>
         <div className={styles.mainAndTimeline}>
-          <div className={styles.main}>
+          <div className={classNames({
+            [styles.main]: true,
+            [styles.noSidebar]: screen === "COLLECTION"
+          })}>
             <DragDropContext onDragEnd={(...args) => window.onDragEndFunc(...args)}>
               <Screen />
             </DragDropContext>
