@@ -222,9 +222,9 @@ const Today = observer(() => {
           tags={tags}
           selected={selectedTag}
           select={tag => {
-            if (!isNewTaskShown && tag) {
+            if (!isNewTaskShown) {
               tempTask.removeTag(selectedTag)
-              tempTask.addTag(tag)
+              if (tag) tempTask.addTag(tag)
             }
             setSelectedTag(tag)
           }}

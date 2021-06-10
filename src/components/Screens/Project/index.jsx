@@ -251,9 +251,9 @@ const Project = observer(() => {
         <TagsFilter
           selected={selectedTag}
           select={tag => {
-            if (!isNewTaskShown && tag && tempTask) {
+            if (!isNewTaskShown && tempTask) {
               tempTask.removeTag(selectedTag)
-              tempTask.addTag(tag)
+              if (tag) tempTask.addTag(tag)
             }
             setSelectedTag(tag)
           }}
