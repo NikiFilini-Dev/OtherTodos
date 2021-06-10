@@ -2,6 +2,7 @@ declare namespace StylesStylNamespace {
   export interface IStylesStyl {
     bottom: string
     center: string
+    content: string
     horizontal_left: string
     left: string
     leftbottom: string

@@ -23,7 +23,34 @@ const FloatMenu = observer(
     let portal = false
     let style = {}
     let modifier
+    if (position === "horizontal_auto") {
+      if (targetBox.x > window.innerWidth / 2) position = "horizontal_left"
+      else position = "horizontal_right"
+      // portal = true
+    }
+    console.log("POSITION", position)
     switch (position) {
+      case "horizontal_right":
+        if (targetBox.y + targetBox.height / 2 < window.innerHeight / 2) {
+          style = {
+            top: targetBox.y + targetBox.height / 2 - 24 + "px",
+            left: targetBox.x + targetBox.width + 12 + "px",
+          }
+        } else {
+          style = {
+            bottom:
+              window.innerHeight -
+              targetBox.y -
+              targetBox.height / 2 -
+              24 +
+              "px",
+            left: targetBox.x + targetBox.width + 12 + "px",
+          }
+          modifier = "bottom"
+        }
+        portal = true
+        break
+
       case "horizontal_left":
         if (targetBox.y + targetBox.height / 2 < window.innerHeight / 2) {
           style = {
@@ -44,6 +71,7 @@ const FloatMenu = observer(
         }
         portal = true
         break
+
       case "vertical_left":
         if (targetBox.y < window.innerHeight / 2) {
           style = {
@@ -90,6 +118,8 @@ const FloatMenu = observer(
     if (style.bottom !== undefined && parseInt(style.bottom) < 0)
       style.bottom = 0
     if (style.top !== undefined && parseInt(style.top) < 0) style.top = 0
+    if ("top" in style) style["--offset"] = style.top
+    if ("bottom" in style) style["--offset"] = style.bottom
     const Content = (
       <div
         className={styles.rectang}
@@ -107,9 +137,10 @@ const FloatMenu = observer(
           <div className={styles.middle} />
           <div className={styles.right} />
         </div>
-        <div>{children}</div>
+        <div className={styles.content}>{children}</div>
       </div>
     )
+
 
     return portal ? ReactDOM.createPortal(Content, el) : Content
   },

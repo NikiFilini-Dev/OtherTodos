@@ -17,7 +17,7 @@ type Props = {
 
 const ColumnOptions = observer(({ column, triggerRef, menuRef }: Props) => {
   const {collectionsStore: {deleteColumn}}: IRootStore = useMst()
-  return <FloatMenu position={"vertical_left"} target={triggerRef} menuRef={menuRef}>
+  return <FloatMenu position={"horizontal_auto"} target={triggerRef} menuRef={menuRef}>
     <div className={styles.wrapper}>
       <div className={styles.group}>
         <div className={styles.name}>Цвет:</div>
