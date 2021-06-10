@@ -354,7 +354,7 @@ const Task = observer(
               ref={state.refs.menus.project.trigger}
             >
               <span onClick={() => state.openMenu("project")}>
-                <Icon name={state.project? state.project.icon : "check_list"} className={styles.projectIcon} />
+                <Icon name={state.project? state.project.icon : "msg_bubble"} className={styles.projectIcon} />
                 {state.project ? state.project.name : "Входящие"}
               </span>
             </span>

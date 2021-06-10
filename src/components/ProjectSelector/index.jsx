@@ -5,6 +5,7 @@ import { useMst } from "models/RootStore"
 import FolderIcon from "assets/folder.svg"
 import SearchIcon from "assets/search.svg"
 import classNames from "classnames"
+import Icon from "../Icon"
 
 const ProjectSelector = observer(({ selected, onSelect }) => {
   const { projects } = useMst()
@@ -35,7 +36,7 @@ const ProjectSelector = observer(({ selected, onSelect }) => {
           })}
           onClick={() => onSelect(null)}
         >
-          <FolderIcon className={styles.projectIcon} />
+          <Icon name={"msg_bubble"} className={styles.projectIcon} />
           Входящие
         </div>
         {filteredProjects.map(project => (
@@ -47,7 +48,7 @@ const ProjectSelector = observer(({ selected, onSelect }) => {
             })}
             onClick={() => onSelect(project)}
           >
-            <FolderIcon className={styles.projectIcon} />
+            <Icon name={project.icon} className={styles.projectIcon} />
             {project.name}
           </div>
         ))}

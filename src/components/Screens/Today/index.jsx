@@ -253,7 +253,7 @@ const Today = observer(() => {
             />
           ) : (
             <React.Fragment>
-              <TaskList tasks={withoutProject} name={"Входящие"} />
+              <TaskList tasks={withoutProject} name={"Входящие"} iconName={"msg_bubble"} />
               {projects.map(project => (
                 <TaskList
                   iconName={project.icon}
