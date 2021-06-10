@@ -72,8 +72,9 @@ const Task = observer(
     }, [taskEmitter])
 
     React.useEffect(() => {
-      if (state.done !== (task.status === "DONE"))
-        state.done = task.status === "DONE"
+      console.log(state.done, task.status)
+      if (state.done !== (task.status === "done"))
+        state.done = task.status === "done"
       if (state.active !== active) state.active = active
     }, [task.status, active])
 
