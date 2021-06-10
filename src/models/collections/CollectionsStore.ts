@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid"
 import CollectionSubtask, { ICollectionSubtask, ICollectionSubtaskSnapshot } from "./CollectionSubtask"
 import { move } from "../../tools/movement"
 import { IRootStore } from "../RootStore"
+import Upload from "./Upload"
 
 const CollectionsStore = types
   .model("CollectionsStore", {
@@ -17,12 +18,18 @@ const CollectionsStore = types
     tags: types.array(CollectionTag),
     logs: types.array(CollectionLog),
     subtasks: types.array(CollectionSubtask),
+    uploads: types.array(Upload),
+
     selectedCollection: types.maybeNull(types.reference(Collection)),
     editingCard: types.maybeNull(types.reference(CollectionCard)),
     editingCollection: types.maybeNull(types.reference(Collection)),
   })
   .views(() => ({}))
   .actions(self => ({
+    pushUpload(data) {
+      self.uploads.push(data)
+    },
+
     selectCard(val) {
       self.editingCard = val
     },

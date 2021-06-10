@@ -17,11 +17,22 @@ import SubtasksList from "../SubtasksList"
 import BakaEditor from "../../editor"
 import { ColorsMap } from "../../palette/colors"
 import FloatMenu from "../FloatMenu"
+import File from "./components/File"
 
 const CardForm = observer(
   ({ cardId }: { cardId: string | null }) => {
     const {
-      collectionsStore: { cards, collections, addSubtask, deleteSubtask, moveSubtask, selectCard, deleteCard },
+      user,
+      collectionsStore: {
+        cards,
+        collections,
+        addSubtask,
+        deleteSubtask,
+        moveSubtask,
+        selectCard,
+        deleteCard,
+        pushUpload,
+      },
     }: IRootStore = useMst()
 
     const [cardEmitter] = React.useState(new Emitter())
@@ -78,6 +89,30 @@ const CardForm = observer(
     const [tagMenuOpen, setTagMenuOpen] = React.useState(false)
 
     useClickOutsideRefs([triggerRef, menuRef], () => setTagMenuOpen(false))
+
+    const fileRef = React.useRef<null | HTMLInputElement>(null)
+    const triggerFileUpload = () => {
+      console.log("Trigger")
+      if (!fileRef.current) return
+      console.log("Has current")
+      fileRef.current.click()
+    }
+
+    const uploadFile = e => {
+      const file = e.target.files[0]
+      const formData = new FormData()
+      formData.append("file", file)
+      fetch(process.env.UPLOAD_URL || "http://localhost/upload", {
+        method: "POST",
+        headers: {
+          "Authorization": user.token
+        },
+        body: formData,
+      }).then(r => r.json()).then(upload => {
+        pushUpload(upload)
+        card.addFile(upload.id)
+      })
+    }
 
     if (!card) return <React.Fragment />
 
@@ -163,6 +198,20 @@ const CardForm = observer(
                     </div>}
                   </div>
                 </div>
+                <div className={styles.group}>
+                  <div className={styles.head}>
+                    <span className={styles.name}>Вложения</span>
+                    <div className={styles.action} onClick={triggerFileUpload}>
+                      + Добавить вложение
+                      <input type={"file"} style={{ display: "none" }} onChange={uploadFile} ref={fileRef} />
+                    </div>
+                  </div>
+                  <div className={styles.files}>
+                    {card.files.map(file => (
+                      <File removeFile={() => card.removeFile(file)} key={file.id} file={file} />
+                    ))}
+                  </div>
+                </div>
               </div>
               <div className={styles.settings}>
                 <div className={styles.group}>
@@ -208,7 +257,7 @@ const CardForm = observer(
                       <div className={styles.tagsMenu}>
                         {collectionTags.map(tag => (
                           <div key={tag.id} onClick={() => card.addTag(tag)}
-                               style={{"--color": ColorsMap[tag.color]} as CSSProperties} className={styles.tag}>
+                               style={{ "--color": ColorsMap[tag.color] } as CSSProperties} className={styles.tag}>
                             {tag.name}
                           </div>
                         ))}
@@ -217,8 +266,8 @@ const CardForm = observer(
                   </div>
                   <div className={styles.tags}>
                     {tags.map(tag => (
-                      <div className={styles.tag} style={{"--color": ColorsMap[tag.color]} as CSSProperties}
-                           key={"remove_tag_"+tag.id} onClick={() => card.removeTag(tag)}>
+                      <div className={styles.tag} style={{ "--color": ColorsMap[tag.color] } as CSSProperties}
+                           key={"remove_tag_" + tag.id} onClick={() => card.removeTag(tag)}>
                         {tag.name}
                       </div>
                     ))}

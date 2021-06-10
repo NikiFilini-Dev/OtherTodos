@@ -11,6 +11,7 @@ declare namespace StylesStylNamespace {
     dateTrigger: string
     done: string
     executor: string
+    files: string
     group: string
     head: string
     main: string

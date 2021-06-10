@@ -23,6 +23,7 @@ import CollectionCard from "./types/collection_card"
 import CollectionColumn from "./types/collection_column"
 import CollectionTag from "./types/collection_tag"
 import CollectionSubtask from "./types/collection_subtask"
+import Upload from "./types/upload"
 
 const syncLogger = createLogger("SYNC")
 
@@ -37,6 +38,7 @@ export default class SyncMachine {
     new HabitRecord(),
     new Subtask(),
     new TimerSession(),
+    new Upload(),
     new Collection(),
     new CollectionColumn(),
     new CollectionTag(),

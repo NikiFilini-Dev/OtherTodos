@@ -3,6 +3,7 @@ import CollectionTag from "./CollectionTag"
 import Collection from "./Collection"
 import CollectionColumn from "./CollectionColumn"
 import { IRootStore } from "../RootStore"
+import Upload from "./Upload"
 
 const CollectionCard = types
   .model("CollectionCard", {
@@ -14,7 +15,8 @@ const CollectionCard = types
     collection: types.reference(Collection),
     column: types.reference(CollectionColumn),
     index: types.number,
-    status: types.optional(types.enumeration("CardStatus", ["ACTIVE", "DONE"]), "ACTIVE")
+    status: types.optional(types.enumeration("CardStatus", ["ACTIVE", "DONE"]), "ACTIVE"),
+    files: types.array(types.reference(Upload)),
   })
   .views(self => ({
     get syncable() {
@@ -39,6 +41,18 @@ const CollectionCard = types
   .actions(self => {
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, string[]> = {}
+
+    actions.addFile = (val) => {
+      if (self.files.includes(val)) return
+      self.files.push(val)
+    }
+    actionsMap.addFile = ["files"]
+
+    actions.removeFile = (val) => {
+      if (!self.files.includes(val)) return
+      self.files.splice(self.files.indexOf(val),1)
+    }
+    actionsMap.removeFile = ["files"]
 
     actions.setName = (val: string) => self.name = val
     actionsMap.setName = ["name"]

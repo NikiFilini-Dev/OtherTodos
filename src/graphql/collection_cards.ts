@@ -26,6 +26,7 @@ export const GET_COLLECTION_CARDS = gql`
       text
       date
       tags
+      files
       collection
       column
       status
