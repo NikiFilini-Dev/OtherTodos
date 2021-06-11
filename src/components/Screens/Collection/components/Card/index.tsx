@@ -19,6 +19,7 @@ const Card = observer(({ card }: {card: ICollectionCard}) => {
     [styles.card]: true
   })} onClick={() => selectCard(card.id)}>
     {card.status === "DONE" && <div className={styles.done}><CheckboxIcon /> Завершена</div>}
+    {card.preview !== null && <img src={card.preview.url} className={styles.preview} />}
     <div className={styles.title}>{card.name}</div>
     {card.text !== null && <div className={styles.description}>{card.text}</div>}
     {card.subtasks.length > 0 && <div className={styles.progressWrapper}>

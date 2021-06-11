@@ -91,7 +91,11 @@ module.exports = {
   devServer: {
     contentBase: "./web_dist",
     hot: true,
+    // hot: true,
+    // inline: false,
+    // hotOnly: true,
     transportMode: "ws",
+    publicPath: " http://192.168.1.58:8080/static/",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",

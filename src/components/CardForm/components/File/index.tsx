@@ -2,15 +2,20 @@ import React from "react"
 import { observer } from "mobx-react"
 import { IUpload } from "../../../../models/collections/Upload"
 import { humanFileSize } from "../../../../tools/file"
-import { IRootStore, useMst } from "../../../../models/RootStore"
 import styles from "./styles.styl"
 import classNames from "classnames"
-import TrashIcon from "../../../../assets/customIcons/trash.svg"
+import TrashIcon from "../../../../assets/line_awesome/ellipsis-v-solid.svg"
+import FloatMenu from "../../../FloatMenu"
+import { useClickOutsideRefs } from "../../../../tools/hooks"
 
-const File = observer(({ file, removeFile }: {file: IUpload, removeFile: () => void}) => {
-  const {user}: IRootStore = useMst()
-  const base_url = "http://d8m2rzrk8wge.cloudfront.net"
-  const url = `${base_url}/${user.id}/${file.id}.${file.extension}`
+type Props = {
+  file: IUpload
+  removeFile: () => void
+  setPreview: (any) => void
+  currentPreview: IUpload | null
+}
+
+const File = observer(({ file, removeFile, setPreview, currentPreview }: Props) => {
   const extensionsMap = {
     doc: "word",
     docx: "word",
@@ -28,18 +33,39 @@ const File = observer(({ file, removeFile }: {file: IUpload, removeFile: () => v
     removeFile()
   }
 
-  return <a href={url} target={"_blank"} rel="noreferrer" title={file.name} className={classNames({
+  const [menuOpen, setMenuOpen] = React.useState(false)
+  const triggerRef = React.useRef(null)
+  const menuRef = React.useRef(null)
+
+  useClickOutsideRefs([triggerRef, menuRef], () => setMenuOpen(false))
+
+  return <a href={file.url} target={"_blank"} rel="noreferrer" title={file.name} className={classNames({
     [styles.file]: true,
     [styles[extensionsMap[file.extension]]]: true
   })}>
-    {extensionsMap[file.extension] === "image" && <img src={url} />}
+    {extensionsMap[file.extension] === "image" && <img src={file.url} />}
     <div className={styles.info}>
       <span className={styles.name}>{file.name}</span>
       <span className={styles.size}>{humanFileSize(file.size)}</span>
 
-      <div onClick={onDeleteClick} className={styles.trash} title={"Удалить файл"}>
+      <div className={styles.ellipsis} title={"Меню"} ref={triggerRef} onClick={e => {
+        e.preventDefault()
+        setMenuOpen(!menuOpen)
+      }}>
         <TrashIcon />
       </div>
+
+      {menuOpen && <FloatMenu target={triggerRef} menuRef={menuRef} position={"horizontal_auto"}>
+        <div className={styles.menu}>
+          <div className={classNames(styles.item, styles.delete)} onClick={onDeleteClick}>Удалить</div>
+          {extensionsMap[file.extension] === "image" && currentPreview !== file && (
+            <div onClick={() => setPreview(file)} className={styles.item}>Установить на превью</div>
+          )}
+          {extensionsMap[file.extension] === "image" && currentPreview === file && (
+            <div onClick={() => setPreview(null)} className={styles.item}>Убрать с превью</div>
+          )}
+        </div>
+      </FloatMenu>}
     </div>
   </a>
 })

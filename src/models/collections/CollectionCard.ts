@@ -17,6 +17,7 @@ const CollectionCard = types
     index: types.number,
     status: types.optional(types.enumeration("CardStatus", ["ACTIVE", "DONE"]), "ACTIVE"),
     files: types.array(types.reference(Upload)),
+    preview: types.maybeNull(types.reference(Upload))
   })
   .views(self => ({
     get syncable() {
@@ -41,6 +42,9 @@ const CollectionCard = types
   .actions(self => {
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, string[]> = {}
+
+    actions.setPreview = val => self.preview = val
+    actionsMap.setPreview = ["preview"]
 
     actions.addFile = (val) => {
       if (self.files.includes(val)) return

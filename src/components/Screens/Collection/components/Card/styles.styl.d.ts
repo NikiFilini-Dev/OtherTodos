@@ -7,6 +7,7 @@ declare namespace StylesStylNamespace {
     done: string
     expired: string
     floater: string
+    preview: string
     progress: string
     progressWrapper: string
     separator: string

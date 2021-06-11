@@ -1,13 +1,16 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
+    delete: string
+    ellipsis: string
     excel: string
     file: string
     image: string
     info: string
+    item: string
+    menu: string
     name: string
     powerpoint: string
     size: string
-    trash: string
     word: string
   }
 }

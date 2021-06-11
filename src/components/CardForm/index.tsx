@@ -208,7 +208,8 @@ const CardForm = observer(
                   </div>
                   <div className={styles.files}>
                     {card.files.map(file => (
-                      <File removeFile={() => card.removeFile(file)} key={file.id} file={file} />
+                      <File removeFile={() => card.removeFile(file)} key={file.id} file={file}
+                            currentPreview={card.preview} setPreview={card.setPreview} />
                     ))}
                   </div>
                 </div>

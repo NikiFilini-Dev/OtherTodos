@@ -15,6 +15,7 @@ export default class CollectionCard extends SyncType {
   preprocess(item) {
     if (item.date === "") item.date = null
     if (item.text === "") item.text = null
+    if (item.preview === "") item.preview = null
     return item
   }
 

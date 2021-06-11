@@ -12,6 +12,8 @@ import BakaEditor from "./editor"
 import { noop } from "lodash-es"
 import CollectionsStore from "./models/collections/CollectionsStore"
 
+__webpack_public_path__ = "http://localhost:8080/static/"
+
 noop("EDITOR", BakaEditor)
 
 if (!IS_WEB) {

@@ -1,6 +1,7 @@
-import { Instance, SnapshotIn, types } from "mobx-state-tree"
+import { getRoot, Instance, SnapshotIn, types } from "mobx-state-tree"
 import { ColorName, ColorNames } from "../../palette/colors"
 import Collection from "./Collection"
+import { IRootStore } from "../RootStore"
 
 const Upload = types
   .model("Upload", {
@@ -9,13 +10,18 @@ const Upload = types
     name: types.string,
     extension: types.string
   })
-  .views(() => ({
+  .views(self => ({
     get syncable() {
       return false
     },
     get syncName() {
       return "Upload"
     },
+    get url() {
+      const base_url = "http://d8m2rzrk8wge.cloudfront.net"
+      const {user} = getRoot<IRootStore>(self)
+      return `${base_url}/${user.id}/${self.id}.${self.extension}`
+    }
   }))
   .actions(() => {
     const actions: Record<string, any> = {}
