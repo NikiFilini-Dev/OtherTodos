@@ -65,7 +65,10 @@ const File = observer(({ file, removeFile, setPreview, currentPreview }: Props) 
       </div>
 
       {menuOpen && <FloatMenu target={triggerRef} menuRef={menuRef} position={"horizontal_auto"}>
-        <div className={styles.menu}>
+        <div className={styles.menu} onClick={e => {
+          e.stopPropagation()
+          e.preventDefault()
+        }}>
           <div className={classNames(styles.item, styles.delete)} onClick={onDeleteClick}>Удалить</div>
           {extensionsMap[file.extension] === "image" && currentPreview !== file && (
             <div onClick={() => setPreview(file)} className={styles.item}>Установить на превью</div>

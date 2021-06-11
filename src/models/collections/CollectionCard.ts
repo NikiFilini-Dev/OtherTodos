@@ -54,9 +54,10 @@ const CollectionCard = types
 
     actions.removeFile = (val) => {
       if (!self.files.includes(val)) return
+      if (self.preview !== null && val?.id === self.preview.id) self.preview = null
       self.files.splice(self.files.indexOf(val),1)
     }
-    actionsMap.removeFile = ["files"]
+    actionsMap.removeFile = ["files", "preview"]
 
     actions.setName = (val: string) => self.name = val
     actionsMap.setName = ["name"]
