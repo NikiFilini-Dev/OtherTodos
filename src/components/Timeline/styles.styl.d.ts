@@ -1,8 +1,12 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
     action: string
+    actions: string
+    active: string
     allDayList: string
     allDayName: string
+    block: string
+    calendarTrigger: string
     currentDate: string
     dash: string
     dayDetail: string
@@ -12,7 +16,10 @@ declare namespace StylesStylNamespace {
     hour: string
     line: string
     now: string
+    tab: string
+    tabs: string
     timeline: string
+    timelineWrapper: string
     wrapper: string
   }
 }

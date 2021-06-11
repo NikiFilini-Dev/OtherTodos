@@ -1,40 +1,68 @@
 .event
   border-radius 8px
-  background var(--background)
-  color white
-  padding 6px
+  background white
+  color var(--background)
+  padding 8px
   display flex
   //flex-direction column
   font-size 14px
   height 100%
   position relative
   min-height calc(12px + 1em)
+
+  &::before
+    content " "
+    position absolute
+    display block
+    left 0
+    top 0
+    width 100%
+    height 100%
+    background var(--background)
+    pointer-events none
+    opacity .15
+
   .start
-    font-weight 200
-    color var(--light)
-    margin-right 3px
+    font-weight 500
+    color var(--background)
+    margin-right 8px
+    opacity .4
 
   .name
-    color var(--normal)
+    color var(--background)
     font-weight 500
 
   .duration
-    position absolute
-    bottom 8px
-    right 8px
-    color rgba(256,256,256,.7)
+    color var(--background)
+    opacity .4
+    font-weight 300
 
 .allDayEvent
-  background var(--background)
+  background white
   padding 3px 6px
-  border-radius 3px
+  border-radius 8px
+  overflow hidden
   margin-bottom 6px
+  position relative
+
+  &::before
+    content " "
+    position absolute
+    display block
+    left 0
+    top 0
+    width 100%
+    height 100%
+    background var(--background)
+    pointer-events none
+    opacity .15
 
   .start
     display none
 
   .name
-    color var(--normal)
+    color var(--background)
+    font-weight 500
 
 .eventMenu
   padding 24px
@@ -105,3 +133,11 @@
 .eventAndMenuWrapper
   height 100%
   width 100%
+
+.compact .event
+  padding 5px
+
+.compact .name
+  white-space nowrap
+  overflow hidden
+  text-overflow ellipsis

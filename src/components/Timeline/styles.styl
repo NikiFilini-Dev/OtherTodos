@@ -2,34 +2,56 @@
   position relative
   display flex
   flex-direction column
-  //overflow hidden
   max-height 100%
+  gap 16px
 
 .currentDate
   display flex
-  //justify-content space-between
   align-items flex-end
-  margin-bottom 8px
+
+  .actions
+    display flex
+    align-items center
+
+  .calendarTrigger
+    height 24px
+    width 24px
+    margin-left 4px
+    margin-right 8px
+    cursor pointer
+    display flex
+    align-items center
+    justify-content center
+    color #9BABC5
+
+
+    svg
+      height 1em
+
+    &.active
+      color var(--brand)
 
   .dayName
     font-weight 500
-    font-size 24px
+    margin-right auto
+    font-size 22px
     line-height 1em
 
   .dayDetail
-    margin-left auto
     font-size 16px
     color #9BABC5
     font-weight 200
+    margin-right 3px
 
   .action
     margin-left 3px
     height 24px
-    width 24px
+    width 16px
     color #9BABC5
     display flex
     justify-content center
     align-items center
+    cursor pointer
 
     svg
       height 1em
@@ -44,17 +66,27 @@
     color #9BABC5
     margin-bottom 4px
 
+
+.block
+  background white
+  border-radius 24px
+  border 1px solid rgba(0,0,0,.1)
+  padding 24px
+  display flex
+  flex-direction column
+
+.timelineWrapper
+  overflow-y auto
+
 .timeline
   margin-top: 8px
-  //overflow hidden
-  overflow-y scroll
-  max-height 100%
   position relative
+
 
 .eventContainer
   position absolute
-  right 8px
-  width calc(100% - 31px - 8px - 8px)
+  right 12px
+  width calc(100% - 31px - 8px - 8px - 16px)
   top var(--start)
   height calc(var(--end) - var(--start))
   border-radius 8px
@@ -66,7 +98,7 @@
     bottom 0
     height 6px
     width 100%
-    background rgba(0,0,0,.05)
+    //background rgba(0,0,0,.05)
     cursor pointer
 .now
   position absolute
@@ -115,8 +147,8 @@
   span
     width 31px
     margin-right 4px
-    font-family Gilroy
     color #5C5C5C
+    margin-top .3em
 
   .dash
     width 100%
@@ -143,3 +175,24 @@
     z-index 0
   &:last-child::before
     display none
+
+.tabs
+  display flex
+  gap 16px
+  margin-bottom 16px
+
+  .tab
+    flex-grow 1
+    display flex
+    align-items center
+    justify-content center
+    height 32px
+    border 1px solid #9BABC5
+    border-radius 10px
+    color #9BABC5
+
+    &.active
+      color white
+      border-color var(--brand)
+      background var(--brand)
+

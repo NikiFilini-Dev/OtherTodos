@@ -1,5 +1,14 @@
 import { DateTime } from "luxon"
 
+export function getMonth(idx) {
+  const objDate = new Date()
+  objDate.setDate(1)
+  objDate.setMonth(idx)
+  const locale = "ru-ru",
+  month = objDate.toLocaleString(locale, { month: "long" })
+  return month
+}
+
 export function isSameDate(d1, d2) {
   return (
     d1.getFullYear() === d2.getFullYear() &&

@@ -1,20 +1,17 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
-    allDayEvent: string
-    colorVariant: string
-    compact: string
-    disabled: string
-    duration: string
-    event: string
-    eventAndMenuWrapper: string
-    eventMenu: string
-    menuAction: string
-    menuItem: string
-    menuItemName: string
-    menuItemValue: string
-    name: string
+    alien: string
+    calendar: string
+    changeMonth: string
+    currentMonth: string
+    day: string
+    dayname: string
+    hasTasksMark: string
+    monthsSelector: string
     selected: string
-    start: string
+    today: string
+    week: string
+    yearHint: string
   }
 }
 

@@ -84,13 +84,16 @@ const Event = observer(({ event, isDragging }) => {
   }
 
   const styleVars = {
-    "--background": event.tag?.color || "#b7b7b7",
+    "--background": event.tag?.color || "#545454",
     "--light": "white",
     "--normal": "white",
   }
 
   return (
-    <div className={styles.eventAndMenuWrapper}>
+    <div className={classNames({
+      [styles.eventAndMenuWrapper]: true,
+      [styles.compact]: event.duration < 60
+    })}>
       {tagActive && (
         <FloatMenu
           position={"horizontal_left"}
@@ -213,8 +216,13 @@ const Event = observer(({ event, isDragging }) => {
         style={styleVars}
       >
         <span className={styles.start}>{padTime(event.start)}</span>
-        <span className={styles.name}>{event.name}</span>
-        {!event.allDay && event.duration > 50 && <span className={styles.duration}>{event.formattedDuration}</span>}
+        <span className={styles.name}>
+          {event.name}
+          {!event.allDay && event.duration > 50 && (
+            <span className={styles.duration}>({event.formattedDuration})</span>)
+          }
+        </span>
+
       </div>
     </div>
   )
