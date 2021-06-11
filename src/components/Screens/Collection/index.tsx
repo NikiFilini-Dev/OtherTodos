@@ -10,6 +10,7 @@ import Button from "../../Button"
 import PlusIcon from "../../../assets/line_awesome/plus-solid.svg"
 import CollectionForm from "../../CollectionForm"
 import Icon from "../../Icon"
+import UploadView from "./components/UploadView"
 
 const Collection = observer(() => {
   const {
@@ -87,6 +88,7 @@ const Collection = observer(() => {
           )}
         </Droppable>
       </DragDropContext>
+      <UploadView />
     </div>
   )
 })

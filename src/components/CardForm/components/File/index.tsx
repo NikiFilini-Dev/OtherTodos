@@ -7,6 +7,7 @@ import classNames from "classnames"
 import TrashIcon from "../../../../assets/line_awesome/ellipsis-v-solid.svg"
 import FloatMenu from "../../../FloatMenu"
 import { useClickOutsideRefs } from "../../../../tools/hooks"
+import { IRootStore, useMst } from "../../../../models/RootStore"
 
 type Props = {
   file: IUpload
@@ -16,6 +17,7 @@ type Props = {
 }
 
 const File = observer(({ file, removeFile, setPreview, currentPreview }: Props) => {
+  const {collectionsStore: {setUploadView}}: IRootStore = useMst()
   const extensionsMap = {
     doc: "word",
     docx: "word",
@@ -39,10 +41,16 @@ const File = observer(({ file, removeFile, setPreview, currentPreview }: Props) 
 
   useClickOutsideRefs([triggerRef, menuRef], () => setMenuOpen(false))
 
+  const onClick = e => {
+    if (extensionsMap[file.extension] !== "image") return
+    e.preventDefault()
+    setUploadView(file)
+  }
+
   return <a href={file.url} target={"_blank"} rel="noreferrer" title={file.name} className={classNames({
     [styles.file]: true,
     [styles[extensionsMap[file.extension]]]: true
-  })}>
+  })} onClick={onClick}>
     {extensionsMap[file.extension] === "image" && <img src={file.url} />}
     <div className={styles.info}>
       <span className={styles.name}>{file.name}</span>
@@ -50,6 +58,7 @@ const File = observer(({ file, removeFile, setPreview, currentPreview }: Props) 
 
       <div className={styles.ellipsis} title={"Меню"} ref={triggerRef} onClick={e => {
         e.preventDefault()
+        e.stopPropagation()
         setMenuOpen(!menuOpen)
       }}>
         <TrashIcon />
@@ -63,6 +72,10 @@ const File = observer(({ file, removeFile, setPreview, currentPreview }: Props) 
           )}
           {extensionsMap[file.extension] === "image" && currentPreview === file && (
             <div onClick={() => setPreview(null)} className={styles.item}>Убрать с превью</div>
+          )}
+          {extensionsMap[file.extension] === "image" && (
+            <a href={file.url} target={"_blank"} rel="noreferrer" className={styles.item}
+               onClick={e => e.stopPropagation()}>Открыть оригинал</a>
           )}
         </div>
       </FloatMenu>}

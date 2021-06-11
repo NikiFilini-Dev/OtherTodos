@@ -32,6 +32,7 @@ const CardForm = observer(
         selectCard,
         deleteCard,
         pushUpload,
+        uploadView
       },
     }: IRootStore = useMst()
 
@@ -126,7 +127,7 @@ const CardForm = observer(
     collectionTags.sort((a, b) => a.index - b.index)
 
     return ReactDOM.createPortal(
-      <div className={styles.wrapper} ref={wrapperRef} onClick={onWrapperClick}>
+      <div className={styles.wrapper} ref={wrapperRef} onClick={onWrapperClick} style={{display: uploadView !== null ? "none" : ""}}>
         <div className={styles.modal}>
           <TaskContext.Provider value={cardEmitter}>
             <div

@@ -23,9 +23,13 @@ const CollectionsStore = types
     selectedCollection: types.maybeNull(types.reference(Collection)),
     editingCard: types.maybeNull(types.reference(CollectionCard)),
     editingCollection: types.maybeNull(types.reference(Collection)),
+    uploadView: types.maybeNull(types.reference(Upload)),
   })
   .views(() => ({}))
   .actions(self => ({
+    setUploadView(data) {
+      self.uploadView = data
+    },
     pushUpload(data) {
       self.uploads.push(data)
     },
