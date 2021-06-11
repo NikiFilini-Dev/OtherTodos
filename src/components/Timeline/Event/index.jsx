@@ -217,7 +217,7 @@ const Event = observer(({ event, isDragging }) => {
       >
         <span className={styles.start}>{padTime(event.start)}</span>
         <span className={styles.name}>
-          {event.name}
+          {event.name}{" "}
           {!event.allDay && event.duration > 50 && (
             <span className={styles.duration}>({event.formattedDuration})</span>)
           }
