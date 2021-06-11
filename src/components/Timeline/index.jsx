@@ -29,6 +29,8 @@ const Timeline = observer(() => {
   const [isCreating, setIsCreating] = React.useState(false)
   const [calendarShown, setCalendarShown] = React.useState(false)
 
+  const scrollRef = React.useRef(null)
+
   const arr = []
   for (let i = 0; i < 24; i++) {
     arr.push(i)
@@ -51,8 +53,8 @@ const Timeline = observer(() => {
   }
   React.useEffect(() => {
     setNowOffset(calcOffset())
-    ref.current.scrollTop =
-      nowRef.current.offsetTop - ref.current.getBoundingClientRect().height / 2
+    scrollRef.current.scrollTop =
+      nowRef.current.offsetTop - scrollRef.current.getBoundingClientRect().height / 2
     const timer = setInterval(() => setNowOffset(calcOffset()), 10000)
     return () => {
       clearInterval(timer)
@@ -61,9 +63,9 @@ const Timeline = observer(() => {
 
   React.useEffect(() => {
     const onFocus = () => {
-      ref.current.scrollTop =
+      scrollRef.current.scrollTop =
         nowRef.current.offsetTop -
-        ref.current.getBoundingClientRect().height / 2
+        scrollRef.current.getBoundingClientRect().height / 2
     }
     onFocus()
     ipc.on("focus", onFocus)
@@ -193,12 +195,12 @@ const Timeline = observer(() => {
 
   React.useEffect(() => {
     if (initialScrolled) return
-    ref.current.scrollTop =
-      nowRef.current.offsetTop - ref.current.getBoundingClientRect().height / 2
+    scrollRef.current.scrollTop =
+      nowRef.current.offsetTop - scrollRef.current.getBoundingClientRect().height / 2
     if (nowRef.current.offsetTop > 6) setInitialScrolled(true)
   }, [nowRef.current?.getBoundingClientRect().top])
 
-  const scrollEmitter = useScrollEmitter(ref)
+  const scrollEmitter = useScrollEmitter(scrollRef)
 
   return (
     <div className={styles.wrapper}>
@@ -217,12 +219,12 @@ const Timeline = observer(() => {
             <span className={styles.action} onClick={onPrevClick}>
               <ChevronLeft />
             </span>
-              <span className={styles.action} onClick={onNextClick}>
+            <span className={styles.action} onClick={onNextClick}>
               <ChevronRight />
             </span>
             <div className={classNames({
               [styles.calendarTrigger]: true,
-              [styles.active]: calendarShown
+              [styles.active]: calendarShown,
             })} onClick={() => setCalendarShown(!calendarShown)}>
               <Icon name={"calendar"} />
             </div>
@@ -231,10 +233,10 @@ const Timeline = observer(() => {
         {calendarShown && <DaySelector />}
       </div>
       <div className={classNames(styles.block)} style={{ overflowY: "hidden" }}>
-          {/*<div className={styles.tabs}>*/}
-          {/*  <div className={classNames(styles.tab, styles.active)}>День</div>*/}
-          {/*  <div className={styles.tab}>Неделя</div>*/}
-          {/*</div>*/}
+        {/*<div className={styles.tabs}>*/}
+        {/*  <div className={classNames(styles.tab, styles.active)}>День</div>*/}
+        {/*  <div className={styles.tab}>Неделя</div>*/}
+        {/*</div>*/}
         <div className={styles.allDayList}>
           {Boolean(todayEvents.filter(t => t.allDay).length) && (
             <div className={styles.allDayName}>Весь день:</div>
@@ -253,13 +255,13 @@ const Timeline = observer(() => {
               )
             })}
         </div>
-        <div className={styles.timelineWrapper}>
-          <div
-            className={styles.timeline}
-            ref={ref}
-            onDoubleClick={onTimelineClick}
-          >
-            <ScrollContext.Provider value={scrollEmitter}>
+        <ScrollContext.Provider value={scrollEmitter}>
+        <div className={styles.timelineWrapper} ref={scrollRef}>
+            <div
+              className={styles.timeline}
+              ref={ref}
+              onDoubleClick={onTimelineClick}
+            >
               {todayEvents
                 .filter(t => !t.allDay)
                 .map(event => (
@@ -310,9 +312,9 @@ const Timeline = observer(() => {
                   <div className={styles.dash} />
                 </div>
               ))}
-            </ScrollContext.Provider>
-          </div>
+            </div>
         </div>
+        </ScrollContext.Provider>
       </div>
     </div>
   )
