@@ -3,7 +3,7 @@ import {
   addMiddleware,
   applySnapshot,
   getSnapshot,
-  onPatch,
+  onPatch, SnapshotIn,
 } from "mobx-state-tree"
 import pointer from "json-pointer"
 import jsonStorage from "../tools/jsonStorage"
@@ -24,11 +24,13 @@ import CollectionColumn from "./types/collection_column"
 import CollectionTag from "./types/collection_tag"
 import CollectionSubtask from "./types/collection_subtask"
 import Upload from "./types/upload"
+import User from "./types/user"
 
 const syncLogger = createLogger("SYNC")
 
 export default class SyncMachine {
   types: SyncType[] = [
+    new User(),
     new Tag(),
     new TimelineEvent(),
     new ProjectCategory(),
@@ -276,6 +278,12 @@ export default class SyncMachine {
         this.registerCreate(node)
       }
     })
+  }
+
+  async getOne<T>(name: string, id: string): Promise<SnapshotIn<T>|false> {
+    const type = this.types.find(type => type.name === name)
+    if (!type) throw new Error("Cant load "+name)
+    return await type.getOne<T>(id)
   }
 
   hookUpdate() {

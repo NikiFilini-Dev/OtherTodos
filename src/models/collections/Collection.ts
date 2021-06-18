@@ -1,6 +1,7 @@
 import { getRoot, Instance, SnapshotIn, types } from "mobx-state-tree"
 import { IRootStore } from "../RootStore"
 import { IconName, IconNames } from "../../palette/icons"
+import { userReference } from "./storages/users.storage"
 
 const Collection = types
   .model("Collection", {
@@ -8,6 +9,8 @@ const Collection = types
     name: types.string,
     icon: types.optional(types.enumeration("Icons", IconNames), "bookmark"),
     index: types.number,
+    users: types.array(userReference),
+    userId: userReference,
   })
   .views(self => ({
     get syncable() {

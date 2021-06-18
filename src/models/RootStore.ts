@@ -22,6 +22,7 @@ import HabitRecord from "./HabitRecord"
 import Subtask, { ISubtask } from "./Subtask"
 import TimerSession, { ITimerSession } from "./TimerSession"
 import CollectionsStore from "./collections/CollectionsStore"
+import { createStorage, createStorageReference } from "./utils"
 
 const RootStore = types
   .model("Store", {

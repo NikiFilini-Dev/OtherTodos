@@ -28,8 +28,8 @@ export const GET_COLLECTION_CARDS = gql`
       tags
       files
       preview
-      collection
-      column
+      collectionId
+      columnId
       status
       index
     }

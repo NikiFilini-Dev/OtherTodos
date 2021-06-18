@@ -3,7 +3,9 @@ import CollectionTag from "./CollectionTag"
 import Collection from "./Collection"
 import CollectionColumn from "./CollectionColumn"
 import { IRootStore } from "../RootStore"
-import Upload from "./Upload"
+import { uploadReference } from "./storages/uploads.storage"
+
+console.log(uploadReference)
 
 const CollectionCard = types
   .model("CollectionCard", {
@@ -16,8 +18,8 @@ const CollectionCard = types
     column: types.reference(CollectionColumn),
     index: types.number,
     status: types.optional(types.enumeration("CardStatus", ["ACTIVE", "DONE"]), "ACTIVE"),
-    files: types.array(types.reference(Upload)),
-    preview: types.maybeNull(types.reference(Upload))
+    files: types.array(uploadReference),
+    preview: types.maybeNull(uploadReference)
   })
   .views(self => ({
     get syncable() {

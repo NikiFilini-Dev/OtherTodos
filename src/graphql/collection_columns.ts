@@ -25,7 +25,7 @@ export const GET_COLLECTION_COLUMNS = gql`
       name
       color
       icon
-      collection
+      collectionId
       index
     }
   }

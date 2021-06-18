@@ -8,7 +8,8 @@ const Upload = types
     id: types.identifier,
     size: types.number,
     name: types.string,
-    extension: types.string
+    extension: types.string,
+    userId: types.string,
   })
   .views(self => ({
     get syncable() {
@@ -19,8 +20,7 @@ const Upload = types
     },
     get url() {
       const base_url = "http://d8m2rzrk8wge.cloudfront.net"
-      const {user} = getRoot<IRootStore>(self)
-      return `${base_url}/${user.id}/${self.id}.${self.extension}`
+      return `${base_url}/${self.userId}/${self.id}.${self.extension}`
     }
   }))
   .actions(() => {

@@ -16,6 +16,8 @@ export default class CollectionCard extends SyncType {
     if (item.date === "") item.date = null
     if (item.text === "") item.text = null
     if (item.preview === "") item.preview = null
+    item.collection = item.collectionId
+    item.column = item.columnId
     return item
   }
 

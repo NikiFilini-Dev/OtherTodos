@@ -25,6 +25,20 @@ export const GET_COLLECTIONS = gql`
       name
       icon
       index
+      users
+      userId
     }
+  }
+`
+
+export const INVITE_USER = gql`
+  mutation InviteUser($collectionId: String!, $email: String!) {
+      inviteUser(collectionId: $collectionId, email: $email)
+  }
+`
+
+export const REMOVE_USER_FROM_COLLECTION = gql`
+  mutation RemoveUserFromCollection($collectionId: String!, $userId: String!) {
+      removeUserFromCollection(collectionId: $collectionId, userId: $userId)
   }
 `

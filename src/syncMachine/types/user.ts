@@ -1,13 +1,10 @@
 import SyncType from "../syncType"
 import gqlClient from "../../graphql/client"
-import {
-  GET_UPLOAD,
-  GET_UPLOADS,
-} from "../../graphql/uploads"
 import { SnapshotIn } from "mobx-state-tree"
+import { GET_USER } from "../../graphql/users"
 
-export default class Upload extends SyncType {
-  name = "Upload"
+export default class User extends SyncType {
+  name = "User"
 
   UPDATE_MUTATION = null
   DELETE_MUTATION = null
@@ -21,8 +18,7 @@ export default class Upload extends SyncType {
   }
 
   async getOne<T>(id: string): Promise<SnapshotIn<T>|false> {
-    const result = await gqlClient.query(GET_UPLOAD, {id}).toPromise()
-    console.log("DATA", result.data.upload)
-    return result.data.upload
+    const result = await gqlClient.query(GET_USER, {id}).toPromise()
+    return result.data.user
   }
 }

@@ -1,5 +1,6 @@
 import gqlClient from "../graphql/client"
 import jsonStorage from "tools/jsonStorage"
+import { SnapshotIn } from "mobx-state-tree"
 
 const syncLogger = createLogger("SYNC")
 
@@ -26,6 +27,10 @@ export default abstract class SyncType {
   abstract load()
 
   abstract preprocess(item: Record<string, any>): Record<string, any>
+
+  async getOne<T>(id: string): Promise<SnapshotIn<T>|false> {
+    throw new Error("getOne not implemented")
+  }
 
   loadUpdates() {
     return new Promise<void>(resolve => {

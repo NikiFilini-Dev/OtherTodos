@@ -14,6 +14,7 @@ export default class CollectionColumn extends SyncType {
 
   preprocess(item) {
     if (item.icon === "") delete item.icon
+    item.collection = item.collectionId
     return item
   }
 

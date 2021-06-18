@@ -24,7 +24,7 @@ export const GET_COLLECTION_TAGS = gql`
       id
       name
       color
-      collection
+      collectionId
       index
     }
   }

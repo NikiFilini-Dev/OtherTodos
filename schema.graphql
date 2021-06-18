@@ -5,28 +5,180 @@ schema {
     mutation: Mutation
 }
 
+type Collection {
+    icon: String!
+    id: String!
+    index: Int!
+    name: String!
+    userId: String!
+    users: [String]!
+}
+
+type CollectionCard {
+    collectionId: String!
+    columnId: String!
+    date: Date!
+    files: [String]!
+    id: String!
+    index: Int!
+    name: String!
+    preview: String!
+    status: String!
+    tags: [String]!
+    text: String!
+    userId: String!
+}
+
+type CollectionCardChanges {
+    collectionId: Time
+    columnId: Time
+    date: Time
+    files: Time
+    id: Time
+    index: Time
+    name: Time
+    preview: Time
+    status: Time
+    tags: Time
+    text: Time
+}
+
+type CollectionChanges {
+    icon: Time
+    id: Time
+    index: Time
+    name: Time
+}
+
+type CollectionColumn {
+    collectionId: String!
+    color: String!
+    icon: String!
+    id: String!
+    index: Int!
+    name: String!
+    userId: String!
+}
+
+type CollectionColumnChanges {
+    collectionId: Time
+    color: Time
+    icon: Time
+    id: Time
+    index: Time
+    name: Time
+}
+
+type CollectionSubtask {
+    cardId: String!
+    id: String!
+    index: Int!
+    status: String!
+    text: String!
+}
+
+type CollectionSubtaskChanges {
+    cardId: Time
+    id: Time
+    index: Time
+    status: Time
+    text: Time
+}
+
+type CollectionTag {
+    collectionId: String!
+    color: String!
+    id: String!
+    index: Int!
+    name: String!
+}
+
+type CollectionTagChanges {
+    collectionId: Time
+    color: Time
+    id: Time
+    index: Time
+    name: Time
+}
+
 type GenerateTokenResponse {
     token: String!
     user: User!
 }
 
+type Habit {
+    color: String!
+    icon: String!
+    id: String!
+    monthlyDays: [Int]!
+    name: String!
+    recordsPerDay: Int!
+    type: String!
+    weeklyDays: [Int]!
+}
+
+type HabitChanges {
+    color: Time
+    icon: Time
+    id: Time
+    monthlyDays: Time
+    name: Time
+    recordsPerDay: Time
+    type: Time
+    weeklyDays: Time
+}
+
+type HabitRecord {
+    date: Date!
+    habit: String!
+    id: String!
+}
+
+type HabitRecordChanges {
+    date: Time
+    habit: Time
+    id: Time
+}
+
 type Mutation {
     activateUser(hash: String!): Boolean!
     createUser(user: NewUserData): User!
+    deleteCollection(id: String!): Boolean
+    deleteCollectionCard(id: String!): Boolean
+    deleteCollectionColumn(id: String!): Boolean
+    deleteCollectionSubtask(id: String!): Boolean
+    deleteCollectionTag(id: String!): Boolean
+    deleteHabit(id: String!): Boolean
+    deleteHabitRecord(id: String!): Boolean
     deleteProject(id: String!): Boolean
     deleteProjectCategory(id: String!): Boolean
+    deleteSubtask(id: String!): Boolean
     deleteTag(id: String!): Boolean
     deleteTask(id: String!): Boolean
     deleteTimelineEvent(id: String!): Boolean
+    deleteTimerSession(id: String!): Boolean
+    deleteUpload(id: String!): Boolean
     generateToken(email: String!, password: String!): GenerateTokenResponse
+    inviteUser(collectionId: String!, email: String!): Boolean
+    removeUserFromCollection(collectionId: String!, userId: String!): Boolean
     requestPasswordReset(email: String!): Boolean!
     resetPassword(hash: String!, newPassword: String!): Boolean!
     test: Boolean
+    updateCollection(changedAt: CollectionChangesDate, data: CollectionUpdate, id: String!): Collection!
+    updateCollectionCard(changedAt: CollectionCardChangesDate, data: CollectionCardUpdate, id: String!): CollectionCard!
+    updateCollectionColumn(changedAt: CollectionColumnChangesDate, data: CollectionColumnUpdate, id: String!): CollectionColumn!
+    updateCollectionSubtask(changedAt: CollectionSubtaskChangesDate, data: CollectionSubtaskUpdate, id: String!): CollectionSubtask!
+    updateCollectionTag(changedAt: CollectionTagChangesDate, data: CollectionTagUpdate, id: String!): CollectionTag!
+    updateHabit(changedAt: HabitChangesDate, data: HabitUpdate, id: String!): Habit!
+    updateHabitRecord(changedAt: HabitRecordChangesDate, data: HabitRecordUpdate, id: String!): HabitRecord!
     updateProject(changedAt: ProjectChangesDate, data: ProjectUpdate, id: String!): Project!
     updateProjectCategory(changedAt: ProjectCategoryChangesDate, data: ProjectCategoryUpdate, id: String!): ProjectCategory!
+    updateSubtask(changedAt: SubtaskChangesDate, data: SubtaskUpdate, id: String!): Subtask!
     updateTag(changedAt: TagChangesDate, data: TagUpdate, id: String!): Tag!
     updateTask(changedAt: TaskChangesDate, data: TaskUpdate, id: String!): Task!
     updateTimelineEvent(changedAt: TimelineEventChangesDate, data: TimelineEventUpdate, id: String!): TimelineEvent!
+    updateTimerSession(changedAt: TimerSessionChangesDate, data: TimerSessionUpdate, id: String!): TimerSession!
+    updateUpload(changedAt: UploadChangesDate, data: UploadUpdate, id: String!): Upload!
 }
 
 type PageMeta {
@@ -37,6 +189,7 @@ type PageMeta {
 
 type Project {
     categories: [String]!
+    icon: String!
     id: String!
     index: Int!
     name: String!
@@ -44,6 +197,7 @@ type Project {
 
 type ProjectCategory {
     folded: Boolean!
+    icon: String!
     id: String!
     index: Int!
     name: String!
@@ -51,31 +205,88 @@ type ProjectCategory {
 
 type ProjectCategoryChanges {
     folded: Time
+    icon: Time
+    id: Time
     index: Time
     name: Time
 }
 
 type ProjectChanges {
     categories: Time
+    icon: Time
+    id: Time
     index: Time
     name: Time
 }
 
 type Query {
+    collection(id: String): Collection!
+    collectionCard(id: String): CollectionCard!
+    collectionCards: [CollectionCard]!
+    collectionColumn(id: String): CollectionColumn!
+    collectionColumns: [CollectionColumn]!
+    collectionSubtask(id: String): CollectionSubtask!
+    collectionSubtasks: [CollectionSubtask]!
+    collectionTag(id: String): CollectionTag!
+    collectionTags: [CollectionTag]!
+    collections: [Collection]!
+    habit(id: String): Habit!
+    habitRecord(id: String): HabitRecord!
+    habitRecords: [HabitRecord]!
+    habits: [Habit]!
     me: User!
+    project(id: String): Project!
     projectCategories: [ProjectCategory]!
+    projectCategory(id: String): ProjectCategory!
     projects: [Project]!
+    subtask(id: String): Subtask!
+    subtasks: [Subtask]!
+    tag(id: String): Tag!
     tags: [Tag]!
+    task(id: String!): Task
     tasks: [Task]!
     test: Boolean
+    timelineEvent(id: String): TimelineEvent!
     timelineEvents: [TimelineEvent]!
+    timerSession(id: String): TimerSession!
+    timerSessions: [TimerSession]!
+    updatedCollectionCards(since: Time!): [CollectionCard]!
+    updatedCollectionColumns(since: Time!): [CollectionColumn]!
+    updatedCollectionSubtasks(since: Time!): [CollectionSubtask]!
+    updatedCollectionTags(since: Time!): [CollectionTag]!
+    updatedCollections(since: Time!): [Collection]!
+    updatedHabitRecords(since: Time!): [HabitRecord]!
+    updatedHabits(since: Time!): [Habit]!
     updatedProjectCategories(since: Time!): [ProjectCategory]!
     updatedProjects(since: Time!): [Project]!
+    updatedSubtasks(since: Time!): [Subtask]!
     updatedTags(since: Time!): [Tag]!
     updatedTasks(since: Time!): [Task]!
     updatedTimelineEvents(since: Time!): [TimelineEvent]!
+    updatedTimerSessions(since: Time!): [TimerSession]!
+    updatedUploads(since: Time!): [Upload]!
+    upload(id: String): Upload!
+    uploads: [Upload]!
     user(id: String!): User!
     users(limit: Int, offset: Int): UsersPage
+}
+
+type Subtask {
+    closedAt: String!
+    id: String!
+    index: Int!
+    status: String!
+    task: String!
+    text: String!
+}
+
+type SubtaskChanges {
+    closedAt: Time
+    id: Time
+    index: Time
+    status: Time
+    task: Time
+    text: Time
 }
 
 type Tag {
@@ -99,6 +310,7 @@ type TagChanges {
 type Task {
     category: String
     closeDate: Date
+    colorTag: String
     creationDate: Date
     date: Date
     deletedAt: Time
@@ -117,6 +329,7 @@ type Task {
 type TaskChanges {
     category: Time
     closeDate: Time
+    colorTag: Time
     creationDate: Time
     date: Time
     event: Time
@@ -131,28 +344,59 @@ type TaskChanges {
 }
 
 type TimelineEvent {
-    allDay: Boolean
+    allDay: Boolean!
     color: String!
     date: Date!
-    deletedAt: Time
-    duration: Int
+    duration: Int!
     id: String!
     name: String!
-    start: String
-    tag: String
-    task: String
+    start: String!
+    tag: String!
+    task: String!
 }
 
 type TimelineEventChanges {
     allDay: Time
     color: Time
     date: Time
-    deletedAt: Time
     duration: Time
+    id: Time
     name: Time
     start: Time
     tag: Time
     task: Time
+}
+
+type TimerSession {
+    date: Date!
+    duration: Int!
+    id: String!
+    start: String!
+    task: String!
+}
+
+type TimerSessionChanges {
+    date: Time
+    duration: Time
+    id: Time
+    start: Time
+    task: Time
+}
+
+type Upload {
+    extension: String!
+    id: String!
+    name: String!
+    size: Int!
+    userId: String!
+}
+
+type UploadChanges {
+    extension: Time
+    id: Time
+    name: Time
+    size: Time
+    userId: Time
 }
 
 type User {
@@ -168,6 +412,132 @@ type UsersPage {
     nodes: [User]!
 }
 
+input CollectionCardChangesDate {
+    collectionId: Time
+    columnId: Time
+    date: Time
+    files: Time
+    id: Time
+    index: Time
+    name: Time
+    preview: Time
+    status: Time
+    tags: Time
+    text: Time
+}
+
+input CollectionCardUpdate {
+    collectionId: String
+    columnId: String
+    date: Date
+    files: [String]
+    id: String
+    index: Int
+    name: String
+    preview: String
+    status: String
+    tags: [String]
+    text: String
+}
+
+input CollectionChangesDate {
+    icon: Time
+    id: Time
+    index: Time
+    name: Time
+}
+
+input CollectionColumnChangesDate {
+    collectionId: Time
+    color: Time
+    icon: Time
+    id: Time
+    index: Time
+    name: Time
+}
+
+input CollectionColumnUpdate {
+    collectionId: String
+    color: String
+    icon: String
+    id: String
+    index: Int
+    name: String
+}
+
+input CollectionSubtaskChangesDate {
+    cardId: Time
+    id: Time
+    index: Time
+    status: Time
+    text: Time
+}
+
+input CollectionSubtaskUpdate {
+    cardId: String
+    id: String
+    index: Int
+    status: String
+    text: String
+}
+
+input CollectionTagChangesDate {
+    collectionId: Time
+    color: Time
+    id: Time
+    index: Time
+    name: Time
+}
+
+input CollectionTagUpdate {
+    collectionId: String
+    color: String
+    id: String
+    index: Int
+    name: String
+}
+
+input CollectionUpdate {
+    icon: String
+    id: String
+    index: Int
+    name: String
+}
+
+input HabitChangesDate {
+    color: Time
+    icon: Time
+    id: Time
+    monthlyDays: Time
+    name: Time
+    recordsPerDay: Time
+    type: Time
+    weeklyDays: Time
+}
+
+input HabitRecordChangesDate {
+    date: Time
+    habit: Time
+    id: Time
+}
+
+input HabitRecordUpdate {
+    date: Date
+    habit: String
+    id: String
+}
+
+input HabitUpdate {
+    color: String
+    icon: String
+    id: String
+    monthlyDays: [Int]
+    name: String
+    recordsPerDay: Int
+    type: String
+    weeklyDays: [Int]
+}
+
 input NewUserData {
     email: String!
     firstName: String!
@@ -177,26 +547,52 @@ input NewUserData {
 
 input ProjectCategoryChangesDate {
     folded: Time
+    icon: Time
+    id: Time
     index: Time
     name: Time
 }
 
 input ProjectCategoryUpdate {
     folded: Boolean
+    icon: String
+    id: String
     index: Int
     name: String
 }
 
 input ProjectChangesDate {
     categories: Time
+    icon: Time
+    id: Time
     index: Time
     name: Time
 }
 
 input ProjectUpdate {
     categories: [String]
+    icon: String
+    id: String
     index: Int
     name: String
+}
+
+input SubtaskChangesDate {
+    closedAt: Time
+    id: Time
+    index: Time
+    status: Time
+    task: Time
+    text: Time
+}
+
+input SubtaskUpdate {
+    closedAt: String
+    id: String
+    index: Int
+    status: String
+    task: String
+    text: String
 }
 
 input TagChangesDate {
@@ -220,6 +616,7 @@ input TagUpdate {
 input TaskChangesDate {
     category: Time
     closeDate: Time
+    colorTag: Time
     creationDate: Time
     date: Time
     event: Time
@@ -236,6 +633,7 @@ input TaskChangesDate {
 input TaskUpdate {
     category: String
     closeDate: Date
+    colorTag: String
     creationDate: Date
     date: Date
     event: String
@@ -254,6 +652,7 @@ input TimelineEventChangesDate {
     color: Time
     date: Time
     duration: Time
+    id: Time
     name: Time
     start: Time
     tag: Time
@@ -263,15 +662,48 @@ input TimelineEventChangesDate {
 input TimelineEventUpdate {
     allDay: Boolean
     color: String
-    date: String
+    date: Date
     duration: Int
+    id: String
     name: String
     start: String
     tag: String
     task: String
 }
 
+input TimerSessionChangesDate {
+    date: Time
+    duration: Time
+    id: Time
+    start: Time
+    task: Time
+}
 
-scalar Date
+input TimerSessionUpdate {
+    date: Date
+    duration: Int
+    id: String
+    start: String
+    task: String
+}
+
+input UploadChangesDate {
+    extension: Time
+    id: Time
+    name: Time
+    size: Time
+    userId: Time
+}
+
+input UploadUpdate {
+    extension: String
+    id: String
+    name: String
+    size: Int
+    userId: String
+}
+
 
 scalar Time
+
+scalar Date

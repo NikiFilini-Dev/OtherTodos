@@ -24,7 +24,7 @@ export const GET_COLLECTION_SUBTASKS = gql`
       id
       text
       status
-      card
+      cardId
       index
     }
   }

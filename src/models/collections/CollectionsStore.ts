@@ -9,6 +9,10 @@ import CollectionSubtask, { ICollectionSubtask, ICollectionSubtaskSnapshot } fro
 import { move } from "../../tools/movement"
 import { IRootStore } from "../RootStore"
 import Upload from "./Upload"
+import { uploadsStorage } from "./storages/uploads.storage"
+import { usersStorage } from "./storages/users.storage"
+
+
 
 const CollectionsStore = types
   .model("CollectionsStore", {
@@ -18,7 +22,8 @@ const CollectionsStore = types
     tags: types.array(CollectionTag),
     logs: types.array(CollectionLog),
     subtasks: types.array(CollectionSubtask),
-    uploads: types.array(Upload),
+    uploads: uploadsStorage,
+    users: usersStorage,
 
     selectedCollection: types.maybeNull(types.reference(Collection)),
     editingCard: types.maybeNull(types.reference(CollectionCard)),
@@ -29,9 +34,6 @@ const CollectionsStore = types
   .actions(self => ({
     setUploadView(data) {
       self.uploadView = data
-    },
-    pushUpload(data) {
-      self.uploads.push(data)
     },
 
     selectCard(val) {
@@ -124,7 +126,9 @@ const CollectionsStore = types
         index: self.collections.reduce((acc, c) => c.index > acc ? c.index : acc, -1) + 1,
         name: "Новая коллекция",
         ...initialData,
-        id
+        id,
+        users: [],
+        userId: ""
       })
       return id
     },
