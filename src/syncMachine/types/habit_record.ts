@@ -5,6 +5,7 @@ import {
   GET_HABIT_RECORDS,
   UPDATE_HABIT_RECORD,
 } from "../../graphql/habit_records"
+import { DateTime } from "luxon"
 
 export default class HabitRecord extends SyncType {
   name = "HabitRecord"
@@ -13,6 +14,7 @@ export default class HabitRecord extends SyncType {
   DELETE_MUTATION = DELETE_HABIT_RECORD
 
   preprocess(item) {
+    if (item.date.length > 15) item.date = DateTime.fromISO(item.date).toFormat("M/d/yyyy")
     return item
   }
 
