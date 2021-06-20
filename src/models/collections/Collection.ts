@@ -11,13 +11,17 @@ const Collection = types
     index: types.number,
     users: types.array(userReference),
     userId: userReference,
+    _temp: types.optional(types.boolean, false),
   })
   .views(self => ({
     get syncable() {
-      return true
+      return !self._temp
     },
     get syncName() {
       return "Collection"
+    },
+    get syncIgnore() {
+      return ["_temp"]
     },
 
     get columns() {

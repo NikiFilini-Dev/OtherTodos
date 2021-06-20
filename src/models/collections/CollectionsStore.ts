@@ -11,6 +11,7 @@ import { IRootStore } from "../RootStore"
 import Upload from "./Upload"
 import { uploadsStorage } from "./storages/uploads.storage"
 import { usersStorage } from "./storages/users.storage"
+import { safeRef } from "../utils"
 
 
 
@@ -25,19 +26,60 @@ const CollectionsStore = types
     uploads: uploadsStorage,
     users: usersStorage,
 
-    selectedCollection: types.maybeNull(types.reference(Collection)),
-    editingCard: types.maybeNull(types.reference(CollectionCard)),
+    selectedCollection: types.maybeNull(
+      safeRef(Collection, "/collectionsStore", "pushCollection", {
+        id: "",
+        name: "LOADING",
+        index: 0,
+        users: [],
+        userId: "",
+        icon: "bookmark",
+        _temp: true
+      })
+    ),
+    editingCard: types.maybeNull(
+      safeRef(CollectionCard, "/collectionsStore", "pushCard", {
+        id: "",
+        name: "LOADING",
+        index: 0,
+        _temp: true,
+        collection: "",
+        column: ""
+      })
+    ),
     editingCollection: types.maybeNull(types.reference(Collection)),
     uploadView: types.maybeNull(types.reference(Upload)),
   })
   .views(() => ({}))
   .actions(self => ({
+    pushCollection(val) {
+      self.collections.push(val)
+    },
+    pushColumn(val) {
+      self.columns.push(val)
+    },
+    pushCard(val) {
+      self.cards.push(val)
+    },
+
     setUploadView(data) {
       self.uploadView = data
     },
 
     selectCard(val) {
       self.editingCard = val
+      let cardId
+      let collectionId
+      if (typeof val === "string") {
+        cardId = val
+        collectionId = self.cards.find(c => c.id === cardId)?.collection.id
+        if (collectionId) history.pushState({}, document.title, "/app/collections/"+collectionId+"/"+cardId)
+      } else {
+        cardId = val.id
+        collectionId = typeof val.collection === "string" ? val.collection : val.collection.id
+        history.pushState({}, document.title, "/app/collections/"+collectionId+"/"+cardId)
+      }
+
     },
     selectEditingCollection(val) {
       self.editingCollection = val
@@ -118,6 +160,8 @@ const CollectionsStore = types
       if (!collection) throw new Error("collection not found")
 
       self.selectedCollection = collection
+
+      history.pushState({}, document.title, "/app/collections/"+id)
     },
 
     createCollection(initialData: Partial<ICollectionSnapshot>) {

@@ -19,14 +19,18 @@ const CollectionCard = types
     index: types.number,
     status: types.optional(types.enumeration("CardStatus", ["ACTIVE", "DONE"]), "ACTIVE"),
     files: types.array(uploadReference),
-    preview: types.maybeNull(uploadReference)
+    preview: types.maybeNull(uploadReference),
+    _temp: types.optional(types.boolean, false),
   })
   .views(self => ({
     get syncable() {
-      return true
+      return !self._temp
     },
     get syncName() {
       return "CollectionCard"
+    },
+    get syncIgnore() {
+      return ["_temp"]
     },
     get subtasks() {
       const root = getRoot<IRootStore>(self)

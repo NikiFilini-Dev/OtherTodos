@@ -22,7 +22,8 @@ import HabitRecord from "./HabitRecord"
 import Subtask, { ISubtask } from "./Subtask"
 import TimerSession, { ITimerSession } from "./TimerSession"
 import CollectionsStore from "./collections/CollectionsStore"
-import { createStorage, createStorageReference } from "./utils"
+import { createStorage, createStorageReference, safeRef } from "./utils"
+import Collection from "./collections/Collection"
 
 const RootStore = types
   .model("Store", {
@@ -39,7 +40,14 @@ const RootStore = types
       types.enumeration(["INBOX", "TODAY", "PROJECT", "LOG", "TAGS", "AUTH", "COLLECTION"]),
       "COLLECTION",
     ),
-    selectedProject: types.maybeNull(types.reference(Project)),
+    selectedProject: types.maybeNull(
+      safeRef(Project, "", "pushProject", {
+        id: "",
+        name: "LOADING",
+        index: 0,
+        _temp: true
+      })
+    ),
     tags: types.array(Tag),
     selectedTag: types.maybeNull(types.reference(Tag)),
     selectedTagType: types.optional(
@@ -59,6 +67,9 @@ const RootStore = types
     collectionsStore: CollectionsStore,
   })
   .actions(self => ({
+    pushProject(val) {
+      self.projects.push(val)
+    },
     resumeTimer() {
       if (!self.runningTimerSession) return
       self.timerStatus = "RUNNING"
@@ -253,6 +264,9 @@ const RootStore = types
     },
     selectTagType(type) {
       self.selectedTagType = type
+      if (type === "TASK") history.pushState({}, document.title, "/app/tags/")
+      if (type === "EVENT") history.pushState({}, document.title, "/app/eventTags/")
+
     },
     setSidebarWidth(val) {
       self.sidebarWidth = val
@@ -357,9 +371,18 @@ const RootStore = types
       self.tasks.selected = null
       self.tempTask = null
       self.selectedDate = DateTime.now().toFormat("M/d/yyyy")
+
+      if (screen === "TODAY") history.pushState({}, document.title, "/app/today/")
+      if (screen === "LOG") history.pushState({}, document.title, "/app/log/")
+      if (screen === "INBOX") history.pushState({}, document.title, "/app/inbox/")
+      if (screen === "PROJECT") history.pushState({}, document.title, "/app/projects/")
+      if (screen === "COLLECTION") history.pushState({}, document.title, "/app/projects/")
+      if (screen === "TAG") history.pushState({}, document.title, "/app/tags/")
     },
     selectProject(project) {
       self.selectedProject = project
+      const id = typeof project === "string" ? project : project.id
+      history.pushState({}, document.title, "/app/projects/"+id)
     },
     selectTag(tag) {
       self.selectedTag = tag
