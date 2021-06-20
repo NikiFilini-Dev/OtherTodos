@@ -8,8 +8,10 @@ declare namespace StylesStylNamespace {
     count: string
     floater: string
     icon: string
+    medium: string
     name: string
     scrollable: string
+    small: string
     title: string
   }
 }

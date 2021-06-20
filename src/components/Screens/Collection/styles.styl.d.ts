@@ -1,14 +1,19 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
+    actionTrigger: string
+    active: string
     add: string
     avatar: string
     columns: string
     head: string
     info: string
+    menu: string
+    menuName: string
+    puller: string
     remove: string
     screen: string
     screenWrapper: string
-    settingsTrigger: string
+    size: string
     title: string
     user: string
     usersList: string

@@ -13,17 +13,25 @@ import { useClickOutsideRefs } from "../../../../../tools/hooks"
 import ColumnOptions from "../ColumnOptions"
 import Icon from "../../../../Icon"
 import FloatPlus from "../FloatPlus"
+import classNames from "classnames"
+
+type Props = {
+  column: ICollectionColumn
+  handleProps?: DraggableProvidedDragHandleProps
+  size: "small" | "big" | "medium"
+}
 
 const Column = observer(({
                            column,
                            handleProps,
-                         }: { column: ICollectionColumn, handleProps?: DraggableProvidedDragHandleProps }) => {
-  const {collectionsStore: {createCard, selectCard}}: IRootStore = useMst()
+                           size,
+                         }: Props) => {
+  const { collectionsStore: { createCard, selectCard } }: IRootStore = useMst()
   const cards = [...column.cards]
-  cards.sort((a,b) => a.index - b.index)
+  cards.sort((a, b) => a.index - b.index)
 
   const onCreateClick = () => {
-    const id = createCard({collection: column.collection.id, column: column.id, name: "Без названия"})
+    const id = createCard({ collection: column.collection.id, column: column.id, name: "Без названия" })
     selectCard(id)
   }
 
@@ -33,7 +41,7 @@ const Column = observer(({
 
   useClickOutsideRefs([triggerRef, menuRef], () => setMenuShown(false))
 
-  return <div className={styles.column}>
+  return <div className={classNames(styles.column, styles[size])}>
     <div className={styles.title}
          style={{ "--columnColor": ColorsMap[column.color] } as CSSProperties} {...handleProps}>
       <div className={styles.icon}>
@@ -48,40 +56,40 @@ const Column = observer(({
       {menuShown && <ColumnOptions column={column} triggerRef={triggerRef} menuRef={menuRef} />}
     </div>
 
-      <Droppable droppableId={column.id} type={"CARD"}>
-        {(provided) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className={styles.scrollable}
-          >
-            <div className={styles.cards}>
-              {cards.map(card => (
-                <Draggable draggableId={card.id} index={card.index} key={card.id}>
-                  {(provided) =>
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <Card card={card} />
-                    </div>
-                  }
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-            {column.cards.length > 0 && <div className={styles.add} onClick={onCreateClick}>+ Добавить карточку</div>}
-            {column.cards.length === 0 && <div className={styles.add} onClick={onCreateClick}>
-              <span>+ Добавить карточку</span>
-              <SmileysIcon />
-              <span className={styles.big}>Карточки отсутствуют</span>
-              <span>Перетащите сюда,<br /> чтобы добавить</span>
-            </div>}
+    <Droppable droppableId={column.id} type={"CARD"}>
+      {(provided) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          className={styles.scrollable}
+        >
+          <div className={styles.cards}>
+            {cards.map(card => (
+              <Draggable draggableId={card.id} index={card.index} key={card.id}>
+                {(provided) =>
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <Card card={card} />
+                  </div>
+                }
+              </Draggable>
+            ))}
+            {provided.placeholder}
           </div>
+          {column.cards.length > 0 && <div className={styles.add} onClick={onCreateClick}>+ Добавить карточку</div>}
+          {column.cards.length === 0 && <div className={styles.add} onClick={onCreateClick}>
+            <span>+ Добавить карточку</span>
+            <SmileysIcon />
+            <span className={styles.big}>Карточки отсутствуют</span>
+            <span>Перетащите сюда,<br /> чтобы добавить</span>
+          </div>}
+        </div>
 
-        )}
-      </Droppable>
+      )}
+    </Droppable>
   </div>
 })
 

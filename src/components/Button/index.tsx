@@ -16,6 +16,7 @@ const Button = (
     textColor = "white",
     iconName,
     square = false,
+    size = "32px"
   }: {
     icon?: any
     text?: string
@@ -27,6 +28,7 @@ const Button = (
     textColor?: string
     iconName?: IconName
     square?: boolean
+    size?: string
   },
   ref,
 ) => {
@@ -39,7 +41,7 @@ const Button = (
         [styles.activated]: activated,
         [styles.square]: square
       })}
-      style={{"--color": color, "--textColor": textColor} as CSSProperties}
+      style={{"--color": color, "--textColor": textColor, "--size": size} as CSSProperties}
       onClick={onClick}
       ref={ref}
     >

@@ -15,6 +15,13 @@ import UserIcon from "assets/line_awesome/user-circle.svg"
 import TimesIcon from "assets/line_awesome/times-solid.svg"
 import gqlClient from "graphql/client"
 import { INVITE_USER, REMOVE_USER_FROM_COLLECTION } from "graphql/collection"
+import ResizeIcon from "assets/customIcons/resize.svg"
+import FloatMenu from "../../FloatMenu"
+import CheckIcon from "assets/line_awesome/check-solid.svg"
+import classNames from "classnames"
+import { useClickOutsideRefs } from "../../../tools/hooks"
+
+type Size = "small" | "medium" | "big"
 
 const Collection = observer(() => {
   const {
@@ -61,7 +68,26 @@ const Collection = observer(() => {
     })
   }
 
-  console.log(selectedCollection.userId, currentUser.id)
+
+  const sizeKey = "collectionCardSize#"+selectedCollection.id
+  const getSize = (): Size => {
+    let size: Size = "medium"
+    const saved = localStorage.getItem(sizeKey)
+    if (saved && ["small", "medium", "big"].includes(saved)) size = saved as Size
+    return size
+  }
+  const [size, _setSize] = React.useState<Size>(getSize())
+  const setSize = s => {
+    _setSize(s)
+    localStorage.setItem(sizeKey, s)
+  }
+
+  const sizeTriggerRef = React.useRef(null)
+  const sizeMenuRef = React.useRef(null)
+  const [sizeMenuOpen, setSizeMenuOpen] = React.useState(false)
+  useClickOutsideRefs([sizeMenuRef, sizeTriggerRef], () => {
+    if (sizeMenuOpen) setSizeMenuOpen(false)
+  })
 
 
   return (
@@ -71,20 +97,53 @@ const Collection = observer(() => {
           <div className={styles.info}>
             <Select variants={collections.map(c => ({ code: c.id, name: c.name, icon: c.icon }))}
                     selected={selectedCollection.id} select={id => selectCollection(id)} />
-            <div className={styles.settingsTrigger} onClick={() => selectEditingCollection(selectedCollection)}><Icon
-              name={"settings"} /></div>
-            <Button icon={PlusIcon} square onClick={onPlusClick} />
+            <div className={styles.puller} />
+            <div className={styles.actionTrigger} onClick={() => selectEditingCollection(selectedCollection)}>
+              <Icon name={"settings"} />
+            </div>
+            <div className={styles.actionTrigger}
+                 onClick={() => setSizeMenuOpen(true)}
+                 ref={sizeTriggerRef}>
+              <ResizeIcon />
+            </div>
+            <Button icon={PlusIcon} square onClick={onPlusClick} size={"44px"} />
           </div>
         </div>
+        {sizeMenuOpen && (
+          <FloatMenu target={sizeTriggerRef} menuRef={sizeMenuRef} position={"horizontal_auto"}>
+            <div className={styles.menu}>
+              <div className={styles.menuName}>Ширина колонок:</div>
+              <div className={classNames({
+                [styles.size]: true,
+                [styles.active]: size === "small"
+              })} onClick={() => setSize("small")}>
+                Маленькая
+                <CheckIcon />
+              </div>
+              <div className={classNames({
+                [styles.size]: true,
+                [styles.active]: size === "medium"
+              })} onClick={() => setSize("medium")}>
+                Средняя
+                <CheckIcon />
+              </div>
+              <div className={classNames({
+                [styles.size]: true,
+                [styles.active]: size === "big"
+              })} onClick={() => setSize("big")}>
+                Большая
+                <CheckIcon />
+              </div>
+            </div>
+          </FloatMenu>
+        )}
         {editingCollection !== null && <CollectionForm />}
         {editingCard !== null && <CardForm cardId={editingCard.id} />}
         <DragDropContext onDragEnd={({ draggableId, destination, type }) => {
           if (!destination) return
           if (type === "COLUMN") {
-            console.log(`moveColumn("${draggableId}", ${destination.index})`)
             moveColumn(draggableId, destination.index)
           } else {
-            console.log(`moveCard("${draggableId}", "${destination.droppableId}", ${destination.index})`)
             moveCard(draggableId, destination.droppableId, destination.index)
           }
         }}>
@@ -102,7 +161,7 @@ const Collection = observer(() => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                       >
-                        <Column column={col} handleProps={provided.dragHandleProps} />
+                        <Column column={col} handleProps={provided.dragHandleProps} size={size} />
                       </div>
                     }
                   </Draggable>
