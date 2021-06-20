@@ -72,12 +72,12 @@ const CardForm = observer(
     const dateTriggerRef = React.useRef<HTMLDivElement | null>(null)
 
     useClickOutsideRef(dateTriggerRef, () => setIsDateSelectorShown(false))
-    const editorRef = React.useRef<BakaEditor | null>(null)
+    const noteEditorRef = React.useRef<BakaEditor | null>(null)
     React.useEffect(() => {
-      if (!editorRef.current || !editorRef.current.setText) return
-      editorRef.current.setText(card.text || "")
+      if (!noteEditorRef.current || !noteEditorRef.current.setText) return
+      noteEditorRef.current.setText(card.text || "")
 
-      editorRef.current.addEventListener(
+      noteEditorRef.current.addEventListener(
         "change",
         // @ts-ignore
         (e: Event & { detail: { original: string } }) => {
@@ -85,7 +85,22 @@ const CardForm = observer(
           card.setText(e.detail.original)
         },
       )
-    }, [editorRef.current])
+    }, [noteEditorRef.current])
+
+    const nameEditorRef = React.useRef<BakaEditor | null>(null)
+    React.useEffect(() => {
+      if (!nameEditorRef.current || !nameEditorRef.current.setText) return
+      nameEditorRef.current.setText(card.name || "")
+
+      nameEditorRef.current.addEventListener(
+        "change",
+        // @ts-ignore
+        (e: Event & { detail: { original: string } }) => {
+          console.log(e.detail.original)
+          card.setName(e.detail.original)
+        },
+      )
+    }, [nameEditorRef.current])
 
     const triggerRef = React.useRef(null)
     const menuRef = React.useRef(null)
@@ -168,10 +183,13 @@ const CardForm = observer(
               <div className={styles.main}>
                 <div className={styles.group}>
                   <span className={styles.name}>Основная информация</span>
-                  <input value={card.name} onChange={e => card.setName(e.target.value)}
-                         placeholder={"Название карточки"} className={styles.cardName} autoFocus />
                   {/*@ts-ignore */}
-                  <baka-editor ref={editorRef} style={{ "--editor-padding": 0, "--min-height": "1em" } as CSSProperties}
+                  <baka-editor ref={nameEditorRef} class={styles.cardName}
+                               style={{ "--editor-padding": 0, "--min-height": "1em" } as CSSProperties}
+                               placeholder={"Описание карточки"} />
+                  {/*@ts-ignore */}
+                  <baka-editor ref={noteEditorRef}
+                               style={{ "--editor-padding": 0, "--min-height": "1em" } as CSSProperties}
                                placeholder={"Описание карточки"} />
                 </div>
                 <div className={styles.group}>
