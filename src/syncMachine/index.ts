@@ -314,10 +314,20 @@ export default class SyncMachine {
       }
       const fields = {}
 
+      let ignoreFields = []
+      let renameFields = {}
+      if (node.syncIgnore !== undefined) ignoreFields = [...ignoreFields, ...node.syncIgnore]
+      if (node.syncRename !== undefined) renameFields = {...renameFields, ...node.syncRename}
+
       node.getActionsMap()[call.name].forEach(fieldName => {
+        const fieldValue = call.context[fieldName]
+        console.log("Trying field", fieldName)
+        if (ignoreFields.includes(fieldName)) return
+        if (fieldName in renameFields) fieldName = renameFields[fieldName]
+
         fields[fieldName] = {
           date: new Date(),
-          value: call.context[fieldName],
+          value: fieldValue,
         }
       })
 

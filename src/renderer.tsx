@@ -23,9 +23,40 @@ if (!IS_WEB) {
   })
 }
 
+type mapReturn = {screen: string, [key: string]: any}
+
+const mapUrl = (): mapReturn => {
+  const url = location.pathname
+  const screen = url.match(/\/app\/([^\/]+)/)
+  console.log(url, screen)
+  if (!screen) return {screen: "TODAY"}
+  switch (screen[1]) {
+    case "tags":
+      return {screen: "TAGS", selectedTagType: "TASK"}
+    case "eventTags":
+      return {screen: "TAGS", selectedTagType: "EVENT"}
+    case "inbox":
+      return {screen: "INBOX"}
+    case "log":
+      return {screen: "LOG"}
+    case "projects":
+      // eslint-disable-next-line no-case-declarations
+      const project = url.match(/\/app\/projects\/([^\/]+)/)
+      if (!project) return {screen: "TODAY"}
+      return {screen: "PROJECT", selectedProject: project[1]}
+    case "collections":
+      // eslint-disable-next-line no-case-declarations
+      const collection = url.match(/\/app\/collections\/([^\/]+)/)
+      if (!collection) return {screen: "TODAY"}
+      return {screen: "COLLECTION", collectionsStore: {selectedCollection: collection[1]}}
+    default:
+      return {screen: "TODAY"}
+  }
+}
+
 const DEBUG = process.env.P_ENV === "debug"
 const rawUser = localStorage.getItem("user")
-const data = {
+let data = {
   user: rawUser ? JSON.parse(rawUser) : null,
   screen: rawUser ? "TODAY" : "AUTH",
   selectedProject: null,
@@ -48,6 +79,8 @@ const data = {
   sidebarWidth: JSON.parse(localStorage.getItem("sidebarWidth") || "250"),
   timelineWidth: JSON.parse(localStorage.getItem("timelineWidth") || "350"),
 }
+data = {...data, ...mapUrl()}
+console.log(mapUrl())
 const Store = RootStore.create(data)
 
 window.getToken = (): string => {

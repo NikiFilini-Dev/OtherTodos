@@ -10,7 +10,8 @@ const Project = types
     name: types.string,
     index: types.number,
     categories: types.array(types.reference(ProjectCategory)),
-    icon: types.optional(types.enumeration("Icons", IconNames), "check_list")
+    icon: types.optional(types.enumeration("Icons", IconNames), "check_list"),
+    _temp: types.optional(types.boolean, false),
   })
   .views(self => ({
     get tasks() {
@@ -25,11 +26,14 @@ const Project = types
       return tasks
     },
     get syncable() {
-      return true
+      return !self._temp
     },
     get syncName() {
       return "Project"
     },
+    get syncIgnore() {
+      return ["_temp"]
+    }
   }))
   .actions(self => {
     const actions: { [key: string]: any } = {}

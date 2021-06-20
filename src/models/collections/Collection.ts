@@ -11,15 +11,15 @@ const Collection = types
     index: types.number,
     users: types.array(userReference),
     userId: userReference,
+    _temp: types.optional(types.boolean, false),
   })
   .views(self => ({
     get syncable() {
-      return true
+      return !self._temp
     },
     get syncName() {
       return "Collection"
     },
-
     get columns() {
       const root = getRoot<IRootStore>(self)
       return root.collectionsStore.columns.filter(c => c.collection === self)
@@ -35,7 +35,7 @@ const Collection = types
       return root.collectionsStore.tags.filter(t => t.collection === self)
     },
     get syncIgnore() {
-        return ["users", "userId"]
+        return ["users", "userId", "_temp"]
     }
   }))
   .actions(self => {

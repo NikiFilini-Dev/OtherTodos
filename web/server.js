@@ -14,6 +14,10 @@ app.use("/static", express.static("./web_dist"))
 app.use("/public", express.static("./web/public"))
 
 app.get("/", async (req, res) => {
+  return res.redirect("/app/")
+})
+
+app.get("/app/*", async (req, res) => {
   let manifest
   if (WDS_MODE) {
     manifest = await (

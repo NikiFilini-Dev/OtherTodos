@@ -1,4 +1,13 @@
-import { applySnapshot, getRoot, IAnyModelType, Instance, resolveIdentifier, SnapshotIn, types } from "mobx-state-tree"
+import {
+  applySnapshot,
+  getRoot,
+  IAnyModelType,
+  Instance,
+  resolveIdentifier,
+  resolvePath,
+  SnapshotIn,
+  types,
+} from "mobx-state-tree"
 
 export const createStorage = <T extends IAnyModelType>(name: string, type: T) => {
   return types.model({
@@ -21,30 +30,56 @@ export const createStorage = <T extends IAnyModelType>(name: string, type: T) =>
 
 export const createStorageReference =
   <T extends IAnyModelType>(storageName: string, storageType: IAnyModelType, type: T, initialData: SnapshotIn<T>) => {
-  return types.reference(type, {
-    get(identifier, parent) {
-      if (!parent) {
-        console.log("NO PARENT")
-        return null
-      }
-      const root = getRoot(parent)
-      const storage = resolveIdentifier(storageType, root, storageName)
+    return types.reference(type, {
+      get(identifier, parent) {
+        if (!parent) {
+          console.log("NO PARENT")
+          return null
+        }
+        const root = getRoot(parent)
+        const storage = resolveIdentifier(storageType, root, storageName)
 
-      const real = storage.elements.find((t: Instance<T>) => t.id === identifier)
-      if (real) return real
+        const real = storage.elements.find((t: Instance<T>) => t.id === identifier)
+        if (real) return real
 
-      const tempElement = type.create({ ...initialData, id: identifier as string })
-      storage.add(tempElement)
+        const tempElement = type.create({ ...initialData, id: identifier as string })
+        storage.add(tempElement)
 
-      window.syncMachine.getOne<T>(tempElement.syncName, identifier as string).then((data: SnapshotIn<T> | false) => {
-        if (!data) return
-        applySnapshot(tempElement, data)
-      })
-      return tempElement
-    },
+        window.syncMachine.getOne<T>(tempElement.syncName, identifier as string).then((data: SnapshotIn<T> | false) => {
+          if (!data) return
+          applySnapshot(tempElement, data)
+        })
+        return tempElement
+      },
 
-    set(value) {
-      return value.id
-    },
-  })
-}
+      set(value) {
+        return value.id
+      },
+    })
+  }
+
+
+export const safeRef =
+  <T extends IAnyModelType>(type: T, path, action, initialData: SnapshotIn<T>) => {
+    return types.reference(type, {
+      get(identifier, parent) {
+        const item = type.create({ ...initialData, id: identifier as string })
+
+        if (parent) {
+          const root = getRoot(parent)
+          const initial = resolveIdentifier(type, root, identifier)
+          if (initial) return initial
+
+          const list = resolvePath(getRoot(parent),path)
+          list[action](item)
+        }
+
+
+        return item
+      },
+
+      set(value) {
+        return value.id
+      },
+    })
+  }
