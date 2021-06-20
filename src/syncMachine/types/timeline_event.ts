@@ -5,6 +5,7 @@ import {
   GET_TIMELINE_EVENTS,
   UPDATE_TIMELINE_EVENT,
 } from "../../graphql/timeline"
+import { DateTime } from "luxon"
 
 export default class TimelineEvent extends SyncType {
   name = "TimelineEvent"
@@ -15,6 +16,7 @@ export default class TimelineEvent extends SyncType {
   preprocess(item) {
     if (item.task === "") item.task = null
     if (item.tag === "") item.tag = null
+    if (item.date.length > 15) item.date = DateTime.fromISO(item.date).toFormat("M/d/yyyy")
     return item
   }
 
