@@ -53,8 +53,10 @@ const CardForm = observer(
 
     React.useEffect(() => {
       cardEmitter.on("*", console.log)
-      cardEmitter.on("add_subtask", (index = 0) => {
-        const id = addSubtask({ card, index })
+      cardEmitter.on("add_subtask", (index = -1) => {
+        const data = { card, index }
+        if (index === -1) delete data.index
+        const id = addSubtask(data)
         setTimeout(() => cardEmitter.emit("focus_subtask", id), 200)
       })
     }, [cardEmitter])
