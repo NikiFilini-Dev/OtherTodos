@@ -5,6 +5,23 @@ schema {
     mutation: Mutation
 }
 
+type CardComment {
+    card: String!
+    collectionId: String!
+    createdAt: Date!
+    id: String!
+    text: String!
+    user: String!
+}
+
+type CardCommentChanges {
+    card: Time
+    collectionId: Time
+    createdAt: Time
+    id: Time
+    text: Time
+}
+
 type Collection {
     icon: String!
     id: String!
@@ -17,6 +34,7 @@ type Collection {
 type CollectionCard {
     collectionId: String!
     columnId: String!
+    comments: [String]!
     date: Date!
     files: [String]!
     id: String!
@@ -143,6 +161,7 @@ type HabitRecordChanges {
 type Mutation {
     activateUser(hash: String!): Boolean!
     createUser(user: NewUserData): User!
+    deleteCardComment(id: String!): Boolean
     deleteCollection(id: String!): Boolean
     deleteCollectionCard(id: String!): Boolean
     deleteCollectionColumn(id: String!): Boolean
@@ -164,6 +183,7 @@ type Mutation {
     requestPasswordReset(email: String!): Boolean!
     resetPassword(hash: String!, newPassword: String!): Boolean!
     test: Boolean
+    updateCardComment(changedAt: CardCommentChangesDate, data: CardCommentUpdate, id: String!): CardComment!
     updateCollection(changedAt: CollectionChangesDate, data: CollectionUpdate, id: String!): Collection!
     updateCollectionCard(changedAt: CollectionCardChangesDate, data: CollectionCardUpdate, id: String!): CollectionCard!
     updateCollectionColumn(changedAt: CollectionColumnChangesDate, data: CollectionColumnUpdate, id: String!): CollectionColumn!
@@ -220,6 +240,8 @@ type ProjectChanges {
 }
 
 type Query {
+    cardComment(id: String): CardComment!
+    cardComments: [CardComment]!
     collection(id: String): Collection!
     collectionCard(id: String): CollectionCard!
     collectionCards: [CollectionCard]!
@@ -250,6 +272,7 @@ type Query {
     timelineEvents: [TimelineEvent]!
     timerSession(id: String): TimerSession!
     timerSessions: [TimerSession]!
+    updatedCardComments(since: Time!): [CardComment]!
     updatedCollectionCards(since: Time!): [CollectionCard]!
     updatedCollectionColumns(since: Time!): [CollectionColumn]!
     updatedCollectionSubtasks(since: Time!): [CollectionSubtask]!
@@ -410,6 +433,22 @@ type User {
 type UsersPage {
     meta: PageMeta!
     nodes: [User]!
+}
+
+input CardCommentChangesDate {
+    card: Time
+    collectionId: Time
+    createdAt: Time
+    id: Time
+    text: Time
+}
+
+input CardCommentUpdate {
+    card: String
+    collectionId: String
+    createdAt: Date
+    id: String
+    text: String
 }
 
 input CollectionCardChangesDate {

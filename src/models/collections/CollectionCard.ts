@@ -4,8 +4,9 @@ import Collection from "./Collection"
 import CollectionColumn from "./CollectionColumn"
 import { IRootStore } from "../RootStore"
 import { uploadReference } from "./storages/uploads.storage"
+import { commentReference } from "./storages/cardComments.storage"
 
-console.log(uploadReference)
+console.log(commentReference)
 
 const CollectionCard = types
   .model("CollectionCard", {
@@ -20,6 +21,7 @@ const CollectionCard = types
     status: types.optional(types.enumeration("CardStatus", ["ACTIVE", "DONE"]), "ACTIVE"),
     files: types.array(uploadReference),
     preview: types.maybeNull(uploadReference),
+    comments: types.array(types.maybeNull(commentReference)),
     _temp: types.optional(types.boolean, false),
   })
   .views(self => ({
@@ -33,7 +35,7 @@ const CollectionCard = types
       return {collection: "collectionId", column: "columnId"}
     },
     get syncIgnore() {
-      return ["_temp"]
+      return ["_temp", "comments"]
     },
     get subtasks() {
       const root = getRoot<IRootStore>(self)
@@ -51,6 +53,16 @@ const CollectionCard = types
   .actions(self => {
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, string[]> = {}
+
+    actions.pushNewComment = val => self.comments.push(val)
+    actionsMap.pushNewComment = []
+
+    actions.deleteComment = (id: string) => {
+      window.syncMachine.registerDelete(id, "CardComment")
+      // @ts-ignore
+      self.comments.splice(self.comments.indexOf(id), 1)
+    }
+    actionsMap.deleteComment = ["comments"]
 
     actions.setPreview = val => self.preview = val
     actionsMap.setPreview = ["preview"]

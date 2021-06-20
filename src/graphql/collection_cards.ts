@@ -32,6 +32,7 @@ export const GET_COLLECTION_CARDS = gql`
       columnId
       status
       index
+      comments
     }
   }
 `

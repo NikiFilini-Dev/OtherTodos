@@ -19,9 +19,11 @@ declare namespace StylesStylNamespace {
     modal: string
     modalPart: string
     name: string
+    newComment: string
     progress: string
     progressWrapper: string
     reject: string
+    rotated: string
     separator: string
     settings: string
     subtask: string

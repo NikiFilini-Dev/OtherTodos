@@ -8,7 +8,7 @@ import TimesIcon from "../../assets/customIcons/times.svg"
 import classNames from "classnames"
 import { IRootStore, useMst } from "../../models/RootStore"
 import Select from "../Select"
-import { DateTime } from "luxon"
+import { DateTime, DateTimeFormatOptions, LocaleOptions } from "luxon"
 import DateSelector from "../DateSelector"
 import { useClickOutsideRef, useClickOutsideRefs } from "../../tools/hooks"
 import Emitter from "eventemitter3"
@@ -18,6 +18,12 @@ import BakaEditor from "../../editor"
 import { ColorsMap } from "../../palette/colors"
 import FloatMenu from "../FloatMenu"
 import File from "./components/File"
+import UserIcon from "assets/line_awesome/user-circle.svg"
+import Icon from "../Icon"
+import CardComment from "../../models/collections/CardComment"
+import { v4 } from "uuid"
+import AngleIcon from "assets/line_awesome/angle-up-solid.svg"
+import Comment from "./components/Comment"
 
 const CardForm = observer(
   ({ cardId }: { cardId: string | null }) => {
@@ -33,6 +39,9 @@ const CardForm = observer(
         deleteCard,
         uploads: {
           add: pushUpload
+        },
+        comments: {
+          add: addComment
         },
         uploadView
       },
@@ -102,6 +111,22 @@ const CardForm = observer(
       )
     }, [nameEditorRef.current])
 
+    const [commentText, setCommentText] = React.useState("")
+    const commentEditorRef = React.useRef<BakaEditor | null>(null)
+    React.useEffect(() => {
+      if (!commentEditorRef.current || !commentEditorRef.current.setText) return
+      commentEditorRef.current.setText(commentText)
+
+      commentEditorRef.current.addEventListener(
+        "change",
+        // @ts-ignore
+        (e: Event & { detail: { original: string } }) => {
+          console.log(e.detail.original)
+          setCommentText(e.detail.original)
+        },
+      )
+    }, [commentEditorRef.current])
+
     const triggerRef = React.useRef(null)
     const menuRef = React.useRef(null)
     const [tagMenuOpen, setTagMenuOpen] = React.useState(false)
@@ -142,6 +167,30 @@ const CardForm = observer(
 
     const collectionTags = [...card.collection.tags.filter(t => !card.tags.includes(t))]
     collectionTags.sort((a, b) => a.index - b.index)
+
+
+
+    const onAddCommentClick = () => {
+      if (!commentText) return
+      setCommentText("")
+      // @ts-ignore
+      commentEditorRef.current.setText("")
+      const comment = {
+        text: commentText,
+        card: card.id,
+        id: v4(),
+        createdAt: DateTime.now().toISO(),
+        user: user.id,
+        collectionId: card.collection.id,
+      }
+      addComment(CardComment.create(comment))
+      card.pushNewComment(comment.id)
+    }
+
+    const comments = [...card.comments]
+    comments.sort((b,a) => DateTime.fromISO(a.createdAt).toSeconds() - DateTime.fromISO(b.createdAt).toSeconds())
+
+    const [commentsFolded, setCommentsFolded] = React.useState(false)
 
     return ReactDOM.createPortal(
       <div className={styles.wrapper} ref={wrapperRef}
@@ -235,7 +284,26 @@ const CardForm = observer(
                     ))}
                   </div>
                 </div>
+                <div className={styles.group}>
+                  <div className={styles.head}>
+                    <span className={styles.name}>
+                      Комментарии <AngleIcon className={classNames({[styles.rotated]: commentsFolded})}
+                                             onClick={() => setCommentsFolded(!commentsFolded)} />
+                    </span>
+                    <div className={styles.action} onClick={onAddCommentClick}>
+                      <Icon name={"send"} /> Отправить
+                    </div>
+                  </div>
+                  {/*@ts-ignore*/}
+                  {!commentsFolded && <baka-editor class={styles.newComment} ref={commentEditorRef} />}
+                  {!commentsFolded && <div>
+                    {comments.map(comment => <Comment comment={comment} key={comment.id} card={card} />)}
+                  </div>}
+                </div>
               </div>
+
+
+
               <div className={styles.settings}>
                 <div className={styles.group}>
                   <div className={styles.name}>Коллекция</div>

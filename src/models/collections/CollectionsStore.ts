@@ -12,8 +12,9 @@ import Upload from "./Upload"
 import { uploadsStorage } from "./storages/uploads.storage"
 import { usersStorage } from "./storages/users.storage"
 import { safeRef } from "../utils"
+import { commentsStorage } from "./storages/cardComments.storage"
 
-
+console.log(commentsStorage)
 
 const CollectionsStore = types
   .model("CollectionsStore", {
@@ -25,6 +26,7 @@ const CollectionsStore = types
     subtasks: types.array(CollectionSubtask),
     uploads: uploadsStorage,
     users: usersStorage,
+    comments: commentsStorage,
 
     selectedCollection: types.maybeNull(
       safeRef(Collection, "/collectionsStore", "pushCollection", {

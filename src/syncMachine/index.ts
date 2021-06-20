@@ -25,6 +25,7 @@ import CollectionTag from "./types/collection_tag"
 import CollectionSubtask from "./types/collection_subtask"
 import Upload from "./types/upload"
 import User from "./types/user"
+import CardComment from "./types/card_comment"
 
 const syncLogger = createLogger("SYNC")
 
@@ -41,6 +42,7 @@ export default class SyncMachine {
     new Subtask(),
     new TimerSession(),
     new Upload(),
+    new CardComment(),
     new Collection(),
     new CollectionColumn(),
     new CollectionTag(),
@@ -253,14 +255,13 @@ export default class SyncMachine {
 
     const data = node.toJSON()
     const fields = {}
-    let ignoreFields = []
-    let renameFields = {}
+    let ignoreFields: string[] = []
+    let renameFields: Record<string, string> = {}
     if (node.syncIgnore !== undefined) ignoreFields = [...ignoreFields, ...node.syncIgnore]
     if (node.syncRename !== undefined) renameFields = {...renameFields, ...node.syncRename}
     console.log("Created", data, Object.keys(data), ignoreFields, renameFields)
     Object.keys(data).forEach(fieldName => {
       const fieldValue = data[fieldName]
-      console.log("Trying field", fieldName)
       if (ignoreFields.includes(fieldName)) return
       if (fieldName in renameFields) fieldName = renameFields[fieldName]
       fields[fieldName] = {
@@ -314,14 +315,13 @@ export default class SyncMachine {
       }
       const fields = {}
 
-      let ignoreFields = []
-      let renameFields = {}
+      let ignoreFields: string[] = []
+      let renameFields: Record<string, string> = {}
       if (node.syncIgnore !== undefined) ignoreFields = [...ignoreFields, ...node.syncIgnore]
       if (node.syncRename !== undefined) renameFields = {...renameFields, ...node.syncRename}
 
       node.getActionsMap()[call.name].forEach(fieldName => {
         const fieldValue = call.context[fieldName]
-        console.log("Trying field", fieldName)
         if (ignoreFields.includes(fieldName)) return
         if (fieldName in renameFields) fieldName = renameFields[fieldName]
 
