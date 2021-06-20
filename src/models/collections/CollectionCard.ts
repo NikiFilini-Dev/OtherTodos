@@ -28,6 +28,9 @@ const CollectionCard = types
     get syncName() {
       return "CollectionCard"
     },
+    get syncRename() {
+      return {collection: "collectionId", column: "columnId"}
+    },
     get subtasks() {
       const root = getRoot<IRootStore>(self)
       return root.collectionsStore.subtasks.filter(st => st.card === self)

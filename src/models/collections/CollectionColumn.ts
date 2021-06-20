@@ -20,6 +20,9 @@ const CollectionColumn = types
     get syncName() {
       return "CollectionColumn"
     },
+    get syncRename() {
+      return {collection: "collectionId"}
+    },
     get cards() {
       const root = getRoot<IRootStore>(self)
       return root.collectionsStore.cards.filter(card => card.column === self)

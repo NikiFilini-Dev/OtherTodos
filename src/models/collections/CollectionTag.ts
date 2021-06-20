@@ -17,6 +17,9 @@ const CollectionTag = types
     get syncName() {
       return "CollectionTag"
     },
+    get syncRename() {
+      return {collection: "collectionId"}
+    },
   }))
   .actions(self => {
     const actions: Record<string, any> = {}

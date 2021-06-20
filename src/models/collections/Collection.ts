@@ -33,6 +33,9 @@ const Collection = types
     get tags() {
       const root = getRoot<IRootStore>(self)
       return root.collectionsStore.tags.filter(t => t.collection === self)
+    },
+    get syncIgnore() {
+        return ["users", "userId"]
     }
   }))
   .actions(self => {

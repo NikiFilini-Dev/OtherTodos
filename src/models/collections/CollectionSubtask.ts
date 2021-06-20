@@ -18,6 +18,9 @@ const CollectionSubtask = types
     get syncName() {
       return "CollectionSubtask"
     },
+    get syncRename() {
+      return {card: "cardId"}
+    },
   }))
   .actions(self => {
     const actions: Record<string, any> = {}

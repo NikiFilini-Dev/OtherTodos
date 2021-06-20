@@ -253,11 +253,21 @@ export default class SyncMachine {
 
     const data = node.toJSON()
     const fields = {}
+    let ignoreFields = []
+    let renameFields = {}
+    if (node.syncIgnore !== undefined) ignoreFields = [...ignoreFields, ...node.syncIgnore]
+    if (node.syncRename !== undefined) renameFields = {...renameFields, ...node.syncRename}
+    console.log("Created", data, Object.keys(data), ignoreFields, renameFields)
     Object.keys(data).forEach(fieldName => {
+      const fieldValue = data[fieldName]
+      console.log("Trying field", fieldName)
+      if (ignoreFields.includes(fieldName)) return
+      if (fieldName in renameFields) fieldName = renameFields[fieldName]
       fields[fieldName] = {
-        value: data[fieldName],
+        value: fieldValue,
         date: new Date(),
       }
+      console.log(fieldName, "added")
     })
     syncLogger.info("Created fields: %s", JSON.stringify(fields))
     type.registerChange(fields, data.id)
