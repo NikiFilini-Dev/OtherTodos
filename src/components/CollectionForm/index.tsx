@@ -15,6 +15,7 @@ import { useClickOutsideRefs } from "../../tools/hooks"
 import ListColorMenu from "../ListColorMenu"
 
 const CollectionTag = observer(({ tag }) => {
+  const {collectionsStore: {deleteTag}}: IRootStore = useMst()
   const triggerRef = React.useRef(null)
   const menuRef = React.useRef(null)
   const [menuOpen, setMenuOpen] = React.useState(false)
@@ -22,7 +23,7 @@ const CollectionTag = observer(({ tag }) => {
 
   return <div className={styles.tag} style={{"--color": ColorsMap[tag.color]} as CSSProperties}>
     <AutosizeInput value={tag.name} onChange={e => tag.setName(e.target.value)} />
-    <TrashIcon />
+    <TrashIcon onClick={() => deleteTag(tag.id)} />
     <div className={styles.color} ref={triggerRef} onClick={() => setMenuOpen(true)} />
     {menuOpen &&
     <ListColorMenu triggerRef={triggerRef} menuRef={menuRef} currentColorName={tag.color} setColor={tag.setColor} /> }

@@ -270,7 +270,7 @@ const CollectionsStore = types
       const tag = self.tags.find(c => c.id === id)
       if (!tag) throw new Error("tag not found")
 
-      self.cards.forEach(card => card.removeTag(id))
+      self.cards.forEach(card => card.removeTag(tag))
 
       if (tag.syncable)
         window.syncMachine.registerDelete(tag.id, tag.syncName)
