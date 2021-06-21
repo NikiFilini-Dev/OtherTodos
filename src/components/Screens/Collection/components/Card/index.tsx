@@ -1,24 +1,29 @@
 import React, { CSSProperties } from "react"
 import { observer } from "mobx-react"
-import { ICollectionCard } from "../../../../../models/collections/CollectionCard"
+import { ICollectionCard } from "models/collections/CollectionCard"
 import styles from "./styles.styl"
-import { IRootStore, useMst } from "../../../../../models/RootStore"
+import { IRootStore, useMst } from "models/RootStore"
 import classNames from "classnames"
-import CheckboxIcon from "../../../../../assets/customIcons/checkmark.svg"
+import CheckboxIcon from "assets/customIcons/checkmark.svg"
+import ChatIcon from "assets/customIcons/chat.svg"
+import AttachmentIcon from "assets/customIcons/attachment.svg"
 import { DateTime } from "luxon"
 import Icon from "../../../../Icon"
-import { ColorsMap } from "../../../../../palette/colors"
+import { ColorsMap } from "palette/colors"
 import FloatPlus from "../FloatPlus"
 
 const Card = observer(({ card }: {card: ICollectionCard}) => {
   const { collectionsStore: { selectCard } }: IRootStore = useMst()
   const tags = [...card.tags]
   tags.sort((a,b) => a.index - b.index)
+
+  const bottomVisible = card.date !== null || card.comments.length > 0 || card.files.length > 0
+
   return <div className={classNames({
     [styles.done]: card.status === "DONE",
     [styles.card]: true
   })} onClick={() => selectCard(card.id)}>
-    {card.status === "DONE" && <div className={styles.done}><CheckboxIcon /> Завершена</div>}
+    {card.status === "DONE" && <div className={styles.done}><CheckboxIcon /> Завершено</div>}
     {card.preview !== null && <img src={card.preview.url} className={styles.preview} />}
     <div className={styles.title}>{card.name}</div>
     {card.text !== null && <div className={styles.description}>{card.text}</div>}
@@ -33,11 +38,17 @@ const Card = observer(({ card }: {card: ICollectionCard}) => {
              key={"card_tag_"+tag.id}>{tag.name}</div>
       ))}
     </div>}
-    {card.date !== null && <div className={styles.bottom}>
+    {bottomVisible && <div className={styles.bottom}>
+      {card.files.length > 0 && (
+        <div className={styles.count}><AttachmentIcon /> {card.files.length}</div>
+      )}
+      {card.comments.length > 0 && (
+        <div className={styles.count}><ChatIcon /> {card.comments.length}</div>
+      )}
       {card.date === DateTime.now().toFormat("M/d/yyyy") && (
         <div className={classNames({[styles.date]: true, [styles.today]: true})}><Icon name={"time"} /> Сегодня</div>
       )}
-      {card.date !== DateTime.now().toFormat("M/d/yyyy") && (
+      {card.date && card.date !== DateTime.now().toFormat("M/d/yyyy") && (
         <div className={classNames({
           [styles.date]: true,
           [styles.expired]: DateTime.fromFormat(card.date, "M/d/yyyy") < DateTime.now()

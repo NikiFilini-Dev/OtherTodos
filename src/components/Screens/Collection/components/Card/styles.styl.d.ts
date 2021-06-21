@@ -2,6 +2,7 @@ declare namespace StylesStylNamespace {
   export interface IStylesStyl {
     bottom: string
     card: string
+    count: string
     date: string
     description: string
     done: string
