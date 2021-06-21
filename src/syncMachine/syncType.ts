@@ -126,6 +126,7 @@ export default abstract class SyncType {
         const onSuccess = () => {
           delete this.updates[id]
           this.dumpUpdates()
+          resolve()
         }
 
         gqlClient

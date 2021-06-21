@@ -186,6 +186,8 @@ const RootStore = types
       const session = self.timerSessions.find(ts => ts.id === id)
       if (!session) return false
 
+      console.log("DELETING SESSION", id)
+
       if (session.syncable)
         window.syncMachine.registerDelete(session.id, session.syncName)
 

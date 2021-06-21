@@ -35,6 +35,7 @@ import { noop } from "lodash"
 import Tag from "components/Tag"
 import SubtasksList from "../SubtasksList"
 import Icon from "../Icon"
+import BackspaceIcon from "assets/line_awesome/backspace-solid.svg"
 
 export const TaskContext = React.createContext(new Emitter())
 
@@ -53,7 +54,8 @@ const Task = observer(
       deleteSubtask,
       editingTask,
       moveSubtask,
-      startTimer
+      startTimer,
+      deleteTimerSession
     }: IRootStore = useMst()
     const [state] = React.useState(new TaskState())
     const [taskEmitter] = React.useState(new Emitter())
@@ -231,6 +233,11 @@ const Task = observer(
 
     const date = useDateFormat(task.date, "M/d/yyyy", "dd LLL")
 
+    const onDeleteTimerSessionsClick = e => {
+      e.stopPropagation()
+      task.timerSessions.forEach(ts => deleteTimerSession(ts.id))
+    }
+
     // @ts-ignore
     return (
       <TaskContext.Provider value={taskEmitter}>
@@ -370,6 +377,12 @@ const Task = observer(
               <span className={styles.totalTime}>
                 <Icon name={"timer"} />
                 {Duration.fromObject({seconds: task.totalTimeSpent}).toFormat("hh:mm:ss")}
+              </span>
+            )}
+
+            {task.totalTimeSpent > 0 && (
+              <span className={styles.resetTime} onClick={onDeleteTimerSessionsClick}>
+                <BackspaceIcon />
               </span>
             )}
 

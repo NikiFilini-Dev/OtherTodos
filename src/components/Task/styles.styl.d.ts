@@ -31,6 +31,7 @@ declare namespace StylesStylNamespace {
     puller: string
     redo: string
     repeatCount: string
+    resetTime: string
     selected: string
     separator: string
     spaceBetween: string
