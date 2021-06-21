@@ -5,6 +5,7 @@ const User = types
     id: types.identifier,
     firstName: types.string,
     lastName: types.string,
+    email: types.string,
   })
   .views(self => ({
     get syncable() {

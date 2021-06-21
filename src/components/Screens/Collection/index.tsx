@@ -20,6 +20,7 @@ import FloatMenu from "../../FloatMenu"
 import CheckIcon from "assets/line_awesome/check-solid.svg"
 import classNames from "classnames"
 import { useClickOutsideRefs } from "../../../tools/hooks"
+import UsersModal from "./components/UsersModal"
 
 type Size = "small" | "medium" | "big"
 
@@ -53,10 +54,7 @@ const Collection = observer(() => {
   }
 
   const onAddUserClick = () => {
-    const email = prompt("User email")
-    gqlClient.mutation(INVITE_USER, { collectionId: selectedCollection.id, email }).toPromise().then(() => {
-      window.syncMachine.loadAll(null)
-    })
+    setInviteModalOpen(true)
   }
 
   const onRemoveUserClick = (id: string) => {
@@ -88,6 +86,8 @@ const Collection = observer(() => {
   useClickOutsideRefs([sizeMenuRef, sizeTriggerRef], () => {
     if (sizeMenuOpen) setSizeMenuOpen(false)
   })
+
+  const [inviteModalOpen, setInviteModalOpen] = React.useState(false)
 
 
   return (
@@ -172,6 +172,7 @@ const Collection = observer(() => {
           </Droppable>
         </DragDropContext>
         <UploadView />
+        {inviteModalOpen && <UsersModal collection={selectedCollection} onClose={() => setInviteModalOpen(false)} />}
       </div>
       <div className={styles.usersList}>
         <div className={styles.user}>
