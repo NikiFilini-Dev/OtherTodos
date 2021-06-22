@@ -167,6 +167,7 @@ const Collection = observer(() => {
                   </Draggable>
                 ))}
                 {provided.placeholder}
+                <div className={styles.addColumn} onClick={onPlusClick}>+</div>
               </div>
             )}
           </Droppable>

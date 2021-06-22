@@ -3,6 +3,7 @@ declare namespace StylesStylNamespace {
     actionTrigger: string
     active: string
     add: string
+    addColumn: string
     avatar: string
     columns: string
     head: string
