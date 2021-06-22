@@ -89,13 +89,19 @@ const Collection = observer(() => {
 
   const [inviteModalOpen, setInviteModalOpen] = React.useState(false)
 
+  const variants = collections.map(c => ({ code: c.id, name: c.name, icon: c.icon }))
+  variants.sort((a,b) => {
+    const collA = collections.find(c => c.id === a.code)
+    const collB = collections.find(c => c.id === b.code)
+    return collA.index - collB.index
+  })
 
   return (
     <div className={styles.screenWrapper}>
       <div className={styles.screen}>
         <div className={styles.head}>
           <div className={styles.info}>
-            <Select variants={collections.map(c => ({ code: c.id, name: c.name, icon: c.icon }))}
+            <Select variants={variants}
                     selected={selectedCollection.id} select={id => selectCollection(id)} />
             <div className={styles.puller} />
             <div className={styles.actionTrigger} onClick={() => selectEditingCollection(selectedCollection)}>
