@@ -5,6 +5,7 @@ import CollectionColumn from "./CollectionColumn"
 import { IRootStore } from "../RootStore"
 import { uploadReference } from "./storages/uploads.storage"
 import { commentReference } from "./storages/cardComments.storage"
+import Task from "../Task"
 
 console.log(commentReference)
 
@@ -22,6 +23,7 @@ const CollectionCard = types
     files: types.array(uploadReference),
     preview: types.maybeNull(uploadReference),
     comments: types.array(types.maybeNull(commentReference)),
+    task: types.maybeNull(types.reference(Task)),
     _temp: types.optional(types.boolean, false),
   })
   .views(self => ({
@@ -119,6 +121,21 @@ const CollectionCard = types
 
     actions.setStatus = (val: "DONE" | "ACTIVE") => self.status = val
     actionsMap.setStatus = ["status"]
+
+    actions.addTask = () => {
+      const root = getRoot<IRootStore>(self)
+      const task = root.createTask({
+        text: self.name,
+        note: self.text,
+        date: self.date
+      })
+      root.tasks.add(task)
+      self.task = task
+    }
+    actionsMap.addTask = ["task"]
+
+    actions.removeTask = () => self.task = null
+    actionsMap.removeTask = ["task"]
 
     actions.getActionsMap = () => actionsMap
     return actions

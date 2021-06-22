@@ -14,6 +14,7 @@ declare namespace StylesStylNamespace {
     fullDate: string
     fullDateIcon: string
     fullOnly: string
+    hasCard: string
     hasEvent: string
     hasTimeIcon: string
     inline: string
@@ -22,6 +23,7 @@ declare namespace StylesStylNamespace {
     note: string
     noteWrapper: string
     notes: string
+    openCard: string
     padding: string
     priorityWrapper: string
     project: string

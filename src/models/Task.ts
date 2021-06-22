@@ -7,6 +7,7 @@ import { LateTimelineEvent } from "./TimelineEvent"
 import { DateTime } from "luxon"
 import { IRootStore } from "./RootStore"
 import { ISubtask } from "./Subtask"
+import { ICollectionCard } from "./collections/CollectionCard"
 
 const Task = types
   .model("Task", {
@@ -72,6 +73,14 @@ const Task = types
     get timerSessions() {
       const root = getRoot<IRootStore>(self)
       return root.timerSessions.filter(ts => ts.task === self)
+    },
+    get card(): ICollectionCard | null {
+      const root = getRoot<IRootStore>(self)
+      let card: ICollectionCard | null = null
+      root.collectionsStore.cards.forEach(c => {
+        if (c.task === self) card = c
+      })
+      return card
     }
   }))
   .actions(self => {

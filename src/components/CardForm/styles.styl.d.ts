@@ -4,6 +4,7 @@ declare namespace StylesStylNamespace {
     actions: string
     active: string
     add: string
+    addTask: string
     block: string
     cardName: string
     cardText: string

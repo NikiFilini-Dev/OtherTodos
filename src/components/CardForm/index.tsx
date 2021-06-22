@@ -24,11 +24,13 @@ import CardComment from "../../models/collections/CardComment"
 import { v4 } from "uuid"
 import AngleIcon from "assets/line_awesome/angle-up-solid.svg"
 import Comment from "./components/Comment"
+import GridIcon from "assets/customIcons/grid2.svg"
 
 const CardForm = observer(
   ({ cardId }: { cardId: string | null }) => {
     const {
       user,
+      tasks: {deleteTask},
       collectionsStore: {
         cards,
         collections,
@@ -194,6 +196,15 @@ const CardForm = observer(
 
     const [commentsFolded, setCommentsFolded] = React.useState(false)
 
+    const onAddTaskClick = () => {
+      if (card.task !== null) {
+        deleteTask(card.task)
+      } else {
+        card.addTask()
+      }
+    }
+
+
     return ReactDOM.createPortal(
       <div className={styles.wrapper} ref={wrapperRef}
            onClick={onWrapperClick} style={{display: uploadView !== null ? "none" : ""}}>
@@ -217,14 +228,20 @@ const CardForm = observer(
                   <CheckboxIcon /> Завершено
                 </span>}
                 <div className={styles.separator} />
-                <span className={styles.reject}>
-                    <TimesIcon />
+                <span className={classNames({
+                  [styles.addTask]: true,
+                  [styles.active]: card.task !== null
+                })} onClick={onAddTaskClick}>
+                    <GridIcon />
                   </span>
                 {cardId !== null && (
                   <span className={styles.trash} onClick={onDeleteClick}>
                     <TrashIcon />
                   </span>
                 )}
+                <span className={styles.reject}>
+                    <TimesIcon />
+                  </span>
               </div>
             </div>
             <div className={classNames({

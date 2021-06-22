@@ -43,6 +43,9 @@ const TaskList = types
       if (task.event) task.unconnectEvent()
       window.syncMachine.registerDelete(task.id, task.syncName)
       const root = getRoot(self)
+      if (task.card) {
+        task.card.removeTask()
+      }
       task.subtasks.forEach(st => {
         root.deleteSubtask(st.id)
       })

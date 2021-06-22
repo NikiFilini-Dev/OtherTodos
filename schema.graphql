@@ -43,6 +43,7 @@ type CollectionCard {
     preview: String!
     status: String!
     tags: [String]!
+    task: String!
     text: String!
     userId: String!
 }
@@ -58,6 +59,7 @@ type CollectionCardChanges {
     preview: Time
     status: Time
     tags: Time
+    task: Time
     text: Time
 }
 
@@ -462,6 +464,7 @@ input CollectionCardChangesDate {
     preview: Time
     status: Time
     tags: Time
+    task: Time
     text: Time
 }
 
@@ -476,6 +479,7 @@ input CollectionCardUpdate {
     preview: String
     status: String
     tags: [String]
+    task: String
     text: String
 }
 

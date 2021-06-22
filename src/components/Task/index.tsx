@@ -36,6 +36,7 @@ import Tag from "components/Tag"
 import SubtasksList from "../SubtasksList"
 import Icon from "../Icon"
 import BackspaceIcon from "assets/line_awesome/backspace-solid.svg"
+import GridIcon from "assets/customIcons/grid2.svg"
 
 export const TaskContext = React.createContext(new Emitter())
 
@@ -55,7 +56,11 @@ const Task = observer(
       editingTask,
       moveSubtask,
       startTimer,
-      deleteTimerSession
+      deleteTimerSession,
+      setScreen,
+      collectionsStore: {
+        selectCard, selectCollection
+      }
     }: IRootStore = useMst()
     const [state] = React.useState(new TaskState())
     const [taskEmitter] = React.useState(new Emitter())
@@ -238,6 +243,12 @@ const Task = observer(
       task.timerSessions.forEach(ts => deleteTimerSession(ts.id))
     }
 
+    const openCard = () => {
+      setScreen("COLLECTION")
+      selectCollection(task.card.collection.id)
+      selectCard(task.card)
+    }
+
     // @ts-ignore
     return (
       <TaskContext.Provider value={taskEmitter}>
@@ -313,6 +324,11 @@ const Task = observer(
                 }
               >
                 <CalendarWeekIcon />
+              </span>
+            )}
+            {!state.active && task.card && (
+              <span className={styles.hasCard}>
+                <GridIcon />
               </span>
             )}
             {!state.active && task.date && (
@@ -459,6 +475,10 @@ const Task = observer(
                 <TagsIcon className={styles.tagsTriggerIcon} />
                 Тэги
               </div>
+            </div>
+            <div className={styles.openCard} onClick={openCard}>
+              <GridIcon />
+              К карточке
             </div>
             {!active && (
               <div className={styles.delete} onClick={() => deleteTask(source)}>
