@@ -4,6 +4,7 @@ declare namespace StylesStylNamespace {
     actions: string
     active: string
     add: string
+    addSubtask: string
     addTask: string
     block: string
     cardName: string
@@ -21,6 +22,7 @@ declare namespace StylesStylNamespace {
     modalPart: string
     name: string
     newComment: string
+    newFile: string
     progress: string
     progressWrapper: string
     reject: string

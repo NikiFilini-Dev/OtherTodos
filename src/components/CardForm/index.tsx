@@ -8,7 +8,7 @@ import TimesIcon from "../../assets/customIcons/times.svg"
 import classNames from "classnames"
 import { IRootStore, useMst } from "../../models/RootStore"
 import Select from "../Select"
-import { DateTime, DateTimeFormatOptions, LocaleOptions } from "luxon"
+import { DateTime } from "luxon"
 import DateSelector from "../DateSelector"
 import { useClickOutsideRef, useClickOutsideRefs } from "../../tools/hooks"
 import Emitter from "eventemitter3"
@@ -18,13 +18,13 @@ import BakaEditor from "../../editor"
 import { ColorsMap } from "../../palette/colors"
 import FloatMenu from "../FloatMenu"
 import File from "./components/File"
-import UserIcon from "assets/line_awesome/user-circle.svg"
 import Icon from "../Icon"
 import CardComment from "../../models/collections/CardComment"
 import { v4 } from "uuid"
 import AngleIcon from "assets/line_awesome/angle-up-solid.svg"
 import Comment from "./components/Comment"
 import GridIcon from "assets/customIcons/grid2.svg"
+import FilePlus from "assets/line_awesome/file-medical-solid.svg"
 
 const CardForm = observer(
   ({ cardId }: { cardId: string | null }) => {
@@ -261,12 +261,6 @@ const CardForm = observer(
                                placeholder={"Описание карточки"} />
                 </div>
                 <div className={styles.group}>
-                  <div className={styles.head}>
-                    <span className={styles.name}>Список подзадач</span>
-                    <div className={styles.action} onClick={() => cardEmitter.emit("add_subtask")}>
-                      + Добавить подзадачу
-                    </div>
-                  </div>
                   <div className={styles.subtasks}>
                     <SubtasksList target={card} moveSubtask={moveSubtask} addNewShown={false}
                                   deleteSubtask={deleteSubtask} listStyle={{ padding: 0 }}
@@ -278,6 +272,9 @@ const CardForm = observer(
                                     borderRadius: 0,
                                     padding: "8px 0",
                                   }} />
+                    <div className={styles.addSubtask} onClick={() => cardEmitter.emit("add_subtask")}>
+                      + Добавить подзадачу
+                    </div>
                     {subtasks.length > 0 && <div className={styles.progressWrapper}>
                       {subtasks.filter(st => st.status === "DONE").length}/{subtasks.length}
                       <div className={styles.progress}
@@ -291,16 +288,16 @@ const CardForm = observer(
                 <div className={styles.group}>
                   <div className={styles.head}>
                     <span className={styles.name}>Вложения</span>
-                    <div className={styles.action} onClick={triggerFileUpload}>
-                      + Добавить вложение
-                      <input type={"file"} style={{ display: "none" }} onChange={uploadFile} ref={fileRef} />
-                    </div>
                   </div>
                   <div className={styles.files}>
                     {card.files.map(file => (
                       <File removeFile={() => card.removeFile(file)} key={file.id} file={file}
                             currentPreview={card.preview} setPreview={card.setPreview} />
                     ))}
+                    <div onClick={triggerFileUpload} className={styles.newFile}>
+                      <FilePlus />
+                      <input type={"file"} style={{ display: "none" }} onChange={uploadFile} ref={fileRef} />
+                    </div>
                   </div>
                 </div>
                 <div className={styles.group}>
