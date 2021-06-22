@@ -56,6 +56,7 @@ const TaskList = observer(
     renamable,
     onNameChange,
     showEmpty,
+    hideEmptyHeader,
     deletable,
     onDelete,
     dnd,
@@ -106,7 +107,7 @@ const TaskList = observer(
     if (!tasks.length && !showEmpty) return <div />
     return (
       <div className={styles.wrapper}>
-        <div className={styles.info}>
+        {(tasks.length !== 0 || !hideEmptyHeader) && <div className={styles.info}>
           <span ref={triggerRef} onClick={() => setMenuOpen(true)}><Icon className={styles.icon} /></span>
           {Boolean(setIcon) && menuOpen &&
             <ListIconMenu triggerRef={triggerRef} menuRef={menuRef} setIcon={setIcon} currentIconName={iconName} />}
@@ -138,7 +139,7 @@ const TaskList = observer(
           >
             <ChevronRight />
           </div>
-        </div>
+        </div>}
         <div
           className={classNames({
             [styles.listWrapper]: true,

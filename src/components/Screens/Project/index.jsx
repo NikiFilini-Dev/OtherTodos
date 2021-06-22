@@ -9,65 +9,9 @@ import Task from "../../Task"
 import Button from "../../Button"
 import PlusIcon from "../../../assets/plus.svg"
 import FolderPlusIcon from "assets/line_awesome/folder-plus-solid.svg"
-import {
-  useClick,
-  useClickOutsideRef,
-  useKeyListener,
-  useTrap,
-} from "../../../tools/hooks"
-import { Droppable, Draggable } from "react-beautiful-dnd"
+import { useClick, useClickOutsideRef, useKeyListener, useTrap } from "../../../tools/hooks"
 import { IconsMap } from "../../../palette/icons"
 import ListIconMenu from "../../ListIconMenu"
-
-const Content = observer(
-  ({ provided, selectedProject, deleteCategory, setIsNewTaskShown, tasks }) => {
-    const categories = [...selectedProject.categories]
-    categories.sort((a, b) => a.index - b.index)
-    const Category = observer(({ provided, category }) => (
-      // <div
-      //   style={provided.draggableStyle}
-      //   {...provided.draggableProps}
-      //   {...provided.dragHandleProps}
-      //   ref={provided.innerRef}
-      //   className={styles.project}
-      // >
-        <TaskList
-          tasks={category.sortedTasks}
-          name={category.name}
-          iconName={category.icon}
-          setIcon={name => category.setIcon(name)}
-          renamable
-          showEmpty
-          // dnd={`tasklist_${category.id}`}
-          deletable={!category.tasks.length}
-          onDelete={() => deleteCategory(category)}
-          onNameChange={e => category.setName(e.target.value)}
-        />
-      // </div>
-    ))
-    return (
-      <div className={styles.listOfLists} ref={provided.innerRef}>
-        <TaskList
-          tasks={tasks.filter(t => !t.category)}
-          name={"Без категории"}
-          showEmpty
-          dnd={"nocategory"}
-        />
-        {categories.map((category) => (
-          <Category provided={provided} category={category} key={category.id} />
-        ))}
-        {provided.placeholder}
-        <div
-          className={styles.addCategory}
-          onClick={() => setIsNewTaskShown(true)}
-        >
-          <PlusIcon />
-          Добавить задачу
-        </div>
-      </div>
-    )
-  },
-)
 
 const Project = observer(() => {
   const {
@@ -206,12 +150,12 @@ const Project = observer(() => {
             <Icon />
           </div>
           {menuOpen &&
-            <ListIconMenu
-              triggerRef={triggerRef}
-              menuRef={menuRef}
-              setIcon={selectedProject.setIcon}
-              currentIconName={selectedProject.icon}
-            />
+          <ListIconMenu
+            triggerRef={triggerRef}
+            menuRef={menuRef}
+            setIcon={selectedProject.setIcon}
+            currentIconName={selectedProject.icon}
+          />
           }
           {isEditingTitle ? (
             <input
@@ -277,19 +221,20 @@ const Project = observer(() => {
           tasks={tasks.filter(t => !t.category)}
           name={"Без категории"}
           showEmpty
+          hideEmptyHeader
           dnd={"nocategory"}
         />
-      {categories.map(category => <TaskList tasks={category.sortedTasks}
-                                            key={category.id}
-                                     name={category.name}
-                                     renamable
-                                     showEmpty
-                                            setIcon={category.setIcon}
-                                            iconName={category.icon}
-                                     dnd={`tasklist_${category.id}`}
-                                     deletable={!category.tasks.length}
-                                     onDelete={() => deleteCategory(category)}
-                                     onNameChange={e => category.setName(e.target.value)} /> )}
+        {categories.map(category => <TaskList tasks={category.sortedTasks}
+                                              key={category.id}
+                                              name={category.name}
+                                              renamable
+                                              showEmpty
+                                              setIcon={category.setIcon}
+                                              iconName={category.icon}
+                                              dnd={`tasklist_${category.id}`}
+                                              deletable={!category.tasks.length}
+                                              onDelete={() => deleteCategory(category)}
+                                              onNameChange={e => category.setName(e.target.value)} />)}
       </div>
     </div>
   )
