@@ -47,6 +47,19 @@ const File = observer(({ file, removeFile, setPreview, currentPreview }: Props) 
     setUploadView(file)
   }
 
+  function download(url, name) {
+    fetch(url, {headers: {
+      Origin: location.origin
+      }}).then((response) => {
+      return response.blob().then((b) => {
+        const a = document.createElement("a")
+        a.setAttribute("download", name)
+        a.href = URL.createObjectURL(b)
+        a.click()
+      })
+    })
+  }
+
   return <a href={file.url} target={"_blank"} rel="noreferrer" title={file.name} className={classNames({
     [styles.file]: true,
     [styles[extensionsMap[file.extension]]]: true
@@ -69,7 +82,6 @@ const File = observer(({ file, removeFile, setPreview, currentPreview }: Props) 
           e.stopPropagation()
           e.preventDefault()
         }}>
-          <div className={classNames(styles.item, styles.delete)} onClick={onDeleteClick}>Удалить</div>
           {extensionsMap[file.extension] === "image" && currentPreview !== file && (
             <div onClick={() => setPreview(file)} className={styles.item}>Установить на превью</div>
           )}
@@ -78,8 +90,16 @@ const File = observer(({ file, removeFile, setPreview, currentPreview }: Props) 
           )}
           {extensionsMap[file.extension] === "image" && (
             <a href={file.url} target={"_blank"} rel="noreferrer" className={styles.item}
-               onClick={e => e.stopPropagation()}>Открыть оригинал</a>
+               onClick={e => e.stopPropagation()}>Открыть в браузере</a>
           )}
+          {extensionsMap[file.extension] === "image" && (
+            <div className={styles.item}
+               onClick={e => {
+                 e.stopPropagation()
+                 download(file.url, file.name)
+               }}>Скачать</div>
+          )}
+          <div className={classNames(styles.item, styles.delete)} onClick={onDeleteClick}>Удалить</div>
         </div>
       </FloatMenu>}
     </div>

@@ -19,7 +19,7 @@ const Upload = types
       return "Upload"
     },
     get url() {
-      const base_url = "http://d8m2rzrk8wge.cloudfront.net"
+      const base_url = "/s3"
       return `${base_url}/${self.userId}/${self.id}.${self.extension}`
     }
   }))

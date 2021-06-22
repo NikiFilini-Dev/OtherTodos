@@ -13,6 +13,13 @@ const WDS_HOST = "http://192.168.1.58:8080"
 app.use("/static", express.static("./web_dist"))
 app.use("/public", express.static("./web/public"))
 
+const http = require("http")
+app.get("/s3/*", function(req, res) {
+  http.get(process.env.IMAGES_BUCKET_URL+req.url.replace("/s3/", ""), function(proxyRes) {
+    proxyRes.pipe(res)
+  })
+})
+
 app.get("/", async (req, res) => {
   return res.redirect("/app/")
 })
