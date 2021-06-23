@@ -1,13 +1,18 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
+    bluePart: string
     button: string
     content: string
     error: string
     errors: string
-    info: string
+    form: string
     input: string
-    part: string
+    inputName: string
+    logo: string
     screen: string
+    services: string
+    switch: string
+    text: string
     title: string
   }
 }

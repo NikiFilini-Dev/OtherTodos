@@ -1,8 +1,6 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
-    active: string
-    inputWrapper: string
-    placeholder: string
+    input: string
   }
 }
 
