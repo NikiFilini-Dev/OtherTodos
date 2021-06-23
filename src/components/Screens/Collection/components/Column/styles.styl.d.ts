@@ -10,6 +10,7 @@ declare namespace StylesStylNamespace {
     icon: string
     medium: string
     name: string
+    newCard: string
     scrollable: string
     small: string
     title: string

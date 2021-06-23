@@ -12,7 +12,7 @@ import Icon from "../../../../Icon"
 import { ColorsMap } from "palette/colors"
 import FloatPlus from "../FloatPlus"
 
-const Card = observer(({ card }: {card: ICollectionCard}) => {
+const Card = observer(({ card, onPlusClick }: {card: ICollectionCard, onPlusClick: () => void}) => {
   const { collectionsStore: { selectCard } }: IRootStore = useMst()
   const tags = [...card.tags]
   tags.sort((a,b) => a.index - b.index)
@@ -55,7 +55,7 @@ const Card = observer(({ card }: {card: ICollectionCard}) => {
         })}><Icon name={"time"} />{DateTime.fromFormat(card.date, "M/d/yyyy").toFormat("dd LLL, yyyy")}</div>
       )}
     </div> }
-    <FloatPlus index={card.index+1} column={card.column} className={styles.floater} />
+    <FloatPlus onClick={onPlusClick} className={styles.floater} />
   </div>
 })
 

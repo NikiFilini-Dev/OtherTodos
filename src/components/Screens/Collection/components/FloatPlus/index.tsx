@@ -6,20 +6,18 @@ import { IRootStore, useMst } from "../../../../../models/RootStore"
 import classNames from "classnames"
 
 type Props = {
-  index: number
-  column: ICollectionColumn
+  onClick: () => void
   className: string
 }
 
-const FloatPlus = observer(({index, column, className}: Props) => {
-  const {collectionsStore: {createCard}}:IRootStore = useMst()
-  const onClick = () => {
-    createCard({column: column.id, collection: column.collection.id, index})
-  }
+const FloatPlus = observer(({className, onClick}: Props) => {
   return <div className={classNames({
     [className]: true,
     [styles.floater]: true
-  })} onClick={onClick}>+</div>
+  })} onClick={e => {
+    e.stopPropagation()
+    onClick()
+  }}>+</div>
 })
 
 export default FloatPlus
