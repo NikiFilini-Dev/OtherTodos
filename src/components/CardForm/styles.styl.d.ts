@@ -6,6 +6,7 @@ declare namespace StylesStylNamespace {
     add: string
     addSubtask: string
     addTask: string
+    angle: string
     block: string
     cardName: string
     cardText: string
@@ -27,6 +28,7 @@ declare namespace StylesStylNamespace {
     progressWrapper: string
     reject: string
     rotated: string
+    search: string
     separator: string
     settings: string
     subtask: string
@@ -34,6 +36,7 @@ declare namespace StylesStylNamespace {
     tag: string
     tags: string
     tagsMenu: string
+    tagsMenuTrigger: string
     trash: string
     wrapper: string
   }

@@ -22,15 +22,17 @@ import Icon from "../Icon"
 import CardComment from "../../models/collections/CardComment"
 import { v4 } from "uuid"
 import AngleIcon from "assets/line_awesome/angle-up-solid.svg"
+import AngleDownIcon from "assets/line_awesome/angle-down-solid.svg"
 import Comment from "./components/Comment"
 import GridIcon from "assets/customIcons/grid2.svg"
 import FilePlus from "assets/line_awesome/file-medical-solid.svg"
+import SearchIcon from "assets/search.svg"
 
 const CardForm = observer(
   ({ cardId }: { cardId: string | null }) => {
     const {
       user,
-      tasks: {deleteTask},
+      tasks: { deleteTask },
       collectionsStore: {
         cards,
         collections,
@@ -40,12 +42,12 @@ const CardForm = observer(
         selectCard,
         deleteCard,
         uploads: {
-          add: pushUpload
+          add: pushUpload,
         },
         comments: {
-          add: addComment
+          add: addComment,
         },
-        uploadView
+        uploadView,
       },
     }: IRootStore = useMst()
 
@@ -152,7 +154,7 @@ const CardForm = observer(
       fetch(process.env.UPLOAD_URL || "http://localhost/upload", {
         method: "POST",
         headers: {
-          "Authorization": user.token
+          "Authorization": user.token,
         },
         body: formData,
       }).then(r => r.json()).then(upload => {
@@ -173,7 +175,6 @@ const CardForm = observer(
     collectionTags.sort((a, b) => a.index - b.index)
 
 
-
     const onAddCommentClick = () => {
       if (!commentText) return
       setCommentText("")
@@ -192,7 +193,7 @@ const CardForm = observer(
     }
 
     const comments = [...card.comments]
-    comments.sort((b,a) => DateTime.fromISO(a.createdAt).toSeconds() - DateTime.fromISO(b.createdAt).toSeconds())
+    comments.sort((b, a) => DateTime.fromISO(a.createdAt).toSeconds() - DateTime.fromISO(b.createdAt).toSeconds())
 
     const [commentsFolded, setCommentsFolded] = React.useState(false)
 
@@ -204,10 +205,12 @@ const CardForm = observer(
       }
     }
 
+    const [tagsMenuFilter, setTagsMenuFilter] = React.useState("")
+
 
     return ReactDOM.createPortal(
       <div className={styles.wrapper} ref={wrapperRef}
-           onClick={onWrapperClick} style={{display: uploadView !== null ? "none" : ""}}>
+           onClick={onWrapperClick} style={{ display: uploadView !== null ? "none" : "" }}>
         <div className={styles.modal}>
           <TaskContext.Provider value={cardEmitter}>
             <div
@@ -230,7 +233,7 @@ const CardForm = observer(
                 <div className={styles.separator} />
                 <span className={classNames({
                   [styles.addTask]: true,
-                  [styles.active]: card.task !== null
+                  [styles.active]: card.task !== null,
                 })} onClick={onAddTaskClick}>
                     <GridIcon />
                   </span>
@@ -250,7 +253,6 @@ const CardForm = observer(
             })}>
               <div className={styles.main}>
                 <div className={styles.group}>
-                  <span className={styles.name}>Основная информация</span>
                   {/*@ts-ignore */}
                   <baka-editor ref={nameEditorRef} class={styles.cardName}
                                style={{ "--editor-padding": 0, "--min-height": "1em" } as CSSProperties}
@@ -303,7 +305,7 @@ const CardForm = observer(
                 <div className={styles.group}>
                   <div className={styles.head}>
                     <span className={styles.name}>
-                      Комментарии <AngleIcon className={classNames({[styles.rotated]: commentsFolded})}
+                      Комментарии <AngleIcon className={classNames({ [styles.rotated]: commentsFolded })}
                                              onClick={() => setCommentsFolded(!commentsFolded)} />
                     </span>
                     <div className={styles.action} onClick={onAddCommentClick}>
@@ -317,7 +319,6 @@ const CardForm = observer(
                   </div>}
                 </div>
               </div>
-
 
 
               <div className={styles.settings}>
@@ -357,20 +358,44 @@ const CardForm = observer(
                 <div className={styles.group}>
                   <div className={styles.head}>
                     <div className={styles.name}>Тэги</div>
-                    <div className={styles.action} onClick={() => setTagMenuOpen(true)}>
-                      <span ref={triggerRef}>+ Добавить тэг</span>
-                    </div>
-                    {tagMenuOpen && <FloatMenu target={triggerRef} position={"horizontal_left"} menuRef={menuRef}>
-                      <div className={styles.tagsMenu}>
-                        {collectionTags.map(tag => (
+                  </div>
+                  <div className={styles.tagsMenuTrigger} ref={triggerRef} onClick={() => setTagMenuOpen(true)}>
+                    <Icon name={"label"} />
+                    Тэги
+                    <AngleDownIcon className={styles.angle} />
+                  </div>
+                  {tagMenuOpen && <FloatMenu target={triggerRef} position={"vertical_middle"} menuRef={menuRef}>
+                    <div className={styles.tagsMenu}>
+                      <div className={styles.search}>
+                        <SearchIcon />
+                        <input autoFocus placeholder={"Поиск"} value={tagsMenuFilter}
+                               onChange={e => setTagsMenuFilter(e.target.value)} />
+                      </div>
+                      <span className={styles.name}>Выбранные тэги:</span>
+                      <div className={styles.tags}>
+                        {tags.map(tag => (
+                          <div className={styles.tag} style={{ "--color": ColorsMap[tag.color] } as CSSProperties}
+                               key={"remove_tag_" + tag.id} onClick={() => card.removeTag(tag)}>
+                            {tag.name}
+                          </div>
+                        ))}
+                      </div>
+                      <span className={styles.name}>Остальные тэги:</span>
+                      <div className={styles.tags}>
+                        {collectionTags
+                          .filter(tag => {
+                            return !tags.includes(tag) &&
+                              tag.name.toLowerCase().startsWith(tagsMenuFilter.toLowerCase())
+                          }).map(tag => (
                           <div key={tag.id} onClick={() => card.addTag(tag)}
                                style={{ "--color": ColorsMap[tag.color] } as CSSProperties} className={styles.tag}>
                             {tag.name}
                           </div>
                         ))}
                       </div>
-                    </FloatMenu>}
-                  </div>
+
+                    </div>
+                  </FloatMenu>}
                   <div className={styles.tags}>
                     {tags.map(tag => (
                       <div className={styles.tag} style={{ "--color": ColorsMap[tag.color] } as CSSProperties}
