@@ -128,7 +128,7 @@ const CollectionCard = types
       const root = getRoot<IRootStore>(self)
       const task = root.createTask({
         text: self.name,
-        note: self.text,
+        note: self.text || "",
         date: self.date
       })
       root.tasks.add(task)
