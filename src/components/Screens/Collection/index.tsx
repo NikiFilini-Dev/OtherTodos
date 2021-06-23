@@ -11,16 +11,14 @@ import PlusIcon from "../../../assets/line_awesome/plus-solid.svg"
 import CollectionForm from "../../CollectionForm"
 import Icon from "../../Icon"
 import UploadView from "./components/UploadView"
-import UserIcon from "assets/line_awesome/user-circle.svg"
-import TimesIcon from "assets/line_awesome/times-solid.svg"
 import gqlClient from "graphql/client"
-import { INVITE_USER, REMOVE_USER_FROM_COLLECTION } from "graphql/collection"
 import ResizeIcon from "assets/customIcons/resize.svg"
 import FloatMenu from "../../FloatMenu"
 import CheckIcon from "assets/line_awesome/check-solid.svg"
 import classNames from "classnames"
 import { useClickOutsideRefs } from "../../../tools/hooks"
 import UsersModal from "./components/UsersModal"
+import Avatar from "../../Avatar"
 
 type Size = "small" | "medium" | "big"
 
@@ -37,6 +35,10 @@ const Collection = observer(() => {
       createColumn,
       selectEditingCollection,
       editingCollection,
+      userFilter,
+      userFilterEnabled,
+      setUserFilter,
+      enableUserFilter,
     },
   }: IRootStore = useMst()
 
@@ -56,16 +58,6 @@ const Collection = observer(() => {
   const onAddUserClick = () => {
     setInviteModalOpen(true)
   }
-
-  const onRemoveUserClick = (id: string) => {
-    gqlClient.mutation(REMOVE_USER_FROM_COLLECTION, {
-      collectionId: selectedCollection.id,
-      userId: id,
-    }).toPromise().then(() => {
-      window.syncMachine.loadAll(null)
-    })
-  }
-
 
   const sizeKey = "collectionCardSize#"+selectedCollection.id
   const getSize = (): Size => {
@@ -94,6 +86,25 @@ const Collection = observer(() => {
     const collA = collections.find(c => c.id === a.code)
     const collB = collections.find(c => c.id === b.code)
     return collA.index - collB.index
+  })
+
+  const onUserClick = (user) => {
+    if (userFilterEnabled && userFilter === user) {
+      setUserFilter(null)
+      enableUserFilter(false)
+      return
+    }
+    enableUserFilter(true)
+    setUserFilter(user)
+  }
+
+  const User = observer(({user}) => {
+    return <div className={styles.user} onClick={() => onUserClick(user)}>
+      {userFilterEnabled && userFilter === user && <div className={styles.filterActiveMark} />}
+      <Avatar user={user} size={"32px"} />
+      <span className={styles.name}>{user ? user.firstName : "Неназначено"}</span>
+      <span className={styles.count}>{selectedCollection.cards.filter(c => c.assigned === user).length}</span>
+    </div>
   })
 
   return (
@@ -182,21 +193,9 @@ const Collection = observer(() => {
         {inviteModalOpen && <UsersModal collection={selectedCollection} onClose={() => setInviteModalOpen(false)} />}
       </div>
       <div className={styles.usersList}>
-        <div className={styles.user}>
-          <div className={styles.avatar}>
-            <UserIcon />
-          </div>
-          {selectedCollection.userId.firstName}
-        </div>
-
-        {selectedCollection.users.map(u => <div key={u.id} className={styles.user}>
-          {selectedCollection.userId.id === currentUser.id &&
-          <div className={styles.remove} onClick={() => onRemoveUserClick(u.id)}><TimesIcon /></div>}
-          <div className={styles.avatar}>
-            <UserIcon />
-          </div>
-          {u.firstName}
-        </div>)}
+        <User user={null} />
+        <User user={selectedCollection.userId} />
+        {selectedCollection.users.map(u => <User key={u.id} user={u} />)}
 
         {selectedCollection.userId.id === currentUser.id && <div className={styles.add} onClick={onAddUserClick}>
           <PlusIcon />

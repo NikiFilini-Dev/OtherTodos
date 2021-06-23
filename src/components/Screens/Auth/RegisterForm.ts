@@ -32,7 +32,7 @@ export default class RegisterForm {
   async register(
     callback: (token: {
       lastName: string
-      name: string
+      firstName: string
       id: string
       email: string
       token: string
@@ -72,7 +72,7 @@ export default class RegisterForm {
 
       const user = {
         token: <string>loginResult.data.generateToken.token,
-        name: <string>registerResult.data.createUser.firstName,
+        firstName: <string>registerResult.data.createUser.firstName,
         lastName: <string>registerResult.data.createUser.lastName,
         email: <string>registerResult.data.createUser.email,
         id: <string>registerResult.data.createUser.id,

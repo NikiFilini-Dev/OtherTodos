@@ -41,7 +41,7 @@ export default class LoginForm {
       token: <string>loginResult.data.generateToken.token,
       id: <string>loginResult.data.generateToken.user.id,
       email: <string>loginResult.data.generateToken.user.email,
-      name: <string>loginResult.data.generateToken.user.firstName,
+      firstName: <string>loginResult.data.generateToken.user.firstName,
       lastName: <string>loginResult.data.generateToken.user.lastName,
     }
     console.log(user)

@@ -11,6 +11,7 @@ import { DateTime } from "luxon"
 import Icon from "../../../../Icon"
 import { ColorsMap } from "palette/colors"
 import FloatPlus from "../FloatPlus"
+import Avatar from "../../../../Avatar"
 
 const Card = observer(({ card, onPlusClick }: {card: ICollectionCard, onPlusClick: () => void}) => {
   const { collectionsStore: { selectCard } }: IRootStore = useMst()
@@ -25,7 +26,12 @@ const Card = observer(({ card, onPlusClick }: {card: ICollectionCard, onPlusClic
   })} onClick={() => selectCard(card.id)}>
     {card.status === "DONE" && <div className={styles.done}><CheckboxIcon /> Завершено</div>}
     {card.preview !== null && <img src={card.preview.url} className={styles.preview} />}
-    <div className={styles.title}>{card.name}</div>
+    <div className={styles.title}>
+      <span className={styles.text}>{card.name}</span>
+      {!!card.assigned && <div className={styles.avatar}>
+        <Avatar size={"24px"} user={card.assigned} />
+      </div>}
+    </div>
     {card.text !== null && <div className={styles.description}>{card.text}</div>}
     {card.subtasks.length > 0 && <div className={styles.progressWrapper}>
       {card.doneSubtasks.length}/{card.subtasks.length}

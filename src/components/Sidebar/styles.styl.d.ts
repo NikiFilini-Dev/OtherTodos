@@ -17,6 +17,7 @@ declare namespace StylesStylNamespace {
     sidebar: string
     signOut: string
     userInfo: string
+    username: string
   }
 }
 

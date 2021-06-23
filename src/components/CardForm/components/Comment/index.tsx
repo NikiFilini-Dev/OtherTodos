@@ -9,6 +9,7 @@ import EditIcon from "assets/line_awesome/edit.svg"
 import CheckIcon from "assets/line_awesome/check-solid.svg"
 import BakaEditor from "../../../../editor"
 import { ICollectionCard } from "../../../../models/collections/CollectionCard"
+import Avatar from "../../../Avatar"
 
 type Props = {
   comment: ICardComment
@@ -63,9 +64,7 @@ const Comment = observer(({ comment, card }: Props) => {
 
   return <div key={comment.id} className={styles.comment} ref={commentRef}>
     <div className={styles.top}>
-      <div className={styles.avatar}>
-        <UserIcon />
-      </div>
+      <Avatar user={comment.user} size={"32px"} />
       <div className={styles.info}>
         <span className={styles.name}>
           {comment.user.firstName} {comment.user.lastName}

@@ -7,13 +7,17 @@ declare namespace StylesStylNamespace {
     addSubtask: string
     addTask: string
     angle: string
+    avatar: string
     block: string
     cardName: string
     cardText: string
     checkbox: string
     dateTrigger: string
     done: string
-    executor: string
+    executorAvatar: string
+    executorInfo: string
+    executorTrigger: string
+    executorWrapper: string
     files: string
     group: string
     head: string
@@ -38,6 +42,8 @@ declare namespace StylesStylNamespace {
     tagsMenu: string
     tagsMenuTrigger: string
     trash: string
+    user: string
+    usersMenu: string
     wrapper: string
   }
 }

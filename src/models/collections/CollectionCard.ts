@@ -6,6 +6,7 @@ import { IRootStore } from "../RootStore"
 import { uploadReference } from "./storages/uploads.storage"
 import { commentReference } from "./storages/cardComments.storage"
 import Task from "../Task"
+import { userReference } from "./storages/users.storage"
 
 console.log(commentReference)
 
@@ -24,6 +25,7 @@ const CollectionCard = types
     preview: types.maybeNull(uploadReference),
     comments: types.array(types.maybeNull(commentReference)),
     task: types.maybeNull(types.reference(Task)),
+    assigned: types.maybeNull(userReference),
     _temp: types.optional(types.boolean, false),
   })
   .views(self => ({
@@ -136,6 +138,9 @@ const CollectionCard = types
 
     actions.removeTask = () => self.task = null
     actionsMap.removeTask = ["task"]
+
+    actions.assignUser = val => self.assigned = val
+    actionsMap.assignUser = ["assigned"]
 
     actions.getActionsMap = () => actionsMap
     return actions

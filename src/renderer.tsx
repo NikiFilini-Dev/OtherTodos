@@ -56,8 +56,17 @@ const mapUrl = (): mapReturn => {
 
 const DEBUG = process.env.P_ENV === "debug"
 const rawUser = localStorage.getItem("user")
+let user: Record<string, any> | null = null
+if (rawUser) {
+  user = JSON.parse(rawUser)
+  if (user && user.name) {
+    user.firstName = user.name
+    delete user.name
+    localStorage.setItem("user", JSON.stringify(user))
+  }
+}
 let data = {
-  user: rawUser ? JSON.parse(rawUser) : null,
+  user: user,
   screen: rawUser ? "TODAY" : "AUTH",
   selectedProject: null,
   selectedTag: null,

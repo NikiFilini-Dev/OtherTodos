@@ -15,6 +15,7 @@ import { DateTime } from "luxon"
 import noop from "lodash-es/noop"
 import { IconsMap } from "../../palette/icons"
 import Icon from "../Icon"
+import Avatar from "../Avatar"
 
 const Element = observer(
   ({
@@ -426,8 +427,8 @@ const Sidebar = observer(() => {
       </div>
       {user && (
         <div className={styles.userInfo}>
-          <UserCircleIcon />
-          {user.name}
+          <Avatar user={user} size={"24px"} />
+          <span className={styles.username}>{user.firstName}</span>
           <div className={styles.signOut} onClick={() => onSignOutClick()}>
             <SignOutAltIcon />
           </div>

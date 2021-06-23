@@ -10,7 +10,7 @@ import { move } from "../../tools/movement"
 import { IRootStore } from "../RootStore"
 import Upload from "./Upload"
 import { uploadsStorage } from "./storages/uploads.storage"
-import { usersStorage } from "./storages/users.storage"
+import { userReference, usersStorage } from "./storages/users.storage"
 import { safeRef } from "../utils"
 import { commentsStorage } from "./storages/cardComments.storage"
 
@@ -39,6 +39,8 @@ const CollectionsStore = types
         _temp: true
       })
     ),
+    userFilterEnabled: types.optional(types.boolean, false),
+    userFilter: types.maybeNull(userReference),
     editingCard: types.maybeNull(
       safeRef(CollectionCard, "/collectionsStore", "pushCard", {
         id: "",
@@ -54,6 +56,13 @@ const CollectionsStore = types
   })
   .views(() => ({}))
   .actions(self => ({
+    enableUserFilter(val: boolean) {
+      self.userFilterEnabled = val
+    },
+    setUserFilter(val) {
+      self.userFilter = val
+    },
+
     pushCollection(val) {
       self.collections.push(val)
     },
@@ -162,6 +171,8 @@ const CollectionsStore = types
       if (!collection) throw new Error("collection not found")
 
       self.selectedCollection = collection
+      self.userFilter = null
+      self.userFilterEnabled = false
 
       history.pushState({}, document.title, "/app/collections/"+id)
     },

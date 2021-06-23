@@ -4,14 +4,15 @@ declare namespace StylesStylNamespace {
     active: string
     add: string
     addColumn: string
-    avatar: string
     columns: string
+    count: string
+    filterActiveMark: string
     head: string
     info: string
     menu: string
     menuName: string
+    name: string
     puller: string
-    remove: string
     screen: string
     screenWrapper: string
     size: string

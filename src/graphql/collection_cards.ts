@@ -34,6 +34,7 @@ export const GET_COLLECTION_CARDS = gql`
       index
       comments
       task
+      assigned
     }
   }
 `

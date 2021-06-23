@@ -4,18 +4,18 @@ const User = types
   .model("User", {
     token: types.string,
     id: types.identifier,
-    name: types.string,
+    firstName: types.string,
     lastName: types.string,
     email: types.string,
   })
   .views(self => ({
     get fullName() {
-      return self.name + self.lastName
+      return self.firstName + self.lastName
     },
   }))
   .actions(self => ({
     setName(name) {
-      self.name = name
+      self.firstName = name
     },
     setLastName(val) {
       self.lastName = val

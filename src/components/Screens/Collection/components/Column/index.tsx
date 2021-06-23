@@ -49,14 +49,10 @@ const Column = observer(({
                            handleProps,
                            size,
                          }: Props) => {
-  const { collectionsStore: { createCard, selectCard } }: IRootStore = useMst()
-  const cards = [...column.cards]
+  const { collectionsStore: { createCard, userFilter, userFilterEnabled } }: IRootStore = useMst()
+  let cards = [...column.cards]
+  if (userFilterEnabled) cards = cards.filter(c => c.assigned === userFilter)
   cards.sort((a, b) => a.index - b.index)
-
-  const onCreateClick = () => {
-    const id = createCard({ collection: column.collection.id, column: column.id, name: "Без названия" })
-    selectCard(id)
-  }
 
   const triggerRef = React.useRef(document.createElement("div"))
   const menuRef = React.useRef(null)
@@ -81,8 +77,6 @@ const Column = observer(({
     }
     setNewCardIndex(-1)
   }
-
-
 
   return <div className={classNames(styles.column, styles[size])}>
     <div className={styles.title}
@@ -127,10 +121,10 @@ const Column = observer(({
             ))}
             {provided.placeholder}
           </div>
-          {(cards[cards.length-1]?.index+1 || 0) === newCardIndex &&
+          {(column.cards[column.cards.length-1]?.index+1 || 0) === newCardIndex &&
           <NewCard newCardIndex={newCardIndex} onSubmit={submitNewCard} />}
           {column.cards.length > 0 && <div className={styles.add}
-                                           onClick={() => showNewCard(cards[cards.length-1]?.index+1)}>
+                                           onClick={() => showNewCard(column.cards[column.cards.length-1]?.index+1)}>
             + Добавить карточку
           </div>}
           {column.cards.length === 0 && <div className={styles.add}

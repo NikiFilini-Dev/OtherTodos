@@ -27,6 +27,7 @@ import Comment from "./components/Comment"
 import GridIcon from "assets/customIcons/grid2.svg"
 import FilePlus from "assets/line_awesome/file-medical-solid.svg"
 import SearchIcon from "assets/search.svg"
+import Avatar from "../Avatar"
 
 const CardForm = observer(
   ({ cardId }: { cardId: string | null }) => {
@@ -208,6 +209,13 @@ const CardForm = observer(
     const [tagsMenuFilter, setTagsMenuFilter] = React.useState("")
 
 
+    const usersTriggerRef = React.useRef(null)
+    const usersMenuRef = React.useRef(null)
+    const [usersMenuOpen, setUsersMenuOpen] = React.useState(false)
+    useClickOutsideRef(usersTriggerRef, () => {
+      if (usersMenuOpen) setUsersMenuOpen(false)
+    })
+
     return ReactDOM.createPortal(
       <div className={styles.wrapper} ref={wrapperRef}
            onClick={onWrapperClick} style={{ display: uploadView !== null ? "none" : "" }}>
@@ -219,7 +227,44 @@ const CardForm = observer(
                 [styles.head]: true,
               })}
             >
-              <span className={styles.executor}>Исполнитель не назначен</span>
+              <div className={styles.executorWrapper}>
+                <div className={styles.executorAvatar}>
+                  <Avatar user={card.assigned} size={"48px"} />
+                </div>
+                <div className={styles.executorInfo}>
+                  <span>Исполнитель:</span>
+                  <span className={styles.executorTrigger} ref={usersTriggerRef} onClick={() => setUsersMenuOpen(true)}>
+                    {card.assigned ? `${card.assigned.firstName} ${card.assigned.lastName}` : "Не назначен"}
+                    <AngleDownIcon />
+                  </span>
+                </div>
+              </div>
+              {usersMenuOpen && (
+                <FloatMenu target={usersTriggerRef} menuRef={usersMenuRef} position={"vertical_middle"}>
+                  <div className={styles.usersMenu}>
+                    <div className={styles.user} onClick={() => card.assignUser(null)}>
+                      <div className={styles.avatar}>
+                        <Avatar user={null} size={"28px"} />
+                      </div>
+                      Не назначен
+                    </div>
+                    <div className={styles.user} onClick={() => card.assignUser(card.collection.userId)}>
+                      <div className={styles.avatar}>
+                        <Avatar user={card.collection.userId} size={"28px"} />
+                      </div>
+                      {card.collection.userId.firstName} {card.collection.userId.lastName}
+                    </div>
+                    {card.collection.users.map(user => (
+                      <div key={user.id} className={styles.user} onClick={() => card.assignUser(user)}>
+                        <div className={styles.avatar}>
+                          <Avatar user={user} size={"28px"} />
+                        </div>
+                        {user.firstName} {user.lastName}
+                      </div>
+                    ))}
+                  </div>
+                </FloatMenu>
+              )}
               <div className={styles.actions}>
                 {card.status === "ACTIVE" && <span className={styles.add} onClick={() => card.setStatus("DONE")}>
                   <CheckboxIcon /> Завершить

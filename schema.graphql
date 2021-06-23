@@ -32,6 +32,7 @@ type Collection {
 }
 
 type CollectionCard {
+    assigned: String!
     collectionId: String!
     columnId: String!
     comments: [String]!
@@ -49,6 +50,7 @@ type CollectionCard {
 }
 
 type CollectionCardChanges {
+    assigned: Time
     collectionId: Time
     columnId: Time
     date: Time
@@ -454,6 +456,7 @@ input CardCommentUpdate {
 }
 
 input CollectionCardChangesDate {
+    assigned: Time
     collectionId: Time
     columnId: Time
     date: Time
@@ -469,6 +472,7 @@ input CollectionCardChangesDate {
 }
 
 input CollectionCardUpdate {
+    assigned: String
     collectionId: String
     columnId: String
     date: Date

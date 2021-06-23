@@ -2,7 +2,6 @@ declare namespace StylesStylNamespace {
   export interface IStylesStyl {
     action: string
     actions: string
-    avatar: string
     awesome: string
     comment: string
     date: string
