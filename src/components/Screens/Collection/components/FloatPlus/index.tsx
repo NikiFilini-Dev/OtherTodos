@@ -1,8 +1,6 @@
 import React from "react"
 import styles from "./styles.styl"
 import { observer } from "mobx-react"
-import { ICollectionColumn } from "../../../../../models/collections/CollectionColumn"
-import { IRootStore, useMst } from "../../../../../models/RootStore"
 import classNames from "classnames"
 
 type Props = {
@@ -11,13 +9,11 @@ type Props = {
 }
 
 const FloatPlus = observer(({className, onClick}: Props) => {
-  return <div className={classNames({
-    [className]: true,
-    [styles.floater]: true
-  })} onClick={e => {
+  return <div className={classNames(className, styles.wrapper)}>
+  <div className={styles.floater} onClick={e => {
     e.stopPropagation()
     onClick()
-  }}>+</div>
+  }}>+</div></div>
 })
 
 export default FloatPlus

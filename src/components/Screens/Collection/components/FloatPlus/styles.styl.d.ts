@@ -1,6 +1,7 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
     floater: string
+    wrapper: string
   }
 }
 
