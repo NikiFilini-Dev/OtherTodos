@@ -7,7 +7,7 @@ import { LateTimelineEvent } from "./TimelineEvent"
 import { DateTime } from "luxon"
 import { IRootStore } from "./RootStore"
 import { ISubtask } from "./Subtask"
-import { ICollectionCard } from "./collections/CollectionCard"
+import CollectionCard from "./collections/CollectionCard"
 
 const Task = types
   .model("Task", {
@@ -28,6 +28,7 @@ const Task = types
     category: types.maybeNull(types.reference(ProjectCategory)),
     event: types.maybeNull(types.reference(types.late(LateTimelineEvent))),
     colorTag: types.maybeNull(types.reference(Tag)),
+    card: types.maybeNull(types.reference(CollectionCard))
   })
   .views(self => ({
     get done() {
@@ -74,18 +75,13 @@ const Task = types
       const root = getRoot<IRootStore>(self)
       return root.timerSessions.filter(ts => ts.task === self)
     },
-    get card(): ICollectionCard | null {
-      const root = getRoot<IRootStore>(self)
-      let card: ICollectionCard | null = null
-      root.collectionsStore.cards.forEach(c => {
-        if (c.task === self) card = c
-      })
-      return card
-    }
   }))
   .actions(self => {
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, any[]> = {}
+
+    actions.setCard = val => self.card = val
+    actionsMap.setCard = ["card"]
 
     actions.setTags = val => {
       self.tags = val

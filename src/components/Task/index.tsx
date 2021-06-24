@@ -476,10 +476,10 @@ const Task = observer(
                 Тэги
               </div>
             </div>
-            <div className={styles.openCard} onClick={openCard}>
+            {task.card && <div className={styles.openCard} onClick={openCard}>
               <GridIcon />
               К карточке
-            </div>
+            </div>}
             {!active && (
               <div className={styles.delete} onClick={() => deleteTask(source)}>
                 <TrashIcon />

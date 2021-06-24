@@ -10,6 +10,7 @@ export default class Task extends SyncType {
 
   preprocess(item) {
     if (item.project === "") item.project = null
+    if (item.card === "") item.card = null
     if (item.event === "") item.event = null
     if (item.category === "") item.category = null
     if (item.colorTag === "") item.colorTag = null

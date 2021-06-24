@@ -5,7 +5,6 @@ import CollectionColumn from "./CollectionColumn"
 import { IRootStore } from "../RootStore"
 import { uploadReference } from "./storages/uploads.storage"
 import { commentReference } from "./storages/cardComments.storage"
-import Task from "../Task"
 import { userReference } from "./storages/users.storage"
 
 console.log(commentReference)
@@ -24,7 +23,6 @@ const CollectionCard = types
     files: types.array(uploadReference),
     preview: types.maybeNull(uploadReference),
     comments: types.array(types.maybeNull(commentReference)),
-    task: types.maybeNull(types.reference(Task)),
     assigned: types.maybeNull(userReference),
     _temp: types.optional(types.boolean, false),
   })
@@ -52,7 +50,13 @@ const CollectionCard = types
 
     get donePercent() {
       return this.doneSubtasks.length * (100 / this.subtasks.length)
-    }
+    },
+
+    get task() {
+      const root = getRoot<IRootStore>(self)
+      console.log("TASK:", root.tasks.all.find(task => task.card === self))
+      return root.tasks.all.find(task => task.card === self)
+    },
   }))
   .actions(self => {
     const actions: Record<string, any> = {}
@@ -129,15 +133,18 @@ const CollectionCard = types
       const task = root.createTask({
         text: self.name,
         note: self.text || "",
-        date: self.date
+        date: self.date,
+        card: self
       })
       root.tasks.add(task)
-      self.task = task
     }
-    actionsMap.addTask = ["task"]
+    actionsMap.addTask = []
 
-    actions.removeTask = () => self.task = null
-    actionsMap.removeTask = ["task"]
+    actions.removeTask = () => {
+      if (!self.task) return
+      const root = getRoot<IRootStore>(self)
+      root.tasks.deleteTask(self.task)
+    }
 
     actions.assignUser = val => self.assigned = val
     actionsMap.assignUser = ["assigned"]

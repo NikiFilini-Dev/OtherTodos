@@ -36,6 +36,7 @@ export const GET_TASKS = gql`
       category
       event
       colorTag
+      card
     }
   }
 `
@@ -58,6 +59,7 @@ export const GET_TASKS_SINCE = gql`
       category
       event
       colorTag
+      card
     }
   }
 `

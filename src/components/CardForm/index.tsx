@@ -199,7 +199,7 @@ const CardForm = observer(
     const [commentsFolded, setCommentsFolded] = React.useState(false)
 
     const onAddTaskClick = () => {
-      if (card.task !== null) {
+      if (card.task) {
         deleteTask(card.task)
       } else {
         card.addTask()
@@ -278,7 +278,7 @@ const CardForm = observer(
                 <div className={styles.separator} />
                 <span className={classNames({
                   [styles.addTask]: true,
-                  [styles.active]: card.task !== null,
+                  [styles.active]: !!card.task,
                 })} onClick={onAddTaskClick}>
                     <GridIcon />
                   </span>
