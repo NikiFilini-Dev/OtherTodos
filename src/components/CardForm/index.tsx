@@ -216,6 +216,45 @@ const CardForm = observer(
       if (usersMenuOpen) setUsersMenuOpen(false)
     })
 
+    React.useEffect(() => {
+      const onPaste = event => {
+        const items = (event.clipboardData || event.originalEvent.clipboardData).items
+        for (const index in items) {
+          const item = items[index]
+          if (item.kind === "file") {
+            const blob = item.getAsFile()
+            console.log(blob)
+            const reader = new FileReader()
+            reader.onload = function(event){
+              const result = event.target?.result
+              if (!result) return
+              const fd = new FormData()
+              fd.append("b64", result as string)
+              fd.append("name", blob.name)
+              fd.append("mime", blob.type)
+              fd.append("size", blob.size)
+
+              fetch(process.env.UPLOAD_URL_B64 || "http://localhost/upload/base64", {
+                method: "POST",
+                headers: {
+                  "Authorization": user.token,
+                },
+                body: fd,
+              }).then(r => r.json()).then(upload => {
+                pushUpload(upload)
+                card.addFile(upload.id)
+              })
+              console.log(result)
+            }
+            reader.readAsDataURL(blob)
+          }
+        }
+      }
+      document.addEventListener("paste", onPaste)
+
+      return () => document.removeEventListener("paste", onPaste)
+    }, [])
+
     return ReactDOM.createPortal(
       <div className={styles.wrapper} ref={wrapperRef}
            onClick={onWrapperClick} style={{ display: uploadView !== null ? "none" : "" }}>
