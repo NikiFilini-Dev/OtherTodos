@@ -25,7 +25,6 @@ export const GET_TAGS = gql`
       name
       index
       color
-      project
       type
     }
   }
