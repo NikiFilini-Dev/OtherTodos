@@ -40,7 +40,7 @@ const Auth = observer(() => {
     registerForm.register(u => afterLoggingIn(u))
   }
 
-  const [currentForm, setCurrentForm] = React.useState<"login"|"register">("register")
+  const [currentForm, setCurrentForm] = React.useState<"login"|"register">("login")
 
   const RegistrationFormComponent = observer(() => {
     return <React.Fragment>
