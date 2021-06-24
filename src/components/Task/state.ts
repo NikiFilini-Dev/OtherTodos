@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx"
 import React from "react"
 import { IProject } from "../../models/Project"
+import { ITag } from "../../models/Tag"
 
 export default class TaskState {
   constructor() {
@@ -11,6 +12,31 @@ export default class TaskState {
 
   project: null | IProject = null
   projectChanged  = false
+
+  tags: ITag[] = []
+  tagsChanged = false
+
+  resetTagsChanged() {
+    this.tagsChanged = false
+  }
+
+  setTags(arr: ITag[], silent = false) {
+    this.tags = arr
+    console.log(arr)
+    if (!silent) this.tagsChanged = true
+  }
+
+  addTag(tag: ITag | string) {
+    if (this.tags.includes(tag)) return
+    this.tags.push(tag)
+    this.tagsChanged = true
+  }
+
+  removeTag(tag: ITag) {
+    if (!this.tags.includes(tag)) return
+    this.tags.splice(this.tags.indexOf(tag), 1)
+    this.tagsChanged = true
+  }
 
   setProject(project, silent = false) {
     this.project = project

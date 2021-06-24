@@ -1,4 +1,5 @@
-import { getRoot, types } from "mobx-state-tree"
+import { getRoot, Instance, types } from "mobx-state-tree"
+import { IRootStore } from "./RootStore"
 
 export function randomTagColor() {
   const colors = [
@@ -23,7 +24,7 @@ const Tag = types
     id: types.identifier,
     name: types.string,
     index: types.number,
-    color: types.maybeNull(types.string, randomTagColor()),
+    color: types.optional(types.maybeNull(types.string), randomTagColor()),
     type: types.optional(
       types.enumeration("TAG_TYPES", ["TASK", "EVENT"]),
       "TASK",
@@ -31,7 +32,7 @@ const Tag = types
   })
   .views(self => ({
     get tasks() {
-      return getRoot(self).tasks.filter(task => task.tags.indexOf(self >= 0))
+      return getRoot<IRootStore>(self).tasks.filter(task => task.tags.includes(self))
     },
     get syncable() {
       return true
@@ -45,8 +46,8 @@ const Tag = types
     },
   }))
   .actions(self => {
-    const actions = {}
-    const actionsMap = {}
+    const actions: Record<string, any> = {}
+    const actionsMap: Record<string, string[]> = {}
 
     actions.setColor = val => {
       self.color = val
@@ -74,3 +75,4 @@ export function factory(data) {
 }
 
 export default Tag
+export type ITag = Instance<typeof Tag>

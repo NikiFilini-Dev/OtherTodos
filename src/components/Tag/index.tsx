@@ -12,6 +12,7 @@ type Props = {
 }
 
 const Tag = observer(({ tag, selected, onClick, listed }: Props) => {
+  console.log(tag)
   return (
     <TagMenu tag={tag} key={`tag_${tag.id}`}>
       <span

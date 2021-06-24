@@ -31,12 +31,18 @@ import TextareaAutosize from "react-textarea-autosize"
 import Button from "../Button"
 import BakaEditor from "../../editor"
 import Emitter from "eventemitter3"
-import { noop } from "lodash"
+import { noop, isEmpty, xorWith, isEqual } from "lodash"
 import Tag from "components/Tag"
 import SubtasksList from "../SubtasksList"
 import Icon from "../Icon"
 import BackspaceIcon from "assets/line_awesome/backspace-solid.svg"
 import GridIcon from "assets/customIcons/grid2.svg"
+import { getSnapshot } from "mobx-state-tree"
+
+
+const areArraysEqual = (x, y) => {
+  return isEmpty(xorWith(x, y, isEqual))
+}
 
 export const TaskContext = React.createContext(new Emitter())
 
@@ -58,6 +64,7 @@ const Task = observer(
       startTimer,
       deleteTimerSession,
       setScreen,
+      tags: allTags,
       collectionsStore: {
         selectCard, selectCollection
       }
@@ -69,6 +76,11 @@ const Task = observer(
 
     const task = source
     if (state.project !== task.project && !state.projectChanged) state.setProject(task.project, true)
+    if (
+      !areArraysEqual(task.tags.map(t => t.toJSON()), state.tags) &&
+      !state.tagsChanged
+    )
+      state.setTags(task.tags.map(t => t.toJSON()), true)
 
     React.useEffect(() => {
       taskEmitter.on("*", console.log)
@@ -105,8 +117,13 @@ const Task = observer(
 
     const onDeactivation = () => {
       if (state.projectChanged) {
-        task.setProject(state.project, true)
+        task.setProject(state.project)
         state.resetProjectChanged()
+      }
+
+      if (state.tagsChanged) {
+        task.setTags(state.tags.map(tag => tag.id))
+        state.resetTagsChanged()
       }
 
       task.subtasks.forEach(st => {
@@ -216,8 +233,18 @@ const Task = observer(
         source.setPriority(priority)
     }
 
-    const selectTag = tag => task.addTag(tag)
-    const unselectTag = tag => task.removeTag(tag)
+    const selectTag = tag => {
+      // console.log(getSnapshot(tag))
+      state.addTag(tag)
+    }
+    const unselectTag = tag => {
+      console.log("Tag:", tag)
+      // console.log("UNSELECT", id)
+      // const tag = allTags.find(t => t.id === id)
+      // if (!tag) return
+      // console.log(getSnapshot(tag))
+      state.removeTag(tag)
+    }
 
     const [isUpdated, setIsUpdated] = React.useState(false)
     const onCheckboxChange = val => {
@@ -233,7 +260,7 @@ const Task = observer(
       setIsUpdated(false)
     }
 
-    const tags = [...task.tags]
+    const tags = [...state.tags]
     tags.sort((a, b) => a.index - b.index)
 
     const date = useDateFormat(task.date, "M/d/yyyy", "dd LLL")
@@ -300,7 +327,7 @@ const Task = observer(
             <div className={styles.puller} />
             <div className={styles.tags}>
               {!state.active &&
-              Boolean(task.tags.length) &&
+              Boolean(state.tags.length) &&
               tags.map(tag => (
                 <Tag tag={tag} key={tag.id} onClick={noop} selected={false} />
               ))}
@@ -423,7 +450,7 @@ const Task = observer(
               <SubtasksList target={task} moveSubtask={moveSubtask} deleteSubtask={deleteSubtask} addNewShown />
             </div>
           </div>}
-          <Tags task={task} />
+          <Tags task={task} tags={state.tags} onDelete={unselectTag} />
           {state.active && <div
             className={classNames({
               [styles.line]: true,
@@ -505,7 +532,7 @@ const Task = observer(
             >
               <TagsSelector
                 type={"TASK"}
-                selected={task.tags}
+                selected={state.tags}
                 select={selectTag}
                 unselect={unselectTag}
               />

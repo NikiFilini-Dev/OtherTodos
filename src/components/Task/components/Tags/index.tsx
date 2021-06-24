@@ -1,18 +1,17 @@
 import { observer } from "mobx-react"
-import React, { CSSProperties } from "react"
+import React from "react"
 import { useClickOutsideRef, useKeyListener } from "../../../../tools/hooks"
 import classNames from "classnames"
 import styles from "../../styles.styl"
-import PalletIcon from "../../../../assets/line_awesome/palette-solid.svg"
 import Tag from "../../../Tag"
 
-const Tags = observer(({ task }) => {
+const Tags = observer(({ task, tags, onDelete }) => {
   const [selectedTagId, setSelectedTagId] = React.useState(null)
   const ref = React.useRef(null)
 
   const onTagClick = tag => {
     if (tag.id === selectedTagId) {
-      task.setColorTag(task.colorTag === tag ? null : tag)
+      task.setColorTag(task.colorTag?.id === tag.id ? null : tag.id)
       setSelectedTagId(null)
     } else {
       setSelectedTagId(tag.id)
@@ -22,7 +21,7 @@ const Tags = observer(({ task }) => {
   useClickOutsideRef(ref, () => setSelectedTagId(null))
 
   useKeyListener(["Delete", "Backspace"], () => {
-    if (selectedTagId) task.removeTag(task.tags.find(t => t.id === selectedTagId))
+    if (selectedTagId) onDelete(tags.find(t => t.id === selectedTagId))
   })
 
   return (
@@ -34,7 +33,7 @@ const Tags = observer(({ task }) => {
         [styles.fullOnly]: true,
       })}
     >
-      {task.tags.map(tag => (
+      {tags.map(tag => (
         <Tag tag={tag}
              key={tag.id}
              selected={selectedTagId === tag.id}
