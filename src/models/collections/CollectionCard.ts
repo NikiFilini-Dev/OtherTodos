@@ -128,7 +128,7 @@ const CollectionCard = types
       if (self.column.collection !== self.collection && self.collection.columns.length > 0)
         self.column = self.collection.columns[0]
     }
-    actionsMap.setCollection = ["collection"]
+    actionsMap.setCollection = ["collection", "column"]
 
     actions.setColumn = (val) => self.column = val
     actionsMap.setColumn = ["column"]

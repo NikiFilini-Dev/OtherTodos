@@ -258,6 +258,14 @@ const CardForm = observer(
       return () => document.removeEventListener("paste", onPaste)
     }, [])
 
+    const columnVariants = card.collection.columns.map(c => ({ code: c.id, name: c.name, icon: "fire" }))
+    columnVariants.sort((a,b) => {
+      const columnA = card.collection.columns.find(c => c.id === a.code)
+      const columnB = card.collection.columns.find(c => c.id === b.code)
+
+      return columnA.index - columnB.index
+    })
+
     return ReactDOM.createPortal(
       <div className={styles.wrapper} ref={wrapperRef}
            onClick={onWrapperClick} style={{ display: uploadView !== null ? "none" : "" }}>
@@ -420,7 +428,7 @@ const CardForm = observer(
                 </div>
                 <div className={styles.group}>
                   <div className={styles.name}>Колонка</div>
-                  <Select variants={card.collection.columns.map(c => ({ code: c.id, name: c.name, icon: "fire" }))}
+                  <Select variants={columnVariants}
                           selected={card.column.id} select={id => card.setColumn(id)} stretch />
                 </div>
                 <div className={styles.group}>
