@@ -45,6 +45,7 @@ const CollectionsStore = types
       safeRef(CollectionCard, "/collectionsStore", "pushCard", {
         id: "",
         name: "LOADING",
+        nameOriginal: "LOADING",
         index: 0,
         _temp: true,
         collection: "",

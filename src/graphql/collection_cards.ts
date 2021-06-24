@@ -23,7 +23,9 @@ export const GET_COLLECTION_CARDS = gql`
     collectionCards {
       id
       name
+      nameOriginal
       text
+      textOriginal
       date
       tags
       files

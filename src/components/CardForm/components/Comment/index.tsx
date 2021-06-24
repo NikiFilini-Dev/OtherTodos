@@ -31,6 +31,7 @@ const Comment = observer(({ comment, card }: Props) => {
   const [editing, setEditing] = React.useState(false)
 
   const [commentText, setCommentText] = React.useState(comment.text)
+  const [commentOriginal, setCommentOriginal] = React.useState(comment.original)
   React.useEffect(() => {
     setCommentText(comment.text)
   }, [comment.text])
@@ -43,13 +44,13 @@ const Comment = observer(({ comment, card }: Props) => {
     setTimeout(() => {
       const editor = commentRef.current?.querySelector<BakaEditor>("baka-editor")
       if (!editor) return
-      editor.setText(commentText)
+      editor.setText(commentOriginal)
       editor.addEventListener(
         "change",
         // @ts-ignore
-        (e: Event & { detail: { original: string } }) => {
-          console.log(e.detail.original)
-          setCommentText(e.detail.original)
+        (e: Event & { detail: { original: string, html: string } }) => {
+          setCommentText(e.detail.html)
+          setCommentOriginal(e.detail.original)
         },
       )
     }, 100)
@@ -60,6 +61,7 @@ const Comment = observer(({ comment, card }: Props) => {
     if (!editor) return
     setEditing(false)
     comment.setText(commentText)
+    comment.setOriginal(commentOriginal)
   }
 
   return <div key={comment.id} className={styles.comment} ref={commentRef}>
@@ -85,9 +87,7 @@ const Comment = observer(({ comment, card }: Props) => {
         </div>}
       </div>
     </div>
-    {!editing && <div className={styles.text}>
-      {comment.text}
-    </div>}
+    {!editing && <div className={styles.text} dangerouslySetInnerHTML={{__html: comment.text}} />}
     {/*@ts-ignore*/}
     {editing && <baka-editor class={styles.editor} />}
   </div>

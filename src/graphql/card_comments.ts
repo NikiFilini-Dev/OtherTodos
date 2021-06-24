@@ -19,14 +19,15 @@ export const DELETE_CARD_COMMENT = gql`
 `
 
 export const GET_CARD_COMMENT = gql`
-  query GetCardComment($id: String!) {
-    cardComment(id: $id) {
-      id
-      text
-      collectionId
-      card
-      createdAt
-      user
+    query GetCardComment($id: String!) {
+        cardComment(id: $id) {
+            id
+            text
+            original
+            collectionId
+            card
+            createdAt
+            user
+        }
     }
-  }
 `

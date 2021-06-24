@@ -91,14 +91,14 @@ const CardForm = observer(
     const noteEditorRef = React.useRef<BakaEditor | null>(null)
     React.useEffect(() => {
       if (!noteEditorRef.current || !noteEditorRef.current.setText) return
-      noteEditorRef.current.setText(card.text || "")
+      noteEditorRef.current.setText(card.textOriginal || "")
 
       noteEditorRef.current.addEventListener(
         "change",
         // @ts-ignore
-        (e: Event & { detail: { original: string } }) => {
-          console.log(e.detail.original)
-          card.setText(e.detail.original)
+        (e: Event & { detail: { original: string, html: string } }) => {
+          card.setText(e.detail.html)
+          card.setTextOriginal(e.detail.original)
         },
       )
     }, [noteEditorRef.current])
@@ -106,30 +106,32 @@ const CardForm = observer(
     const nameEditorRef = React.useRef<BakaEditor | null>(null)
     React.useEffect(() => {
       if (!nameEditorRef.current || !nameEditorRef.current.setText) return
-      nameEditorRef.current.setText(card.name || "")
+      nameEditorRef.current.setText(card.nameOriginal || "")
 
       nameEditorRef.current.addEventListener(
         "change",
         // @ts-ignore
-        (e: Event & { detail: { original: string } }) => {
-          console.log(e.detail.original)
-          card.setName(e.detail.original)
+        (e: Event & { detail: { original: string, html: string } }) => {
+          card.setName(e.detail.html)
+          card.setNameOriginal(e.detail.original)
         },
       )
     }, [nameEditorRef.current])
 
     const [commentText, setCommentText] = React.useState("")
+    const [commentOriginal, setCommentOriginal] = React.useState("")
     const commentEditorRef = React.useRef<BakaEditor | null>(null)
     React.useEffect(() => {
       if (!commentEditorRef.current || !commentEditorRef.current.setText) return
-      commentEditorRef.current.setText(commentText)
+      commentEditorRef.current.setText(commentOriginal)
 
       commentEditorRef.current.addEventListener(
         "change",
         // @ts-ignore
-        (e: Event & { detail: { original: string } }) => {
+        (e: Event & { detail: { original: string, html: string } }) => {
           console.log(e.detail.original)
-          setCommentText(e.detail.original)
+          setCommentText(e.detail.html)
+          setCommentOriginal(e.detail.original)
         },
       )
     }, [commentEditorRef.current])
@@ -183,6 +185,7 @@ const CardForm = observer(
       commentEditorRef.current.setText("")
       const comment = {
         text: commentText,
+        original: commentOriginal,
         card: card.id,
         id: v4(),
         createdAt: DateTime.now().toISO(),

@@ -26,7 +26,7 @@ export default class BakaLink extends HTMLElement {
     el.target = "_blank"
     el.innerText = this.innerText
     el.addEventListener("click", () => {
-      if (!this.ctrlPressed) return
+      if (this.ctrlPressed) return
       if (!IS_WEB) {
         require("electron").shell.openExternal(el.href)
       } else {

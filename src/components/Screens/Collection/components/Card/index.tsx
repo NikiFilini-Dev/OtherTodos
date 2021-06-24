@@ -27,12 +27,12 @@ const Card = observer(({ card, onPlusClick }: {card: ICollectionCard, onPlusClic
     {card.status === "DONE" && <div className={styles.done}><CheckboxIcon /> Завершено</div>}
     {card.preview !== null && <img src={card.preview.url} className={styles.preview} />}
     <div className={styles.title}>
-      <span className={styles.text}>{card.name}</span>
+      <span className={styles.text} dangerouslySetInnerHTML={{__html: card.name}} />
       {!!card.assigned && <div className={styles.avatar}>
         <Avatar size={"24px"} user={card.assigned} />
       </div>}
     </div>
-    {card.text !== null && <div className={styles.description}>{card.text}</div>}
+    {card.text !== null && <div className={styles.description} dangerouslySetInnerHTML={{__html: card.text}} />}
     {card.subtasks.length > 0 && <div className={styles.progressWrapper}>
       {card.doneSubtasks.length}/{card.subtasks.length}
       <div className={styles.progress} style={{"--donePercent": `${card.donePercent}%`} as CSSProperties} />

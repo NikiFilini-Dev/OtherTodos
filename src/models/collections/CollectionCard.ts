@@ -13,7 +13,9 @@ const CollectionCard = types
   .model("CollectionCard", {
     id: types.identifier,
     name: types.string,
+    nameOriginal: types.string,
     text: types.maybeNull(types.string),
+    textOriginal: types.maybeNull(types.string),
     date: types.maybeNull(types.string),
     tags: types.array(types.reference(CollectionTag)),
     collection: types.reference(Collection),
@@ -91,11 +93,17 @@ const CollectionCard = types
     actions.setName = (val: string) => self.name = val
     actionsMap.setName = ["name"]
 
+    actions.setNameOriginal = (val: string) => self.nameOriginal = val
+    actionsMap.setNameOriginal = ["nameOriginal"]
+
     actions.setIndex = (val: number) => self.index = val
     actionsMap.setIndex = ["index"]
 
     actions.setText = (val: string) => self.text = val.length ? val : null
     actionsMap.setText = ["text"]
+
+    actions.setTextOriginal = (val: string) => self.textOriginal = val.length ? val : null
+    actionsMap.setTextOriginal = ["textOriginal"]
 
     actions.setDate = (val: string) => self.date = val
     actionsMap.setDate = ["date"]

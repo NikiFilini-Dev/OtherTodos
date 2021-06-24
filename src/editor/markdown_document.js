@@ -28,12 +28,12 @@ export default class MarkdownDocument extends Document {
 
     const process = (styleNames, regexp, n) => {
       text.replace(regexp, (fullMatch, match, index) => {
-        let start = index + n
-        let end = index + fullMatch.length - n
+        let start = index + n + 1
+        let end = index + fullMatch.length - n - 1
         for (let styleName of styleNames) {
           ranges[styleName].push([start, end])
         }
-        ranges.service.push([start - n, start])
+        ranges.service.push([start-n, start])
         ranges.service.push([end, end + n])
         return match
       })
@@ -59,10 +59,10 @@ export default class MarkdownDocument extends Document {
 
     process(["bold", "italic"], /\*{3}([^*]+)\*{3}/gm, 3)
 
-    process(["bold"], /[^*]\*{2}([^*]+)\*{2}[^*]/gm, 3)
+    process(["bold"], /[^*]\*{2}([^*]+)\*{2}[^*]/gm, 2)
     process(["bold"], /^\*{2}([^*]+)\*{2}/gm, 2)
 
-    process(["italic"], /[^*]\*([^*]+)\*[^*]/gm, 2)
+    process(["italic"], /[^*]\*([^*]+)\*[^*]/gm, 1)
     process(["italic"], /^\*([^*]+)\*/gm, 1)
 
     process(["underline"], /__(.+?)__/gm, 2)

@@ -6,6 +6,7 @@ const CardComment = types
     id: types.identifier,
     createdAt: types.string,
     text: types.string,
+    original: types.string,
     user: userReference,
     card: types.string,
     collectionId: types.string,
@@ -28,6 +29,9 @@ const CardComment = types
 
     actions.setText = (s: string) => self.text = s
     actionsMap.setText = ["text"]
+
+    actions.setOriginal = (s: string) => self.original = s
+    actionsMap.setOriginal = ["original"]
 
     actions.getActionsMap = () => actionsMap
     return actions
