@@ -7,11 +7,12 @@ import TagsFilter from "components/TagsFilter"
 import TaskList from "components/TaskList"
 import Task from "../../Task"
 import Button from "../../Button"
-import PlusIcon from "../../../assets/plus.svg"
+import PlusIcon from "assets/line_awesome/plus-solid.svg"
 import FolderPlusIcon from "assets/line_awesome/folder-plus-solid.svg"
 import { useClick, useClickOutsideRef, useKeyListener, useTrap } from "../../../tools/hooks"
 import { IconsMap } from "../../../palette/icons"
 import ListIconMenu from "../../ListIconMenu"
+import TrashIcon from "assets/line_awesome/trash-alt.svg"
 
 const Project = observer(() => {
   const {
@@ -22,6 +23,7 @@ const Project = observer(() => {
     setTempTask,
     insertTempTask,
     deleteCategory,
+    deleteProject,
   } = useMst()
 
   const inputRef = React.useRef()
@@ -177,12 +179,25 @@ const Project = observer(() => {
 
           <div className={styles.actions}>
             <Button
-              icon={FolderPlusIcon}
-              awesome={true}
-              onClick={() => addCategory()}
-              secondary={true}
+              icon={TrashIcon}
+              square
+              awesome
+              secondary
+              size={"42px"}
+              onClick={() => deleteProject(selectedProject)}
             />
             <Button
+              square
+              awesome
+              secondary
+              size={"42px"}
+              icon={FolderPlusIcon}
+              onClick={() => addCategory()}
+            />
+            <Button
+              square
+              awesome
+              size={"42px"}
               icon={PlusIcon}
               onClick={() => {
                 setTempTask(initialTaskData)

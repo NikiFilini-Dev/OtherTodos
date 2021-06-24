@@ -408,6 +408,7 @@ const RootStore = types
         self.selectedProject = null
         if (self.screen === "PROJECT") self.screen = "INBOX"
       }
+      project.tasks.forEach(t => self.tasks.deleteTask(t))
       window.syncMachine.registerDelete(project.id, project.syncName)
       destroy(project)
     },

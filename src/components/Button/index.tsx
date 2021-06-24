@@ -12,6 +12,7 @@ const Button = (
     secondary = false,
     activated = false,
     awesome = false,
+    noFill = false,
     color = "",
     textColor = "white",
     iconName,
@@ -29,6 +30,7 @@ const Button = (
     iconName?: IconName
     square?: boolean
     size?: string
+    noFill?: boolean
   },
   ref,
 ) => {
@@ -50,7 +52,7 @@ const Button = (
           className={classNames({
             [styles.icon]: true,
             [styles.awesome]: awesome,
-            [styles.filled]: !awesome,
+            [styles.filled]: !awesome && !noFill,
           })}
         />
       )}

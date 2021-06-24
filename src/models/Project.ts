@@ -15,8 +15,8 @@ const Project = types
   })
   .views(self => ({
     get tasks() {
-      return getRoot<typeof RootStore>(self).tasks.filter(
-        task => task.project.id === self.id,
+      return getRoot<typeof RootStore>(self).tasks.all.filter(
+        task => task.project?.id === self.id,
       )
     },
     get sortedTasks() {
