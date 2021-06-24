@@ -30,77 +30,14 @@ import SmileIcon from "../assets/customIcons/smile.svg"
 import LabelIcon from "../assets/customIcons/label.svg"
 import CalendarCheckmarkIcon from "../assets/customIcons/calendar_checkmark.svg"
 import SettingsIcon from "../assets/customIcons/settings.svg"
+import ArchiveIcon from "assets/customIcons/archive.svg"
+import DrinkIcon from "assets/customIcons/drink.svg"
+import FolderIcon from "assets/customIcons/folder.svg"
+import ImageIcon from "assets/customIcons/image.svg"
+import InfoIcon from "assets/customIcons/info.svg"
 
-export const IconNames: IconName[] = [
-  "bookmark",
-  "ship",
-  "ball",
-  "fire",
-  "camera",
-  "win",
-  "present",
-  "pool",
-  "book",
-  "wallet",
-  "eye",
-  "heart",
-  "key",
-  "lightning",
-  "msg_bubble",
-  "pin",
-  "rocket",
-  "send",
-  "terminal",
-  "todo_list",
-  "check_list",
-  "timer",
-  "play",
-  "pause",
-  "stop",
-  "calendar",
-  "time",
-  "grid",
-  "label",
-  "smile",
-  "calendar_checkmark",
-  "settings"
-]
 
-export type IconName =
-  | "bookmark"
-  | "ship"
-  | "ball"
-  | "fire"
-  | "camera"
-  | "win"
-  | "present"
-  | "pool"
-  | "book"
-  | "wallet"
-  | "eye"
-  | "heart"
-  | "key"
-  | "lightning"
-  | "msg_bubble"
-  | "pin"
-  | "rocket"
-  | "send"
-  | "terminal"
-  | "todo_list"
-  | "check_list"
-  | "timer"
-  | "play"
-  | "pause"
-  | "stop"
-  | "calendar"
-  | "time"
-  | "grid"
-  | "label"
-  | "smile"
-  | "calendar_checkmark"
-  | "settings"
-
-export const IconsMap: Record<IconName, any> = {
+export const IconsMap = {
   bookmark: BookmarkIcon,
   ship: ShipIcon,
   ball: BallIcon,
@@ -133,4 +70,12 @@ export const IconsMap: Record<IconName, any> = {
   smile: SmileIcon,
   calendar_checkmark: CalendarCheckmarkIcon,
   settings: SettingsIcon,
+  archive: ArchiveIcon,
+  drink: DrinkIcon,
+  folder: FolderIcon,
+  image: ImageIcon,
+  info: InfoIcon
 }
+
+export type IconName = keyof typeof IconsMap
+export const IconNames: IconName[] = Object.keys(IconsMap) as IconName[]
