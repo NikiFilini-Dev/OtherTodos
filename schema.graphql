@@ -10,6 +10,7 @@ type CardComment {
     collectionId: String!
     createdAt: Date!
     id: String!
+    original: String!
     text: String!
     user: String!
 }
@@ -19,6 +20,7 @@ type CardCommentChanges {
     collectionId: Time
     createdAt: Time
     id: Time
+    original: Time
     text: Time
 }
 
@@ -41,10 +43,12 @@ type CollectionCard {
     id: String!
     index: Int!
     name: String!
+    nameOriginal: String!
     preview: String!
     status: String!
     tags: [String]!
     text: String!
+    textOriginal: String!
     userId: String!
 }
 
@@ -57,10 +61,12 @@ type CollectionCardChanges {
     id: Time
     index: Time
     name: Time
+    nameOriginal: Time
     preview: Time
     status: Time
     tags: Time
     text: Time
+    textOriginal: Time
 }
 
 type CollectionChanges {
@@ -442,6 +448,7 @@ input CardCommentChangesDate {
     collectionId: Time
     createdAt: Time
     id: Time
+    original: Time
     text: Time
 }
 
@@ -450,6 +457,7 @@ input CardCommentUpdate {
     collectionId: String
     createdAt: Date
     id: String
+    original: String
     text: String
 }
 
@@ -462,10 +470,12 @@ input CollectionCardChangesDate {
     id: Time
     index: Time
     name: Time
+    nameOriginal: Time
     preview: Time
     status: Time
     tags: Time
     text: Time
+    textOriginal: Time
 }
 
 input CollectionCardUpdate {
@@ -477,10 +487,12 @@ input CollectionCardUpdate {
     id: String
     index: Int
     name: String
+    nameOriginal: String
     preview: String
     status: String
     tags: [String]
     text: String
+    textOriginal: String
 }
 
 input CollectionChangesDate {

@@ -329,7 +329,7 @@ const CardForm = observer(
                     <TrashIcon />
                   </span>
                 )}
-                <span className={styles.reject}>
+                <span className={styles.reject} onClick={() => selectCard(null)}>
                     <TimesIcon />
                   </span>
               </div>
