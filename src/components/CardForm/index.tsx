@@ -151,18 +151,20 @@ const CardForm = observer(
     }
 
     const uploadFile = e => {
-      const file = e.target.files[0]
-      const formData = new FormData()
-      formData.append("file", file)
-      fetch(process.env.UPLOAD_URL || "http://localhost/upload", {
-        method: "POST",
-        headers: {
-          "Authorization": user.token,
-        },
-        body: formData,
-      }).then(r => r.json()).then(upload => {
-        pushUpload(upload)
-        card.addFile(upload.id)
+      const files = [...e.target.files]
+      files.forEach(file => {
+        const formData = new FormData()
+        formData.append("file", file)
+        fetch(process.env.UPLOAD_URL || "http://localhost/upload", {
+          method: "POST",
+          headers: {
+            "Authorization": user.token,
+          },
+          body: formData,
+        }).then(r => r.json()).then(upload => {
+          pushUpload(upload)
+          card.addFile(upload.id)
+        })
       })
     }
 
@@ -393,7 +395,7 @@ const CardForm = observer(
                     ))}
                     <div onClick={triggerFileUpload} className={styles.newFile}>
                       <FilePlus />
-                      <input type={"file"} style={{ display: "none" }} onChange={uploadFile} ref={fileRef} />
+                      <input type={"file"} style={{ display: "none" }} multiple onChange={uploadFile} ref={fileRef} />
                     </div>
                   </div>
                 </div>

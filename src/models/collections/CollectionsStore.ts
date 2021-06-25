@@ -80,18 +80,6 @@ const CollectionsStore = types
 
     selectCard(val) {
       self.editingCard = val
-      let cardId
-      let collectionId
-      if (typeof val === "string") {
-        cardId = val
-        collectionId = self.cards.find(c => c.id === cardId)?.collection.id
-        if (collectionId) history.pushState({}, document.title, "/app/collections/"+collectionId+"/"+cardId)
-      } else {
-        cardId = val.id
-        collectionId = typeof val.collection === "string" ? val.collection : val.collection.id
-        history.pushState({}, document.title, "/app/collections/"+collectionId+"/"+cardId)
-      }
-
     },
     selectEditingCollection(val) {
       self.editingCollection = val
