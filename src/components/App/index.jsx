@@ -17,6 +17,7 @@ import Timeline from "../Timeline"
 import noop from "lodash-es/noop"
 import Timer from "../Timer"
 import classNames from "classnames"
+import CardForm from "../CardForm"
 
 const App = observer(() => {
   const {
@@ -27,6 +28,9 @@ const App = observer(() => {
     setSidebarWidth,
     timelineWidth,
     setTimelineWidth,
+    collectionsStore: {
+      editingCard
+    }
   } = useMst()
   let Screen = Today
   switch (screen) {
@@ -148,6 +152,7 @@ const App = observer(() => {
           })}>
             <DragDropContext onDragEnd={(...args) => window.onDragEndFunc(...args)}>
               <Screen />
+              {editingCard !== null && <CardForm cardId={editingCard.id} />}
             </DragDropContext>
           </div>
           <div

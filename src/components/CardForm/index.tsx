@@ -203,7 +203,7 @@ const CardForm = observer(
 
     const onAddTaskClick = () => {
       if (card.task) {
-        deleteTask(card.task)
+        card.removeTask()
       } else {
         card.addTask()
       }

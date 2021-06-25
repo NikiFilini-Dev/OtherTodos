@@ -153,6 +153,7 @@ const CollectionCard = types
       const root = getRoot<IRootStore>(self)
       root.tasks.deleteTask(self.task)
     }
+    actionsMap.removeTask = []
 
     actions.assignUser = val => self.assigned = val
     actionsMap.assignUser = ["assigned"]

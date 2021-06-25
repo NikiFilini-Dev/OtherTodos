@@ -271,8 +271,8 @@ const Task = observer(
     }
 
     const openCard = () => {
-      setScreen("COLLECTION")
-      selectCollection(task.card.collection.id)
+      // setScreen("COLLECTION")
+      // selectCollection(task.card.collection.id)
       selectCard(task.card)
     }
 

@@ -155,7 +155,6 @@ const Collection = observer(() => {
           </FloatMenu>
         )}
         {editingCollection !== null && <CollectionForm />}
-        {editingCard !== null && <CardForm cardId={editingCard.id} />}
         <DragDropContext onDragEnd={({ draggableId, destination, type }) => {
           if (!destination) return
           if (type === "COLUMN") {
