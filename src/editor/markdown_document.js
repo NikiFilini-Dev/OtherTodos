@@ -54,7 +54,7 @@ export default class MarkdownDocument extends Document {
     process(
       ["link"],
       /(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/gm,
-      0,
+      -1,
     )
 
     process(["bold", "italic"], /\*{3}([^*]+)\*{3}/gm, 3)

@@ -140,7 +140,7 @@ const CollectionCard = types
       const root = getRoot<IRootStore>(self)
       const task = root.createTask({
         text: self.name,
-        note: self.text || "",
+        note: self.textOriginal || "",
         date: self.date,
         card: self
       })
