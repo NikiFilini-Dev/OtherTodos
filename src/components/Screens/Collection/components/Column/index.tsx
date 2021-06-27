@@ -71,6 +71,7 @@ const Column = observer(({
       createCard({
         index: newCardIndex,
         name: name,
+        nameOriginal: name,
         collection: column.collection.id,
         column: column.id,
       })
