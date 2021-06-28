@@ -26,6 +26,7 @@ import CollectionSubtask from "./types/collection_subtask"
 import Upload from "./types/upload"
 import User from "./types/user"
 import CardComment from "./types/card_comment"
+import Stylus from "stylus"
 
 const syncLogger = createLogger("SYNC")
 
@@ -54,25 +55,34 @@ export default class SyncMachine {
   applying = false
   hydrated = true
 
-  timer: NodeJS.Timeout | null = null
-  timeout = 1000
-
-  interval: NodeJS.Timeout
-  intervalTimeout = 1000 * 60 * 10
-
   store: IRootStore
+
+  sendTimer: NodeJS.Timeout | null = null
+  sendTimeout = 1000
+
+  loadTimer: NodeJS.Timeout | null = null
+  loadTimeout = 10000
 
   constructor(Store: IRootStore, waitForHydration = false) {
     this.store = Store
     this.hydrated = !waitForHydration
 
-    this.loadAll(null)
+    this.loadAll()
 
     this.hookCreate()
     this.hookUpdate()
 
-    this.initInterval()
     this.initWindowHooks()
+  }
+
+  resetLoadTimer() {
+    if (this.loadTimer !== null) clearTimeout(this.loadTimer)
+    this.loadTimer = setTimeout(() => this.loadAll(), this.loadTimeout)
+  }
+
+  resetSendTimer() {
+    if (this.sendTimer !== null) clearTimeout(this.sendTimer)
+    this.sendTimer = setTimeout(() => this.updateAll(), this.sendTimeout)
   }
 
   getTypeByName(name: string) {
@@ -83,20 +93,13 @@ export default class SyncMachine {
     Promise.all(this.types.map(type => type.loadUpdates())).then(() => {
       this.hydrated = true
       syncLogger.debug("Hydration finished")
-      this.resetTimer()
+      this.resetLoadTimer()
     })
   }
 
   initWindowHooks() {
-    window.addEventListener("blur", () => this.loadAll(null))
-    window.addEventListener("focus", () => this.loadAll(null))
-  }
-
-  initInterval() {
-    if (this.interval) clearInterval(this.interval)
-    this.interval = setInterval(() => {
-      this.loadAll(null)
-    }, this.intervalTimeout)
+    window.addEventListener("blur", () => this.resetLoadTimer())
+    window.addEventListener("focus", () => this.resetLoadTimer())
   }
 
   applyData(s: string) {
@@ -183,14 +186,11 @@ export default class SyncMachine {
     return snapshot
   }
 
-  loadAll(timer: NodeJS.Timeout | null) {
+  loadAll() {
     if (!window.getToken()) return
-    if (this.timer !== timer) return
     syncLogger.info("Loading...")
 
     const promises = this.types.map(type => type.load())
-    if (this.timer !== timer) return
-    this.timer = null
 
     Promise.all(promises).then(
       results => {
@@ -211,8 +211,7 @@ export default class SyncMachine {
   }
 
   updateAll() {
-    if (!window.getToken()) return this.resetTimer()
-    const timer = this.timer
+    if (!window.getToken()) return this.resetSendTimer()
     this.state = "sending updates"
     syncLogger.info("Sending updates...")
     const promises = this.types.map(type => type.sendUpdates())
@@ -220,13 +219,8 @@ export default class SyncMachine {
       if (!IS_WEB) jsonStorage.setItem("synced", { date: new Date() })
       this.state = "updates send"
       syncLogger.info("Updates sent.")
-      setTimeout(() => this.loadAll(timer), 1000)
+      this.resetLoadTimer()
     })
-  }
-
-  resetTimer() {
-    if (this.timer) clearTimeout(this.timer)
-    this.timer = setTimeout(() => this.updateAll(), this.timeout)
   }
 
   registerDelete(id: string, typeName: string) {
@@ -239,7 +233,7 @@ export default class SyncMachine {
     }
 
     type.registerDelete(id)
-    this.resetTimer()
+    this.resetSendTimer()
   }
 
   registerCreate(node) {
@@ -272,7 +266,7 @@ export default class SyncMachine {
     })
     syncLogger.info("Created fields: %s", JSON.stringify(fields))
     type.registerChange(fields, data.id)
-    this.resetTimer()
+    this.resetSendTimer()
   }
 
   hookCreate() {
@@ -335,7 +329,7 @@ export default class SyncMachine {
       syncLogger.info("Changed fields: %s", JSON.stringify(fields))
 
       type.registerChange(fields, call.context.id)
-      this.resetTimer()
+      this.resetSendTimer()
     }
 
     addMiddleware(this.store, (call, next) => {

@@ -80,7 +80,7 @@ const Column = observer(({
   }
 
   return <div className={classNames(styles.column, styles[size])}>
-    <div className={styles.title}
+    <div className={styles.title} title={`${column.name} #${column.index} - ${column.id}`}
          style={{ "--columnColor": ColorsMap[column.color] } as CSSProperties} {...handleProps}>
       <div className={styles.icon}>
         <Icon name={column.icon} />
