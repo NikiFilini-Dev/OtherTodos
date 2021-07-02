@@ -310,9 +310,8 @@ const Task = observer(
 
             {!state.active && task.totalTimeSpent > 0 && <Icon name={"timer"} className={styles.hasTimeIcon} />}
             {!state.active && (
-              <span className={styles.taskText}>
-                {task.isNote ? task.noteText : task.text}
-              </span>
+              <span className={styles.taskText}
+                    dangerouslySetInnerHTML={{__html: task.isNote ? task.noteText : task.text}} />
             )}
             {state.active && (
               <TextareaAutosize
