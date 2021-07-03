@@ -19,13 +19,17 @@ import classNames from "classnames"
 import { useClickOutsideRefs } from "../../../tools/hooks"
 import UsersModal from "./components/UsersModal"
 import Avatar from "../../Avatar"
+import DoorOpenIcon from "assets/line_awesome/door-open-solid.svg"
+import { REMOVE_USER_FROM_COLLECTION } from "../../../graphql/collection"
 
 type Size = "small" | "medium" | "big"
 
 const Collection = observer(() => {
   const {
+    setScreen,
     user: currentUser,
     collectionsStore: {
+      removeCollection,
       collections,
       selectCollection,
       selectedCollection,
@@ -107,6 +111,20 @@ const Collection = observer(() => {
     </div>
   })
 
+  const onExitClick = () => {
+    const id = selectedCollection.id
+    gqlClient.mutation(REMOVE_USER_FROM_COLLECTION, {
+      collectionId: id,
+      userId: currentUser.id,
+    }).toPromise().then(() => {
+      window.syncMachine.loadAll()
+      setScreen("TODAY")
+      removeCollection(id)
+    })
+  }
+
+  // console.log(currentUser.id, selectedCollection.userId.id)
+
   return (
     <div className={styles.screenWrapper}>
       <div className={styles.screen}>
@@ -115,6 +133,9 @@ const Collection = observer(() => {
             <Select variants={variants}
                     selected={selectedCollection.id} select={id => selectCollection(id)} />
             <div className={styles.puller} />
+            {currentUser.id !== selectedCollection.userId.id && (
+              <div className={styles.actionTriggerLong} onClick={onExitClick}>Покинуть <DoorOpenIcon /></div>
+            )}
             <div className={styles.actionTrigger} onClick={() => selectEditingCollection(selectedCollection)}>
               <Icon name={"settings"} />
             </div>

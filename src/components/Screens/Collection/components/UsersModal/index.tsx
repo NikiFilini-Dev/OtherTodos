@@ -37,7 +37,7 @@ const UsersModal = observer(
         collectionId: collection.id,
         userId: id,
       }).toPromise().then(() => {
-        window.syncMachine.loadAll(null)
+        window.syncMachine.loadAll()
       })
     }
 
@@ -51,7 +51,7 @@ const UsersModal = observer(
         await inviteUser(email)
       }
 
-      window.syncMachine.loadAll(null)
+      window.syncMachine.loadAll()
     }
 
     const onKeydown = e => {

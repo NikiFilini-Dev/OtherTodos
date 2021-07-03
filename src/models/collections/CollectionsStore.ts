@@ -178,6 +178,25 @@ const CollectionsStore = types
       })
       return id
     },
+    removeCollection(id: string) {
+      const collection = self.collections.find(c => c.id === id)
+      if (!collection) throw new Error("collection not found")
+
+      if (self.selectedCollection) self.selectedCollection = null
+
+      for (const column of collection.columns) {
+        for (const card of column.cards) {
+          destroy(card)
+        }
+        destroy(column)
+      }
+
+      for (const tag of collection.tags) {
+        destroy(tag)
+      }
+
+      destroy(collection)
+    },
     deleteCollection(id: string) {
       const collection = self.collections.find(c => c.id === id)
       if (!collection) throw new Error("collection not found")
@@ -197,10 +216,6 @@ const CollectionsStore = types
         }
       }
       if (self.editingCollection === collection) self.editingCollection = null
-
-
-
-
       if (collection.syncable)
         window.syncMachine.registerDelete(collection.id, collection.syncName)
 

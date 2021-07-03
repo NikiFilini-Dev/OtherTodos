@@ -1,6 +1,7 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
     actionTrigger: string
+    actionTriggerLong: string
     active: string
     add: string
     addColumn: string
