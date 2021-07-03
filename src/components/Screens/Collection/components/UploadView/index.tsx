@@ -8,16 +8,16 @@ import { ICollectionCard } from "../../../../../models/collections/CollectionCar
 import AngleLeftIcon from "assets/line_awesome/angle-left-solid.svg"
 import AngleRightIcon from "assets/line_awesome/angle-right-solid.svg"
 import { useKeyListener } from "../../../../../tools/hooks"
+import Swipe from "../../../../../tools/swipe"
 
 const UploadView = observer(() => {
-  const { collectionsStore: { uploadView, setUploadView, cards } }: IRootStore = useMst()
+  const { collectionsStore: { uploadView, setUploadView: _setUploadView, cards } }: IRootStore = useMst()
   const [el] = React.useState(document.createElement("div"))
-  React.useEffect(() => {
-    document.querySelector("#modals")?.appendChild(el)
-    return () => {
-      document.querySelector("#modals")?.removeChild(el)
-    }
-  }, [])
+
+  const setUploadView = (u) => {
+    console.log("SET UPLOAD VIEW", u)
+    _setUploadView(u)
+  }
 
   const list: IUpload[] = []
   cards.forEach((c: ICollectionCard) => {
@@ -31,29 +31,67 @@ const UploadView = observer(() => {
   const hasPrev = currentIndex > 0
   const hasNext = currentIndex < list.length - 1
 
-  useKeyListener("ArrowLeft", () => {
-    if (!hasPrev) return
-    setUploadView(list[currentIndex - 1])
-  })
-  useKeyListener("ArrowRight", () => {
-    if (!hasNext) return
-    setUploadView(list[currentIndex + 1])
-  })
+  const onLeft = () => {
+    console.log("ON LEFT")
+    if (!hasPrev) setUploadView(list[list.length - 1])
+    else setUploadView(list[currentIndex - 1])
+  }
+
+  const onRight = () => {
+    console.log("ON RIGHT", list)
+    if (!hasNext) setUploadView(list[0])
+    else setUploadView(list[currentIndex + 1])
+  }
+
+  useKeyListener("ArrowLeft", onLeft)
+  useKeyListener("ArrowRight", onRight)
+
+  React.useEffect(() => {
+    document.querySelector("#modals")?.appendChild(el)
+
+    return () => {
+      document.querySelector("#modals")?.removeChild(el)
+    }
+  }, [el])
+
+  const wrapper = React.useRef<HTMLDivElement | null>(null)
+
+  React.useEffect(() => {
+    if (!wrapper.current) return
+    console.log(wrapper.current)
+    Swipe(wrapper.current)
+
+    wrapper.current.addEventListener("swipeend", swipeListener, false)
+
+    function swipeListener (event) {
+      console.log(event)
+      event.stopPropagation()
+      if (event.direction === "left") onRight()
+      if (event.direction === "right") onLeft()
+    }
+
+    return () => {
+      wrapper.current?.removeEventListener("swipeend", swipeListener, false)
+    }
+  }, [wrapper.current, onRight, onLeft, list])
 
   if (!uploadView) return <React.Fragment />
-  return ReactDOM.createPortal(<div className={styles.wrapper} onClick={() => setUploadView(null)}>
-    {hasPrev && <div onClick={e => {
+  return ReactDOM.createPortal(<div className={styles.wrapper} ref={wrapper} onClick={e => {
+    console.log("Mouseup", e)
+    setUploadView(null)
+  }}>
+    {list.length > 1 && <div onClick={e => {
       e.stopPropagation()
-      setUploadView(list[currentIndex - 1])
+      onLeft()
     }} className={styles.left}>
       <AngleLeftIcon />
     </div>}
 
     <img src={uploadView.url} />
 
-    {hasNext && <div onClick={e => {
+    {list.length > 1 && <div onClick={e => {
       e.stopPropagation()
-      setUploadView(list[currentIndex + 1])
+      onRight()
     }} className={styles.right}>
       <AngleRightIcon />
     </div>}

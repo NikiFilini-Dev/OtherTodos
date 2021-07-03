@@ -18,6 +18,7 @@ import noop from "lodash-es/noop"
 import Timer from "../Timer"
 import classNames from "classnames"
 import CardForm from "../CardForm"
+import UploadView from "../Screens/Collection/components/UploadView"
 
 const App = observer(() => {
   const {
@@ -153,6 +154,7 @@ const App = observer(() => {
             <DragDropContext onDragEnd={(...args) => window.onDragEndFunc(...args)}>
               <Screen />
               {editingCard !== null && <CardForm cardId={editingCard.id} />}
+              <UploadView />
             </DragDropContext>
           </div>
           <div

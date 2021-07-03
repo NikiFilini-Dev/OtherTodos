@@ -188,7 +188,7 @@ const Collection = observer(() => {
             )}
           </Droppable>
         </DragDropContext>
-        <UploadView />
+
         {inviteModalOpen && <UsersModal collection={selectedCollection} onClose={() => setInviteModalOpen(false)} />}
       </div>
       <div className={styles.usersList}>
