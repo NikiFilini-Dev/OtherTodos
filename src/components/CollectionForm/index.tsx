@@ -33,7 +33,7 @@ const CollectionTag = observer(({ tag }) => {
 const CollectionForm = observer(
   ( ) => {
     const {
-      collectionsStore: { selectEditingCollection, deleteCollection, editingCollection, createTag, moveTag, deleteTag },
+      collectionsStore: { selectEditingCollection, deleteCollection, editingCollection, createTag, moveTag },
     }: IRootStore = useMst()
 
     const collection = editingCollection
@@ -72,7 +72,7 @@ const CollectionForm = observer(
           >
             <input value={collection.name} onChange={e => collection.setName(e.target.value)} />
             <div className={styles.actions}>
-              <span className={styles.reject} onClick={onWrapperClick}>
+              <span className={styles.reject} onClick={() => selectEditingCollection(null)}>
                     <TimesIcon />
                   </span>
                 <span className={styles.trash} onClick={onDeleteClick}>
