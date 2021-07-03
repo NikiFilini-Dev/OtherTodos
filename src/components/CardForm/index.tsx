@@ -28,6 +28,7 @@ import GridIcon from "assets/customIcons/grid2.svg"
 import FilePlus from "assets/line_awesome/file-medical-solid.svg"
 import SearchIcon from "assets/search.svg"
 import Avatar from "../Avatar"
+import Spinner from "./spinner.svg"
 
 const CardForm = observer(
   ({ cardId }: { cardId: string | null }) => {
@@ -150,9 +151,13 @@ const CardForm = observer(
       fileRef.current.click()
     }
 
+    const [progresses, setProgresses] = React.useState<string[]>([])
+
     const uploadFile = e => {
       const files = [...e.target.files]
       files.forEach(file => {
+        const uploadId = v4()
+        setProgresses([...progresses, uploadId])
         const formData = new FormData()
         formData.append("file", file)
         fetch(process.env.UPLOAD_URL || "http://localhost/upload", {
@@ -164,6 +169,9 @@ const CardForm = observer(
         }).then(r => r.json()).then(upload => {
           pushUpload(upload)
           card.addFile(upload.id)
+          const tmp = [...progresses]
+          tmp.splice(tmp.indexOf(uploadId), 1)
+          setProgresses([...tmp])
         })
       })
     }
@@ -227,6 +235,8 @@ const CardForm = observer(
         for (const index in items) {
           const item = items[index]
           if (item.kind === "file") {
+            const uploadId = v4()
+            setProgresses([...progresses, uploadId])
             const blob = item.getAsFile()
             console.log(blob)
             const reader = new FileReader()
@@ -248,6 +258,9 @@ const CardForm = observer(
               }).then(r => r.json()).then(upload => {
                 pushUpload(upload)
                 card.addFile(upload.id)
+                const tmp = [...progresses]
+                tmp.splice(tmp.indexOf(uploadId), 1)
+                setProgresses([...tmp])
               })
               console.log(result)
             }
@@ -393,6 +406,9 @@ const CardForm = observer(
                       <File removeFile={() => card.removeFile(file)} key={file.id} file={file}
                             currentPreview={card.preview} setPreview={card.setPreview} />
                     ))}
+                    {progresses.map(id => <div key={id} className={styles.loader}>
+                      <Spinner />
+                    </div>)}
                     <div onClick={triggerFileUpload} className={styles.newFile}>
                       <FilePlus />
                       <input type={"file"} style={{ display: "none" }} multiple onChange={uploadFile} ref={fileRef} />

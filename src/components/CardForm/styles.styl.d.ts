@@ -21,6 +21,7 @@ declare namespace StylesStylNamespace {
     files: string
     group: string
     head: string
+    loader: string
     main: string
     mainPart: string
     modal: string
