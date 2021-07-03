@@ -10,6 +10,7 @@ import Checkbox from "components/Checkbox"
 import classNames from "classnames"
 import TagsSelector from "../../TagsSelector"
 import { randomTagColor } from "../../../models/Tag"
+import { ColorsMap } from "../../../palette/colors"
 
 const padTime = s => {
   if (!s) return "00:00"
@@ -84,7 +85,7 @@ const Event = observer(({ event, isDragging }) => {
   }
 
   const styleVars = {
-    "--background": event.tag?.color || "#545454",
+    "--background": ColorsMap[event.tag?.color] || "#545454",
     "--light": "white",
     "--normal": "white",
   }

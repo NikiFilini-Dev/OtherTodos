@@ -38,6 +38,7 @@ import Icon from "../Icon"
 import BackspaceIcon from "assets/line_awesome/backspace-solid.svg"
 import GridIcon from "assets/customIcons/grid2.svg"
 import { getSnapshot } from "mobx-state-tree"
+import { ColorsMap } from "../../palette/colors"
 
 
 const areArraysEqual = (x, y) => {
@@ -290,7 +291,7 @@ const Task = observer(
           })}
           style={
             {
-              "--task-color": task.colorTag?.color,
+              "--task-color": ColorsMap[task.colorTag?.color],
               "userSelect": state.noSelection || selected === task.id ? "none" : "auto"
             } as CSSProperties
           }
@@ -346,7 +347,7 @@ const Task = observer(
               <span
                 className={styles.hasEvent}
                 style={
-                  { "--tag-color": task.event.tag?.color } as CSSProperties
+                  { "--tag-color": ColorsMap[task.event.tag?.color] } as CSSProperties
                 }
               >
                 <CalendarWeekIcon />

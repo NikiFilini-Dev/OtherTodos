@@ -23,6 +23,7 @@ const FloatMenu = observer(
     let portal = false
     let style = {}
     let modifier
+    console.log(targetBox)
     if (position === "horizontal_auto") {
       if (targetBox.x > window.innerWidth / 2) position = "horizontal_left"
       else position = "horizontal_right"

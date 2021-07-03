@@ -6,7 +6,7 @@ import styles from "./styles.styl"
 import classNames from "classnames"
 
 const ListColorMenu = observer(({ currentColorName, setColor, triggerRef, menuRef }) => {
-  return <FloatMenu position={"vertical_left"} target={triggerRef} menuRef={menuRef}>
+  return <FloatMenu position={"horizontal_auto"} target={triggerRef} menuRef={menuRef}>
     <div className={styles.list}>
       {ColorNames.map(name => {
         return <div key={`color_${name}`} className={classNames({

@@ -3,6 +3,7 @@ import { observer } from "mobx-react"
 import styles from "./styles.m.styl"
 import classNames from "classnames"
 import TagMenu from "components/menus/TagMenu"
+import { ColorsMap } from "../../palette/colors"
 
 type Props = {
   tag: any,
@@ -21,7 +22,7 @@ const Tag = observer(({ tag, selected, onClick, listed }: Props) => {
           [styles.selected]: selected,
           [styles.monotone]: !listed
         })}
-        style={{"--tagColor": tag.color} as CSSProperties}
+        style={{"--tagColor": ColorsMap[tag.color]} as CSSProperties}
         onClick={() => onClick()}
       >
         {tag.name}

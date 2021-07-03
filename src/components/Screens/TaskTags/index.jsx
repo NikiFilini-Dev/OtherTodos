@@ -7,10 +7,19 @@ import TagIcon from "assets/line_awesome/tag-solid.svg"
 import TrashIcon from "assets/line_awesome/trash-alt.svg"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import Button from "../../Button"
+import { ColorsMap } from "../../../palette/colors"
+import ListColorMenu from "../../ListColorMenu"
+import { useClickOutsideRefs } from "../../../tools/hooks"
 
 const { dialog } = require("electron").remote
 
 const Tag = observer(({ tag, provided, onTagDelete }) => {
+  const triggerRef = React.useRef(null)
+  const menuRef = React.useRef(null)
+
+  const [menuShown, setMenuShown] = React.useState(false)
+  useClickOutsideRefs([triggerRef, menuRef], () => setMenuShown(false))
+
   return (
     <div
       className={styles.tag}
@@ -22,7 +31,7 @@ const Tag = observer(({ tag, provided, onTagDelete }) => {
     >
       <TagIcon
         className={styles.colorIndicator}
-        style={{ "--tag-color": tag.color }}
+        style={{ "--tag-color": ColorsMap[tag.color] }}
       />
       <input
         value={tag.name}
@@ -32,12 +41,10 @@ const Tag = observer(({ tag, provided, onTagDelete }) => {
       <div className={styles.delete} onClick={() => onTagDelete(tag)}>
         <TrashIcon />
       </div>
-      <input
-        type={"color"}
-        className={styles.colorInput}
-        onChange={e => tag.setColor(e.target.value)}
-        defaultValue={tag.color}
-      />
+      <div className={styles.colorInput} style={{"--color": ColorsMap[tag.color]}}
+           ref={triggerRef} onClick={() => setMenuShown(true)} />
+      {menuShown && <ListColorMenu triggerRef={triggerRef} menuRef={menuRef}
+                                   currentColorName={tag.color} setColor={tag.setColor} />}
     </div>
   )
 })
