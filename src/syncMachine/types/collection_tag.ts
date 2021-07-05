@@ -13,6 +13,7 @@ export default class CollectionTag extends SyncType {
   DELETE_MUTATION = DELETE_COLLECTION_TAG
 
   preprocess(item) {
+    item = {...item}
     item.collection = item.collectionId
     // delete item.collectionId
     return item

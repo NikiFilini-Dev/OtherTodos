@@ -254,10 +254,11 @@ const CollectionsStore = types
       self.columns.push({
         collection: initialData.collection,
         index: index+1,
-        name: "Новая коллекция",
+        name: "Новая колонка",
         ...initialData,
         id
       })
+      return id
     },
     deleteColumn(id: string) {
       const column = self.columns.find(c => c.id === id)

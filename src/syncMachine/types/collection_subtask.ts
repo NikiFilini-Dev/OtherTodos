@@ -13,6 +13,7 @@ export default class CollectionSubtask extends SyncType {
   DELETE_MUTATION = DELETE_COLLECTION_SUBTASK
 
   preprocess(item) {
+    item = {...item}
     item.card = item.cardId
     // delete item.collectionId
     return item

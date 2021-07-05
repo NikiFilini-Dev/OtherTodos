@@ -13,6 +13,7 @@ export default class CollectionCard extends SyncType {
   DELETE_MUTATION = DELETE_COLLECTION_CARD
 
   preprocess(item) {
+    item = {...item}
     if (item.date === "") item.date = null
     if (item.text === "") item.text = null
     if (item.preview === "") item.preview = null

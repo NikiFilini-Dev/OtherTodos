@@ -7,6 +7,7 @@ declare namespace StylesStylNamespace {
     column: string
     count: string
     floater: string
+    floaterVertical: string
     icon: string
     medium: string
     name: string

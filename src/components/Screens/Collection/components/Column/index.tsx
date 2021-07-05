@@ -22,7 +22,7 @@ type Props = {
   size: "small" | "big" | "medium"
 }
 
-const NewCard = observer(({newCardIndex, onSubmit}) => {
+const NewCard = observer(({ newCardIndex, onSubmit }) => {
   const [name, setName] = React.useState("")
 
   const onNewCardKeyDown = e => {
@@ -49,7 +49,15 @@ const Column = observer(({
                            handleProps,
                            size,
                          }: Props) => {
-  const { collectionsStore: { createCard, userFilter, userFilterEnabled } }: IRootStore = useMst()
+  const {
+    collectionsStore: {
+      createCard,
+      userFilter,
+      userFilterEnabled,
+      createColumn,
+      moveColumn,
+    },
+  }: IRootStore = useMst()
   let cards = [...column.cards]
   if (userFilterEnabled) cards = cards.filter(c => c.assigned === userFilter)
   cards.sort((a, b) => a.index - b.index)
@@ -80,6 +88,11 @@ const Column = observer(({
     setNewCardIndex(-1)
   }
 
+  const onAddColumnClick = (index: number) => {
+    const id = createColumn({ collection: column.collection.id })
+    moveColumn(id, index)
+  }
+
   return <div className={classNames(styles.column, styles[size])}>
     <div className={styles.title} title={`${column.name} #${column.index} - ${column.id}`}
          style={{ "--columnColor": ColorsMap[column.color] } as CSSProperties} {...handleProps}>
@@ -92,6 +105,7 @@ const Column = observer(({
         <EllipsisIcon />
       </div>
       <FloatPlus onClick={() => showNewCard(0)} className={styles.floater} />
+      <FloatPlus onClick={() => onAddColumnClick(column.index + 1)} className={styles.floaterVertical} />
       {menuShown && <ColumnOptions column={column} triggerRef={triggerRef} menuRef={menuRef} />}
     </div>
 
@@ -107,7 +121,7 @@ const Column = observer(({
               <React.Fragment key={card.id}>
                 {card.index === newCardIndex && (
                   <NewCard newCardIndex={newCardIndex} onSubmit={name => submitNewCard(name)} />
-                  )}
+                )}
                 <Draggable draggableId={card.id} index={card.index}>
                   {(provided) =>
                     <div
@@ -123,14 +137,16 @@ const Column = observer(({
             ))}
             {provided.placeholder}
           </div>
-          {(column.cards[column.cards.length-1]?.index+1 || 0) === newCardIndex &&
+          {(column.cards[column.cards.length - 1]?.index + 1 || 0) === newCardIndex &&
           <NewCard newCardIndex={newCardIndex} onSubmit={submitNewCard} />}
-          {column.cards.length > 0 && <div className={styles.add}
-                                           onClick={() => showNewCard(column.cards[column.cards.length-1]?.index+1)}>
-            + Добавить карточку
-          </div>}
+          {column.cards.length > 0 && (
+            <div className={styles.add}
+                 onClick={() => showNewCard(column.cards[column.cards.length - 1]?.index + 1)}>
+              + Добавить карточку
+            </div>
+          )}
           {column.cards.length === 0 && <div className={styles.add}
-                                             onClick={() => showNewCard( 0)}>
+                                             onClick={() => showNewCard(0)}>
             <span>+ Добавить карточку</span>
             <SmileysIcon />
             <span className={styles.big}>Карточки отсутствуют</span>

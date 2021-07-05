@@ -22,7 +22,6 @@ export default class Upload extends SyncType {
 
   async getOne<T>(id: string): Promise<SnapshotIn<T>|false> {
     const result = await gqlClient.query(GET_UPLOAD, {id}).toPromise()
-    console.log("DATA", result.data.upload)
     return result.data.upload
   }
 }

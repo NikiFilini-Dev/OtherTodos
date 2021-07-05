@@ -13,6 +13,7 @@ export default class CollectionColumn extends SyncType {
   DELETE_MUTATION = DELETE_COLLECTION_COLUMN
 
   preprocess(item) {
+    item = {...item}
     if (item.icon === "") delete item.icon
     item.collection = item.collectionId
     return item
