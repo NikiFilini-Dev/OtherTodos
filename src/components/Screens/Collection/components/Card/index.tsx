@@ -27,6 +27,7 @@ const Card = observer(({ card, onPlusClick }: {card: ICollectionCard, onPlusClic
     {card.status === "DONE" && <div className={styles.done}><CheckboxIcon /> Завершено</div>}
     {card.preview !== null && <img src={card.preview.url} className={styles.preview} />}
     <div className={styles.title}>
+      {/*<span className={styles.text} dangerouslySetInnerHTML={{__html: `${card.index}. ${card.name}`}} />*/}
       <span className={styles.text} dangerouslySetInnerHTML={{__html: card.name}} />
       {!!card.assigned && <div className={styles.avatar}>
         <Avatar size={"24px"} user={card.assigned} />

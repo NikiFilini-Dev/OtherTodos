@@ -67,6 +67,10 @@ const RootStore = types
     collectionsStore: CollectionsStore,
   })
   .actions(self => ({
+    healthCheck() {
+      self.collectionsStore.healthCheckCards()
+      this.healthCheckSubtasks()
+    },
     pushProject(val) {
       self.projects.push(val)
     },
@@ -258,7 +262,7 @@ const RootStore = types
       if (window.IS_WEB) {
         localStorage.setItem("user", JSON.stringify(user))
       }
-      setTimeout(() => window.syncMachine.resetTimer(), 10)
+      setTimeout(() => window.syncMachine.resetLoadTimer(), 10)
       if (user?.id && self.screen === "AUTH") {
         self.screen = "TODAY"
       }
