@@ -74,6 +74,7 @@ const Column = observer(({
         nameOriginal: name,
         collection: column.collection.id,
         column: column.id,
+        assigned: userFilter?.id,
       })
     }
     setNewCardIndex(-1)

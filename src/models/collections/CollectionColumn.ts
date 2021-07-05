@@ -25,7 +25,9 @@ const CollectionColumn = types
     },
     get cards() {
       const root = getRoot<IRootStore>(self)
-      return root.collectionsStore.cards.filter(card => card.column === self)
+      const cards = [...root.collectionsStore.cards.filter(card => card.column === self)]
+      cards.sort((a,b) => a.index - b.index)
+      return cards
     }
   }))
   .actions(self => {
