@@ -69,6 +69,7 @@ const CollectionsStore = types
       })
 
       Object.values(cardsMap).forEach(list => {
+        list.sort((a,b) => a.index - b.index)
         list.forEach((card, index) => {
           if (card.index !== index) {
             card.setIndex(index)
