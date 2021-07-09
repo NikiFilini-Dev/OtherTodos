@@ -68,6 +68,7 @@ const RootStore = types
   })
   .actions(self => ({
     healthCheck() {
+      self.collectionsStore.healthCheckColumns()
       self.collectionsStore.healthCheckCards()
       this.healthCheckSubtasks()
     },

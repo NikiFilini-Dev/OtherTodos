@@ -17,10 +17,6 @@ type Props = {
 }
 
 const Comment = observer(({ comment, card }: Props) => {
-  const onDeleteClick = e => {
-    e.preventDefault()
-  }
-
   const format: LocaleOptions & DateTimeFormatOptions = {
     month: "short",
     day: "numeric",
@@ -32,6 +28,9 @@ const Comment = observer(({ comment, card }: Props) => {
 
   const [commentText, setCommentText] = React.useState(comment.text)
   const [commentOriginal, setCommentOriginal] = React.useState(comment.original)
+  if (commentOriginal === "" && comment.original !== "") {
+    setCommentOriginal(comment.original)
+  }
   React.useEffect(() => {
     setCommentText(comment.text)
   }, [comment.text])

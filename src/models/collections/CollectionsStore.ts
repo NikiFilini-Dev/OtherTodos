@@ -57,6 +57,26 @@ const CollectionsStore = types
   })
   .views(() => ({}))
   .actions(self => ({
+    healthCheckColumns() {
+      const columnsMap: Record<string, ICollectionColumn[]> = {}
+
+      self.columns.forEach(column => {
+        if (column.collection.id in columnsMap) {
+          columnsMap[column.collection.id].push(column)
+        } else {
+          columnsMap[column.collection.id] = [column]
+        }
+      })
+
+      Object.values(columnsMap).forEach(list => {
+        list.sort((a,b) => a.index - b.index)
+        list.forEach((card, index) => {
+          if (card.index !== index) {
+            card.setIndex(index)
+          }
+        })
+      })
+    },
     healthCheckCards() {
       const cardsMap: Record<string, ICollectionCard[]> = {}
 
