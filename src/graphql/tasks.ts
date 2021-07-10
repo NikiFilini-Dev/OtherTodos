@@ -41,7 +41,7 @@ export const GET_TASKS = gql`
   }
 `
 
-export const GET_TASKS_SINCE = gql`
+export const GET_UPDATED_TASKS = gql`
   query GetTasksUpdated($since: Time!) {
     updatedTasks(since: $since) {
       id
@@ -60,6 +60,8 @@ export const GET_TASKS_SINCE = gql`
       event
       colorTag
       card
+
+      deletedAt
     }
   }
 `

@@ -29,3 +29,17 @@ export const GET_COLLECTION_SUBTASKS = gql`
     }
   }
 `
+
+export const GET_UPDATED_COLLECTION_SUBTASKS = gql`
+  query GetCollectionSubtasks($since: Time!) {
+    updatedCollectionSubtasks(since: $since) {
+      id
+      text
+      status
+      cardId
+      index
+
+      deletedAt
+    }
+  }
+`

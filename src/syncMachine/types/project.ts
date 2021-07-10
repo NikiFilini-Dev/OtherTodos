@@ -3,6 +3,7 @@ import gqlClient from "../../graphql/client"
 import {
   DELETE_PROJECT,
   GET_PROJECTS,
+  GET_UPDATED_PROJECTS,
   UPDATE_PROJECT,
 } from "../../graphql/projects"
 
@@ -11,6 +12,10 @@ export default class Project extends SyncType {
 
   UPDATE_MUTATION = UPDATE_PROJECT
   DELETE_MUTATION = DELETE_PROJECT
+  GET_UPDATED = GET_UPDATED_PROJECTS
+
+  PATH = "collectionsStore.projects"
+  DATA_NAME = "updatedProjects"
 
   preprocess(item) {
     if (item.icon === "") item.icon = "check_list"

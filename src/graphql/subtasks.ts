@@ -30,3 +30,18 @@ export const GET_SUBTASKS = gql`
     }
   }
 `
+
+export const GET_UPDATED_SUBTASKS = gql`
+  query GetSubtasks($since: Time!) {
+    updatedSubtasks(since: $since) {
+      id
+      text
+      status
+      closedAt
+      task
+      index
+
+      deletedAt
+    }
+  }
+`

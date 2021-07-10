@@ -29,3 +29,17 @@ export const GET_PROJECTS = gql`
     }
   }
 `
+
+export const GET_UPDATED_PROJECTS = gql`
+  query GetProjects($since: Time!) {
+    updatedProjects(since: $since) {
+      id
+      name
+      icon
+      index
+      categories
+
+      deletedAt
+    }
+  }
+`

@@ -11,7 +11,7 @@ export default class TaskState {
   }
 
   project: null | IProject = null
-  projectChanged  = false
+  projectChanged = false
 
   tags: ITag[] = []
   tagsChanged = false
@@ -22,7 +22,6 @@ export default class TaskState {
 
   setTags(arr: ITag[], silent = false) {
     this.tags = arr
-    console.log(arr)
     if (!silent) this.tagsChanged = true
   }
 
@@ -156,17 +155,13 @@ export default class TaskState {
   }
 
   elementInAnyMenuOrTrigger(el) {
-    console.log(this.refs.menus)
     for (const name of Object.keys(this.menus)) {
       if (
         this.inRef(el, this.refs.menus[name].menu) ||
         this.inRef(el, this.refs.menus[name].trigger)
-      ){
-        console.log("IN MENU", name)
+      ) {
         return true
       }
-
-
     }
     return false
   }

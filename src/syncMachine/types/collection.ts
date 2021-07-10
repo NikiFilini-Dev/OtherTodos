@@ -3,6 +3,7 @@ import gqlClient from "../../graphql/client"
 import {
   DELETE_COLLECTION,
   GET_COLLECTIONS,
+  GET_UPDATED_COLLECTIONS,
   UPDATE_COLLECTION,
 } from "../../graphql/collection"
 
@@ -11,6 +12,10 @@ export default class Collection extends SyncType {
 
   UPDATE_MUTATION = UPDATE_COLLECTION
   DELETE_MUTATION = DELETE_COLLECTION
+  GET_UPDATED = GET_UPDATED_COLLECTIONS
+
+  PATH = "collectionsStore.collections"
+  DATA_NAME = "updatedCollections"
 
   preprocess(item) {
     return item
@@ -22,7 +27,9 @@ export default class Collection extends SyncType {
 
     return snapshot => {
       this.lastLoadAt = now
-      snapshot.collectionsStore.collections = result.data.collections.map(this.preprocess)
+      snapshot.collectionsStore.collections = result.data.collections.map(
+        this.preprocess,
+      )
       return snapshot
     }
   }

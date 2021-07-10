@@ -6,23 +6,22 @@ import TagMenu from "components/menus/TagMenu"
 import { ColorsMap } from "../../palette/colors"
 
 type Props = {
-  tag: any,
-  selected: boolean,
-  onClick: () => void,
+  tag: any
+  selected: boolean
+  onClick: () => void
   listed?: boolean
 }
 
 const Tag = observer(({ tag, selected, onClick, listed }: Props) => {
-  console.log(tag)
   return (
     <TagMenu tag={tag} key={`tag_${tag.id}`}>
       <span
         className={classNames({
           [styles.tag]: true,
           [styles.selected]: selected,
-          [styles.monotone]: !listed
+          [styles.monotone]: !listed,
         })}
-        style={{"--tagColor": ColorsMap[tag.color]} as CSSProperties}
+        style={{ "--tagColor": ColorsMap[tag.color] } as CSSProperties}
         onClick={() => onClick()}
       >
         {tag.name}

@@ -3,6 +3,7 @@ import gqlClient from "../../graphql/client"
 import {
   DELETE_SUBTASK,
   GET_SUBTASKS,
+  GET_UPDATED_SUBTASKS,
   UPDATE_SUBTASK,
 } from "../../graphql/subtasks"
 
@@ -11,6 +12,10 @@ export default class Subtask extends SyncType {
 
   UPDATE_MUTATION = UPDATE_SUBTASK
   DELETE_MUTATION = DELETE_SUBTASK
+  GET_UPDATED = GET_UPDATED_SUBTASKS
+
+  PATH = "subtasks"
+  DATA_NAME = "updatedSubtasks"
 
   preprocess(item) {
     if (item.closedAt === "") item.closedAt = null

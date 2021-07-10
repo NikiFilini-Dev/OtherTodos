@@ -18,8 +18,22 @@ export const DELETE_PROJECT_CATEGORY = gql`
   }
 `
 
+export const GET_UPDATED_PROJECT_CATEGORIES = gql`
+  query GetProjectCategories($since: Time!) {
+    updatedProjectCategories(since: $since) {
+      id
+      name
+      icon
+      index
+      folded
+
+      deletedAt
+    }
+  }
+`
+
 export const GET_PROJECT_CATEGORIES = gql`
-  query GetProjectCategoriess {
+  query GetProjectCategories {
     projectCategories {
       id
       name
