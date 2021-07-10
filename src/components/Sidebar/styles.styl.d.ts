@@ -4,6 +4,7 @@ declare namespace StylesStylNamespace {
     addTrigger: string
     beta: string
     colorInput: string
+    group: string
     groupElement: string
     groupElementAwesomeIcon: string
     groupElementIcon: string

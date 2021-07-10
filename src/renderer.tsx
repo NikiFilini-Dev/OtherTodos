@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import App from "./components/App/index.jsx"
+import App from "./components/App"
 import RootStore, { Provider } from "./models/RootStore"
 import jsonStorage from "tools/jsonStorage"
 import migrations from "models/migrations"
@@ -23,34 +23,37 @@ if (!IS_WEB) {
   })
 }
 
-type mapReturn = {screen: string, [key: string]: any}
+type mapReturn = { screen: string; [key: string]: any }
 
 const mapUrl = (): mapReturn => {
   const url = location.pathname
   const screen = url.match(/\/app\/([^\/]+)/)
   console.log(url, screen)
-  if (!screen) return {screen: "TODAY"}
+  if (!screen) return { screen: "TODAY" }
   switch (screen[1]) {
     case "tags":
-      return {screen: "TAGS", selectedTagType: "TASK"}
+      return { screen: "TAGS", selectedTagType: "TASK" }
     case "eventTags":
-      return {screen: "TAGS", selectedTagType: "EVENT"}
+      return { screen: "TAGS", selectedTagType: "EVENT" }
     case "inbox":
-      return {screen: "INBOX"}
+      return { screen: "INBOX" }
     case "log":
-      return {screen: "LOG"}
+      return { screen: "LOG" }
     case "projects":
       // eslint-disable-next-line no-case-declarations
       const project = url.match(/\/app\/projects\/([^\/]+)/)
-      if (!project) return {screen: "TODAY"}
-      return {screen: "PROJECT", selectedProject: project[1]}
+      if (!project) return { screen: "TODAY" }
+      return { screen: "PROJECT", selectedProject: project[1] }
     case "collections":
       // eslint-disable-next-line no-case-declarations
       const collection = url.match(/\/app\/collections\/([^\/]+)/)
-      if (!collection) return {screen: "TODAY"}
-      return {screen: "COLLECTION", collectionsStore: {selectedCollection: collection[1]}}
+      if (!collection) return { screen: "TODAY" }
+      return {
+        screen: "COLLECTION",
+        collectionsStore: { selectedCollection: collection[1] },
+      }
     default:
-      return {screen: "TODAY"}
+      return { screen: "TODAY" }
   }
 }
 
@@ -82,13 +85,13 @@ let data = {
     columns: [],
     cards: [],
     subtasks: [],
-    selectedCollection: null
+    selectedCollection: null,
   }),
 
   sidebarWidth: JSON.parse(localStorage.getItem("sidebarWidth") || "250"),
   timelineWidth: JSON.parse(localStorage.getItem("timelineWidth") || "350"),
 }
-data = {...data, ...mapUrl()}
+data = { ...data, ...mapUrl() }
 console.log(mapUrl())
 const Store = RootStore.create(data)
 

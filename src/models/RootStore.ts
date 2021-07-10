@@ -37,7 +37,15 @@ const RootStore = types
     selectedDate: DateTime.now().toFormat("M/d/yyyy"),
     timelineDate: DateTime.now().toFormat("M/d/yyyy"),
     screen: types.optional(
-      types.enumeration(["INBOX", "TODAY", "PROJECT", "LOG", "TAGS", "AUTH", "COLLECTION"]),
+      types.enumeration([
+        "INBOX",
+        "TODAY",
+        "PROJECT",
+        "LOG",
+        "TAGS",
+        "AUTH",
+        "COLLECTION",
+      ]),
       "COLLECTION",
     ),
     selectedProject: types.maybeNull(
@@ -45,8 +53,8 @@ const RootStore = types
         id: "",
         name: "LOADING",
         index: 0,
-        _temp: true
-      })
+        _temp: true,
+      }),
     ),
     tags: types.array(Tag),
     selectedTag: types.maybeNull(types.reference(Tag)),
@@ -63,7 +71,10 @@ const RootStore = types
     subtasks: types.array(Subtask),
     timerSessions: types.array(TimerSession),
     runningTimerSession: types.maybeNull(types.reference(TimerSession)),
-    timerStatus: types.optional(types.enumeration("TimerStatuses", ["RUNNING", "PAUSE", "NONE"]), "NONE"),
+    timerStatus: types.optional(
+      types.enumeration("TimerStatuses", ["RUNNING", "PAUSE", "NONE"]),
+      "NONE",
+    ),
     collectionsStore: CollectionsStore,
   })
   .actions(self => ({
@@ -104,9 +115,13 @@ const RootStore = types
     startTimer(task) {
       if (task === self.tempTask) return
       const newId = uuidv4()
-      self.timerSessions.push(
-        {task, date: DateTime.now().toFormat("M/d/yyyy"),
-          start: DateTime.now().toFormat("H:m"), duration: 0, id: newId } as ITimerSession)
+      self.timerSessions.push({
+        task,
+        date: DateTime.now().toFormat("M/d/yyyy"),
+        start: DateTime.now().toFormat("H:m"),
+        duration: 0,
+        id: newId,
+      } as ITimerSession)
       // @ts-ignore
       self.runningTimerSession = newId
       self.timerStatus = "RUNNING"
@@ -114,7 +129,7 @@ const RootStore = types
     addSubtask(initialData: Partial<ISubtask>) {
       if (!initialData.task) return
       const id = initialData.id ? initialData.id : uuidv4()
-      if ("index" in initialData && typeof(initialData.task) !== "string") {
+      if ("index" in initialData && typeof initialData.task !== "string") {
         initialData.task.subtasks.forEach(st => {
           if (st.index >= (initialData.index as number))
             st.setIndex(st.index + 1)
@@ -138,14 +153,14 @@ const RootStore = types
       return id
     },
     healthCheckSubtasks() {
-      const groups: {[key: string]: ISubtask[]} = {}
+      const groups: { [key: string]: ISubtask[] } = {}
       self.subtasks.forEach(st => {
         if (st.task.id in groups) groups[st.task.id].push(st)
         else groups[st.task.id] = [st]
       })
 
       Object.values(groups).forEach(group => {
-        group.sort((a,b) => a.index - b.index)
+        group.sort((a, b) => a.index - b.index)
         group.forEach((st, i) => {
           if (st.index !== i) st.setIndex(i)
         })
@@ -161,10 +176,10 @@ const RootStore = types
       taskSubtasks.forEach(st => {
         if (st.id === subtask.id) return
         if (st.index < subtask.index && st.index >= newIndex) {
-          st.setIndex(st.index+1)
+          st.setIndex(st.index + 1)
         }
         if (st.index > subtask.index && st.index <= newIndex) {
-          st.setIndex(st.index-1)
+          st.setIndex(st.index - 1)
         }
       })
 
@@ -263,7 +278,7 @@ const RootStore = types
       if (window.IS_WEB) {
         localStorage.setItem("user", JSON.stringify(user))
       }
-      setTimeout(() => window.syncMachine.resetLoadTimer(), 10)
+      setTimeout(() => window.syncMachine.loadAll(), 10)
       if (user?.id && self.screen === "AUTH") {
         self.screen = "TODAY"
       }
@@ -272,8 +287,8 @@ const RootStore = types
     selectTagType(type) {
       self.selectedTagType = type
       if (type === "TASK") history.pushState({}, document.title, "/app/tags/")
-      if (type === "EVENT") history.pushState({}, document.title, "/app/eventTags/")
-
+      if (type === "EVENT")
+        history.pushState({}, document.title, "/app/eventTags/")
     },
     setSidebarWidth(val) {
       self.sidebarWidth = val
@@ -304,8 +319,7 @@ const RootStore = types
       self.tempTask = task
       if (self.tempTask !== null)
         console.log("Temp task:", self.tempTask.toJSON())
-      else
-        console.log("Temp task:", self.tempTask)
+      else console.log("Temp task:", self.tempTask)
     },
     setEditingTask(task) {
       task = taskFactory(uuidv4(), task)
@@ -315,8 +329,7 @@ const RootStore = types
       self.editingTask = task
       if (self.editingTask !== null)
         console.log("Editing task:", self.editingTask.toJSON())
-      else
-        console.log("Editing task:", self.editingTask)
+      else console.log("Editing task:", self.editingTask)
     },
     setTimelineDate(val) {
       if (val instanceof Date) {
@@ -379,17 +392,21 @@ const RootStore = types
       self.tempTask = null
       self.selectedDate = DateTime.now().toFormat("M/d/yyyy")
 
-      if (screen === "TODAY") history.pushState({}, document.title, "/app/today/")
+      if (screen === "TODAY")
+        history.pushState({}, document.title, "/app/today/")
       if (screen === "LOG") history.pushState({}, document.title, "/app/log/")
-      if (screen === "INBOX") history.pushState({}, document.title, "/app/inbox/")
-      if (screen === "PROJECT") history.pushState({}, document.title, "/app/projects/")
-      if (screen === "COLLECTION") history.pushState({}, document.title, "/app/projects/")
+      if (screen === "INBOX")
+        history.pushState({}, document.title, "/app/inbox/")
+      if (screen === "PROJECT")
+        history.pushState({}, document.title, "/app/projects/")
+      if (screen === "COLLECTION")
+        history.pushState({}, document.title, "/app/projects/")
       if (screen === "TAG") history.pushState({}, document.title, "/app/tags/")
     },
     selectProject(project) {
       self.selectedProject = project
       const id = typeof project === "string" ? project : project.id
-      history.pushState({}, document.title, "/app/projects/"+id)
+      history.pushState({}, document.title, "/app/projects/" + id)
     },
     selectTag(tag) {
       self.selectedTag = tag

@@ -1,17 +1,14 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
-    app: string
-    globalWrapper: string
-    main: string
-    mainAndTimeline: string
-    noSidebar: string
-    resizeHandle: string
-    sideBar: string
-    timeline: string
-    timer: string
-    timerWrapper: string
-    topBar: string
-    verticalWrapper: string
+    active: string
+    email: string
+    info: string
+    item: string
+    menu: string
+    name: string
+    signOut: string
+    userInfo: string
+    username: string
   }
 }
 

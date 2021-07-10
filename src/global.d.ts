@@ -14,6 +14,7 @@ declare global {
     syncMachine: SyncMachine
     IS_WEB: boolean
     Store: IRootStore
+    onDragEndFunc?: any
   }
 }
 // eslint-disable-next-line max-len

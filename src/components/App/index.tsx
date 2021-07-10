@@ -1,4 +1,4 @@
-import React from "react"
+import React, { CSSProperties } from "react"
 import styles from "./styles.styl"
 
 import { observer } from "mobx-react"
@@ -19,6 +19,7 @@ import Timer from "../Timer"
 import classNames from "classnames"
 import CardForm from "../CardForm"
 import UploadView from "../Screens/Collection/components/UploadView"
+import Top from "../Top"
 
 const App = observer(() => {
   const {
@@ -29,9 +30,7 @@ const App = observer(() => {
     setSidebarWidth,
     timelineWidth,
     setTimelineWidth,
-    collectionsStore: {
-      editingCard
-    }
+    collectionsStore: { editingCard },
   } = useMst()
   let Screen = Today
   switch (screen) {
@@ -71,7 +70,11 @@ const App = observer(() => {
     [],
   )
 
-  const onDragStart = (getInitialData, processMove, prevent = () => false) => {
+  const onDragStart = (
+    getInitialData,
+    processMove,
+    prevent: (e?: any) => boolean = () => false,
+  ) => {
     return e => {
       if (prevent(e)) return
       e.preventDefault()
@@ -87,32 +90,35 @@ const App = observer(() => {
     }
   }
 
-  const sidebarRef = React.useRef(null)
+  const sidebarRef = React.useRef<HTMLDivElement | null>(null)
   const onResizeSidebarStart = onDragStart(
     () => ({}),
     e => {
+      if (!sidebarRef.current) return
       const box = sidebarRef.current.getBoundingClientRect()
       const width = e.pageX - 32 - box.left
       setSidebarWidth(width > 250 ? width : 250)
     },
   )
 
-  const timelineRef = React.useRef(null)
+  const timelineRef = React.useRef<HTMLDivElement | null>(null)
   const onResizeTimelineStart = onDragStart(
     () => ({}),
     e => {
+      if (!timelineRef.current) return
       const box = timelineRef.current.getBoundingClientRect()
-      const width = (window.innerWidth - e.pageX) - (window.innerWidth - box.right) - 18
+      const width =
+        window.innerWidth - e.pageX - (window.innerWidth - box.right) - 18
       // console.log(width, window.innerWidth, e.pageX, (window.innerWidth - box.right))
       setTimelineWidth(width > 350 ? width : 350)
     },
   )
 
-  const topRef = React.useRef(null)
+  const topRef = React.useRef<HTMLDivElement | null>(null)
   const [topSize, setTopSize] = React.useState(0)
   React.useEffect(() => {
     const resizeObserver = new ResizeObserver(entries => {
-      for (let entry of entries) {
+      for (const entry of entries) {
         console.log("Resize", entry.contentRect.height, entries)
         setTopSize(entry.contentRect.height)
       }
@@ -121,52 +127,66 @@ const App = observer(() => {
       console.log("Subscribe")
       resizeObserver.observe(topRef.current)
     }
-    return () => resizeObserver.unobserve(topRef.current)
+    return () => {
+      if (!topRef.current) return
+      resizeObserver.unobserve(topRef.current)
+    }
   }, [topRef.current])
 
   return (
     <div
-      className={styles.app}
-      style={{
-        "--sidebar-width": `${sidebarWidth}px`,
-        "--timeline-width": `${timelineWidth}px`,
-        "--topHeight": `${topSize}px`,
-        "--bottomHeight": "calc(100% - var(--topHeight, 0px))"
-      }}
+      className={styles.globalWrapper}
+      style={
+        {
+          "--sidebar-width": `${sidebarWidth}px`,
+          "--timeline-width": `${timelineWidth}px`,
+          "--topHeight": `${topSize}px`,
+          "--bottomHeight": "calc(100% - var(--topHeight, 0px))",
+        } as CSSProperties
+      }
     >
-      <div className={styles.sideBar} ref={sidebarRef}>
-        <Sidebar />
+      <div className={styles.topBar}>
+        <Top />
       </div>
-      <div
-        className={styles.resizeHandle}
-        draggable={true}
-        onDragStart={e => onResizeSidebarStart(e)}
-      />
-      <div className={styles.verticalWrapper}>
-        <div ref={topRef}>
-          <Timer />
+      <div className={styles.app}>
+        <div className={styles.sideBar} ref={sidebarRef}>
+          <Sidebar />
         </div>
-        <div className={styles.mainAndTimeline}>
-          <div className={classNames({
-            [styles.main]: true,
-            [styles.noSidebar]: screen === "COLLECTION"
-          })}>
-            <DragDropContext onDragEnd={(...args) => window.onDragEndFunc(...args)}>
-              <Screen />
-              {editingCard !== null && <CardForm cardId={editingCard.id} />}
-              <UploadView />
-            </DragDropContext>
+        <div
+          className={styles.resizeHandle}
+          draggable={true}
+          onDragStart={e => onResizeSidebarStart(e)}
+        />
+        <div className={styles.verticalWrapper}>
+          <div ref={topRef}>
+            <Timer />
           </div>
-          <div
-            className={styles.resizeHandle}
-            draggable={true}
-            onDragStart={e => onResizeTimelineStart(e)}
-          />
-          {screen !== "COLLECTION" && (
-            <div className={styles.timeline} ref={timelineRef}>
-              <Timeline />
+          <div className={styles.mainAndTimeline}>
+            <div
+              className={classNames({
+                [styles.main]: true,
+                [styles.noSidebar]: screen === "COLLECTION",
+              })}
+            >
+              <DragDropContext
+                onDragEnd={(...args) => window.onDragEndFunc(...args)}
+              >
+                <Screen />
+                {editingCard !== null && <CardForm cardId={editingCard.id} />}
+                <UploadView />
+              </DragDropContext>
             </div>
-          )}
+            <div
+              className={styles.resizeHandle}
+              draggable={true}
+              onDragStart={e => onResizeTimelineStart(e)}
+            />
+            {screen !== "COLLECTION" && (
+              <div className={styles.timeline} ref={timelineRef}>
+                <Timeline />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

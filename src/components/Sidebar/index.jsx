@@ -91,7 +91,7 @@ const Group = observer(
     type,
     initiallyFolded,
     colored,
-    namePrompt=true,
+    namePrompt = true,
   }) => {
     const [isOpen, setIsOpen] = React.useState(!initiallyFolded)
     const [isAddActive, setIsAddActive] = React.useState(false)
@@ -190,7 +190,7 @@ const Group = observer(
     })
 
     return (
-      <div>
+      <div className={styles.group}>
         <div className={styles.groupTitle} onClick={onTitleClick}>
           <ArrowRightIcon
             className={classNames({
@@ -236,24 +236,26 @@ Group.propTypes = {
   onAdd: propTypes.func,
 }
 
-const Foldable = observer(({name, children}) => {
+const Foldable = observer(({ name, children }) => {
   const [isOpen, setIsOpen] = React.useState(true)
   const onTitleClick = e => {
     setIsOpen(!isOpen)
   }
 
-  return <div>
-    <div className={styles.groupTitle} onClick={onTitleClick}>
-      <ArrowRightIcon
-        className={classNames({
-          [styles.groupTitleIcon]: true,
-          [styles.groupTitleIconOpen]: isOpen,
-        })}
-      />
-      {name}
+  return (
+    <div>
+      <div className={styles.groupTitle} onClick={onTitleClick}>
+        <ArrowRightIcon
+          className={classNames({
+            [styles.groupTitleIcon]: true,
+            [styles.groupTitleIconOpen]: isOpen,
+          })}
+        />
+        {name}
+      </div>
+      {isOpen && children}
     </div>
-    {isOpen && children}
-  </div>
+  )
 })
 
 const Sidebar = observer(() => {
@@ -280,8 +282,8 @@ const Sidebar = observer(() => {
       selectedCollection,
       selectCollection,
       createCollection,
-      deleteCollection
-    }
+      deleteCollection,
+    },
   } = useMst()
 
   const addProject = name => {
@@ -290,7 +292,7 @@ const Sidebar = observer(() => {
   }
 
   const addCollection = () => {
-    const collectionId = createCollection({name: "Новая коллекция"})
+    const collectionId = createCollection({ name: "Новая коллекция" })
     selectCollection(collectionId)
     setScreen("COLLECTION")
   }
@@ -316,124 +318,117 @@ const Sidebar = observer(() => {
   const sortedCollections = [...collections]
   sortedCollections.sort((a, b) => a.index - b.index)
 
-  const onSignOutClick = async () => {
-    setUser(null)
-    await backup()
-    clear()
-    // location.reload()
-  }
-
   return (
     <React.Fragment>
-      <div className={styles.logoWrapper}>
-        <Logo className={styles.logo} />
-        {!process.env.IS_DEV && <span className={styles.logoTitle}>Task</span>}
-        {Boolean(process.env.IS_DEV) && <span className={styles.logoTitle+" "+styles.beta}>Beta</span>}
-      </div>
       <div className={styles.sidebar}>
-        <div
-          className={classNames({
-            [styles.groupElement]: true,
-            [styles.active]: screen === "INBOX",
-          })}
-          onClick={() => setScreen("INBOX")}
-        >
-          <Icon name={"msg_bubble"} className={styles.groupElementIcon} />
-          Входящие
-        </div>
-        <div
-          className={classNames({
-            [styles.groupElement]: true,
-            [styles.active]: screen === "TODAY",
-          })}
-          onClick={() => {
-            setScreen("TODAY")
-            selectDate(DateTime.now().toFormat("M/d/yyyy"))
-          }}
-        >
-          <Icon name={"smile"} className={styles.groupElementIcon} />
-          Сегодня
-        </div>
-        <div
-          className={classNames({
-            [styles.groupElement]: true,
-            [styles.active]: screen === "LOG",
-          })}
-          onClick={() => setScreen("LOG")}
-        >
-          <Icon name={"calendar_checkmark"} className={styles.groupElementIcon} />
-          Журнал
-        </div>
-
-        <Group
-          name={"Коллекции"}
-          elements={sortedCollections}
-          isActive={collection =>
-            collection === selectedCollection && screen === "COLLECTION"
-          }
-          onElementClick={collection => {
-            return () => {
-              setScreen("COLLECTION")
-              selectCollection(collection.id)
-            }
-          }}
-          namePrompt={false}
-          onAdd={addCollection}
-          onDelete={rmProject}
-        />
-        <Group
-          name={"Проекты"}
-          elements={sortedProjects}
-          isActive={project =>
-            project === selectedProject && screen === "PROJECT"
-          }
-          onElementClick={project => {
-            return () => {
-              setScreen("PROJECT")
-              selectProject(project)
-            }
-          }}
-          onAdd={addProject}
-          onDelete={c => deleteCollection(c.id)}
-        />
-        <Foldable name={"Метки"}>
-          <div
-            className={classNames({
-              [styles.groupElement]: true,
-              [styles.active]: screen === "TAGS" && selectedTagType === "TASK",
-            })}
-            onClick={() => {
-              setScreen("TAGS")
-              selectTagType("TASK")
-            }}
-          >
-            <Icon name={"label"} className={styles.groupElementIcon} />
-            Метки задач
-          </div>
-          <div
-            className={classNames({
-              [styles.groupElement]: true,
-              [styles.active]: screen === "TAGS" && selectedTagType === "EVENT",
-            })}
-            onClick={() => {
-              setScreen("TAGS")
-              selectTagType("EVENT")
-            }}
-          >
-            <Icon name={"label"} className={styles.groupElementIcon} />
-            Метки событий
-          </div>
-        </Foldable>
+        {screen !== "COLLECTION" && (
+          <React.Fragment>
+            <div className={styles.group}>
+              <div
+                className={classNames({
+                  [styles.groupElement]: true,
+                  [styles.active]: screen === "INBOX",
+                })}
+                onClick={() => setScreen("INBOX")}
+              >
+                <Icon name={"msg_bubble"} className={styles.groupElementIcon} />
+                Входящие
+              </div>
+              <div
+                className={classNames({
+                  [styles.groupElement]: true,
+                  [styles.active]: screen === "TODAY",
+                })}
+                onClick={() => {
+                  setScreen("TODAY")
+                  selectDate(DateTime.now().toFormat("M/d/yyyy"))
+                }}
+              >
+                <Icon name={"smile"} className={styles.groupElementIcon} />
+                Сегодня
+              </div>
+              <div
+                className={classNames({
+                  [styles.groupElement]: true,
+                  [styles.active]: screen === "LOG",
+                })}
+                onClick={() => setScreen("LOG")}
+              >
+                <Icon
+                  name={"calendar_checkmark"}
+                  className={styles.groupElementIcon}
+                />
+                Архив
+              </div>
+            </div>
+            <Group
+              name={"Проекты"}
+              elements={sortedProjects}
+              isActive={project =>
+                project === selectedProject && screen === "PROJECT"
+              }
+              onElementClick={project => {
+                return () => {
+                  setScreen("PROJECT")
+                  selectProject(project)
+                }
+              }}
+              onAdd={addProject}
+              onDelete={c => deleteCollection(c.id)}
+            />
+            <Foldable name={"Метки"}>
+              <div
+                className={classNames({
+                  [styles.groupElement]: true,
+                  [styles.active]:
+                    screen === "TAGS" && selectedTagType === "TASK",
+                })}
+                onClick={() => {
+                  setScreen("TAGS")
+                  selectTagType("TASK")
+                }}
+              >
+                <Icon name={"label"} className={styles.groupElementIcon} />
+                Метки задач
+              </div>
+              <div
+                className={classNames({
+                  [styles.groupElement]: true,
+                  [styles.active]:
+                    screen === "TAGS" && selectedTagType === "EVENT",
+                })}
+                onClick={() => {
+                  setScreen("TAGS")
+                  selectTagType("EVENT")
+                }}
+              >
+                <Icon name={"label"} className={styles.groupElementIcon} />
+                Метки событий
+              </div>
+            </Foldable>
+          </React.Fragment>
+        )}
+        {screen === "COLLECTION" && (
+          <React.Fragment>
+            <Group
+              name={"Коллекции"}
+              elements={sortedCollections}
+              isActive={collection =>
+                collection === selectedCollection && screen === "COLLECTION"
+              }
+              onElementClick={collection => {
+                return () => {
+                  setScreen("COLLECTION")
+                  selectCollection(collection.id)
+                }
+              }}
+              namePrompt={false}
+              onAdd={addCollection}
+              onDelete={rmProject}
+            />
+          </React.Fragment>
+        )}
       </div>
-      {user && (
-        <div className={styles.userInfo}>
-          <Avatar user={user} size={"24px"} />
-          <span className={styles.username}>{user.firstName}</span>
-          <div className={styles.signOut} onClick={() => onSignOutClick()}>
-            <SignOutAltIcon />
-          </div>
-        </div>
-      )}
     </React.Fragment>
   )
 })
