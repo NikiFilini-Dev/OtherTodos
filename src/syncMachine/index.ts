@@ -3,7 +3,8 @@ import {
   addMiddleware,
   applySnapshot,
   getSnapshot,
-  onPatch, SnapshotIn,
+  onPatch,
+  SnapshotIn,
 } from "mobx-state-tree"
 import pointer from "json-pointer"
 import jsonStorage from "../tools/jsonStorage"
@@ -26,7 +27,6 @@ import CollectionSubtask from "./types/collection_subtask"
 import Upload from "./types/upload"
 import User from "./types/user"
 import CardComment from "./types/card_comment"
-import Stylus from "stylus"
 
 const syncLogger = createLogger("SYNC")
 
@@ -61,13 +61,13 @@ export default class SyncMachine {
   sendTimeout = 1000
 
   loadTimer: NodeJS.Timeout | null = null
-  loadTimeout = 10000
+  loadTimeout = 1000
 
   constructor(Store: IRootStore, waitForHydration = false) {
     this.store = Store
     this.hydrated = !waitForHydration
 
-    this.loadAll()
+    this.loadBase()
 
     this.hookCreate()
     this.hookUpdate()
@@ -124,7 +124,7 @@ export default class SyncMachine {
       }
     })
     let trash: string[] = []
-    snapshot.subtasks.forEach((subtask) => {
+    snapshot.subtasks.forEach(subtask => {
       if (!snapshot.tasks.all.find(t => t.id === subtask.task)) {
         syncLogger.warn(
           "Subtask %s has invalid task ref %s",
@@ -135,11 +135,14 @@ export default class SyncMachine {
       }
     })
     trash.forEach(id => {
-      snapshot.subtasks.splice(snapshot.subtasks.findIndex(st => st.id === id), 1)
+      snapshot.subtasks.splice(
+        snapshot.subtasks.findIndex(st => st.id === id),
+        1,
+      )
     })
 
     trash = []
-    snapshot.habitRecords.forEach((record) => {
+    snapshot.habitRecords.forEach(record => {
       if (!snapshot.habits.find(h => h.id === record.habit)) {
         syncLogger.warn(
           "HabitRecord %s has invalid habit ref %s",
@@ -150,11 +153,14 @@ export default class SyncMachine {
       }
     })
     trash.forEach(id => {
-      snapshot.habitRecords.splice(snapshot.habitRecords.findIndex(st => st.id === id), 1)
+      snapshot.habitRecords.splice(
+        snapshot.habitRecords.findIndex(st => st.id === id),
+        1,
+      )
     })
 
     trash = []
-    snapshot.timerSessions.forEach((session) => {
+    snapshot.timerSessions.forEach(session => {
       if (!snapshot.tasks.all.find(h => h.id === session.task)) {
         syncLogger.warn(
           "TimerSession %s has invalid task ref %s",
@@ -165,11 +171,14 @@ export default class SyncMachine {
       }
     })
     trash.forEach(id => {
-      snapshot.timerSessions.splice(snapshot.timerSessions.findIndex(st => st.id === id), 1)
+      snapshot.timerSessions.splice(
+        snapshot.timerSessions.findIndex(st => st.id === id),
+        1,
+      )
     })
 
     trash = []
-    snapshot.collectionsStore.subtasks.forEach((subtask) => {
+    snapshot.collectionsStore.subtasks.forEach(subtask => {
       if (!snapshot.collectionsStore.cards.find(t => t.id === subtask.card)) {
         syncLogger.warn(
           "CollectionSubtask %s has invalid card ref %s",
@@ -180,17 +189,21 @@ export default class SyncMachine {
       }
     })
     trash.forEach(id => {
-      snapshot.collectionsStore.subtasks.splice(snapshot.collectionsStore.subtasks.findIndex(st => st.id === id), 1)
+      snapshot.collectionsStore.subtasks.splice(
+        snapshot.collectionsStore.subtasks.findIndex(st => st.id === id),
+        1,
+      )
     })
 
     return snapshot
   }
 
-  loadAll() {
+  loadBase() {
     if (!window.getToken()) return
     syncLogger.info("Loading...")
 
     const promises = this.types.map(type => type.load())
+    this.state = "loading"
 
     Promise.all(promises).then(
       results => {
@@ -208,6 +221,29 @@ export default class SyncMachine {
       },
       reason => console.error(reason),
     )
+  }
+
+  loadAll() {
+    if (!window.getToken()) return
+    if (this.state) syncLogger.info("Updating...")
+    if (this.state === "loading" || this.state === "updating")
+      return this.resetLoadTimer()
+
+    this.state = "updating"
+    Promise.all(this.types.map(type => type.loadNew())).then(newResults => {
+      let snapshot = JSON.parse(JSON.stringify(getSnapshot(this.store)))
+      newResults.forEach(f => {
+        if (!f) return
+        snapshot = f(snapshot)
+      })
+      snapshot = this.healthCheck(snapshot)
+      this.applying = true
+      applySnapshot(this.store, snapshot)
+      this.store.healthCheck()
+      this.applying = false
+      this.state = "waiting"
+      syncLogger.info("Updated.")
+    })
   }
 
   updateAll() {
@@ -251,8 +287,10 @@ export default class SyncMachine {
     const fields = {}
     let ignoreFields: string[] = []
     let renameFields: Record<string, string> = {}
-    if (node.syncIgnore !== undefined) ignoreFields = [...ignoreFields, ...node.syncIgnore]
-    if (node.syncRename !== undefined) renameFields = {...renameFields, ...node.syncRename}
+    if (node.syncIgnore !== undefined)
+      ignoreFields = [...ignoreFields, ...node.syncIgnore]
+    if (node.syncRename !== undefined)
+      renameFields = { ...renameFields, ...node.syncRename }
     console.log("Created", data, Object.keys(data), ignoreFields, renameFields)
     Object.keys(data).forEach(fieldName => {
       const fieldValue = data[fieldName]
@@ -285,9 +323,9 @@ export default class SyncMachine {
     })
   }
 
-  async getOne<T>(name: string, id: string): Promise<SnapshotIn<T>|false> {
+  async getOne<T>(name: string, id: string): Promise<SnapshotIn<T> | false> {
     const type = this.types.find(type => type.name === name)
-    if (!type) throw new Error("Cant load "+name)
+    if (!type) throw new Error("Cant load " + name)
     return await type.getOne<T>(id)
   }
 
@@ -311,8 +349,10 @@ export default class SyncMachine {
 
       let ignoreFields: string[] = []
       let renameFields: Record<string, string> = {}
-      if (node.syncIgnore !== undefined) ignoreFields = [...ignoreFields, ...node.syncIgnore]
-      if (node.syncRename !== undefined) renameFields = {...renameFields, ...node.syncRename}
+      if (node.syncIgnore !== undefined)
+        ignoreFields = [...ignoreFields, ...node.syncIgnore]
+      if (node.syncRename !== undefined)
+        renameFields = { ...renameFields, ...node.syncRename }
 
       node.getActionsMap()[call.name].forEach(fieldName => {
         const fieldValue = call.context[fieldName]

@@ -3,6 +3,7 @@ import gqlClient from "../../graphql/client"
 import {
   DELETE_TIMELINE_EVENT,
   GET_TIMELINE_EVENTS,
+  GET_UPDATED_TIMELINE_EVENTS,
   UPDATE_TIMELINE_EVENT,
 } from "../../graphql/timeline"
 import { DateTime } from "luxon"
@@ -12,11 +13,16 @@ export default class TimelineEvent extends SyncType {
 
   UPDATE_MUTATION = UPDATE_TIMELINE_EVENT
   DELETE_MUTATION = DELETE_TIMELINE_EVENT
+  GET_UPDATED = GET_UPDATED_TIMELINE_EVENTS
+
+  PATH = "events"
+  DATA_NAME = "updatedTimelineEvents"
 
   preprocess(item) {
     if (item.task === "") item.task = null
     if (item.tag === "") item.tag = null
-    if (item.date.length > 15) item.date = DateTime.fromISO(item.date).toFormat("M/d/yyyy")
+    if (item.date.length > 15)
+      item.date = DateTime.fromISO(item.date).toFormat("M/d/yyyy")
     return item
   }
 

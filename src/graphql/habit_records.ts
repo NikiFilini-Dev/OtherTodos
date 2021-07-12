@@ -27,3 +27,15 @@ export const GET_HABIT_RECORDS = gql`
     }
   }
 `
+
+export const GET_UPDATED_HABIT_RECORDS = gql`
+  query GetHabitRecords($since: Time!) {
+    updatedHabitRecords(since: $since) {
+      id
+      habit
+      date
+
+      deletedAt
+    }
+  }
+`

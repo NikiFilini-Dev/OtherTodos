@@ -29,3 +29,17 @@ export const GET_COLLECTION_TAGS = gql`
     }
   }
 `
+
+export const GET_UPDATED_COLLECTION_TAGS = gql`
+  query GetCollectionTags($since: Time!) {
+    updatedCollectionTags(since: $since) {
+      id
+      name
+      color
+      collectionId
+      index
+
+      deletedAt
+    }
+  }
+`

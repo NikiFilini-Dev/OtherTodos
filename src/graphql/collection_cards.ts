@@ -39,3 +39,26 @@ export const GET_COLLECTION_CARDS = gql`
     }
   }
 `
+
+export const GET_UPDATED_COLLECTION_CARDS = gql`
+  query GetCollectionCards($since: Time!) {
+    updatedCollectionCards(since: $since) {
+      id
+      name
+      nameOriginal
+      text
+      textOriginal
+      date
+      tags
+      files
+      preview
+      collectionId
+      columnId
+      status
+      index
+      comments
+      assigned
+      deletedAt
+    }
+  }
+`

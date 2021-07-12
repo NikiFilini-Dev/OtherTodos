@@ -31,14 +31,29 @@ export const GET_COLLECTIONS = gql`
   }
 `
 
+export const GET_UPDATED_COLLECTIONS = gql`
+  query GetUpdatedCollections($since: Time!) {
+    updatedCollections(since: $since) {
+      id
+      name
+      icon
+      index
+      users
+      userId
+
+      deletedAt
+    }
+  }
+`
+
 export const INVITE_USER = gql`
   mutation InviteUser($collectionId: String!, $email: String!) {
-      inviteUser(collectionId: $collectionId, email: $email)
+    inviteUser(collectionId: $collectionId, email: $email)
   }
 `
 
 export const REMOVE_USER_FROM_COLLECTION = gql`
   mutation RemoveUserFromCollection($collectionId: String!, $userId: String!) {
-      removeUserFromCollection(collectionId: $collectionId, userId: $userId)
+    removeUserFromCollection(collectionId: $collectionId, userId: $userId)
   }
 `

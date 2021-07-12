@@ -3,6 +3,7 @@ import gqlClient from "../../graphql/client"
 import {
   DELETE_PROJECT_CATEGORY,
   GET_PROJECT_CATEGORIES,
+  GET_UPDATED_PROJECT_CATEGORIES,
   UPDATE_PROJECT_CATEGORY,
 } from "../../graphql/project_categories"
 
@@ -11,6 +12,10 @@ export default class ProjectCategory extends SyncType {
 
   UPDATE_MUTATION = UPDATE_PROJECT_CATEGORY
   DELETE_MUTATION = DELETE_PROJECT_CATEGORY
+  GET_UPDATED = GET_UPDATED_PROJECT_CATEGORIES
+
+  PATH = "categories"
+  DATA_NAME = "updatedProjectCategories"
 
   preprocess(item) {
     if (item.icon === "") item.icon = "check_list"

@@ -32,3 +32,20 @@ export const GET_HABITS = gql`
     }
   }
 `
+
+export const GET_UPDATED_HABITS = gql`
+  query GetHabits($since: Time!) {
+    updatedHabits(since: $since) {
+      id
+      name
+      recordsPerDay
+      color
+      icon
+      type
+      weeklyDays
+      monthlyDays
+
+      deletedAt
+    }
+  }
+`

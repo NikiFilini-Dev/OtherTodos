@@ -29,3 +29,15 @@ export const GET_TAGS = gql`
     }
   }
 `
+
+export const GET_UPDATED_TAGS = gql`
+  query GetTags($since: Time!) {
+    updatedTags(since: $since) {
+      id
+      name
+      index
+      color
+      type
+    }
+  }
+`

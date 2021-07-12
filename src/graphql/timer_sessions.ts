@@ -29,3 +29,17 @@ export const GET_TIMER_SESSIONS = gql`
     }
   }
 `
+
+export const GET_UPDATED_TIMER_SESSIONS = gql`
+  query GetTimerSessions($since: Time!) {
+    updatedTimerSessions(since: $since) {
+      id
+      task
+      date
+      start
+      duration
+
+      deletedAt
+    }
+  }
+`
