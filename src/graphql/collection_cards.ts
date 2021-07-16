@@ -62,3 +62,9 @@ export const GET_UPDATED_COLLECTION_CARDS = gql`
     }
   }
 `
+
+export const GENERATE_COLLECTION_CARD_ZIP = gql`
+  mutation GenerateZIP($cardId: String!) {
+    generateZip(cardId: $cardId)
+  }
+`

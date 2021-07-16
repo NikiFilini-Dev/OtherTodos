@@ -1,6 +1,7 @@
 import SyncMachine from "./syncMachine"
 import winston from "winston"
 import { IRootStore } from "./models/RootStore"
+import React from "react"
 
 declare global {
   const IS_WEB: boolean
@@ -15,6 +16,15 @@ declare global {
     IS_WEB: boolean
     Store: IRootStore
     onDragEndFunc?: any
+  }
+
+  namespace JSX {
+    interface IntrinsicElements {
+      "baka-editor": React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & { class: string }
+    }
   }
 }
 // eslint-disable-next-line max-len

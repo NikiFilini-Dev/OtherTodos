@@ -194,6 +194,7 @@ type Mutation {
   deleteTimerSession(id: String!): Boolean
   deleteUpload(id: String!): Boolean
   generateToken(email: String!, password: String!): GenerateTokenResponse
+  generateZip(cardId: String!): String
   inviteUser(collectionId: String!, email: String!): Boolean
   removeUserFromCollection(collectionId: String!, userId: String!): Boolean
   requestPasswordReset(email: String!): Boolean!
@@ -364,6 +365,7 @@ type Task {
   repeatEvery: Int
   repeating: Boolean
   status: String
+  subtasks: [Subtask]!
   tags: [String]
   text: String
 }
