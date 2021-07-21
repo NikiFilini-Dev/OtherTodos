@@ -9,7 +9,12 @@ import Task from "../../Task"
 import Button from "../../Button"
 import PlusIcon from "assets/line_awesome/plus-solid.svg"
 import FolderPlusIcon from "assets/line_awesome/folder-plus-solid.svg"
-import { useClick, useClickOutsideRef, useKeyListener, useTrap } from "../../../tools/hooks"
+import {
+  useClick,
+  useClickOutsideRef,
+  useKeyListener,
+  useTrap,
+} from "../../../tools/hooks"
 import { IconsMap } from "../../../palette/icons"
 import ListIconMenu from "../../ListIconMenu"
 import TrashIcon from "assets/line_awesome/trash-alt.svg"
@@ -67,8 +72,9 @@ const Project = observer(() => {
     if (task.tags.length) task.tags.forEach(tag => tags.add(tag))
   })
   tags = [...tags]
-  if (selectedTag)
+  if (selectedTag) {
     tasks = tasks.filter(task => task.tags.indexOf(selectedTag) >= 0)
+  }
 
   const onReject = () => {
     setTempTask(initialTaskData)
@@ -139,26 +145,30 @@ const Project = observer(() => {
     if (!menuOpen) return
     const notInRef =
       !triggerRef.current ||
-      (e.target !== triggerRef.current && !triggerRef.current.contains(e.target))
-    if (notInRef)
-      setMenuOpen(false)
+      (e.target !== triggerRef.current &&
+        !triggerRef.current.contains(e.target))
+    if (notInRef) setMenuOpen(false)
   })
 
   return (
     <div className={styles.screen}>
       <div className={styles.head}>
         <div className={styles.info}>
-          <div className={styles.icon} onClick={() => setMenuOpen(true)} ref={triggerRef}>
+          <div
+            className={styles.icon}
+            onClick={() => setMenuOpen(true)}
+            ref={triggerRef}
+          >
             <Icon />
           </div>
-          {menuOpen &&
-          <ListIconMenu
-            triggerRef={triggerRef}
-            menuRef={menuRef}
-            setIcon={selectedProject.setIcon}
-            currentIconName={selectedProject.icon}
-          />
-          }
+          {menuOpen && (
+            <ListIconMenu
+              triggerRef={triggerRef}
+              menuRef={menuRef}
+              setIcon={selectedProject.setIcon}
+              currentIconName={selectedProject.icon}
+            />
+          )}
           {isEditingTitle ? (
             <input
               type={"text"}
@@ -239,17 +249,24 @@ const Project = observer(() => {
           hideEmptyHeader
           dnd={"nocategory"}
         />
-        {categories.map(category => <TaskList tasks={category.sortedTasks}
-                                              key={category.id}
-                                              name={category.name}
-                                              renamable
-                                              showEmpty
-                                              setIcon={category.setIcon}
-                                              iconName={category.icon}
-                                              dnd={`tasklist_${category.id}`}
-                                              deletable={!category.tasks.length}
-                                              onDelete={() => deleteCategory(category)}
-                                              onNameChange={e => category.setName(e.target.value)} />)}
+        {categories.map(category => (
+          <TaskList
+            tasks={category.sortedTasks.filter(task => {
+              if (!selectedTag) return true
+              return task.tags.indexOf(selectedTag) >= 0
+            })}
+            key={category.id}
+            name={category.name}
+            renamable
+            showEmpty
+            setIcon={category.setIcon}
+            iconName={category.icon}
+            dnd={`tasklist_${category.id}`}
+            deletable={!category.tasks.length}
+            onDelete={() => deleteCategory(category)}
+            onNameChange={e => category.setName(e.target.value)}
+          />
+        ))}
       </div>
     </div>
   )
