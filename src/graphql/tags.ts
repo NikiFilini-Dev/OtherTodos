@@ -38,6 +38,8 @@ export const GET_UPDATED_TAGS = gql`
       index
       color
       type
+
+      deletedAt
     }
   }
 `

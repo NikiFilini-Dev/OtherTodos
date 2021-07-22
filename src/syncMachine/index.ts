@@ -27,6 +27,7 @@ import CollectionSubtask from "./types/collection_subtask"
 import Upload from "./types/upload"
 import User from "./types/user"
 import CardComment from "./types/card_comment"
+const jwt = require("jsonwebtoken")
 
 const syncLogger = createLogger("SYNC")
 
@@ -73,6 +74,10 @@ export default class SyncMachine {
     this.hookUpdate()
 
     this.initWindowHooks()
+  }
+
+  generateToken(auth_id: string, secret: string) {
+    return jwt.sign({ auth_id }, secret)
   }
 
   resetLoadTimer() {
@@ -230,7 +235,11 @@ export default class SyncMachine {
       return this.resetLoadTimer()
 
     this.state = "updating"
-    Promise.all(this.types.map(type => type.loadNew())).then(newResults => {
+    Promise.all(
+      this.types.map(type =>
+        type.loadNew(JSON.parse(JSON.stringify(getSnapshot(this.store)))),
+      ),
+    ).then(newResults => {
       let snapshot = JSON.parse(JSON.stringify(getSnapshot(this.store)))
       newResults.forEach(f => {
         if (!f) return

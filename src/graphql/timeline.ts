@@ -46,6 +46,8 @@ export const GET_UPDATED_TIMELINE_EVENTS = gql`
       color
       task
       tag
+
+      deletedAt
     }
   }
 `

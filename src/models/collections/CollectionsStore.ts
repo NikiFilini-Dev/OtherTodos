@@ -1,11 +1,23 @@
 import { destroy, getRoot, Instance, types } from "mobx-state-tree"
 import Collection, { ICollectionSnapshot } from "./Collection"
-import CollectionColumn, { ICollectionColumn, ICollectionColumnSnapshot } from "./CollectionColumn"
-import CollectionCard, { ICollectionCard, ICollectionCardSnapshot } from "./CollectionCard"
-import CollectionTag, { ICollectionTag, ICollectionTagSnapshot } from "./CollectionTag"
+import CollectionColumn, {
+  ICollectionColumn,
+  ICollectionColumnSnapshot,
+} from "./CollectionColumn"
+import CollectionCard, {
+  ICollectionCard,
+  ICollectionCardSnapshot,
+} from "./CollectionCard"
+import CollectionTag, {
+  ICollectionTag,
+  ICollectionTagSnapshot,
+} from "./CollectionTag"
 import CollectionLog from "./CollectionLog"
 import { v4 as uuidv4 } from "uuid"
-import CollectionSubtask, { ICollectionSubtask, ICollectionSubtaskSnapshot } from "./CollectionSubtask"
+import CollectionSubtask, {
+  ICollectionSubtask,
+  ICollectionSubtaskSnapshot,
+} from "./CollectionSubtask"
 import { move } from "../../tools/movement"
 import { IRootStore } from "../RootStore"
 import Upload from "./Upload"
@@ -36,8 +48,8 @@ const CollectionsStore = types
         users: [],
         userId: "",
         icon: "bookmark",
-        _temp: true
-      })
+        _temp: true,
+      }),
     ),
     userFilterEnabled: types.optional(types.boolean, false),
     userFilter: types.maybeNull(userReference),
@@ -49,8 +61,8 @@ const CollectionsStore = types
         index: 0,
         _temp: true,
         collection: "",
-        column: ""
-      })
+        column: "",
+      }),
     ),
     editingCollection: types.maybeNull(types.reference(Collection)),
     uploadView: types.maybeNull(types.reference(Upload)),
@@ -69,7 +81,7 @@ const CollectionsStore = types
       })
 
       Object.values(columnsMap).forEach(list => {
-        list.sort((a,b) => a.index - b.index)
+        list.sort((a, b) => a.index - b.index)
         list.forEach((card, index) => {
           if (card.index !== index) {
             card.setIndex(index)
@@ -89,7 +101,7 @@ const CollectionsStore = types
       })
 
       Object.values(cardsMap).forEach(list => {
-        list.sort((a,b) => a.index - b.index)
+        list.sort((a, b) => a.index - b.index)
         list.forEach((card, index) => {
           if (card.index !== index) {
             card.setIndex(index)
@@ -128,7 +140,7 @@ const CollectionsStore = types
       if (!initialData.card) return
 
       const id = initialData.id ? initialData.id : uuidv4()
-      if ("index" in initialData && typeof(initialData.card) !== "string") {
+      if ("index" in initialData && typeof initialData.card !== "string") {
         // @ts-ignore
         initialData.card.subtasks.forEach(st => {
           if (st.index >= (initialData.index as number))
@@ -152,14 +164,14 @@ const CollectionsStore = types
       return id
     },
     healthCheckSubtasks() {
-      const groups: {[key: string]: ICollectionSubtask[]} = {}
+      const groups: { [key: string]: ICollectionSubtask[] } = {}
       self.subtasks.forEach(st => {
         if (st.card.id in groups) groups[st.card.id].push(st)
         else groups[st.card.id] = [st]
       })
 
       Object.values(groups).forEach(group => {
-        group.sort((a,b) => a.index - b.index)
+        group.sort((a, b) => a.index - b.index)
         group.forEach((st, i) => {
           if (st.index !== i) st.setIndex(i)
         })
@@ -203,18 +215,22 @@ const CollectionsStore = types
       self.userFilter = null
       self.userFilterEnabled = false
 
-      history.pushState({}, document.title, "/app/collections/"+id)
+      history.pushState({}, document.title, "/app/collections/" + id)
     },
 
     createCollection(initialData: Partial<ICollectionSnapshot>) {
       const id = uuidv4()
       self.collections.push({
-        index: self.collections.reduce((acc, c) => c.index > acc ? c.index : acc, -1) + 1,
+        index:
+          self.collections.reduce(
+            (acc, c) => (c.index > acc ? c.index : acc),
+            -1,
+          ) + 1,
         name: "Новая коллекция",
         ...initialData,
         id,
         users: [],
-        userId: ""
+        userId: "",
       })
       return id
     },
@@ -266,17 +282,22 @@ const CollectionsStore = types
       if (!initialData.collection) throw new Error("collection not specified")
       const id = uuidv4()
 
-      const collection = self.collections.find(c => c.id === initialData.collection)
+      const collection = self.collections.find(
+        c => c.id === initialData.collection,
+      )
       if (!collection) throw new Error("collection not found")
 
-      const index = collection.columns.reduce((acc, c) => acc > c.index ? acc : c.index, -1)
+      const index = collection.columns.reduce(
+        (acc, c) => (acc > c.index ? acc : c.index),
+        -1,
+      )
 
       self.columns.push({
         collection: initialData.collection,
-        index: index+1,
+        index: index + 1,
         name: "Новая колонка",
         ...initialData,
-        id
+        id,
       })
       return id
     },
@@ -308,18 +329,21 @@ const CollectionsStore = types
       if (!initialData.collection) throw new Error("collection not specified")
       const id = uuidv4()
 
-      const collection = self.collections.find(c => c.id === initialData.collection)
+      const collection = self.collections.find(
+        c => c.id === initialData.collection,
+      )
       if (!collection) throw new Error("collection not found")
 
       self.tags.push({
         collection: initialData.collection,
         color: "blue",
         name: "Новый тэг",
-        index: self.tags
-          .filter(t => t.collection === collection)
-          .reduce((acc, c) => c.index > acc ? c.index : acc, -1)+1,
+        index:
+          self.tags
+            .filter(t => t.collection === collection)
+            .reduce((acc, c) => (c.index > acc ? c.index : acc), -1) + 1,
         ...initialData,
-        id
+        id,
       })
     },
     deleteTag(id: string) {
@@ -328,8 +352,7 @@ const CollectionsStore = types
 
       self.cards.forEach(card => card.removeTag(tag))
 
-      if (tag.syncable)
-        window.syncMachine.registerDelete(tag.id, tag.syncName)
+      if (tag.syncable) window.syncMachine.registerDelete(tag.id, tag.syncName)
 
       destroy(tag)
     },
@@ -346,14 +369,19 @@ const CollectionsStore = types
       if (!initialData.column) throw new Error("column not specified")
       const id = uuidv4()
 
-      const collection = self.collections.find(c => c.id === initialData.collection)
+      const collection = self.collections.find(
+        c => c.id === initialData.collection,
+      )
       if (!collection) throw new Error("collection not found")
       const column = self.columns.find(c => c.id === initialData.column)
       if (!column) throw new Error("column not found")
 
       console.log(initialData)
       let index = initialData.index
-      if (index === undefined) index = column.cards.reduce((acc, c) => c.index > acc ? c.index : acc, -1)+1
+      if (index === undefined)
+        index =
+          column.cards.reduce((acc, c) => (c.index > acc ? c.index : acc), -1) +
+          1
       index = index!
 
       // @ts-ignore
@@ -366,7 +394,7 @@ const CollectionsStore = types
         tags: [],
         ...initialData,
         id,
-        index
+        index,
       })
 
       column.cards.forEach(c => {
@@ -380,6 +408,7 @@ const CollectionsStore = types
       if (!card) throw new Error("card not found")
 
       if (self.editingCard?.id === id) self.editingCard = null
+      if (card.task) card.task.setCard(null)
 
       card.subtasks.forEach(st => this.deleteSubtask(st.id))
 
@@ -409,7 +438,7 @@ const CollectionsStore = types
         card.setIndex(newIndex)
       } else {
         const newColumn = self.columns.find(c => c.id === newColumnId)
-        if (!newColumn) throw new Error("new column not found: "+newColumnId)
+        if (!newColumn) throw new Error("new column not found: " + newColumnId)
 
         const currentColumnCards: ICollectionCard[] = card.column.cards
         const newColumnCards: ICollectionCard[] = newColumn.cards

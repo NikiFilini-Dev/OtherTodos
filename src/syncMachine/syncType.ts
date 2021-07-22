@@ -57,7 +57,7 @@ export default abstract class SyncType {
 
   abstract preprocess(item: Record<string, any>): Record<string, any>
 
-  async loadNew() {
+  async loadNew(currentSnapshot) {
     if (!this.DATA_NAME || !this.PATH || !this.GET_UPDATED)
       return snapshot => snapshot
 
@@ -66,12 +66,24 @@ export default abstract class SyncType {
       .query(this.GET_UPDATED, { since: this.lastLoadAt })
       .toPromise()
 
+    const oldEntities = getValue(currentSnapshot, this.PATH)
+
     return snapshot => {
       this.lastLoadAt = now
       const updated = result.data[this.DATA_NAME ?? ""].map(this.preprocess)
       const list = getValue(snapshot, this.PATH)
       updated.forEach(updatedItem => {
         const index = list.findIndex(i => i.id === updatedItem.id)
+        const old = oldEntities.find(i => i.id === updatedItem.id)
+        console.log(updatedItem, old)
+        let changed = false
+        Object.keys(old).forEach(key => {
+          console.log(old[key], updatedItem[key])
+          if (old[key] !== updatedItem[key]) changed = true
+        })
+        if (!changed) return
+
+        console.log("Updated:", updatedItem)
 
         if (updatedItem.deletedAt !== "0001-01-01T00:00:00.000Z") {
           if (index < 0) return
