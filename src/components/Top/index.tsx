@@ -54,7 +54,7 @@ const Top = observer(() => {
 
   const triggerCollections = action(() => {
     if (CollectionsMode) return
-    if (!selectedCollection) {
+    if (!selectedCollection && collections.length) {
       const c = [...collections]
       c.sort((a, b) => a.index - b.index)
       selectCollection(c[0].id)
@@ -83,14 +83,12 @@ const Top = observer(() => {
           name={"Задачи"}
           trigger={triggerTasks}
         />
-        {collections.length > 0 && (
-          <Element
-            icon={GridIcon}
-            active={CollectionsMode}
-            name={"Коллекции"}
-            trigger={triggerCollections}
-          />
-        )}
+        <Element
+          icon={GridIcon}
+          active={CollectionsMode}
+          name={"Коллекции"}
+          trigger={triggerCollections}
+        />
       </div>
     </React.Fragment>
   )
