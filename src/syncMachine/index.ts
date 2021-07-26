@@ -27,6 +27,7 @@ import CollectionSubtask from "./types/collection_subtask"
 import Upload from "./types/upload"
 import User from "./types/user"
 import CardComment from "./types/card_comment"
+import CollectionLog from "./types/collection_log"
 const jwt = require("jsonwebtoken")
 
 const syncLogger = createLogger("SYNC")
@@ -50,6 +51,7 @@ export default class SyncMachine {
     new CollectionTag(),
     new CollectionCard(),
     new CollectionSubtask(),
+    new CollectionLog(),
   ]
 
   state = "initial"
@@ -272,6 +274,7 @@ export default class SyncMachine {
     const type = this.types.find(
       type => type.name.toLowerCase() === typeName.toLowerCase(),
     )
+    console.log(id, typeName, type)
     if (!type) {
       syncLogger.warn("TYPE %s NOT REGISTERED", typeName)
       return

@@ -96,6 +96,8 @@ const CardForm = observer(({ cardId }: { cardId: string | null }) => {
       "change",
       // @ts-ignore
       (e: Event & { detail: { original: string; html: string } }) => {
+        if (e.detail.original === card.textOriginal) return
+        console.error("CARD SET TEXT", e)
         card.setText(e.detail.html)
         card.setTextOriginal(e.detail.original)
       },
@@ -111,6 +113,7 @@ const CardForm = observer(({ cardId }: { cardId: string | null }) => {
       "change",
       // @ts-ignore
       (e: Event & { detail: { original: string; html: string } }) => {
+        if (e.detail.original === card.nameOriginal) return
         card.setName(e.detail.html)
         card.setNameOriginal(e.detail.original)
       },

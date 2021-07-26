@@ -9,11 +9,15 @@ import {
   types,
 } from "mobx-state-tree"
 
-export const createStorage = <T extends IAnyModelType>(name: string, type: T) => {
-  return types.model({
-    id: types.identifier,
-    elements: types.array(type),
-  })
+export const createStorage = <T extends IAnyModelType>(
+  name: string,
+  type: T,
+) => {
+  return types
+    .model({
+      id: types.identifier,
+      elements: types.array(type),
+    })
     .actions(self => ({
       add(newElement: T) {
         if (self.elements.includes(newElement)) return
@@ -22,64 +26,78 @@ export const createStorage = <T extends IAnyModelType>(name: string, type: T) =>
 
       remove<T extends { beforeDelete?: () => void }>(element: T) {
         if (!self.elements.includes(element)) return
-        if ("beforeDelete" in element && element.beforeDelete) element.beforeDelete()
+        if ("beforeDelete" in element && element.beforeDelete)
+          element.beforeDelete()
         self.elements.slice(self.elements.indexOf(element), 1)
       },
     }))
 }
 
-export const createStorageReference =
-  <T extends IAnyModelType>(storageName: string, storageType: IAnyModelType, type: T, initialData: SnapshotIn<T>) => {
-    return types.reference(type, {
-      get(identifier, parent) {
-        if (!parent) {
-          console.log("NO PARENT")
-          return null
-        }
-        const root = getRoot(parent)
-        const storage = resolveIdentifier(storageType, root, storageName)
+export const createStorageReference = <T extends IAnyModelType>(
+  storageName: string,
+  storageType: IAnyModelType,
+  type: T,
+  initialData: SnapshotIn<T>,
+) => {
+  return types.reference(type, {
+    get(identifier, parent) {
+      if (!parent) {
+        console.log("NO PARENT")
+        return null
+      }
+      const root = getRoot(parent)
+      const storage = resolveIdentifier(storageType, root, storageName)
 
-        const real = storage.elements.find((t: Instance<T>) => t.id === identifier)
-        if (real) return real
+      const real = storage.elements.find(
+        (t: Instance<T>) => t.id === identifier,
+      )
+      if (real) return real
 
-        const tempElement = type.create({ ...initialData, id: identifier as string })
-        storage.add(tempElement)
+      const tempElement = type.create({
+        ...initialData,
+        id: identifier as string,
+      })
+      storage.add(tempElement)
 
-        window.syncMachine.getOne<T>(tempElement.syncName, identifier as string).then((data: SnapshotIn<T> | false) => {
+      window.syncMachine
+        .getOne<T>(tempElement.syncName, identifier as string)
+        .then((data: SnapshotIn<T> | false) => {
           if (!data) return
           applySnapshot(tempElement, data)
         })
-        return tempElement
-      },
+      return tempElement
+    },
 
-      set(value) {
-        return value.id
-      },
-    })
-  }
+    set(value) {
+      return value.id
+    },
+  })
+}
 
+export const safeRef = <T extends IAnyModelType>(
+  type: T,
+  path,
+  action,
+  initialData: SnapshotIn<T>,
+) => {
+  return types.reference(type, {
+    get(identifier, parent) {
+      const item = type.create({ ...initialData, id: identifier as string })
 
-export const safeRef =
-  <T extends IAnyModelType>(type: T, path, action, initialData: SnapshotIn<T>) => {
-    return types.reference(type, {
-      get(identifier, parent) {
-        const item = type.create({ ...initialData, id: identifier as string })
+      if (parent) {
+        const root = getRoot(parent)
+        const initial = resolveIdentifier(type, root, identifier)
+        if (initial) return initial
 
-        if (parent) {
-          const root = getRoot(parent)
-          const initial = resolveIdentifier(type, root, identifier)
-          if (initial) return initial
+        const list = resolvePath(getRoot(parent), path)
+        list[action](item)
+      }
 
-          const list = resolvePath(getRoot(parent),path)
-          list[action](item)
-        }
+      return item
+    },
 
-
-        return item
-      },
-
-      set(value) {
-        return value.id
-      },
-    })
-  }
+    set(value) {
+      return value.id
+    },
+  })
+}

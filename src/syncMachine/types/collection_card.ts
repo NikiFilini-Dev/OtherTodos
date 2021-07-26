@@ -15,7 +15,7 @@ export default class CollectionCard extends SyncType {
 
   GET_UPDATED = GET_UPDATED_COLLECTION_CARDS
 
-  PATH = "collectionsStore.collectionCards"
+  PATH = "collectionsStore.cards"
   DATA_NAME = "updatedCollectionCards"
 
   preprocess(item) {

@@ -14,7 +14,7 @@ export default class CollectionTag extends SyncType {
   DELETE_MUTATION = DELETE_COLLECTION_TAG
   GET_UPDATED = GET_UPDATED_COLLECTION_TAGS
 
-  PATH = "collectionsStore.collectionTags"
+  PATH = "collectionsStore.tags"
   DATA_NAME = "updatedCollectionTags"
 
   preprocess(item) {

@@ -35,20 +35,31 @@ const Collection = types
       return root.collectionsStore.tags.filter(t => t.collection === self)
     },
     get syncIgnore() {
-        return ["users", "userId", "_temp"]
-    }
+      return ["users", "userId", "_temp"]
+    },
+    get logs() {
+      const root = getRoot<IRootStore>(self)
+      const logs = root.collectionsStore.logs.filter(
+        t => t.collectionId === self.id,
+      )
+      logs.sort(
+        (b, a) =>
+          new Date(a.datetime).getTime() - new Date(b.datetime).getTime(),
+      )
+      return logs
+    },
   }))
   .actions(self => {
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, string[]> = {}
 
-    actions.setName = (val: string) => self.name = val
+    actions.setName = (val: string) => (self.name = val)
     actionsMap.setName = ["name"]
 
-    actions.setIcon = (val: IconName) => self.icon = val
+    actions.setIcon = (val: IconName) => (self.icon = val)
     actionsMap.setIcon = ["icon"]
 
-    actions.setIndex = (val: number) => self.index = val
+    actions.setIndex = (val: number) => (self.index = val)
     actionsMap.setIndex = ["index"]
 
     actions.getActionsMap = () => actionsMap

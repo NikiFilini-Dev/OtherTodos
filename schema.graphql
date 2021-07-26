@@ -99,6 +99,20 @@ type CollectionColumnChanges {
   name: Time
 }
 
+type CollectionLog {
+  action: String!
+  cardId: String
+  collectionId: String!
+  columnId: String
+  commentId: String
+  datetime: Time
+  id: String!
+  moveTargetCollection: String
+  moveTargetColumn: String
+  targetType: String!
+  userId: String
+}
+
 type CollectionSubtask {
   cardId: String!
   deletedAt: Time!
@@ -266,6 +280,7 @@ type Query {
   collectionCards: [CollectionCard]!
   collectionColumn(id: String): CollectionColumn!
   collectionColumns: [CollectionColumn]!
+  collectionLogs: [CollectionLog]!
   collectionSubtask(id: String): CollectionSubtask!
   collectionSubtasks: [CollectionSubtask]!
   collectionTag(id: String): CollectionTag!
@@ -276,6 +291,7 @@ type Query {
   habitRecords: [HabitRecord]!
   habits: [Habit]!
   me: User!
+  newCollectionLogs(since: Time!): [CollectionLog]!
   project(id: String): Project!
   projectCategories: [ProjectCategory]!
   projectCategory(id: String): ProjectCategory!

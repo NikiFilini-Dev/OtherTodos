@@ -14,7 +14,7 @@ export default class Project extends SyncType {
   DELETE_MUTATION = DELETE_PROJECT
   GET_UPDATED = GET_UPDATED_PROJECTS
 
-  PATH = "collectionsStore.projects"
+  PATH = "projects"
   DATA_NAME = "updatedProjects"
 
   preprocess(item) {

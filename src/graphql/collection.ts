@@ -31,6 +31,19 @@ export const GET_COLLECTIONS = gql`
   }
 `
 
+export const GET_COLLECTION = gql`
+  query GetCollection($id: String!) {
+    collection(id: $id) {
+      id
+      name
+      icon
+      index
+      users
+      userId
+    }
+  }
+`
+
 export const GET_UPDATED_COLLECTIONS = gql`
   query GetUpdatedCollections($since: Time!) {
     updatedCollections(since: $since) {

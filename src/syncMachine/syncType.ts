@@ -2,6 +2,7 @@ import gqlClient from "../graphql/client"
 import jsonStorage from "tools/jsonStorage"
 import { SnapshotIn } from "mobx-state-tree"
 import { GET_UPDATED_COLLECTIONS } from "../graphql/collection"
+import { size } from "lodash-es"
 
 const syncLogger = createLogger("SYNC")
 
@@ -23,7 +24,9 @@ function getValue(obj, path) {
   let o = obj
   while (a.length) {
     const n = a.shift()
-    if (!(n in o)) return
+    if (!(n in o)) {
+      return
+    }
     o = o[n]
   }
   return o
@@ -76,13 +79,14 @@ export default abstract class SyncType {
         const index = list.findIndex(i => i.id === updatedItem.id)
         const old = oldEntities.find(i => i.id === updatedItem.id)
         console.log(updatedItem, old)
-        let changed = false
-        Object.keys(old).forEach(key => {
-          console.log(old[key], updatedItem[key])
-          if (old[key] !== updatedItem[key]) changed = true
-        })
-        if (!changed) return
-
+        if (old) {
+          let changed = false
+          Object.keys(old).forEach(key => {
+            console.log(old[key], updatedItem[key])
+            if (old[key] !== updatedItem[key]) changed = true
+          })
+          if (!changed) return
+        }
         console.log("Updated:", updatedItem)
 
         if (updatedItem.deletedAt !== "0001-01-01T00:00:00.000Z") {
@@ -95,6 +99,7 @@ export default abstract class SyncType {
         if (index >= 0) {
           list[index] = updatedItem
         } else {
+          console.log("PUSH", updatedItem)
           list.push(updatedItem)
         }
       })
@@ -155,6 +160,7 @@ export default abstract class SyncType {
     const updates = { ...this.updates }
     return new Promise<void>((resolve, reject) => {
       const item = updates[id]
+      if (!size(item.fields) && item.state === "alive") return resolve()
 
       const onError = error => {
         syncLogger.error(error)

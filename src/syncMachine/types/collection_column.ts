@@ -15,7 +15,7 @@ export default class CollectionColumn extends SyncType {
 
   GET_UPDATED = GET_UPDATED_COLLECTION_COLUMNS
 
-  PATH = "collectionsStore.collectionColumns"
+  PATH = "collectionsStore.columns"
   DATA_NAME = "updatedCollectionColumns"
 
   preprocess(item) {

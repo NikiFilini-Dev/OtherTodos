@@ -14,7 +14,7 @@ export default class CollectionSubtask extends SyncType {
   DELETE_MUTATION = DELETE_COLLECTION_SUBTASK
   GET_UPDATED = GET_UPDATED_COLLECTION_SUBTASKS
 
-  PATH = "collectionsStore.collectionSubtasks"
+  PATH = "collectionsStore.subtasks"
   DATA_NAME = "updatedCollectionSubtasks"
 
   preprocess(item) {

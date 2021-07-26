@@ -40,6 +40,28 @@ export const GET_COLLECTION_CARDS = gql`
   }
 `
 
+export const GET_COLLECTION_CARD = gql`
+  query GetCollectionCard($id: String) {
+    collectionCard(id: $id) {
+      id
+      name
+      nameOriginal
+      text
+      textOriginal
+      date
+      tags
+      files
+      preview
+      collectionId
+      columnId
+      status
+      index
+      comments
+      assigned
+    }
+  }
+`
+
 export const GET_UPDATED_COLLECTION_CARDS = gql`
   query GetCollectionCards($since: Time!) {
     updatedCollectionCards(since: $since) {

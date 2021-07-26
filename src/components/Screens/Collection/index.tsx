@@ -4,13 +4,11 @@ import { IRootStore, useMst } from "models/RootStore"
 import styles from "./styles.styl"
 import Column from "./components/Column"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
-import CardForm from "../../CardForm"
 import Select from "../../Select"
 import Button from "../../Button"
 import PlusIcon from "../../../assets/line_awesome/plus-solid.svg"
 import CollectionForm from "../../CollectionForm"
 import Icon from "../../Icon"
-import UploadView from "./components/UploadView"
 import gqlClient from "graphql/client"
 import ResizeIcon from "assets/customIcons/resize.svg"
 import FloatMenu from "../../FloatMenu"
@@ -20,9 +18,97 @@ import { useClickOutsideRefs } from "../../../tools/hooks"
 import UsersModal from "./components/UsersModal"
 import Avatar from "../../Avatar"
 import DoorOpenIcon from "assets/line_awesome/door-open-solid.svg"
-import { REMOVE_USER_FROM_COLLECTION } from "../../../graphql/collection"
+import {
+  GET_COLLECTION,
+  REMOVE_USER_FROM_COLLECTION,
+} from "../../../graphql/collection"
+import { ICollectionLog } from "../../../models/collections/CollectionLog"
+import { GET_COLLECTION_CARD } from "../../../graphql/collection_cards"
+import { GET_COLLECTION_COLUMN } from "../../../graphql/collection_columns"
+import CollectionColumn from "../../../syncMachine/types/collection_column"
+import { SnapshotOut } from "mobx-state-tree"
+import CollectionCard from "../../../models/collections/CollectionCard"
+import {
+  ActionCreate,
+  ActionDelete,
+  ActionEdit,
+  ActionMove,
+  ActionComplete,
+} from "./actions"
+import {
+  CardChanged,
+  CardComplete,
+  CardCreated,
+  CardDeleted,
+  CardMoved,
+} from "./cardLogs"
+import { ColumnChanged, ColumnCreated, ColumnDeleted } from "./columnLogs"
+import { CommentChanged, CommentCreated, CommentDeleted } from "./commentLogs"
+import LeftIcon from "assets/customIcons/left.svg"
+import { CollectionChanged, CollectionCreated } from "./collectiontLogs"
 
 type Size = "small" | "medium" | "big"
+
+export type Card = SnapshotOut<typeof CollectionCard>
+export const getCard = id => {
+  return gqlClient.query(GET_COLLECTION_CARD, { id }).toPromise()
+}
+
+export type Column = SnapshotOut<typeof CollectionColumn>
+export const getColumn = id => {
+  return gqlClient.query(GET_COLLECTION_COLUMN, { id }).toPromise()
+}
+
+export type Collection = SnapshotOut<typeof Collection>
+export const getCollection = id => {
+  return gqlClient.query(GET_COLLECTION, { id }).toPromise()
+}
+
+const LogEntry = observer(({ log }: { log: ICollectionLog }) => {
+  if (log.action === "MOVE" && log.targetType === "CARD") {
+    return <CardMoved log={log} />
+  }
+  if (log.action === "CREATE" && log.targetType === "CARD") {
+    return <CardCreated log={log} />
+  }
+  if (log.action === "EDIT" && log.targetType === "CARD") {
+    return <CardChanged log={log} />
+  }
+  if (log.action === "DELETE" && log.targetType === "CARD") {
+    return <CardDeleted log={log} />
+  }
+  if (log.action === "COMPLETE" && log.targetType === "CARD") {
+    return <CardComplete log={log} />
+  }
+
+  if (log.action === "CREATE" && log.targetType === "COLUMN") {
+    return <ColumnCreated log={log} />
+  }
+  if (log.action === "EDIT" && log.targetType === "COLUMN") {
+    return <ColumnChanged log={log} />
+  }
+  if (log.action === "DELETE" && log.targetType === "COLUMN") {
+    return <ColumnDeleted log={log} />
+  }
+
+  if (log.action === "CREATE" && log.targetType === "COMMENT") {
+    return <CommentCreated log={log} />
+  }
+  if (log.action === "EDIT" && log.targetType === "COMMENT") {
+    return <CommentChanged log={log} />
+  }
+  if (log.action === "DELETE" && log.targetType === "COMMENT") {
+    return <CommentDeleted log={log} />
+  }
+
+  if (log.action === "CREATE" && log.targetType === "COLLECTION") {
+    return <CollectionCreated log={log} />
+  }
+  if (log.action === "EDIT" && log.targetType === "COLLECTION") {
+    return <CollectionChanged log={log} />
+  }
+  return <div>{log.action}</div>
+})
 
 const Collection = observer(() => {
   const {
@@ -35,7 +121,6 @@ const Collection = observer(() => {
       selectedCollection,
       moveColumn,
       moveCard,
-      editingCard,
       createColumn,
       selectEditingCollection,
       editingCollection,
@@ -45,6 +130,8 @@ const Collection = observer(() => {
       enableUserFilter,
     },
   }: IRootStore = useMst()
+
+  const [logsShown, setLogsShown] = React.useState(false)
 
   const sizeKey = "collectionCardSize#" + selectedCollection?.id
   const getSize = (): Size => {
@@ -218,6 +305,7 @@ const Collection = observer(() => {
             </div>
           </FloatMenu>
         )}
+
         {editingCollection !== null && <CollectionForm />}
         <DragDropContext
           onDragEnd={({ draggableId, destination, type }) => {
@@ -273,7 +361,39 @@ const Collection = observer(() => {
           />
         )}
       </div>
+      <div
+        className={classNames({
+          [styles.logs]: true,
+          [styles.hidden]: !logsShown,
+        })}
+      >
+        {selectedCollection.logs.map(log => (
+          <div className={styles.logWrapper} key={log.id}>
+            {log.action === "EDIT" && <ActionEdit />}
+            {log.action === "MOVE" && <ActionMove />}
+            {log.action === "DELETE" && <ActionDelete />}
+            {log.action === "CREATE" && <ActionCreate />}
+            {log.action === "COMPLETE" && <ActionComplete />}
+            <div className={styles.log}>
+              <LogEntry log={log} />
+            </div>
+          </div>
+        ))}
+      </div>
       <div className={styles.usersList}>
+        <div
+          onClick={e => {
+            e.preventDefault()
+            setLogsShown(!logsShown)
+          }}
+          className={classNames({
+            [styles.logsTrigger]: true,
+            [styles.active]: logsShown,
+          })}
+        >
+          {logsShown && <PlusIcon />}
+          {!logsShown && <LeftIcon />}
+        </div>
         <User user={null} />
         <User user={selectedCollection.userId} />
         {selectedCollection.users.map(u => (
