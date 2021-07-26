@@ -380,7 +380,12 @@ const Collection = observer(() => {
           </div>
         ))}
       </div>
-      <div className={styles.usersList}>
+      <div
+        className={classNames({
+          [styles.usersList]: true,
+          [styles.logsShown]: logsShown,
+        })}
+      >
         <div
           onClick={e => {
             e.preventDefault()

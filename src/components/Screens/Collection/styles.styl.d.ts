@@ -19,6 +19,7 @@ declare namespace StylesStylNamespace {
     log: string
     logWrapper: string
     logs: string
+    logsShown: string
     logsTrigger: string
     menu: string
     menuName: string
