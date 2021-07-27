@@ -45,8 +45,9 @@ const RootStore = types
         "TAGS",
         "AUTH",
         "COLLECTION",
+        "COLLECTION_PERSONAL",
       ]),
-      "COLLECTION",
+      "TODAY",
     ),
     selectedProject: types.maybeNull(
       safeRef(Project, "", "pushProject", {
@@ -401,6 +402,8 @@ const RootStore = types
         history.pushState({}, document.title, "/app/projects/")
       if (screen === "COLLECTION")
         history.pushState({}, document.title, "/app/projects/")
+      if (screen === "COLLECTION_PERSONAL")
+        history.pushState({}, document.title, "/app/assigned/")
       if (screen === "TAG") history.pushState({}, document.title, "/app/tags/")
     },
     selectProject(project) {

@@ -46,7 +46,7 @@ const Top = observer(() => {
   const TasksMode = ["INBOX", "TODAY", "PROJECT", "LOG", "TAGS"].includes(
     screen,
   )
-  const CollectionsMode = ["COLLECTION"].includes(screen)
+  const CollectionsMode = ["COLLECTION", "COLLECTION_PERSONAL"].includes(screen)
   const triggerTasks = () => {
     if (TasksMode) return
     setScreen("TODAY")
@@ -59,7 +59,7 @@ const Top = observer(() => {
       c.sort((a, b) => a.index - b.index)
       selectCollection(c[0].id)
     }
-    setScreen("COLLECTION")
+    setScreen("COLLECTION_PERSONAL")
   })
 
   return (

@@ -20,6 +20,7 @@ import classNames from "classnames"
 import CardForm from "../CardForm"
 import UploadView from "../Screens/Collection/components/UploadView"
 import Top from "../Top"
+import CollectionPersonal from "../Screens/CollectionPersonal"
 
 const App = observer(() => {
   const {
@@ -54,6 +55,9 @@ const App = observer(() => {
       break
     case "COLLECTION":
       Screen = Collection
+      break
+    case "COLLECTION_PERSONAL":
+      Screen = CollectionPersonal
       break
   }
 
@@ -165,7 +169,10 @@ const App = observer(() => {
             <div
               className={classNames({
                 [styles.main]: true,
-                [styles.noSidebar]: screen === "COLLECTION",
+                [styles.noSidebar]: [
+                  "COLLECTION",
+                  "COLLECTION_PERSONAL",
+                ].includes(screen),
               })}
             >
               <DragDropContext
@@ -181,7 +188,7 @@ const App = observer(() => {
               draggable={true}
               onDragStart={e => onResizeTimelineStart(e)}
             />
-            {screen !== "COLLECTION" && (
+            {screen !== "COLLECTION" && screen !== "COLLECTION_PERSONAL" && (
               <div className={styles.timeline} ref={timelineRef}>
                 <Timeline />
               </div>

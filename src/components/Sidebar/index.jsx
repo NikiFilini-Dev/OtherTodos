@@ -321,7 +321,7 @@ const Sidebar = observer(() => {
   return (
     <React.Fragment>
       <div className={styles.sidebar}>
-        {screen !== "COLLECTION" && (
+        {!["COLLECTION", "COLLECTION_PERSONAL"].includes(screen) && (
           <React.Fragment>
             <div className={styles.group}>
               <div
@@ -408,8 +408,20 @@ const Sidebar = observer(() => {
             </Foldable>
           </React.Fragment>
         )}
-        {screen === "COLLECTION" && (
+        {["COLLECTION", "COLLECTION_PERSONAL"].includes(screen) && (
           <React.Fragment>
+            <div className={styles.group}>
+              <div
+                className={classNames({
+                  [styles.groupElement]: true,
+                  [styles.active]: screen === "COLLECTION_PERSONAL",
+                })}
+                onClick={() => setScreen("COLLECTION_PERSONAL")}
+              >
+                <Icon name={"msg_bubble"} className={styles.groupElementIcon} />
+                Назначено
+              </div>
+            </div>
             <Group
               name={"Коллекции"}
               elements={sortedCollections}

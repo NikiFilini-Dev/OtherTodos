@@ -39,6 +39,8 @@ const mapUrl = (): mapReturn => {
       return { screen: "INBOX" }
     case "log":
       return { screen: "LOG" }
+    case "assigned":
+      return { screen: "COLLECTION_PERSONAL" }
     case "projects":
       // eslint-disable-next-line no-case-declarations
       const project = url.match(/\/app\/projects\/([^\/]+)/)
@@ -214,7 +216,7 @@ if (!IS_WEB) {
 }
 
 function render() {
-  window.syncMachine.loadAll(null)
+  window.syncMachine.loadAll()
   ReactDOM.render(
     <Provider value={Store}> {App} </Provider>,
     document.querySelector("#app"),
