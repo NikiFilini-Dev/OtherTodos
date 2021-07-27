@@ -46,6 +46,7 @@ import { ColumnChanged, ColumnCreated, ColumnDeleted } from "./columnLogs"
 import { CommentChanged, CommentCreated, CommentDeleted } from "./commentLogs"
 import LeftIcon from "assets/customIcons/left.svg"
 import { CollectionChanged, CollectionCreated } from "./collectiontLogs"
+import { DateTime, DateTimeFormatOptions, LocaleOptions } from "luxon"
 
 type Size = "small" | "medium" | "big"
 
@@ -225,6 +226,26 @@ const Collection = observer(() => {
       })
   }
 
+  const format: LocaleOptions & DateTimeFormatOptions = {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }
+
+  const [logsByDates, setLogsByDates] = React.useState<Record<string, any[]>>(
+    {},
+  )
+  React.useEffect(() => {
+    const tmp = {}
+    selectedCollection.logs.forEach(log => {
+      const key = DateTime.fromISO(log.datetime).toFormat("M/d/yyyy")
+      if (key in tmp) tmp[key].push(log)
+      else tmp[key] = [log]
+    })
+    setLogsByDates(tmp)
+  }, [selectedCollection.logs.length])
+
   // console.log(currentUser.id, selectedCollection.userId.id)
 
   return (
@@ -367,18 +388,34 @@ const Collection = observer(() => {
           [styles.hidden]: !logsShown,
         })}
       >
-        {selectedCollection.logs.map(log => (
-          <div className={styles.logWrapper} key={log.id}>
-            {log.action === "EDIT" && <ActionEdit />}
-            {log.action === "MOVE" && <ActionMove />}
-            {log.action === "DELETE" && <ActionDelete />}
-            {log.action === "CREATE" && <ActionCreate />}
-            {log.action === "COMPLETE" && <ActionComplete />}
-            <div className={styles.log}>
-              <LogEntry log={log} />
-            </div>
-          </div>
-        ))}
+        {Object.keys(logsByDates).map(date => {
+          const logs = logsByDates[date]
+          return (
+            <React.Fragment key={date}>
+              <h1>
+                {DateTime.fromFormat(date, "M/d/yyyy").toLocaleString({
+                  month: "short",
+                  day: "numeric",
+                })}
+              </h1>
+              {logs.map(log => (
+                <div className={styles.logWrapper} key={log.id}>
+                  {log.action === "EDIT" && <ActionEdit />}
+                  {log.action === "MOVE" && <ActionMove />}
+                  {log.action === "DELETE" && <ActionDelete />}
+                  {log.action === "CREATE" && <ActionCreate />}
+                  {log.action === "COMPLETE" && <ActionComplete />}
+                  <div className={styles.log}>
+                    <LogEntry log={log} />
+                    <div className={styles.date}>
+                      {DateTime.fromISO(log.datetime).toLocaleString(format)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </React.Fragment>
+          )
+        })}
       </div>
       <div
         className={classNames({

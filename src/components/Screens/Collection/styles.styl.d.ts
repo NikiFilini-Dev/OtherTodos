@@ -10,6 +10,7 @@ declare namespace StylesStylNamespace {
     complete: string
     count: string
     create: string
+    date: string
     delete: string
     edit: string
     filterActiveMark: string
