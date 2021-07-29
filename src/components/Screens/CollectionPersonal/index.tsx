@@ -16,7 +16,7 @@ const CollectionPersonal = observer(() => {
   const assignedCardsMap: Record<string, ICollectionCard[]> = {}
   cards.forEach(card => {
     if (card.assigned?.id !== user.id || card.status === "DONE") return
-    const key = card.column.id
+    const key = card.collection.id
     if (key in assignedCardsMap) assignedCardsMap[key].push(card)
     else assignedCardsMap[key] = [card]
   })
@@ -28,14 +28,14 @@ const CollectionPersonal = observer(() => {
         <div className={styles.columns}>
           {Object.keys(assignedCardsMap).map(columnId => {
             const cards = assignedCardsMap[columnId]
-            const column = cards[0].column
+            const column = cards[0].collection
             return (
               <div key={columnId} className={styles.column}>
                 <div
                   className={styles.columnHead}
                   style={
                     {
-                      "--columnColor": ColorsMap[column.color],
+                      "--columnColor": ColorsMap["green"],
                     } as CSSProperties
                   }
                 >

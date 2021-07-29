@@ -6,6 +6,7 @@ declare namespace StylesStylNamespace {
     active: string
     add: string
     addColumn: string
+    clickable: string
     columns: string
     complete: string
     count: string

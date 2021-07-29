@@ -4,6 +4,7 @@ import CollectionColumn from "./CollectionColumn"
 import CollectionCard from "./CollectionCard"
 import CardComment from "./CardComment"
 import OtherUser from "./OtherUser"
+import { userReference } from "./storages/users.storage"
 
 const CollectionLog = types
   .model("CollectionLog", {
@@ -26,7 +27,7 @@ const CollectionLog = types
       "DELETE",
       "COMPLETE",
     ]),
-    user: types.reference(OtherUser),
+    user: userReference,
     datetime: types.string,
     moveTargetCollection: types.maybeNull(types.reference(Collection)),
     moveTargetColumn: types.maybeNull(types.reference(CollectionColumn)),
