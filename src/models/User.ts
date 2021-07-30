@@ -14,7 +14,7 @@ const User = types
     email: types.string,
     lastSeenNotificationsAt: types.optional(
       types.string,
-      DateTime.now().toISO(),
+      DateTime.fromSeconds(0).toISO(),
     ),
   })
   .views(self => ({
@@ -65,7 +65,7 @@ const User = types
             this.setName(me.firstName)
             this.setLastName(me.lastName)
             this.setLastSeenNotificationsAt(
-              me.lastSeenNotificationsAt || DateTime.now().toISO(),
+              me.lastSeenNotificationsAt || DateTime.fromSeconds(0).toISO(),
               false,
             )
             console.log("ME:", me)
