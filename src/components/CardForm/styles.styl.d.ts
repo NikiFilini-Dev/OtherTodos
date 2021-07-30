@@ -45,6 +45,7 @@ declare namespace StylesStylNamespace {
     trash: string
     user: string
     usersMenu: string
+    watchers: string
     wrapper: string
   }
 }

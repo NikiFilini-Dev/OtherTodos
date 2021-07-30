@@ -250,6 +250,7 @@ export default class SyncMachine {
       snapshot = this.healthCheck(snapshot)
       this.applying = true
       applySnapshot(this.store, snapshot)
+      this.store.user.refresh()
       this.store.healthCheck()
       this.applying = false
       this.state = "waiting"

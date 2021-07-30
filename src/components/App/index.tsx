@@ -137,6 +137,8 @@ const App = observer(() => {
     }
   }, [topRef.current])
 
+  const noSidebar = ["COLLECTION", "COLLECTION_PERSONAL"].includes(screen)
+
   return (
     <div
       className={styles.globalWrapper}
@@ -165,14 +167,16 @@ const App = observer(() => {
           <div ref={topRef}>
             <Timer />
           </div>
-          <div className={styles.mainAndTimeline}>
+          <div
+            className={classNames({
+              [styles.mainAndTimeline]: true,
+              [styles.noSidebar]: noSidebar,
+            })}
+          >
             <div
               className={classNames({
                 [styles.main]: true,
-                [styles.noSidebar]: [
-                  "COLLECTION",
-                  "COLLECTION_PERSONAL",
-                ].includes(screen),
+                [styles.noSidebar]: noSidebar,
               })}
             >
               <DragDropContext
@@ -183,12 +187,14 @@ const App = observer(() => {
                 <UploadView />
               </DragDropContext>
             </div>
-            <div
-              className={styles.resizeHandle}
-              draggable={true}
-              onDragStart={e => onResizeTimelineStart(e)}
-            />
-            {screen !== "COLLECTION" && screen !== "COLLECTION_PERSONAL" && (
+            {!noSidebar && (
+              <div
+                className={styles.resizeHandle}
+                draggable={true}
+                onDragStart={e => onResizeTimelineStart(e)}
+              />
+            )}
+            {!noSidebar && (
               <div className={styles.timeline} ref={timelineRef}>
                 <Timeline />
               </div>

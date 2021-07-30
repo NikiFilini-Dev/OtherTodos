@@ -65,7 +65,7 @@ export const getCollection = id => {
   return gqlClient.query(GET_COLLECTION, { id }).toPromise()
 }
 
-const LogEntry = observer(({ log }: { log: ICollectionLog }) => {
+export const LogEntry = observer(({ log }: { log: ICollectionLog }) => {
   if (log.action === "MOVE" && log.targetType === "CARD") {
     return <CardMoved log={log} />
   }

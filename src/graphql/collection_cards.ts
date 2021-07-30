@@ -29,6 +29,7 @@ export const GET_COLLECTION_CARDS = gql`
       date
       tags
       files
+      watchers
       preview
       collectionId
       columnId
@@ -51,6 +52,7 @@ export const GET_COLLECTION_CARD = gql`
       date
       tags
       files
+      watchers
       preview
       collectionId
       columnId
@@ -73,6 +75,7 @@ export const GET_UPDATED_COLLECTION_CARDS = gql`
       date
       tags
       files
+      watchers
       preview
       collectionId
       columnId
@@ -88,5 +91,16 @@ export const GET_UPDATED_COLLECTION_CARDS = gql`
 export const GENERATE_COLLECTION_CARD_ZIP = gql`
   mutation GenerateZIP($cardId: String!) {
     generateZip(cardId: $cardId)
+  }
+`
+export const WATCH_COLLECTION_CARD = gql`
+  mutation WatchCollectionCard($id: String!) {
+    watchCollectionCard(id: $id)
+  }
+`
+
+export const UNWATCH_COLLECTION_CARD = gql`
+  mutation UnwatchCollectionCard($id: String!) {
+    unwatchCollectionCard(id: $id)
   }
 `

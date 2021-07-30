@@ -53,6 +53,7 @@ type CollectionCard {
   text: String!
   textOriginal: String!
   userId: String!
+  watchers: [String]!
 }
 
 type CollectionCardChanges {
@@ -213,7 +214,9 @@ type Mutation {
   removeUserFromCollection(collectionId: String!, userId: String!): Boolean
   requestPasswordReset(email: String!): Boolean!
   resetPassword(hash: String!, newPassword: String!): Boolean!
+  setLastSeenNotificationsAt(time: Time): Boolean
   test: Boolean
+  unwatchCollectionCard(id: String!): Boolean
   updateCardComment(changedAt: CardCommentChangesDate, data: CardCommentUpdate, id: String!): CardComment!
   updateCollection(changedAt: CollectionChangesDate, data: CollectionUpdate, id: String!): Collection!
   updateCollectionCard(changedAt: CollectionCardChangesDate, data: CollectionCardUpdate, id: String!): CollectionCard!
@@ -230,6 +233,7 @@ type Mutation {
   updateTimelineEvent(changedAt: TimelineEventChangesDate, data: TimelineEventUpdate, id: String!): TimelineEvent!
   updateTimerSession(changedAt: TimerSessionChangesDate, data: TimerSessionUpdate, id: String!): TimerSession!
   updateUpload(changedAt: UploadChangesDate, data: UploadUpdate, id: String!): Upload!
+  watchCollectionCard(id: String!): Boolean
 }
 
 type PageMeta {
@@ -465,10 +469,12 @@ type UploadChanges {
 
 type User {
   activated: Boolean!
+  cardSubscriptions: [String]!
   email: String!
   firstName: String!
   id: String!
   lastName: String!
+  lastSeenNotificationsAt: Time
 }
 
 type UsersPage {

@@ -6,8 +6,11 @@ import { IRootStore } from "../RootStore"
 import { uploadReference } from "./storages/uploads.storage"
 import { commentReference } from "./storages/cardComments.storage"
 import { userReference } from "./storages/users.storage"
-
-console.log(commentReference)
+import gqlClient from "graphql/client"
+import {
+  UNWATCH_COLLECTION_CARD,
+  WATCH_COLLECTION_CARD,
+} from "../../graphql/collection_cards"
 
 const CollectionCard = types
   .model("CollectionCard", {
@@ -21,11 +24,15 @@ const CollectionCard = types
     collection: types.reference(Collection),
     column: types.reference(CollectionColumn),
     index: types.number,
-    status: types.optional(types.enumeration("CardStatus", ["ACTIVE", "DONE"]), "ACTIVE"),
+    status: types.optional(
+      types.enumeration("CardStatus", ["ACTIVE", "DONE"]),
+      "ACTIVE",
+    ),
     files: types.array(uploadReference),
     preview: types.maybeNull(uploadReference),
     comments: types.array(types.maybeNull(commentReference)),
     assigned: types.maybeNull(userReference),
+    watchers: types.array(userReference),
     _temp: types.optional(types.boolean, false),
   })
   .views(self => ({
@@ -36,7 +43,7 @@ const CollectionCard = types
       return "CollectionCard"
     },
     get syncRename() {
-      return {collection: "collectionId", column: "columnId"}
+      return { collection: "collectionId", column: "columnId" }
     },
     get syncIgnore() {
       return ["_temp", "comments"]
@@ -56,13 +63,38 @@ const CollectionCard = types
 
     get task() {
       const root = getRoot<IRootStore>(self)
-      console.log("TASK:", root.tasks.all.find(task => task.card === self))
+      console.log(
+        "TASK:",
+        root.tasks.all.find(task => task.card === self),
+      )
       return root.tasks.all.find(task => task.card === self)
     },
   }))
   .actions(self => {
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, string[]> = {}
+
+    actions.watch = () => {
+      gqlClient
+        .mutation(WATCH_COLLECTION_CARD, { id: self.id })
+        .toPromise()
+        .then(resp => {
+          console.log(resp)
+          window.syncMachine.loadAll()
+        })
+    }
+    actionsMap.watch = []
+
+    actions.unwatch = () => {
+      gqlClient
+        .mutation(UNWATCH_COLLECTION_CARD, { id: self.id })
+        .toPromise()
+        .then(resp => {
+          console.log(resp)
+          window.syncMachine.loadAll()
+        })
+    }
+    actionsMap.unwatch = []
 
     actions.pushNewComment = val => self.comments.push(val)
     actionsMap.pushNewComment = []
@@ -74,66 +106,71 @@ const CollectionCard = types
     }
     actionsMap.deleteComment = ["comments"]
 
-    actions.setPreview = val => self.preview = val
+    actions.setPreview = val => (self.preview = val)
     actionsMap.setPreview = ["preview"]
 
-    actions.addFile = (val) => {
+    actions.addFile = val => {
       if (self.files.includes(val)) return
       self.files.push(val)
     }
     actionsMap.addFile = ["files"]
 
-    actions.removeFile = (val) => {
+    actions.removeFile = val => {
       if (!self.files.includes(val)) return
-      if (self.preview !== null && val?.id === self.preview.id) self.preview = null
-      self.files.splice(self.files.indexOf(val),1)
+      if (self.preview !== null && val?.id === self.preview.id)
+        self.preview = null
+      self.files.splice(self.files.indexOf(val), 1)
     }
     actionsMap.removeFile = ["files", "preview"]
 
-    actions.setName = (val: string) => self.name = val
+    actions.setName = (val: string) => (self.name = val)
     actionsMap.setName = ["name"]
 
-    actions.setNameOriginal = (val: string) => self.nameOriginal = val
+    actions.setNameOriginal = (val: string) => (self.nameOriginal = val)
     actionsMap.setNameOriginal = ["nameOriginal"]
 
-    actions.setIndex = (val: number) => self.index = val
+    actions.setIndex = (val: number) => (self.index = val)
     actionsMap.setIndex = ["index"]
 
-    actions.setText = (val: string) => self.text = val.length ? val : null
+    actions.setText = (val: string) => (self.text = val.length ? val : null)
     actionsMap.setText = ["text"]
 
-    actions.setTextOriginal = (val: string) => self.textOriginal = val.length ? val : null
+    actions.setTextOriginal = (val: string) =>
+      (self.textOriginal = val.length ? val : null)
     actionsMap.setTextOriginal = ["textOriginal"]
 
-    actions.setDate = (val: string) => self.date = val
+    actions.setDate = (val: string) => (self.date = val)
     actionsMap.setDate = ["date"]
 
-    actions.setTags = (val) => self.tags = val
+    actions.setTags = val => (self.tags = val)
     actionsMap.setTags = ["tags"]
 
-    actions.addTag = (val) => {
+    actions.addTag = val => {
       if (self.tags.includes(val)) return
       self.tags.push(val)
     }
     actionsMap.addTag = ["tags"]
 
-    actions.removeTag = (val) => {
+    actions.removeTag = val => {
       if (!self.tags.includes(val)) return
-      self.tags.splice(self.tags.indexOf(val),1)
+      self.tags.splice(self.tags.indexOf(val), 1)
     }
     actionsMap.removeTag = ["tags"]
 
-    actions.setCollection = (val) => {
+    actions.setCollection = val => {
       self.collection = val
-      if (self.column.collection !== self.collection && self.collection.columns.length > 0)
+      if (
+        self.column.collection !== self.collection &&
+        self.collection.columns.length > 0
+      )
         self.column = self.collection.columns[0]
     }
     actionsMap.setCollection = ["collection", "column"]
 
-    actions.setColumn = (val) => self.column = val
+    actions.setColumn = val => (self.column = val)
     actionsMap.setColumn = ["column"]
 
-    actions.setStatus = (val: "DONE" | "ACTIVE") => self.status = val
+    actions.setStatus = (val: "DONE" | "ACTIVE") => (self.status = val)
     actionsMap.setStatus = ["status"]
 
     actions.addTask = () => {
@@ -142,7 +179,7 @@ const CollectionCard = types
         text: self.name,
         note: self.textOriginal || "",
         date: self.date,
-        card: self
+        card: self,
       })
       root.tasks.add(task)
     }
@@ -155,7 +192,7 @@ const CollectionCard = types
     }
     actionsMap.removeTask = []
 
-    actions.assignUser = val => self.assigned = val
+    actions.assignUser = val => (self.assigned = val)
     actionsMap.assignUser = ["assigned"]
 
     actions.getActionsMap = () => actionsMap

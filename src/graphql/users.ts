@@ -40,18 +40,28 @@ export const GENERATE_TOKEN_MUTATION = gql`
 export const ME_QUERY = gql`
   query Me {
     me {
+      id
       email
+      firstName
+      lastName
+      lastSeenNotificationsAt
     }
   }
 `
 
 export const GET_USER = gql`
   query User($id: String!) {
-      user(id: $id) {
-          id
-          email
-          firstName
-          lastName
-      }
+    user(id: $id) {
+      id
+      email
+      firstName
+      lastName
+    }
+  }
+`
+
+export const SET_LAST_SEEN_NOTIFICATIONS_AT = gql`
+  mutation SetLastSeenNotificationsAt($time: Time) {
+    setLastSeenNotificationsAt(time: $time)
   }
 `

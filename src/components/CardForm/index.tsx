@@ -97,7 +97,6 @@ const CardForm = observer(({ cardId }: { cardId: string | null }) => {
       // @ts-ignore
       (e: Event & { detail: { original: string; html: string } }) => {
         if (e.detail.original === card.textOriginal) return
-        console.error("CARD SET TEXT", e)
         card.setText(e.detail.html)
         card.setTextOriginal(e.detail.original)
       },
@@ -131,7 +130,6 @@ const CardForm = observer(({ cardId }: { cardId: string | null }) => {
       "change",
       // @ts-ignore
       (e: Event & { detail: { original: string; html: string } }) => {
-        console.log(e.detail.original)
         setCommentText(e.detail.html)
         setCommentOriginal(e.detail.original)
       },
@@ -146,9 +144,7 @@ const CardForm = observer(({ cardId }: { cardId: string | null }) => {
 
   const fileRef = React.useRef<null | HTMLInputElement>(null)
   const triggerFileUpload = () => {
-    console.log("Trigger")
     if (!fileRef.current) return
-    console.log("Has current")
     fileRef.current.click()
   }
 
@@ -308,6 +304,15 @@ const CardForm = observer(({ cardId }: { cardId: string | null }) => {
     const url = "/s3/" + result.data.generateZip
     window.open(url)
     setIsGeneratingArchive(false)
+  }
+
+  const watching = card.watchers.find(u => u.id === user.id)
+  const onWatchClick = () => {
+    if (watching) {
+      card.unwatch()
+    } else {
+      card.watch()
+    }
   }
 
   // @ts-ignore
@@ -707,6 +712,19 @@ const CardForm = observer(({ cardId }: { cardId: string | null }) => {
                     >
                       {tag.name}
                     </div>
+                  ))}
+                </div>
+              </div>
+              <div className={styles.group}>
+                <div className={styles.head}>
+                  <div className={styles.name}>Наблюдатели</div>
+                  <div className={styles.action} onClick={onWatchClick}>
+                    {watching ? "Отписаться" : "Подписаться"}
+                  </div>
+                </div>
+                <div className={styles.watchers}>
+                  {card.watchers.map(watcher => (
+                    <Avatar user={watcher} size={"32px"} key={watcher.id} />
                   ))}
                 </div>
               </div>

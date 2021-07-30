@@ -25,6 +25,7 @@ import { uploadsStorage } from "./storages/uploads.storage"
 import { userReference, usersStorage } from "./storages/users.storage"
 import { safeRef } from "../utils"
 import { commentsStorage } from "./storages/cardComments.storage"
+import { DateTime } from "luxon"
 
 console.log(commentsStorage)
 
@@ -67,7 +68,7 @@ const CollectionsStore = types
     editingCollection: types.maybeNull(types.reference(Collection)),
     uploadView: types.maybeNull(types.reference(Upload)),
   })
-  .views(() => ({}))
+  .views(self => ({}))
   .actions(self => ({
     healthCheckColumns() {
       const columnsMap: Record<string, ICollectionColumn[]> = {}

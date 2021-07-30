@@ -17,8 +17,8 @@ export default class User extends SyncType {
     return snapshot => snapshot
   }
 
-  async getOne<T>(id: string): Promise<SnapshotIn<T>|false> {
-    const result = await gqlClient.query(GET_USER, {id}).toPromise()
+  async getOne<T>(id: string): Promise<SnapshotIn<T> | false> {
+    const result = await gqlClient.query(GET_USER, { id }).toPromise()
     return result.data.user
   }
 }

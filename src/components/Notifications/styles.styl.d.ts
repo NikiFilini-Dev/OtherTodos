@@ -1,17 +1,12 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
-    active: string
-    block: string
-    email: string
-    hasNew: string
+    datetime: string
     info: string
-    item: string
-    menu: string
-    name: string
-    rightPart: string
-    signOut: string
-    userInfo: string
-    username: string
+    log: string
+    markSeen: string
+    new: string
+    title: string
+    wrapper: string
   }
 }
 

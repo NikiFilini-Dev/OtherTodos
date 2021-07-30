@@ -9,6 +9,8 @@ import ChecklistIcon from "assets/customIcons/check_list.svg"
 import GridIcon from "assets/customIcons/grid.svg"
 import classNames from "classnames"
 import { action } from "mobx"
+import BellIcon from "assets/customIcons/bell.svg"
+import Notifications from "../Notifications"
 
 const Element = observer(({ icon, active, name, trigger }) => {
   const Icon = icon
@@ -36,6 +38,9 @@ const Top = observer(() => {
     setScreen,
     collectionsStore: { collections, selectedCollection, selectCollection },
   } = useMst()
+
+  const [notificationsShown, setNotificationsShown] = React.useState(false)
+
   const onSignOutClick = async () => {
     setUser(null)
     location.reload()
@@ -89,6 +94,22 @@ const Top = observer(() => {
           name={"Коллекции"}
           trigger={triggerCollections}
         />
+      </div>
+      <div className={styles.rightPart}>
+        <div
+          className={styles.block}
+          onClick={() => setNotificationsShown(!notificationsShown)}
+        >
+          <BellIcon />
+          {!!user?.notifications.new.length && (
+            <div className={styles.hasNew}>
+              {user.notifications.new.length > 9
+                ? 9
+                : user.notifications.new.length}
+            </div>
+          )}
+        </div>
+        {notificationsShown && <Notifications />}
       </div>
     </React.Fragment>
   )
