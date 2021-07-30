@@ -78,6 +78,7 @@ export default abstract class SyncType {
       updated.forEach(updatedItem => {
         const index = list.findIndex(i => i.id === updatedItem.id)
         const old = oldEntities.find(i => i.id === updatedItem.id)
+        if (updatedItem.id in this.updates) return
         console.log(updatedItem, old)
         if (old) {
           let changed = false
