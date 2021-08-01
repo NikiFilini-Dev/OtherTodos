@@ -2,6 +2,10 @@ import { getRoot, Instance, SnapshotIn, types } from "mobx-state-tree"
 import { IRootStore } from "../RootStore"
 import { IconName, IconNames } from "../../palette/icons"
 import { userReference } from "./storages/users.storage"
+import gqlClient from "../../graphql/client"
+import { UNWATCH_COLLECTION_CARD } from "../../graphql/collection_cards"
+import { GET_COLLECTION } from "../../graphql/collection"
+import { runInAction } from "mobx"
 
 const Collection = types
   .model("Collection", {
@@ -61,6 +65,21 @@ const Collection = types
 
     actions.setIndex = (val: number) => (self.index = val)
     actionsMap.setIndex = ["index"]
+
+    actions.refreshUsers = () => {
+      gqlClient
+        .mutation(GET_COLLECTION, { id: self.id })
+        .toPromise()
+        .then(resp => {
+          runInAction(() => {
+            self._setUsers(resp.data.collection.users)
+          })
+        })
+    }
+    actionsMap.refreshUsers = []
+
+    actions._setUsers = users => (self.users = users)
+    actionsMap._setUsers = []
 
     actions.getActionsMap = () => actionsMap
     return actions
