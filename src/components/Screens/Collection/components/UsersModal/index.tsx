@@ -76,6 +76,11 @@ const UsersModal = observer(
       onInviteClick()
     }
 
+    const onUserClick = async user => {
+      console.log(user)
+      await navigator.clipboard.writeText(user.email)
+    }
+
     return ReactDOM.createPortal(
       <div className={styles.wrapper} ref={wrapperRef} onClick={onWrapperClick}>
         <div className={styles.modal}>
@@ -123,29 +128,25 @@ const UsersModal = observer(
               <div className={styles.group}>
                 <span className={styles.name}>Участники проекта:</span>
                 <div className={styles.users}>
-                  <div key={collection.userId.id} className={styles.user}>
-                    <div className={styles.avatar}>
-                      <UserIcon />
-                    </div>
-                    {collection.userId.firstName} {collection.userId.lastName}
-                    <span className={styles.email}>
-                      ({collection.userId.email})
-                    </span>
-                  </div>
-
-                  {collection.users.map(user => (
-                    <div key={user.id} className={styles.user}>
+                  {[collection.userId, ...collection.users].map(user => (
+                    <div
+                      key={user.id}
+                      className={styles.user}
+                      onClick={() => onUserClick(user)}
+                    >
                       <div className={styles.avatar}>
                         <UserIcon />
                       </div>
                       {user.firstName} {user.lastName}
                       <span className={styles.email}>({user.email})</span>
-                      <div
-                        className={styles.remove}
-                        onClick={() => onRemoveUserClick(user.id)}
-                      >
-                        <TimesIcon />
-                      </div>
+                      {user !== collection.userId && (
+                        <div
+                          className={styles.remove}
+                          onClick={() => onRemoveUserClick(user.id)}
+                        >
+                          <TimesIcon />
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
