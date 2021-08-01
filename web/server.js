@@ -8,16 +8,19 @@ const { template } = require("lodash")
 const fetch = require("node-fetch")
 
 const WDS_MODE = process.argv.includes("--wds")
-const WDS_HOST = "http://192.168.1.58:8080"
+const WDS_HOST = "http://127.0.0.1:8080"
 
 app.use("/static", express.static("./web_dist"))
 app.use("/public", express.static("./web/public"))
 
 const http = require("http")
-app.get("/s3/*", function(req, res) {
-  http.get(process.env.IMAGES_BUCKET_URL+req.url.replace("/s3/", ""), function(proxyRes) {
-    proxyRes.pipe(res)
-  })
+app.get("/s3/*", function (req, res) {
+  http.get(
+    process.env.IMAGES_BUCKET_URL + req.url.replace("/s3/", ""),
+    function (proxyRes) {
+      proxyRes.pipe(res)
+    },
+  )
 })
 
 app.get("/", async (req, res) => {
@@ -27,13 +30,15 @@ app.get("/", async (req, res) => {
 app.get("/app/*", async (req, res) => {
   let manifest
   if (WDS_MODE) {
-    manifest = await (
-      await fetch(WDS_HOST+"/static/manifest.json")
-    ).json()
-    Object.keys(manifest).forEach(key => manifest[key] = `${WDS_HOST}/static/${manifest[key]}`)
+    manifest = await (await fetch(WDS_HOST + "/static/manifest.json")).json()
+    Object.keys(manifest).forEach(
+      key => (manifest[key] = `${WDS_HOST}/static/${manifest[key]}`),
+    )
   } else {
     manifest = await fs.readJson(path.resolve("./web_dist/manifest.json"))
-    Object.keys(manifest).forEach(key => manifest[key] = `/static/${manifest[key]}`)
+    Object.keys(manifest).forEach(
+      key => (manifest[key] = `/static/${manifest[key]}`),
+    )
   }
 
   const html = fs.readFileSync(path.resolve("./web/index.html.ejs"), "utf-8")

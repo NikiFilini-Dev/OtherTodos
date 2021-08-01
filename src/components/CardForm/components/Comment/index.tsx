@@ -10,6 +10,7 @@ import CheckIcon from "assets/line_awesome/check-solid.svg"
 import BakaEditor from "../../../../editor"
 import { ICollectionCard } from "../../../../models/collections/CollectionCard"
 import Avatar from "../../../Avatar"
+import classNames from "classnames"
 
 type Props = {
   comment: ICardComment
@@ -25,6 +26,7 @@ const Comment = observer(({ comment, card }: Props) => {
   }
 
   const [editing, setEditing] = React.useState(false)
+  const [mentioning, setMentioning] = React.useState(false)
 
   const [commentText, setCommentText] = React.useState(comment.text)
   const [commentOriginal, setCommentOriginal] = React.useState(comment.original)
@@ -41,13 +43,15 @@ const Comment = observer(({ comment, card }: Props) => {
     if (!commentRef.current) return
     setEditing(true)
     setTimeout(() => {
-      const editor = commentRef.current?.querySelector<BakaEditor>("baka-editor")
+      const editor = commentRef.current?.querySelector<BakaEditor>(
+        "baka-editor",
+      )
       if (!editor) return
       editor.setText(commentOriginal)
       editor.addEventListener(
         "change",
         // @ts-ignore
-        (e: Event & { detail: { original: string, html: string } }) => {
+        (e: Event & { detail: { original: string; html: string } }) => {
           setCommentText(e.detail.html)
           setCommentOriginal(e.detail.original)
         },
@@ -63,33 +67,80 @@ const Comment = observer(({ comment, card }: Props) => {
     comment.setOriginal(commentOriginal)
   }
 
-  return <div key={comment.id} className={styles.comment} ref={commentRef}>
-    <div className={styles.top}>
-      <Avatar user={comment.user} size={"32px"} />
-      <div className={styles.info}>
-        <span className={styles.name}>
-          {comment.user.firstName} {comment.user.lastName}
-        </span>
-        <span className={styles.date}>
-          {DateTime.fromISO(comment.createdAt).toLocaleString(format)}
-        </span>
-      </div>
-      <div className={styles.actions}>
-        <div className={styles.action} onClick={() => card.deleteComment(comment.id)}>
-          <TrashIcon />
+  const mention = user => {
+    const editor = commentRef.current?.querySelector<BakaEditor>("baka-editor")
+    if (!editor) return
+
+    editor.addText(`@(${user.firstName})[${user.email}], `)
+    setMentioning(false)
+    editor.focus()
+  }
+
+  return (
+    <div key={comment.id} className={styles.comment} ref={commentRef}>
+      <div className={styles.top}>
+        <Avatar user={comment.user} size={"32px"} />
+        <div className={styles.info}>
+          <span className={styles.name}>
+            {comment.user.firstName} {comment.user.lastName}
+          </span>
+          <span className={styles.date}>
+            {DateTime.fromISO(comment.createdAt).toLocaleString(format)}
+          </span>
         </div>
-        {!editing && <div className={styles.action} onClick={startEditing}>
-          <EditIcon className={styles.awesome} />
-        </div>}
-        {editing && <div className={styles.action} onClick={stopEditing}>
-          <CheckIcon className={styles.awesome} />
-        </div>}
+        <div className={styles.actions}>
+          <div
+            className={styles.action}
+            onClick={() => card.deleteComment(comment.id)}
+          >
+            <TrashIcon />
+          </div>
+          {!editing && (
+            <div className={styles.action} onClick={startEditing}>
+              <EditIcon className={styles.awesome} />
+            </div>
+          )}
+          {editing && (
+            <div className={styles.action} onClick={stopEditing}>
+              <CheckIcon className={styles.awesome} />
+            </div>
+          )}
+          {editing && (
+            <div
+              className={classNames({
+                [styles.action]: true,
+                [styles.active]: mentioning,
+              })}
+              onClick={() => setMentioning(!mentioning)}
+            >
+              @
+            </div>
+          )}
+        </div>
       </div>
+      {!editing && (
+        <div
+          className={styles.text}
+          dangerouslySetInnerHTML={{ __html: comment.text }}
+        />
+      )}
+      {mentioning && (
+        <div className={styles.mentions}>
+          <div className={styles.title}>Упомянуть:</div>
+          {[card.collection.userId, ...card.collection.users].map(u => (
+            <div key={u.id} onClick={() => mention(u)} className={styles.user}>
+              <Avatar user={u} size={"24px"} />
+              <span>
+                {u.firstName} {u.lastName}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+      {/*@ts-ignore*/}
+      {editing && <baka-editor class={styles.editor} />}
     </div>
-    {!editing && <div className={styles.text} dangerouslySetInnerHTML={{__html: comment.text}} />}
-    {/*@ts-ignore*/}
-    {editing && <baka-editor class={styles.editor} />}
-  </div>
+  )
 })
 
 export default Comment

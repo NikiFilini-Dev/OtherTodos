@@ -43,7 +43,12 @@ import {
   CardMoved,
 } from "./cardLogs"
 import { ColumnChanged, ColumnCreated, ColumnDeleted } from "./columnLogs"
-import { CommentChanged, CommentCreated, CommentDeleted } from "./commentLogs"
+import {
+  CommentChanged,
+  CommentCreated,
+  CommentDeleted,
+  CommentMentioned,
+} from "./commentLogs"
 import LeftIcon from "assets/customIcons/left.svg"
 import { CollectionChanged, CollectionCreated } from "./collectiontLogs"
 import { DateTime, DateTimeFormatOptions, LocaleOptions } from "luxon"
@@ -66,6 +71,8 @@ export const getCollection = id => {
 }
 
 export const LogEntry = observer(({ log }: { log: ICollectionLog }) => {
+  const { user } = useMst()
+
   if (log.action === "MOVE" && log.targetType === "CARD") {
     return <CardMoved log={log} />
   }
@@ -92,7 +99,18 @@ export const LogEntry = observer(({ log }: { log: ICollectionLog }) => {
     return <ColumnDeleted log={log} />
   }
 
-  if (log.action === "CREATE" && log.targetType === "COMMENT") {
+  if (
+    log.action === "CREATE" &&
+    log.targetType === "COMMENT" &&
+    log.mentionsUser(user.id)
+  ) {
+    return <CommentMentioned log={log} />
+  }
+  if (
+    log.action === "CREATE" &&
+    log.targetType === "COMMENT" &&
+    !log.mentionsUser(user.id)
+  ) {
     return <CommentCreated log={log} />
   }
   if (log.action === "EDIT" && log.targetType === "COMMENT") {

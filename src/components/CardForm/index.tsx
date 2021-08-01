@@ -315,6 +315,15 @@ const CardForm = observer(({ cardId }: { cardId: string | null }) => {
     }
   }
 
+  const [mentioning, setMentioning] = React.useState(false)
+  const mention = user => {
+    if (!commentEditorRef.current || !commentEditorRef.current.setText) return
+    const editor = commentEditorRef.current
+    editor.addText(`@(${user.firstName})[${user.email}], `)
+    setMentioning(false)
+    editor.focus()
+  }
+
   // @ts-ignore
   return ReactDOM.createPortal(
     <div
@@ -555,7 +564,35 @@ const CardForm = observer(({ cardId }: { cardId: string | null }) => {
                   <div className={styles.action} onClick={onAddCommentClick}>
                     <Icon name={"send"} /> Отправить
                   </div>
+                  <div
+                    onClick={() => setMentioning(!mentioning)}
+                    className={classNames({
+                      [styles.mentionTrigger]: true,
+                      [styles.active]: mentioning,
+                    })}
+                  >
+                    @
+                  </div>
                 </div>
+                {!commentsFolded && mentioning && (
+                  <div className={styles.mentions}>
+                    <div className={styles.title}>Упомянуть:</div>
+                    {[card.collection.userId, ...card.collection.users].map(
+                      u => (
+                        <div
+                          key={u.id}
+                          onClick={() => mention(u)}
+                          className={styles.user}
+                        >
+                          <Avatar user={u} size={"24px"} />
+                          <span>
+                            {u.firstName} {u.lastName}
+                          </span>
+                        </div>
+                      ),
+                    )}
+                  </div>
+                )}
                 {!commentsFolded && (
                   <baka-editor
                     class={styles.newComment}

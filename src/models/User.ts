@@ -34,7 +34,8 @@ const User = types
         if (!card || log.user.id === user.id) return false
         if (
           card.assigned?.id !== user.id &&
-          !card.watchers.find(u => u.id === self.id)
+          !card.watchers.find(u => u.id === self.id) &&
+          !log.mentionedUsers.find(u => u.id === self.id)
         )
           return false
         return true

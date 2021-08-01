@@ -4,7 +4,7 @@ import { escapeHtml } from "./utils"
 
 export default class Document {
   //    text = 'aabb\nbbaa\n'
-  text = ""
+  text = "Hello, @(Yegor)[yegorpok@gmail.com] asdfasdf"
   history = []
   historyOffset = -1
 

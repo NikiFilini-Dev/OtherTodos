@@ -14,6 +14,7 @@ export const GET_COLLECTION_LOGS = gql`
       moveTargetColumn
       targetType
       userId
+      mentionedUsers
     }
   }
 `
@@ -32,6 +33,7 @@ export const GET_NEW_COLLECTION_LOGS = gql`
       moveTargetColumn
       targetType
       userId
+      mentionedUsers
     }
   }
 `

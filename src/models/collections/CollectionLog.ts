@@ -1,9 +1,6 @@
 import { Instance, types } from "mobx-state-tree"
 import Collection from "./Collection"
 import CollectionColumn from "./CollectionColumn"
-import CollectionCard from "./CollectionCard"
-import CardComment from "./CardComment"
-import OtherUser from "./OtherUser"
 import { userReference } from "./storages/users.storage"
 
 const CollectionLog = types
@@ -31,6 +28,7 @@ const CollectionLog = types
     datetime: types.string,
     moveTargetCollection: types.maybeNull(types.reference(Collection)),
     moveTargetColumn: types.maybeNull(types.reference(CollectionColumn)),
+    mentionedUsers: types.array(userReference),
   })
   .views(() => ({
     get syncable() {
@@ -38,6 +36,11 @@ const CollectionLog = types
     },
     get syncName() {
       return "CollectionLog"
+    },
+  }))
+  .actions(self => ({
+    mentionsUser(id) {
+      return !!self.mentionedUsers.find(u => u.id === id)
     },
   }))
 

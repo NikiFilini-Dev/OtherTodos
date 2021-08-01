@@ -32,6 +32,33 @@ export const CommentCreated = observer(({ log }: { log: ICollectionLog }) => {
   )
 })
 
+export const CommentMentioned = observer(({ log }: { log: ICollectionLog }) => {
+  const [card, setCard] = React.useState<Card | null>(null)
+
+  const {
+    collectionsStore: { selectCard },
+  }: IRootStore = useMst()
+
+  const onCardClick = () => {
+    selectCard(log.cardId)
+  }
+
+  React.useEffect(() => {
+    getCard(log.cardId).then(result => {
+      setCard(result.data.collectionCard)
+    })
+  }, [log.cardId])
+
+  return (
+    <div>
+      <b>{log.user.firstName}</b> упомянул вас в комментарии к карточке{" "}
+      <b className={styles.clickable} onClick={onCardClick}>
+        {card?.name}
+      </b>
+    </div>
+  )
+})
+
 export const CommentChanged = observer(({ log }: { log: ICollectionLog }) => {
   const [card, setCard] = React.useState<Card | null>(null)
 

@@ -9,6 +9,19 @@ export default class Editable extends HTMLElement {
   }
 
   initIO(io) {
+    this.addText = text => {
+      let range = this.getSelection()
+
+      if (range.collapsed) {
+        this.cursorPos = range.startOffset + text.length
+        io.insert(range.startOffset, text)
+      } else {
+        this.cursorPos = range.startOffset + text.length
+        // this.setCursorPos(range.startOffset + text.length)
+        io.replace(range.startOffset, range.endOffset, text)
+      }
+    }
+
     let lastSelection
 
     this.innerHTML = io.toHtml()

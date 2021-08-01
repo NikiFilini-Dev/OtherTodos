@@ -24,6 +24,8 @@ declare namespace StylesStylNamespace {
     loader: string
     main: string
     mainPart: string
+    mentionTrigger: string
+    mentions: string
     modal: string
     modalPart: string
     name: string
@@ -42,6 +44,7 @@ declare namespace StylesStylNamespace {
     tags: string
     tagsMenu: string
     tagsMenuTrigger: string
+    title: string
     trash: string
     user: string
     usersMenu: string

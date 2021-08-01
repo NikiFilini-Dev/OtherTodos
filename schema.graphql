@@ -108,6 +108,7 @@ type CollectionLog {
   commentId: String
   datetime: Time
   id: String!
+  mentionedUsers: [String]!
   moveTargetCollection: String
   moveTargetColumn: String
   targetType: String!

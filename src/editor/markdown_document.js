@@ -22,6 +22,8 @@ export default class MarkdownDocument extends Document {
       image: [],
       image_title: [],
       link_title: [],
+      mention_name: [],
+      mention_email: [],
     }
 
     let text = this.text
@@ -33,11 +35,34 @@ export default class MarkdownDocument extends Document {
         for (let styleName of styleNames) {
           ranges[styleName].push([start, end])
         }
-        ranges.service.push([start-n, start])
+        ranges.service.push([start - n, start])
         ranges.service.push([end, end + n])
         return match
       })
     }
+
+    const processMentions = () => {
+      const regexp = /@\((.+?)\)\[(.+?)\]/gm
+      text.replace(regexp, (fullMatch, name, email, index) => {
+        console.log(fullMatch, name, email, index)
+        const nameStart = index + 2
+        ranges.service.push([index, nameStart])
+
+        const emailStart = nameStart + name.length + 2
+        ranges.service.push([nameStart + name.length, emailStart])
+
+        ranges.service.push([
+          emailStart + email.length,
+          emailStart + email.length + 1,
+        ])
+        ranges.mention_name.push([nameStart, nameStart + name.length])
+        ranges.mention_email.push([emailStart, emailStart + email.length])
+
+        return fullMatch
+      })
+    }
+
+    processMentions()
 
     // const replaced_occurrences = []
     const escapeMarkup = (regexp, n) => {
@@ -71,6 +96,16 @@ export default class MarkdownDocument extends Document {
     process(["monospace"], /`([^`\n\r]+?)`/gm, 1)
 
     return {
+      mention_name: {
+        openTag: "<span class='mention_name'>",
+        closeTag: "</span>",
+        ranges: ranges.mention_name,
+      },
+      mention_email: {
+        openTag: "<span class='mention_email'>",
+        closeTag: "</span>",
+        ranges: ranges.mention_email,
+      },
       bold: {
         openTag: "<b>",
         closeTag: "</b>",
@@ -198,6 +233,12 @@ export default class MarkdownDocument extends Document {
     html = html.replace(
       /<baka-link class="link">(.+)<\/baka-link>/gm,
       (fullMatch, link) => `<a href="${link}" target="_blank">${link}</a>`,
+    )
+
+    html = html.replace(
+      /<span class=["']service["']>@\(<\/span><span class=["']mention_name["']>(.+?)<\/span><span class=["']service["']>\)\[<\/span><span class=["']mention_email["']>(.+?)<\/span><span class=["']service["']>\]<\/span>/gm,
+      (fullMatch, name, email) =>
+        `<baka-mention email="${email}">@${name}</baka-mention>`,
     )
 
     html = html.replace(/\\\*/gm, "*")

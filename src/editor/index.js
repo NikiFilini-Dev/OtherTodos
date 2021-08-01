@@ -4,8 +4,10 @@ import Document from "./markdown_document"
 import Editable from "./editable"
 import "./baka_link"
 import { noop } from "lodash-es"
+import BakaMention from "./baka_mention"
 
 noop("baka-editable", Editable)
+noop("baka-mention", BakaMention)
 
 export default class BakaEditor extends HTMLElement {
   template = `<div id="wrapper">
@@ -220,6 +222,10 @@ export default class BakaEditor extends HTMLElement {
         onButtonClick(styleName, e),
       )
     }
+  }
+
+  addText(text) {
+    this.elms.editor.addText(text)
   }
 
   logger(historyEvent) {
