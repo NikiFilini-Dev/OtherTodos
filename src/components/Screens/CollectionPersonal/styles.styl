@@ -23,6 +23,28 @@
   font-size 18px
   font-weight 500
 
+.actions
+  display flex
+  align-items center
+  gap 16px
+  margin-left auto
+
+.actionTrigger
+  margin-right 16px
+  display flex
+  align-items center
+  justify-content center
+  cursor pointer
+  width 44px
+  height 44px
+  border-radius 10px
+  background #F1F1F1
+
+  svg
+    width 28px
+    height 28px
+    color #9BABC5
+
 .columns
   display flex
   gap 24px
@@ -32,9 +54,16 @@
 .column
   display flex
   flex-direction column
-  min-width 350px
-  width 250px
   overflow-y auto
+
+  &.small
+    width 200px
+
+  &.medium
+    width 250px
+
+  &.big
+    width 300px
 
   .columnHead
     height 48px

@@ -28,14 +28,7 @@ import { GET_COLLECTION_COLUMN } from "../../../graphql/collection_columns"
 import CollectionColumn from "../../../syncMachine/types/collection_column"
 import { SnapshotOut } from "mobx-state-tree"
 import CollectionCard from "../../../models/collections/CollectionCard"
-import {
-  ActionCreate,
-  ActionDelete,
-  ActionEdit,
-  ActionMove,
-  ActionComplete,
-  LogAction,
-} from "./actions"
+import { LogAction } from "./actions"
 import {
   CardChanged,
   CardComplete,
@@ -53,6 +46,7 @@ import {
 import LeftIcon from "assets/customIcons/left.svg"
 import { CollectionChanged, CollectionCreated } from "./collectiontLogs"
 import { DateTime, DateTimeFormatOptions, LocaleOptions } from "luxon"
+import SizeMenu from "./components/SizeMenu"
 
 type Size = "small" | "medium" | "big"
 
@@ -305,45 +299,12 @@ const Collection = observer(() => {
           </div>
         </div>
         {sizeMenuOpen && (
-          <FloatMenu
-            target={sizeTriggerRef}
+          <SizeMenu
+            triggerRef={sizeTriggerRef}
             menuRef={sizeMenuRef}
-            position={"horizontal_auto"}
-          >
-            <div className={styles.menu}>
-              <div className={styles.menuName}>Ширина колонок:</div>
-              <div
-                className={classNames({
-                  [styles.size]: true,
-                  [styles.active]: size === "small",
-                })}
-                onClick={() => setSize("small")}
-              >
-                Маленькая
-                <CheckIcon />
-              </div>
-              <div
-                className={classNames({
-                  [styles.size]: true,
-                  [styles.active]: size === "medium",
-                })}
-                onClick={() => setSize("medium")}
-              >
-                Средняя
-                <CheckIcon />
-              </div>
-              <div
-                className={classNames({
-                  [styles.size]: true,
-                  [styles.active]: size === "big",
-                })}
-                onClick={() => setSize("big")}
-              >
-                Большая
-                <CheckIcon />
-              </div>
-            </div>
-          </FloatMenu>
+            currentSize={size}
+            setSize={setSize}
+          />
         )}
 
         {editingCollection !== null && <CollectionForm />}

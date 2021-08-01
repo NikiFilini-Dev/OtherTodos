@@ -1,11 +1,16 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
+    actionTrigger: string
+    actions: string
+    big: string
     column: string
     columnHead: string
     columns: string
     head: string
+    medium: string
     screen: string
     screenWrapper: string
+    small: string
   }
 }
 
