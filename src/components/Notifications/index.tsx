@@ -5,6 +5,7 @@ import { useMst } from "../../models/RootStore"
 import { LogEntry } from "../Screens/Collection"
 import { DateTime } from "luxon"
 import classNames from "classnames"
+import { LogAction } from "../Screens/Collection/actions"
 
 const Notifications = observer(() => {
   const { user } = useMst()
@@ -34,19 +35,22 @@ const Notifications = observer(() => {
       {logs.map(log => (
         <div
           className={classNames({
-            [styles.log]: true,
+            [styles.logWrapper]: true,
             [styles.new]: newLogs.includes(log),
           })}
           key={log.id}
         >
-          <LogEntry log={log} />
-          <div className={styles.datetime}>
-            {DateTime.fromISO(log.datetime).toLocaleString({
-              month: "short",
-              day: "numeric",
-              hour: "numeric",
-              minute: "numeric",
-            })}
+          <LogAction log={log} />
+          <div className={styles.log}>
+            <LogEntry log={log} />
+            <div className={styles.datetime}>
+              {DateTime.fromISO(log.datetime).toLocaleString({
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+              })}
+            </div>
           </div>
         </div>
       ))}

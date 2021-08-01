@@ -6,6 +6,19 @@ import PencilIcon from "assets/customIcons/pencil.svg"
 import TrashIcon from "assets/customIcons/trash.svg"
 import PlusIcon from "assets/customIcons/plus.svg"
 import DoneIcon from "assets/customIcons/done.svg"
+import { observer } from "mobx-react"
+
+export const LogAction = observer(({ log }) => {
+  return (
+    <React.Fragment>
+      {log.action === "EDIT" && <ActionEdit />}
+      {log.action === "MOVE" && <ActionMove />}
+      {log.action === "DELETE" && <ActionDelete />}
+      {log.action === "CREATE" && <ActionCreate />}
+      {log.action === "COMPLETE" && <ActionComplete />}
+    </React.Fragment>
+  )
+})
 
 export const ActionMove = () => {
   return (

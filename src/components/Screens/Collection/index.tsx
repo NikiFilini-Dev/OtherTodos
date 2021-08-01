@@ -34,6 +34,7 @@ import {
   ActionEdit,
   ActionMove,
   ActionComplete,
+  LogAction,
 } from "./actions"
 import {
   CardChanged,
@@ -418,11 +419,7 @@ const Collection = observer(() => {
               </h1>
               {logs.map(log => (
                 <div className={styles.logWrapper} key={log.id}>
-                  {log.action === "EDIT" && <ActionEdit />}
-                  {log.action === "MOVE" && <ActionMove />}
-                  {log.action === "DELETE" && <ActionDelete />}
-                  {log.action === "CREATE" && <ActionCreate />}
-                  {log.action === "COMPLETE" && <ActionComplete />}
+                  <LogAction log={log} />
                   <div className={styles.log}>
                     <LogEntry log={log} />
                     <div className={styles.date}>

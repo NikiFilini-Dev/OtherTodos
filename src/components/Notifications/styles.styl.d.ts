@@ -3,6 +3,7 @@ declare namespace StylesStylNamespace {
     datetime: string
     info: string
     log: string
+    logWrapper: string
     markSeen: string
     new: string
     title: string
