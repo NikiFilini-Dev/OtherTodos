@@ -26,6 +26,7 @@ import { userReference, usersStorage } from "./storages/users.storage"
 import { safeRef } from "../utils"
 import { commentsStorage } from "./storages/cardComments.storage"
 import { DateTime } from "luxon"
+import CollectionFilter from "./CollectionFilter"
 
 console.log(commentsStorage)
 
@@ -67,6 +68,7 @@ const CollectionsStore = types
     ),
     editingCollection: types.maybeNull(types.reference(Collection)),
     uploadView: types.maybeNull(types.reference(Upload)),
+    filter: types.optional(CollectionFilter, {}),
   })
   .views(self => ({}))
   .actions(self => ({
@@ -215,6 +217,7 @@ const CollectionsStore = types
       self.selectedCollection = collection
       self.userFilter = null
       self.userFilterEnabled = false
+      self.filter = CollectionFilter.create()
 
       history.pushState({}, document.title, "/app/collections/" + id)
     },

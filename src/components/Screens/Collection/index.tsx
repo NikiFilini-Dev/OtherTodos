@@ -1,4 +1,4 @@
-import React from "react"
+import React, { CSSProperties } from "react"
 import { observer } from "mobx-react"
 import { IRootStore, useMst } from "models/RootStore"
 import styles from "./styles.styl"
@@ -47,6 +47,9 @@ import LeftIcon from "assets/customIcons/left.svg"
 import { CollectionChanged, CollectionCreated } from "./collectiontLogs"
 import { DateTime, DateTimeFormatOptions, LocaleOptions } from "luxon"
 import SizeMenu from "./components/SizeMenu"
+import { noop } from "lodash-es"
+import { ColorsMap } from "../../../palette/colors"
+import DateSelector from "../../DateSelector"
 
 type Size = "small" | "medium" | "big"
 
@@ -142,6 +145,7 @@ const Collection = observer(() => {
       userFilterEnabled,
       setUserFilter,
       enableUserFilter,
+      filter,
     },
   }: IRootStore = useMst()
 
@@ -259,7 +263,18 @@ const Collection = observer(() => {
     setLogsByDates(tmp)
   }, [selectedCollection.logs.length])
 
-  // console.log(currentUser.id, selectedCollection.userId.id)
+  const onTagClick = tag => {
+    if (filter.onlyWithTags.includes(tag)) {
+      filter.removeTag(tag.id)
+    } else {
+      filter.addTag(tag.id)
+    }
+  }
+
+  const dateFilterRef = React.useRef(null)
+  const [dateFilterShown, setDateFilterShown] = React.useState(false)
+
+  const [shownTab, setShownTab] = React.useState<"LOG" | "FILTER">("LOG")
 
   return (
     <div className={styles.screenWrapper}>
@@ -366,32 +381,151 @@ const Collection = observer(() => {
         className={classNames({
           [styles.logs]: true,
           [styles.hidden]: !logsShown,
+          [styles.filter]: shownTab === "FILTER",
         })}
       >
-        {Object.keys(logsByDates).map(date => {
-          const logs = logsByDates[date]
-          return (
-            <React.Fragment key={date}>
-              <h1>
-                {DateTime.fromFormat(date, "M/d/yyyy").toLocaleString({
-                  month: "short",
-                  day: "numeric",
-                })}
-              </h1>
-              {logs.map(log => (
-                <div className={styles.logWrapper} key={log.id}>
-                  <LogAction log={log} />
-                  <div className={styles.log}>
-                    <LogEntry log={log} />
-                    <div className={styles.date}>
-                      {DateTime.fromISO(log.datetime).toLocaleString(format)}
-                    </div>
+        <div className={styles.tabs}>
+          <div
+            className={classNames({
+              [styles.tab]: true,
+              [styles.active]: shownTab === "LOG",
+            })}
+            onClick={() => setShownTab("LOG")}
+          >
+            Активность
+          </div>
+          <div
+            className={classNames({
+              [styles.tab]: true,
+              [styles.active]: shownTab === "FILTER",
+            })}
+            onClick={() => setShownTab("FILTER")}
+          >
+            Фильтры
+          </div>
+        </div>
+        {shownTab === "FILTER" && (
+          <React.Fragment>
+            <div className={styles.group}>
+              <div className={styles.groupName}>Тэги:</div>
+              <div className={styles.filterTags}>
+                {selectedCollection.tags.map(tag => (
+                  <div
+                    key={tag.id}
+                    onClick={() => onTagClick(tag)}
+                    className={classNames({
+                      [styles.tag]: true,
+                      [styles.selected]: filter.onlyWithTags.includes(tag),
+                    })}
+                    style={
+                      { "--tagColor": ColorsMap[tag.color] } as CSSProperties
+                    }
+                  >
+                    {tag.name}
                   </div>
-                </div>
-              ))}
-            </React.Fragment>
-          )
-        })}
+                ))}
+              </div>
+            </div>
+            <div className={styles.group}>
+              <div className={styles.groupName}>Наблюдатели</div>
+              <Select
+                variants={[
+                  selectedCollection.userId,
+                  ...selectedCollection.users,
+                ].map(u => ({
+                  code: u.id,
+                  name: u.firstName,
+                }))}
+                select={variant => {
+                  if (filter.onlyWithWatcher?.id === variant) {
+                    filter.setOnlyWithWatcher(null)
+                  } else {
+                    filter.setOnlyWithWatcher(variant)
+                  }
+                }}
+                selected={
+                  filter.onlyWithWatcher
+                    ? {
+                        code: filter.onlyWithWatcher.id,
+                        name: filter.onlyWithWatcher.firstName,
+                      }
+                    : undefined
+                }
+              />
+            </div>
+            <div className={styles.group}>
+              <div className={styles.groupName}>Статус</div>
+              <Select
+                variants={[
+                  { code: "DONE", name: "Выполнено" },
+                  { code: "NOT_DONE", name: "Не выполнено" },
+                  { code: "ANY", name: "Любой" },
+                ]}
+                select={filter.setOnlyInStatus}
+                selected={filter.onlyInStatus}
+              />
+            </div>
+            <div className={styles.group}>
+              <div className={styles.groupName}>Срок исполнения</div>
+              <div
+                ref={dateFilterRef}
+                onClick={() => setDateFilterShown(!dateFilterShown)}
+                className={styles.selectedDate}
+              >
+                {filter.onlyOnDate
+                  ? DateTime.fromFormat(filter.onlyOnDate, "M/d/yyyy").toFormat(
+                      "dd.MM.yyyy",
+                    )
+                  : "Срок исполнения"}
+              </div>
+              {dateFilterShown && (
+                <DateSelector
+                  value={filter.onlyOnDate}
+                  onSelect={day => {
+                    setDateFilterShown(false)
+                    filter.setOnlyOnDate(
+                      day.date
+                        ? DateTime.fromJSDate(day.date).toFormat("M/d/yyyy")
+                        : null,
+                    )
+                  }}
+                  triggerRef={dateFilterRef}
+                  right={false}
+                />
+              )}
+            </div>
+          </React.Fragment>
+        )}
+        {shownTab === "LOG" && (
+          <React.Fragment>
+            {Object.keys(logsByDates).map(date => {
+              const logs = logsByDates[date]
+              return (
+                <React.Fragment key={date}>
+                  <h1>
+                    {DateTime.fromFormat(date, "M/d/yyyy").toLocaleString({
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </h1>
+                  {logs.map(log => (
+                    <div className={styles.logWrapper} key={log.id}>
+                      <LogAction log={log} />
+                      <div className={styles.log}>
+                        <LogEntry log={log} />
+                        <div className={styles.date}>
+                          {DateTime.fromISO(log.datetime).toLocaleString(
+                            format,
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </React.Fragment>
+              )
+            })}
+          </React.Fragment>
+        )}
       </div>
       <div
         className={classNames({

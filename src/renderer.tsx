@@ -88,6 +88,7 @@ let data = {
     cards: [],
     subtasks: [],
     selectedCollection: null,
+    filter: {},
   }),
 
   sidebarWidth: JSON.parse(localStorage.getItem("sidebarWidth") || "250"),

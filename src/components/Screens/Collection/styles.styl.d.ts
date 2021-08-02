@@ -14,7 +14,11 @@ declare namespace StylesStylNamespace {
     date: string
     delete: string
     edit: string
+    filter: string
     filterActiveMark: string
+    filterTags: string
+    group: string
+    groupName: string
     head: string
     hidden: string
     info: string
@@ -30,7 +34,12 @@ declare namespace StylesStylNamespace {
     puller: string
     screen: string
     screenWrapper: string
+    selected: string
+    selectedDate: string
     size: string
+    tab: string
+    tabs: string
+    tag: string
     title: string
     user: string
     usersList: string
