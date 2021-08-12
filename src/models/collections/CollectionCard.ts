@@ -46,7 +46,7 @@ const CollectionCard = types
       return { collection: "collectionId", column: "columnId" }
     },
     get syncIgnore() {
-      return ["_temp", "comments"]
+      return ["_temp", "comments", "watchers"]
     },
     get subtasks() {
       const root = getRoot<IRootStore>(self)
