@@ -232,7 +232,7 @@ export default class SyncMachine {
 
   loadAll() {
     if (!window.getToken()) return
-    if (this.state) syncLogger.info("Updating...")
+    // if (this.state) syncLogger.info("Updating...")
     if (this.state === "loading" || this.state === "updating")
       return this.resetLoadTimer()
 
@@ -241,21 +241,27 @@ export default class SyncMachine {
       this.types.map(type =>
         type.loadNew(JSON.parse(JSON.stringify(getSnapshot(this.store)))),
       ),
-    ).then(newResults => {
-      let snapshot = JSON.parse(JSON.stringify(getSnapshot(this.store)))
-      newResults.forEach(f => {
-        if (!f) return
-        snapshot = f(snapshot)
-      })
-      snapshot = this.healthCheck(snapshot)
-      this.applying = true
-      applySnapshot(this.store, snapshot)
-      this.store.user.refresh()
-      this.store.healthCheck()
-      this.applying = false
-      this.state = "waiting"
-      syncLogger.info("Updated.")
-    })
+    ).then(
+      newResults => {
+        const oldSnapshot = JSON.stringify(getSnapshot(this.store))
+        let snapshot = JSON.parse(oldSnapshot)
+        newResults.forEach(f => {
+          if (!f) return
+          snapshot = f(snapshot)
+        })
+        snapshot = this.healthCheck(snapshot)
+        this.applying = true
+        applySnapshot(this.store, snapshot)
+        this.store.user.refresh()
+        this.store.healthCheck()
+        this.applying = false
+        this.state = "waiting"
+        if (oldSnapshot !== JSON.stringify(getSnapshot(this.store)))
+          syncLogger.info("Updated.")
+        this.resetLoadTimer()
+      },
+      () => (this.state = "waiting"),
+    )
   }
 
   updateAll() {

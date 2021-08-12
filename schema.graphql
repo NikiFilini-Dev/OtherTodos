@@ -456,6 +456,7 @@ type Upload {
   extension: String!
   id: String!
   name: String!
+  preview: String
   size: Int!
   userId: String!
 }

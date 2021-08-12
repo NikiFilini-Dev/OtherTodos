@@ -44,7 +44,10 @@ const Card = observer(
           </div>
         )}
         {card.preview !== null && (
-          <img src={card.preview.url} className={styles.preview} />
+          <img
+            src={card.preview.previewUrl || card.preview.url}
+            className={styles.preview}
+          />
         )}
         <div className={styles.title}>
           {/*<span className={styles.text} dangerouslySetInnerHTML={{__html: `${card.index}. ${card.name}`}} />*/}

@@ -59,17 +59,19 @@ const User = types
         .toPromise()
         .then(resp => {
           const me = resp.data.me
-          console.log(resp, me)
           runInAction(() => {
-            this.setId(me.id)
-            this.setEmail(me.email)
-            this.setName(me.firstName)
-            this.setLastName(me.lastName)
-            this.setLastSeenNotificationsAt(
-              me.lastSeenNotificationsAt || DateTime.fromSeconds(0).toISO(),
-              false,
+            if (me.id !== self.id) this.setId(me.id)
+            if (me.email !== self.email) this.setEmail(me.email)
+            if (me.firstName !== self.firstName) this.setName(me.firstName)
+            if (me.lastName !== self.lastName) this.setLastName(me.lastName)
+            if (
+              me.lastSeenNotificationsAt !== self.lastSeenNotificationsAt &&
+              me.lastSeenNotificationsAt !== null
             )
-            console.log("ME:", me)
+              this.setLastSeenNotificationsAt(
+                me.lastSeenNotificationsAt || DateTime.fromSeconds(0).toISO(),
+                false,
+              )
           })
         })
     },

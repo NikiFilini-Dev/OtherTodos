@@ -10,6 +10,7 @@ const Upload = types
     name: types.string,
     extension: types.string,
     userId: types.string,
+    preview: types.maybeNull(types.string),
   })
   .views(self => ({
     get syncable() {
@@ -21,7 +22,11 @@ const Upload = types
     get url() {
       const base_url = "/s3"
       return `${base_url}/${self.userId}/${self.id}.${self.extension}`
-    }
+    },
+    get previewUrl() {
+      const base_url = "/s3"
+      return `${base_url}/${self.userId}/${self.preview}.${self.extension}`
+    },
   }))
   .actions(() => {
     const actions: Record<string, any> = {}
