@@ -40,7 +40,6 @@ import GridIcon from "assets/customIcons/grid2.svg"
 import { getSnapshot } from "mobx-state-tree"
 import { ColorsMap } from "../../palette/colors"
 
-
 const areArraysEqual = (x, y) => {
   return isEmpty(xorWith(x, y, isEqual))
 }
@@ -49,13 +48,13 @@ export const TaskContext = React.createContext(new Emitter())
 
 const Task = observer(
   ({
-     task: source,
-     active = false,
-     onConfirm,
-     onReject,
-     expired,
-     newPrompt = false,
-   }) => {
+    task: source,
+    active = false,
+    onConfirm,
+    onReject,
+    expired,
+    newPrompt = false,
+  }) => {
     const {
       tasks: { deleteTask, selected, select },
       addSubtask,
@@ -66,9 +65,7 @@ const Task = observer(
       deleteTimerSession,
       setScreen,
       tags: allTags,
-      collectionsStore: {
-        selectCard, selectCollection
-      }
+      collectionsStore: { selectCard, selectCollection },
     }: IRootStore = useMst()
     const [state] = React.useState(new TaskState())
     const [taskEmitter] = React.useState(new Emitter())
@@ -76,12 +73,19 @@ const Task = observer(
     const editorRef = React.useRef<BakaEditor | null>(null)
 
     const task = source
-    if (state.project !== task.project && !state.projectChanged) state.setProject(task.project, true)
+    if (state.project !== task.project && !state.projectChanged)
+      state.setProject(task.project, true)
     if (
-      !areArraysEqual(task.tags.map(t => t.toJSON()), state.tags) &&
+      !areArraysEqual(
+        task.tags.map(t => t.toJSON()),
+        state.tags,
+      ) &&
       !state.tagsChanged
     )
-      state.setTags(task.tags.map(t => t.toJSON()), true)
+      state.setTags(
+        task.tags.map(t => t.toJSON()),
+        true,
+      )
 
     React.useEffect(() => {
       taskEmitter.on("*", console.log)
@@ -132,6 +136,11 @@ const Task = observer(
       })
     }
 
+    const wrapperOnConfirm = () => {
+      onDeactivation()
+      onConfirm()
+    }
+
     useClick(document, e => {
       if (
         !state.menus.datePicker ||
@@ -170,10 +179,10 @@ const Task = observer(
       if (state.refs.input.current && active) state.refs.input.current.focus()
     }, ["active"])
 
-    useKeyListener("Enter", (e) => {
+    useKeyListener("Enter", e => {
       const path = e.path || (e.composedPath && e.composedPath())
       if (path.includes(noteAndSubtasksContainer.current)) return
-      if (onConfirm) onConfirm()
+      if (onConfirm) wrapperOnConfirm()
     })
 
     useKeyListener("Escape", () => {
@@ -217,7 +226,6 @@ const Task = observer(
       )
         return
 
-
       if (selected === source.id && !state.active) {
         state.active = true
         onActivation()
@@ -228,10 +236,8 @@ const Task = observer(
     }
 
     const onPrioritySelect = priority => {
-      if (editingTask)
-        editingTask.setPriority(priority)
-      else
-        source.setPriority(priority)
+      if (editingTask) editingTask.setPriority(priority)
+      else source.setPriority(priority)
     }
 
     const selectTag = tag => {
@@ -292,7 +298,8 @@ const Task = observer(
           style={
             {
               "--task-color": ColorsMap[task.colorTag?.color],
-              "userSelect": state.noSelection || selected === task.id ? "none" : "auto"
+              userSelect:
+                state.noSelection || selected === task.id ? "none" : "auto",
             } as CSSProperties
           }
           onClick={onTaskClick}
@@ -309,10 +316,16 @@ const Task = observer(
             )}
             {task.isNote && <div className={styles.checkPlaceholder} />}
 
-            {!state.active && task.totalTimeSpent > 0 && <Icon name={"timer"} className={styles.hasTimeIcon} />}
+            {!state.active && task.totalTimeSpent > 0 && (
+              <Icon name={"timer"} className={styles.hasTimeIcon} />
+            )}
             {!state.active && (
-              <span className={styles.taskText}
-                    dangerouslySetInnerHTML={{__html: task.isNote ? task.noteText : task.text}} />
+              <span
+                className={styles.taskText}
+                dangerouslySetInnerHTML={{
+                  __html: task.isNote ? task.noteText : task.text,
+                }}
+              />
             )}
             {state.active && (
               <TextareaAutosize
@@ -327,10 +340,10 @@ const Task = observer(
             <div className={styles.puller} />
             <div className={styles.tags}>
               {!state.active &&
-              Boolean(state.tags.length) &&
-              tags.map(tag => (
-                <Tag tag={tag} key={tag.id} onClick={noop} selected={false} />
-              ))}
+                Boolean(state.tags.length) &&
+                tags.map(tag => (
+                  <Tag tag={tag} key={tag.id} onClick={noop} selected={false} />
+                ))}
             </div>
             {!state.active && Boolean(expired) && state.project !== null && (
               <span
@@ -347,7 +360,9 @@ const Task = observer(
               <span
                 className={styles.hasEvent}
                 style={
-                  { "--tag-color": ColorsMap[task.event.tag?.color] } as CSSProperties
+                  {
+                    "--tag-color": ColorsMap[task.event.tag?.color],
+                  } as CSSProperties
                 }
               >
                 <CalendarWeekIcon />
@@ -392,137 +407,168 @@ const Task = observer(
               />
             </div>
           )}
-          {state.active && <div
-            className={classNames({
-              [styles.line]: true,
-              [styles.padding]: true,
-              [styles.fullOnly]: true,
-            })}
-          >
-            <span
-              className={styles.project}
-              ref={state.refs.menus.project.trigger}
-            >
-              <span onClick={() => state.openMenu("project")}>
-                <Icon name={state.project? state.project.icon : "msg_bubble"} className={styles.projectIcon} />
-                {state.project ? state.project.name : "Входящие"}
-              </span>
-            </span>
-
-            <div className={styles.separator} />
-
-            <span className={styles.startTimer} onClick={() => startTimer(task)}>
-              <span><Icon name={"play"} /></span>
-              Начать
-            </span>
-
-            {task.totalTimeSpent > 0 && (
-              <span className={styles.totalTime}>
-                <Icon name={"timer"} />
-                {Duration.fromObject({seconds: task.totalTimeSpent}).toFormat("hh:mm:ss")}
-              </span>
-            )}
-
-            {task.totalTimeSpent > 0 && (
-              <span className={styles.resetTime} onClick={onDeleteTimerSessionsClick}>
-                <BackspaceIcon />
-              </span>
-            )}
-
-            {task.date && !state.active && (
-              <span className={styles.date}>
-                <CalendarIcon className={styles.dateIcon} />
-                {date}
-              </span>
-            )}
-          </div>}
-
-          {state.active && <div
-            className={classNames({
-              [styles.line]: true,
-              [styles.padding]: true,
-              [styles.fullOnly]: true,
-            })}
-          >
-            <div className={styles.noteWrapper} ref={noteAndSubtasksContainer}>
-              {/*@ts-ignore */}
-              <baka-editor class={styles.note} ref={editorRef} />
-              <SubtasksList target={task} moveSubtask={moveSubtask} deleteSubtask={deleteSubtask} addNewShown />
-            </div>
-          </div>}
-          <Tags task={task} tags={state.tags} onDelete={unselectTag} />
-          {state.active && <div
-            className={classNames({
-              [styles.line]: true,
-              [styles.padding]: true,
-              [styles.fullOnly]: true,
-            })}
-          >
-            <div style={{ position: "relative" }}>
-              <span
-                className={styles.fullDate}
-                ref={state.refs.menus.datePicker.trigger}
-                onClick={() => state.openMenu("datePicker")}
-              >
-                <StarIcon className={styles.fullDateIcon} />
-                {task.date === DateTime.now().toFormat("M/d/yyyy")
-                  ? "Сегодня"
-                  : task.date
-                    ? date
-                    : "Без даты"}
-              </span>
-            </div>
+          {state.active && (
             <div
               className={classNames({
-                [styles.redo]: true,
-                [styles.active]: task.repeatEvery,
+                [styles.line]: true,
+                [styles.padding]: true,
+                [styles.fullOnly]: true,
               })}
             >
-              <RedoIcon />
-              <input
-                type={"number"}
-                className={styles.repeatCount}
-                value={task.repeatEvery || 0}
-                onChange={e => task.setRepeatEvery(e.target.value)}
-                min={0}
-              />{" "}
-              дней
+              <span
+                className={styles.project}
+                ref={state.refs.menus.project.trigger}
+              >
+                <span onClick={() => state.openMenu("project")}>
+                  <Icon
+                    name={state.project ? state.project.icon : "msg_bubble"}
+                    className={styles.projectIcon}
+                  />
+                  {state.project ? state.project.name : "Входящие"}
+                </span>
+              </span>
+
+              <div className={styles.separator} />
+
+              <span
+                className={styles.startTimer}
+                onClick={() => startTimer(task)}
+              >
+                <span>
+                  <Icon name={"play"} />
+                </span>
+                Начать
+              </span>
+
+              {task.totalTimeSpent > 0 && (
+                <span className={styles.totalTime}>
+                  <Icon name={"timer"} />
+                  {Duration.fromObject({
+                    seconds: task.totalTimeSpent,
+                  }).toFormat("hh:mm:ss")}
+                </span>
+              )}
+
+              {task.totalTimeSpent > 0 && (
+                <span
+                  className={styles.resetTime}
+                  onClick={onDeleteTimerSessionsClick}
+                >
+                  <BackspaceIcon />
+                </span>
+              )}
+
+              {task.date && !state.active && (
+                <span className={styles.date}>
+                  <CalendarIcon className={styles.dateIcon} />
+                  {date}
+                </span>
+              )}
             </div>
+          )}
+
+          {state.active && (
             <div
-              style={{ position: "relative" }}
-              ref={state.refs.menus.tags.trigger}
+              className={classNames({
+                [styles.line]: true,
+                [styles.padding]: true,
+                [styles.fullOnly]: true,
+              })}
             >
               <div
-                className={classNames({
-                  [styles.tagsTrigger]: true,
-                  [styles.active]: state.menus.tags,
-                })}
-                onClick={() => state.openMenu("tags")}
+                className={styles.noteWrapper}
+                ref={noteAndSubtasksContainer}
               >
-                <TagsIcon className={styles.tagsTriggerIcon} />
-                Тэги
+                {/*@ts-ignore */}
+                <baka-editor class={styles.note} ref={editorRef} />
+                <SubtasksList
+                  target={task}
+                  moveSubtask={moveSubtask}
+                  deleteSubtask={deleteSubtask}
+                  addNewShown
+                />
               </div>
             </div>
-            {task.card && <div className={styles.openCard} onClick={openCard}>
-              <GridIcon />
-              К карточке
-            </div>}
-            {!active && (
-              <div className={styles.delete} onClick={() => deleteTask(source)}>
-                <TrashIcon />
+          )}
+          <Tags task={task} tags={state.tags} onDelete={unselectTag} />
+          {state.active && (
+            <div
+              className={classNames({
+                [styles.line]: true,
+                [styles.padding]: true,
+                [styles.fullOnly]: true,
+              })}
+            >
+              <div style={{ position: "relative" }}>
+                <span
+                  className={styles.fullDate}
+                  ref={state.refs.menus.datePicker.trigger}
+                  onClick={() => state.openMenu("datePicker")}
+                >
+                  <StarIcon className={styles.fullDateIcon} />
+                  {task.date === DateTime.now().toFormat("M/d/yyyy")
+                    ? "Сегодня"
+                    : task.date
+                    ? date
+                    : "Без даты"}
+                </span>
               </div>
-            )}
-            {newPrompt && (
-              <div className={styles.promptButtons}>
-                <div className={styles.promptButton}>
-                  <Button text={"Добавить"} onClick={onConfirm} />
-                </div>
-                <div className={styles.promptButton}>
-                  <Button text={"Отменить"} onClick={onReject} secondary />
+              <div
+                className={classNames({
+                  [styles.redo]: true,
+                  [styles.active]: task.repeatEvery,
+                })}
+              >
+                <RedoIcon />
+                <input
+                  type={"number"}
+                  className={styles.repeatCount}
+                  value={task.repeatEvery || 0}
+                  onChange={e => task.setRepeatEvery(e.target.value)}
+                  min={0}
+                />{" "}
+                дней
+              </div>
+              <div
+                style={{ position: "relative" }}
+                ref={state.refs.menus.tags.trigger}
+              >
+                <div
+                  className={classNames({
+                    [styles.tagsTrigger]: true,
+                    [styles.active]: state.menus.tags,
+                  })}
+                  onClick={() => state.openMenu("tags")}
+                >
+                  <TagsIcon className={styles.tagsTriggerIcon} />
+                  Тэги
                 </div>
               </div>
-            )}
-          </div>}
+              {task.card && (
+                <div className={styles.openCard} onClick={openCard}>
+                  <GridIcon />К карточке
+                </div>
+              )}
+              {!active && (
+                <div
+                  className={styles.delete}
+                  onClick={() => deleteTask(source)}
+                >
+                  <TrashIcon />
+                </div>
+              )}
+              {newPrompt && (
+                <div className={styles.promptButtons}>
+                  <div className={styles.promptButton}>
+                    <Button text={"Добавить"} onClick={wrapperOnConfirm} />
+                  </div>
+                  <div className={styles.promptButton}>
+                    <Button text={"Отменить"} onClick={onReject} secondary />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {state.menus.tags && (
             <FloatMenu

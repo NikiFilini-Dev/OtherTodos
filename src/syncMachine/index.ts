@@ -133,6 +133,7 @@ export default class SyncMachine {
     let trash: string[] = []
     snapshot.subtasks.forEach(subtask => {
       if (!snapshot.tasks.all.find(t => t.id === subtask.task)) {
+        if (snapshot.tempTask?.id === subtask.task) return
         syncLogger.warn(
           "Subtask %s has invalid task ref %s",
           subtask.id,
