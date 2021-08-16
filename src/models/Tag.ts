@@ -1,21 +1,9 @@
 import { getRoot, Instance, types } from "mobx-state-tree"
 import { IRootStore } from "./RootStore"
+import { ColorNames } from "../palette/colors"
 
 export function randomTagColor() {
-  const colors = [
-    "#e53935",
-    "#D81B60",
-    "#8E24AA",
-    "#5E35B1",
-    "#3949AB",
-    "#1E88E5",
-    "#00ACC1",
-    "#00897B",
-    "#43A047",
-    "#FFB300",
-    "#FB8C00",
-    "#F4511E",
-  ]
+  const colors = ColorNames
   return colors[Math.floor(Math.random() * colors.length)]
 }
 
@@ -32,7 +20,9 @@ const Tag = types
   })
   .views(self => ({
     get tasks() {
-      return getRoot<IRootStore>(self).tasks.filter(task => task.tags.includes(self))
+      return getRoot<IRootStore>(self).tasks.filter(task =>
+        task.tags.includes(self),
+      )
     },
     get syncable() {
       return true
