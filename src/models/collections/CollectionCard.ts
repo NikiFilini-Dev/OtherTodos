@@ -80,7 +80,7 @@ const CollectionCard = types
         .toPromise()
         .then(resp => {
           console.log(resp)
-          window.syncMachine.loadAll()
+          window.syncMachine.loadBase()
         })
     }
     actionsMap.watch = []
@@ -91,7 +91,7 @@ const CollectionCard = types
         .toPromise()
         .then(resp => {
           console.log(resp)
-          window.syncMachine.loadAll()
+          window.syncMachine.loadBase()
         })
     }
     actionsMap.unwatch = []
