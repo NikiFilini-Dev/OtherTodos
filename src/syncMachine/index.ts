@@ -28,6 +28,7 @@ import Upload from "./types/upload"
 import User from "./types/user"
 import CardComment from "./types/card_comment"
 import CollectionLog from "./types/collection_log"
+import AssignedColumn from "./types/assigned_column"
 const jwt = require("jsonwebtoken")
 
 const syncLogger = createLogger("SYNC")
@@ -52,6 +53,7 @@ export default class SyncMachine {
     new CollectionCard(),
     new CollectionSubtask(),
     new CollectionLog(),
+    new AssignedColumn()
   ]
 
   state = "initial"
@@ -329,6 +331,8 @@ export default class SyncMachine {
 
   hookCreate() {
     onPatch(this.store, patch => {
+      if (patch.path.match(/\/collectionsStore\/assignedColumns\/\d+\/cards\/\d+/gm)) return
+      // console.warn(patch)
       if (!this.hydrated || this.applying) return
       if (patch.op === "add") {
         const node = pointer.get(this.store, patch.path)

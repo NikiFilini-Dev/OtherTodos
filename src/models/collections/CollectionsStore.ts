@@ -27,6 +27,7 @@ import { safeRef } from "../utils"
 import { commentsStorage } from "./storages/cardComments.storage"
 import { DateTime } from "luxon"
 import CollectionFilter from "./CollectionFilter"
+import AssignedColumn, { IAssignedColumnSnapshot } from "./AssignedColumn"
 
 console.log(commentsStorage)
 
@@ -41,6 +42,7 @@ const CollectionsStore = types
     uploads: uploadsStorage,
     users: usersStorage,
     comments: commentsStorage,
+    assignedColumns: types.array(AssignedColumn),
 
     selectedCollection: types.maybeNull(
       safeRef(Collection, "/collectionsStore", "pushCollection", {
@@ -326,6 +328,45 @@ const CollectionsStore = types
       if (!column) return false
       const collectionColumns: ICollectionColumn[] = column.collection.columns
       move(collectionColumns, id, newIndex)
+      return true
+    },
+
+    createAssignedColumn(initialData: Partial<IAssignedColumnSnapshot>) {
+      const id = uuidv4()
+
+      const index = self.assignedColumns.reduce(
+        (acc, c) => (acc > c.index ? acc : c.index),
+        -1,
+      )
+
+      self.assignedColumns.push({
+        index: index + 1,
+        name: "Новая колонка",
+        ...initialData,
+        id,
+      })
+      return id
+    },
+    deleteAssignedColumn(id: string) {
+      const column = self.assignedColumns.find(c => c.id === id)
+      if (!column) throw new Error("column not found")
+
+      self.assignedColumns.forEach(c => {
+        if (c.id === id) return
+        if (c.index > column.index) c.setIndex(c.index - 1)
+      })
+
+      // column.cards.forEach(c => this.deleteCard(c.id))
+
+      if (column.syncable)
+        window.syncMachine.registerDelete(column.id, column.syncName)
+
+      destroy(column)
+    },
+    moveAssignedColumn(id: string, newIndex: number) {
+      const column = self.assignedColumns.find(c => c.id === id)
+      if (!column) return false
+      move(self.assignedColumns, id, newIndex)
       return true
     },
 

@@ -9,22 +9,164 @@ import styles from "./styles.styl"
 import ResizeIcon from "../../../assets/customIcons/resize.svg"
 import SizeMenu from "../Collection/components/SizeMenu"
 import classNames from "classnames"
+import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd"
+import { find } from "lodash"
+import EllipsisIcon from "../../../assets/line_awesome/ellipsis-v-solid.svg"
+import FloatPlus from "../Collection/components/FloatPlus"
+import ColumnOptions from "../Collection/components/ColumnOptions"
+import AutosizeInput from "react-input-autosize"
 
 type Size = "small" | "medium" | "big"
+
+const Column = observer(({size, column: c, provided}) => {
+  const cards = c.cards
+  const column = c
+
+  const triggerRef = React.useRef(null)
+  const menuRef = React.useRef(null)
+
+  const [menuShown, setMenuShown] = React.useState(false)
+
+  return <div
+    className={classNames({
+      [styles.column]: true,
+      [styles[size]]: true,
+    })}
+  >
+    <div
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}
+      className={styles.title}
+      style={
+        {
+          "--columnColor": ColorsMap[c.color],
+        } as CSSProperties
+      }
+    >
+      <div className={styles.icon}>
+        <Icon name={column.icon} />
+      </div>
+      <AutosizeInput
+        value={column.name}
+        onChange={e => column.setName(e.target.value)}
+        inputClassName={styles.name}
+      />
+      <div className={styles.count}>{column.cards.length}</div>
+      <div
+        className={styles.colorTrigger}
+        ref={triggerRef}
+        onClick={() => setMenuShown(!menuShown)}
+      >
+        <EllipsisIcon />
+      </div>
+      {menuShown && (
+        <ColumnOptions
+          column={column}
+          triggerRef={triggerRef}
+          menuRef={menuRef}
+        />
+      )}
+    </div>
+    <Droppable droppableId={c.id} type={"CARD"}>
+      {provided => (
+        <div
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          className={styles.scrollable}
+        >
+          <div className={styles.cards}>
+            {cards.map((card,i) => (
+              <Draggable draggableId={card.id} index={i} key={card.id}>
+                {provided => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <Card
+                      card={card}
+                    />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        </div>
+      )}
+    </Droppable>
+  </div>
+})
+
+const AssignedColumn = observer(({size}) => {
+  const {
+    user,
+    collectionsStore: { cards: allCards, assignedColumns },
+  } = useMst()
+
+  let cardsInColumns: any[] = []
+  assignedColumns.forEach(c => cardsInColumns = [...cardsInColumns, ...c.cards])
+
+  const cards = allCards.filter(card => {
+    return card.assigned?.id === user.id && card.status !== "DONE" && !cardsInColumns.includes(card)
+  })
+
+  return <div
+    className={classNames({
+      [styles.column]: true,
+      [styles[size]]: true,
+    })}
+  >
+    <div
+      className={styles.title}
+      style={
+        {
+          "--columnColor": ColorsMap['green'],
+        } as CSSProperties
+      }
+    >
+      <div className={styles.icon}>
+      <Icon name={'bookmark'} /></div>
+      <div className={styles.name}>Назначенные</div>
+      <div className={styles.count}>{cards.length}</div>
+    </div>
+    <Droppable droppableId={'assigned'} type={"CARD"}>
+      {provided => (
+        <div
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          className={styles.scrollable}
+        >
+          <div className={styles.cards}>
+            {cards.map((card, i) => (
+              <Draggable draggableId={card.id} index={i} key={card.id}>
+                {provided => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <Card
+                      card={card}
+                    />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+
+          </div>
+        </div>
+      )}
+    </Droppable>
+  </div>
+})
 
 const CollectionPersonal = observer(() => {
   const {
     user,
-    collectionsStore: { cards },
+    collectionsStore: { cards, assignedColumns, createAssignedColumn, moveAssignedColumn },
   } = useMst()
-
-  const assignedCardsMap: Record<string, ICollectionCard[]> = {}
-  cards.forEach(card => {
-    if (card.assigned?.id !== user.id || card.status === "DONE") return
-    const key = card.collection.id
-    if (key in assignedCardsMap) assignedCardsMap[key].push(card)
-    else assignedCardsMap[key] = [card]
-  })
 
   const sizeKey = "collectionCardSize#personal"
   const getSize = (): Size => {
@@ -43,6 +185,27 @@ const CollectionPersonal = observer(() => {
   const [sizeMenuOpen, setSizeMenuOpen] = React.useState(false)
   const sizeTriggerRef = React.useRef(null)
   const sizeMenuRef = React.useRef(null)
+
+  const onDragEnd = ({ draggableId, destination, type, source: {droppableId: sourceId} }: DropResult) => {
+    console.log(draggableId, destination, type)
+    if (!destination) return
+
+    const {droppableId, index} = destination
+    if (type === 'COLUMN') {
+      moveAssignedColumn(draggableId, index)
+    }
+    if (type === 'CARD') {
+      if (sourceId !== 'assigned') {
+        const source = assignedColumns.find(c => c.id === sourceId)
+        source.removeCard(draggableId)
+      }
+      const column = assignedColumns.find(c => c.id === droppableId)
+      column.insertCard(draggableId, index)
+    }
+  }
+
+  const columns = [...assignedColumns]
+  columns.sort((a,b) => a.index - b.index)
 
   return (
     <div className={styles.screenWrapper}>
@@ -67,35 +230,42 @@ const CollectionPersonal = observer(() => {
             setSize={setSize}
           />
         )}
-        <div className={styles.columns}>
-          {Object.keys(assignedCardsMap).map(columnId => {
-            const cards = assignedCardsMap[columnId]
-            const column = cards[0].collection
-            return (
+        <DragDropContext
+          onDragEnd={onDragEnd}
+        >
+          <Droppable
+            droppableId={"assignedColumns"}
+            direction={"horizontal"}
+            type={"COLUMN"}
+          >
+            {provided => (
               <div
-                key={columnId}
-                className={classNames({
-                  [styles.column]: true,
-                  [styles[size]]: true,
-                })}
+                className={styles.columns}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
               >
-                <div
-                  className={styles.columnHead}
-                  style={
-                    {
-                      "--columnColor": ColorsMap["green"],
-                    } as CSSProperties
-                  }
-                >
-                  <Icon name={column.icon} /> {column.name}
-                </div>
-                {cards.map(card => (
-                  <Card card={card} key={card.id} />
+                <AssignedColumn size={size} />
+                {columns.map(c => (
+                  <Draggable
+                    draggableId={c.id}
+                    index={c.index}
+                    key={c.id}
+                  >
+                    {provided => (
+                      <div ref={provided.innerRef} {...provided.draggableProps}>
+                        <Column column={c} size={size} provided={provided} />
+                      </div>
+                    )}
+                  </Draggable>
                 ))}
+                {provided.placeholder}
+                <div onClick={() => createAssignedColumn({})} className={styles.add}>
+                  +
+                </div>
               </div>
-            )
-          })}
-        </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       </div>
     </div>
   )
