@@ -5,7 +5,7 @@ export function getMonth(idx) {
   objDate.setDate(1)
   objDate.setMonth(idx)
   const locale = "ru-ru",
-  month = objDate.toLocaleString(locale, { month: "long" })
+    month = objDate.toLocaleString(locale, { month: "long" })
   return month
 }
 

@@ -66,11 +66,19 @@ export default function Swipe(node, handler?: any) {
         fire("start", e)
       } else if (e.type == moveEvent || e.type == dragEvent) {
         if (!way) {
-          const wdX = calcDiff(startX, current.x), wdY = calcDiff(startY, current.y)
+          const wdX = calcDiff(startX, current.x),
+            wdY = calcDiff(startY, current.y)
           if (wdX == wdY) return
           way = wdX > wdY ? "x" : "y"
         }
-        direction = way == "x" ? (x > current.x ? "left" : "right") : (y > current.y ? "top" : "bottom")
+        direction =
+          way == "x"
+            ? x > current.x
+              ? "left"
+              : "right"
+            : y > current.y
+            ? "top"
+            : "bottom"
         x = current.x
         y = current.y
         fire("move", e)
@@ -91,10 +99,15 @@ export default function Swipe(node, handler?: any) {
     if (el == window || el == document) return false
     const p = Element.prototype
     // @ts-ignore
-    const f = p.matches || p.webkitMatchesSelector || p.mozMatchesSelector || p.msMatchesSelector || function(s) {
-      // @ts-ignore
-      return [].indexOf.call(document.querySelectorAll(s), this) !== -1
-    }
+    const f =
+      p.matches ||
+      p.webkitMatchesSelector ||
+      p.mozMatchesSelector ||
+      p.msMatchesSelector ||
+      function (s) {
+        // @ts-ignore
+        return [].indexOf.call(document.querySelectorAll(s), this) !== -1
+      }
     return f.call(el, selector)
   }
 

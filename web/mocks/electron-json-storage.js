@@ -1,4 +1,4 @@
-const {noop} = require("lodash-es")
+const { noop } = require("lodash-es")
 
 module.exports = {
   get: noop,
@@ -7,5 +7,5 @@ module.exports = {
   clear: noop,
   keys: () => [],
   getDefaultDataPath: undefined,
-  getDataPath: () => ""
+  getDataPath: () => "",
 }

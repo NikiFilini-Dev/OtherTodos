@@ -41,10 +41,20 @@ const Tag = observer(({ tag, provided, onTagDelete }) => {
       <div className={styles.delete} onClick={() => onTagDelete(tag)}>
         <TrashIcon />
       </div>
-      <div className={styles.colorInput} style={{"--color": ColorsMap[tag.color]}}
-           ref={triggerRef} onClick={() => setMenuShown(true)} />
-      {menuShown && <ListColorMenu triggerRef={triggerRef} menuRef={menuRef}
-                                   currentColorName={tag.color} setColor={tag.setColor} />}
+      <div
+        className={styles.colorInput}
+        style={{ "--color": ColorsMap[tag.color] }}
+        ref={triggerRef}
+        onClick={() => setMenuShown(true)}
+      />
+      {menuShown && (
+        <ListColorMenu
+          triggerRef={triggerRef}
+          menuRef={menuRef}
+          currentColorName={tag.color}
+          setColor={tag.setColor}
+        />
+      )}
     </div>
   )
 })

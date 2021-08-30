@@ -61,9 +61,13 @@ const TaskList = observer(
     onDelete,
     dnd,
     iconName,
-    setIcon
+    setIcon,
   }) => {
-    const { selectedDate, screen, tasks: {selected} } = useMst()
+    const {
+      selectedDate,
+      screen,
+      tasks: { selected },
+    } = useMst()
     if (!showHidden) tasks = tasks.filter(task => !task.done)
 
     const [folded, setIsFolded] = React.useState(false)
@@ -96,50 +100,60 @@ const TaskList = observer(
       if (!menuOpen) return
       const notInRef =
         !triggerRef.current ||
-        (e.target !== triggerRef.current && !triggerRef.current.contains(e.target))
+        (e.target !== triggerRef.current &&
+          !triggerRef.current.contains(e.target))
       // const notInMenuRef =
       //   !menuRef.current ||
       //   (e.target !== menuRef.current && !menuRef.current.contains(e.target))
-      if (notInRef)
-        setMenuOpen(false)
+      if (notInRef) setMenuOpen(false)
     })
 
     if (!tasks.length && !showEmpty) return <div />
     return (
       <div className={styles.wrapper}>
-        {(tasks.length !== 0 || !hideEmptyHeader) && <div className={styles.info}>
-          <span ref={triggerRef} onClick={() => setMenuOpen(true)}><Icon className={styles.icon} /></span>
-          {Boolean(setIcon) && menuOpen &&
-            <ListIconMenu triggerRef={triggerRef} menuRef={menuRef} setIcon={setIcon} currentIconName={iconName} />}
-          {renamable ? (
-            <AutosizeInput
-              value={name}
-              onChange={onNameChange}
-              inputClassName={styles.nameInput}
-              inputRef={inputRef}
-            />
-          ) : (
-            <span className={styles.name}>{name}</span>
-          )}
-          <span className={styles.tasksCount}>({totalCount})</span>
-
-          <div className={styles.actions}>
-            {deletable && (
-              <div className={styles.delete} onClick={onDelete}>
-                <TrashIcon />
-              </div>
+        {(tasks.length !== 0 || !hideEmptyHeader) && (
+          <div className={styles.info}>
+            <span ref={triggerRef} onClick={() => setMenuOpen(true)}>
+              <Icon className={styles.icon} />
+            </span>
+            {Boolean(setIcon) && menuOpen && (
+              <ListIconMenu
+                triggerRef={triggerRef}
+                menuRef={menuRef}
+                setIcon={setIcon}
+                currentIconName={iconName}
+              />
             )}
+            {renamable ? (
+              <AutosizeInput
+                value={name}
+                onChange={onNameChange}
+                inputClassName={styles.nameInput}
+                inputRef={inputRef}
+              />
+            ) : (
+              <span className={styles.name}>{name}</span>
+            )}
+            <span className={styles.tasksCount}>({totalCount})</span>
+
+            <div className={styles.actions}>
+              {deletable && (
+                <div className={styles.delete} onClick={onDelete}>
+                  <TrashIcon />
+                </div>
+              )}
+            </div>
+            <div
+              className={classNames({
+                [styles.fold]: true,
+                [styles.active]: folded,
+              })}
+              onClick={() => setIsFolded(!folded)}
+            >
+              <ChevronRight />
+            </div>
           </div>
-          <div
-            className={classNames({
-              [styles.fold]: true,
-              [styles.active]: folded,
-            })}
-            onClick={() => setIsFolded(!folded)}
-          >
-            <ChevronRight />
-          </div>
-        </div>}
+        )}
         <div
           className={classNames({
             [styles.listWrapper]: true,
@@ -152,7 +166,12 @@ const TaskList = observer(
             isDropDisabled={!dnd}
           >
             {(provided, snapshot) => (
-              <Content provided={provided} snapshot={snapshot} tasks={tasks} selectedTaskId={selected} />
+              <Content
+                provided={provided}
+                snapshot={snapshot}
+                tasks={tasks}
+                selectedTaskId={selected}
+              />
             )}
           </Droppable>
         </div>

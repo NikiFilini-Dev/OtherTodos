@@ -49,8 +49,10 @@ const Habit = types
       )
     },
     isDone(date: string) {
-      return this.records.filter(r => r.date === date).length === self.recordsPerDay
-    }
+      return (
+        this.records.filter(r => r.date === date).length === self.recordsPerDay
+      )
+    },
   }))
   .actions(self => {
     const actions: Record<string, any> = {}

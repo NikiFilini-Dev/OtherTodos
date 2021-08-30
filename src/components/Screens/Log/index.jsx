@@ -51,7 +51,7 @@ const Log = observer(() => {
       </div>
       <div className={styles.listOfLists}>
         <EndlessScroll
-          onReachBottom={() => setShownDays(shownDays+10)}
+          onReachBottom={() => setShownDays(shownDays + 10)}
           isLoading={false}
           hasMore={reversedDays.length > shownDays}
         >

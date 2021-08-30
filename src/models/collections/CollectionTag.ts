@@ -18,20 +18,20 @@ const CollectionTag = types
       return "CollectionTag"
     },
     get syncRename() {
-      return {collection: "collectionId"}
+      return { collection: "collectionId" }
     },
   }))
   .actions(self => {
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, string[]> = {}
 
-    actions.setName = (val: string) => self.name = val
+    actions.setName = (val: string) => (self.name = val)
     actionsMap.setName = ["name"]
 
-    actions.setColor = (val: ColorName) => self.color = val
+    actions.setColor = (val: ColorName) => (self.color = val)
     actionsMap.setColor = ["color"]
 
-    actions.setIndex = (val: number) => self.index = val
+    actions.setIndex = (val: number) => (self.index = val)
     actionsMap.setIndex = ["index"]
 
     actions.getActionsMap = () => actionsMap

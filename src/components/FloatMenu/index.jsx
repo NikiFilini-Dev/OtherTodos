@@ -119,22 +119,14 @@ const FloatMenu = observer(
         if (targetBox.y < window.innerHeight / 2) {
           style = {
             top: targetBox.top + targetBox.height + 12 + "px",
-            right:
-              window.innerWidth -
-              targetBox.left -
-              targetBox.width +
-              "px",
+            right: window.innerWidth - targetBox.left - targetBox.width + "px",
           }
           portal = true
           modifier = "top"
         } else {
           style = {
             bottom: window.innerHeight - targetBox.y + 19 + "px",
-            right:
-              window.innerWidth -
-              targetBox.left -
-              targetBox.width +
-              "px",
+            right: window.innerWidth - targetBox.left - targetBox.width + "px",
           }
           modifier = "bottom"
         }
@@ -166,7 +158,6 @@ const FloatMenu = observer(
         <div className={styles.content}>{children}</div>
       </div>
     )
-
 
     return portal ? ReactDOM.createPortal(Content, el) : Content
   },

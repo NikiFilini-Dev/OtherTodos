@@ -33,7 +33,7 @@ const Project = types
     },
     get syncIgnore() {
       return ["_temp"]
-    }
+    },
   }))
   .actions(self => {
     const actions: { [key: string]: any } = {}
@@ -71,7 +71,7 @@ const Project = types
     }
     actionsMap.removeCategory = ["categories"]
 
-    actions.setIcon = val => self.icon = val
+    actions.setIcon = val => (self.icon = val)
     actionsMap.setIcon = ["icon"]
 
     actions.getActionsMap = () => actionsMap

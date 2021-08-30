@@ -21,19 +21,19 @@ const TimerSession = types
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, string[]> = {}
 
-    actions.setDate = (val: string) => self.date = val
+    actions.setDate = (val: string) => (self.date = val)
     actionsMap.setDate = ["date"]
 
-    actions.setStart = (val: string) => self.start = val
+    actions.setStart = (val: string) => (self.start = val)
     actionsMap.setStart = ["start"]
 
-    actions.setDuration = (val: number) => self.duration = Math.round(val)
+    actions.setDuration = (val: number) => (self.duration = Math.round(val))
     actionsMap.setDuration = ["duration"]
 
-    actions.addDuration = (val: number) => self.duration += Math.round(val)
+    actions.addDuration = (val: number) => (self.duration += Math.round(val))
     actionsMap.addDuration = ["duration"]
 
-    actions.setTask = (val) => self.task = val
+    actions.setTask = val => (self.task = val)
     actionsMap.setName = ["task"]
 
     actions.getActionsMap = () => actionsMap

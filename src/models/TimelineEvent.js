@@ -32,8 +32,10 @@ const TimelineEvent = types
       if (self.duration < 60) format = "mм"
       else if (self.duration % 60 === 0) format = "hч"
       else format = "hч mм"
-      return Duration.fromObject( {minutes: self.duration}).normalize().toFormat(format)
-    }
+      return Duration.fromObject({ minutes: self.duration })
+        .normalize()
+        .toFormat(format)
+    },
   }))
   .actions(self => {
     const actions = {}

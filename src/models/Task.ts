@@ -28,7 +28,7 @@ const Task = types
     category: types.maybeNull(types.reference(ProjectCategory)),
     event: types.maybeNull(types.reference(types.late(LateTimelineEvent))),
     colorTag: types.maybeNull(types.reference(Tag)),
-    card: types.maybeNull(types.reference(CollectionCard))
+    card: types.maybeNull(types.reference(CollectionCard)),
   })
   .views(self => ({
     get done() {
@@ -80,7 +80,7 @@ const Task = types
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, any[]> = {}
 
-    actions.setCard = val => self.card = val
+    actions.setCard = val => (self.card = val)
     actionsMap.setCard = ["card"]
 
     actions.setTags = val => {
@@ -120,10 +120,10 @@ const Task = types
     }
     actionsMap.createAndConnectEvent = ["event"]
 
-    actions.setCloseDate = val => self.closeDate = val
+    actions.setCloseDate = val => (self.closeDate = val)
     actionsMap.setCloseDate = ["closeDate"]
 
-    actions.setRepeating = val => self.repeating = val
+    actions.setRepeating = val => (self.repeating = val)
     actionsMap.setRepeating = ["repeating"]
 
     actions.setRepeatEvery = n => {
@@ -162,12 +162,16 @@ const Task = types
             root.addSubtask({
               ...st,
               status: "ACTIVE",
-              task: newTask.id
+              task: newTask.id,
             })
           })
 
           if (self.event) {
-            const newEventId = root.createEvent({...self.event, task: newTask.id, date: newTask.date})
+            const newEventId = root.createEvent({
+              ...self.event,
+              task: newTask.id,
+              date: newTask.date,
+            })
             root.tasks.all.find(t => t.id === newTask.id).setEvent(newEventId)
           }
         }
@@ -175,10 +179,10 @@ const Task = types
     }
     actionsMap.changeStatus = ["status", "closeDate"]
 
-    actions.setNote = value => self.note = value
+    actions.setNote = value => (self.note = value)
     actionsMap.setNote = ["note"]
 
-    actions.setPriority = value => self.priority = value
+    actions.setPriority = value => (self.priority = value)
     actionsMap.setPriority = ["priority"]
 
     actions.setDate = value => {
@@ -193,7 +197,8 @@ const Task = types
     actionsMap.setDate = ["date", "event"]
 
     actions.setProject = project => {
-      if (self.category && self.category.project !== project) self.category = null
+      if (self.category && self.category.project !== project)
+        self.category = null
       self.project = project
     }
     actionsMap.setProject = ["project", "category"]

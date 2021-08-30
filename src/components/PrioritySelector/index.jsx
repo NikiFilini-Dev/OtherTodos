@@ -6,7 +6,12 @@ import FloatMenu from "../FloatMenu/index.jsx"
 import { useClick } from "../../tools/hooks"
 import noop from "lodash-es/noop"
 
-const PrioritySelector = ({ priority, menuRef, triggerRef, onSelect = noop }) => {
+const PrioritySelector = ({
+  priority,
+  menuRef,
+  triggerRef,
+  onSelect = noop,
+}) => {
   const ref = React.useRef(null)
   const [isShown, setIsShown] = React.useState(false)
   const wrapperRef = React.useRef(null)

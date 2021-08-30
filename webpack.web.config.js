@@ -17,9 +17,9 @@ rules.push({
   loader: "file-loader",
   query: {
     outputPath: "fonts/",
-    publicPath: process.env.WDS_MODE ?
-      "http://localhost:8080/static/fonts/" :
-      "/static/fonts/",
+    publicPath: process.env.WDS_MODE
+      ? "http://localhost:8080/static/fonts/"
+      : "/static/fonts/",
   },
 })
 
@@ -49,7 +49,12 @@ module.exports = {
         "mocks",
         "jsonStorage.js",
       ),
-      "electron-json-storage": path.resolve(__dirname, "web", "mocks", "electron-json-storage.js")
+      "electron-json-storage": path.resolve(
+        __dirname,
+        "web",
+        "mocks",
+        "electron-json-storage.js",
+      ),
     },
   },
   node: {
@@ -99,9 +104,10 @@ module.exports = {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+      "Access-Control-Allow-Headers":
+        "X-Requested-With, content-type, Authorization",
     },
-    host: "0.0.0.0"
+    host: "0.0.0.0",
   },
   target: "web",
 }

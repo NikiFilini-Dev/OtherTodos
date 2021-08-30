@@ -11,10 +11,12 @@ import { useKeyListener } from "../../../../../tools/hooks"
 import Swipe from "../../../../../tools/swipe"
 
 const UploadView = observer(() => {
-  const { collectionsStore: { uploadView, setUploadView: _setUploadView, cards } }: IRootStore = useMst()
+  const {
+    collectionsStore: { uploadView, setUploadView: _setUploadView, cards },
+  }: IRootStore = useMst()
   const [el] = React.useState(document.createElement("div"))
 
-  const setUploadView = (u) => {
+  const setUploadView = u => {
     console.log("SET UPLOAD VIEW", u)
     _setUploadView(u)
   }
@@ -23,7 +25,8 @@ const UploadView = observer(() => {
   cards.forEach((c: ICollectionCard) => {
     if (!c.files.includes(uploadView)) return
     c.files.forEach((f: IUpload) => {
-      if (["png", "jpg", "jpeg", "gif", "bmp", "webp"].includes(f.extension)) list.push(f)
+      if (["png", "jpg", "jpeg", "gif", "bmp", "webp"].includes(f.extension))
+        list.push(f)
     })
   })
 
@@ -63,7 +66,7 @@ const UploadView = observer(() => {
 
     wrapper.current.addEventListener("swipeend", swipeListener, false)
 
-    function swipeListener (event) {
+    function swipeListener(event) {
       console.log(event)
       event.stopPropagation()
       if (event.direction === "left") onRight()
@@ -76,26 +79,43 @@ const UploadView = observer(() => {
   }, [wrapper.current, onRight, onLeft, list])
 
   if (!uploadView) return <React.Fragment />
-  return ReactDOM.createPortal(<div className={styles.wrapper} ref={wrapper} onClick={e => {
-    console.log("Mouseup", e)
-    setUploadView(null)
-  }}>
-    {list.length > 1 && <div onClick={e => {
-      e.stopPropagation()
-      onLeft()
-    }} className={styles.left}>
-      <AngleLeftIcon />
-    </div>}
+  return ReactDOM.createPortal(
+    <div
+      className={styles.wrapper}
+      ref={wrapper}
+      onClick={e => {
+        console.log("Mouseup", e)
+        setUploadView(null)
+      }}
+    >
+      {list.length > 1 && (
+        <div
+          onClick={e => {
+            e.stopPropagation()
+            onLeft()
+          }}
+          className={styles.left}
+        >
+          <AngleLeftIcon />
+        </div>
+      )}
 
-    <img src={uploadView.url} />
+      <img src={uploadView.url} />
 
-    {list.length > 1 && <div onClick={e => {
-      e.stopPropagation()
-      onRight()
-    }} className={styles.right}>
-      <AngleRightIcon />
-    </div>}
-  </div>, el)
+      {list.length > 1 && (
+        <div
+          onClick={e => {
+            e.stopPropagation()
+            onRight()
+          }}
+          className={styles.right}
+        >
+          <AngleRightIcon />
+        </div>
+      )}
+    </div>,
+    el,
+  )
 })
 
 export default UploadView

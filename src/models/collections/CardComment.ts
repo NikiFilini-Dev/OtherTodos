@@ -10,7 +10,7 @@ const CardComment = types
     user: userReference,
     card: types.string,
     collectionId: types.string,
-    _temp: types.optional(types.boolean, false)
+    _temp: types.optional(types.boolean, false),
   })
   .views(self => ({
     get syncable() {
@@ -21,16 +21,16 @@ const CardComment = types
     },
     get syncIgnore() {
       return ["_temp", "user"]
-    }
+    },
   }))
   .actions(self => {
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, string[]> = {}
 
-    actions.setText = (s: string) => self.text = s
+    actions.setText = (s: string) => (self.text = s)
     actionsMap.setText = ["text"]
 
-    actions.setOriginal = (s: string) => self.original = s
+    actions.setOriginal = (s: string) => (self.original = s)
     actionsMap.setOriginal = ["original"]
 
     actions.getActionsMap = () => actionsMap

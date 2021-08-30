@@ -54,7 +54,8 @@ const Timeline = observer(() => {
   React.useEffect(() => {
     setNowOffset(calcOffset())
     scrollRef.current.scrollTop =
-      nowRef.current.offsetTop - scrollRef.current.getBoundingClientRect().height / 2
+      nowRef.current.offsetTop -
+      scrollRef.current.getBoundingClientRect().height / 2
     const timer = setInterval(() => setNowOffset(calcOffset()), 10000)
     return () => {
       clearInterval(timer)
@@ -196,7 +197,8 @@ const Timeline = observer(() => {
   React.useEffect(() => {
     if (initialScrolled) return
     scrollRef.current.scrollTop =
-      nowRef.current.offsetTop - scrollRef.current.getBoundingClientRect().height / 2
+      nowRef.current.offsetTop -
+      scrollRef.current.getBoundingClientRect().height / 2
     if (nowRef.current.offsetTop > 6) setInitialScrolled(true)
   }, [nowRef.current?.getBoundingClientRect().top])
 
@@ -222,10 +224,13 @@ const Timeline = observer(() => {
             <span className={styles.action} onClick={onNextClick}>
               <ChevronRight />
             </span>
-            <div className={classNames({
-              [styles.calendarTrigger]: true,
-              [styles.active]: calendarShown,
-            })} onClick={() => setCalendarShown(!calendarShown)}>
+            <div
+              className={classNames({
+                [styles.calendarTrigger]: true,
+                [styles.active]: calendarShown,
+              })}
+              onClick={() => setCalendarShown(!calendarShown)}
+            >
               <Icon name={"calendar"} />
             </div>
           </div>
@@ -256,7 +261,7 @@ const Timeline = observer(() => {
             })}
         </div>
         <ScrollContext.Provider value={scrollEmitter}>
-        <div className={styles.timelineWrapper} ref={scrollRef}>
+          <div className={styles.timelineWrapper} ref={scrollRef}>
             <div
               className={styles.timeline}
               ref={ref}
@@ -313,7 +318,7 @@ const Timeline = observer(() => {
                 </div>
               ))}
             </div>
-        </div>
+          </div>
         </ScrollContext.Provider>
       </div>
     </div>

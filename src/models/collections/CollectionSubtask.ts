@@ -9,7 +9,7 @@ const CollectionSubtask = types
     text: types.string,
     index: types.optional(types.number, 0),
     status: types.enumeration("SubtaskStatus", ["ACTIVE", "DONE"]),
-    card: types.reference(CollectionCard)
+    card: types.reference(CollectionCard),
   })
   .views(() => ({
     get syncable() {
@@ -19,23 +19,23 @@ const CollectionSubtask = types
       return "CollectionSubtask"
     },
     get syncRename() {
-      return {card: "cardId"}
+      return { card: "cardId" }
     },
   }))
   .actions(self => {
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, string[]> = {}
 
-    actions.setText = (val: string) => self.text = val
+    actions.setText = (val: string) => (self.text = val)
     actionsMap.setText = ["text"]
 
-    actions.setIndex = (val: number) => self.index = val
+    actions.setIndex = (val: number) => (self.index = val)
     actionsMap.setIndex = ["index"]
 
-    actions.setStatus = (val: "ACTIVE" | "DONE") => self.status = val
+    actions.setStatus = (val: "ACTIVE" | "DONE") => (self.status = val)
     actionsMap.setStatus = ["status"]
 
-    actions.setCard = (val) => self.card = val
+    actions.setCard = val => (self.card = val)
     actionsMap.setCard = ["card"]
 
     actions.getActionsMap = () => actionsMap

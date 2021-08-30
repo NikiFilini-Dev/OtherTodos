@@ -172,7 +172,9 @@ const Today = observer(() => {
   React.useEffect(() => (window.onDragEndFunc = onDragEnd), [])
   window.onDragEndFunc = onDragEnd
 
-  const date = toTitleCase(DateTime.fromFormat(selectedDate, "M/d/yyyy").toFormat( "dd.MM"))
+  const date = toTitleCase(
+    DateTime.fromFormat(selectedDate, "M/d/yyyy").toFormat("dd.MM"),
+  )
 
   return (
     <div className={styles.screen}>
@@ -253,7 +255,11 @@ const Today = observer(() => {
             />
           ) : (
             <React.Fragment>
-              <TaskList tasks={withoutProject} name={"Входящие"} iconName={"msg_bubble"} />
+              <TaskList
+                tasks={withoutProject}
+                name={"Входящие"}
+                iconName={"msg_bubble"}
+              />
               {projects.map(project => (
                 <TaskList
                   iconName={project.icon}

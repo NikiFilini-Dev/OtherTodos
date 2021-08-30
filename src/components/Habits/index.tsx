@@ -13,7 +13,15 @@ import { IconsMap } from "../../palette/icons"
 import { ColorsMap } from "../../palette/colors"
 
 const Habit = observer(
-  ({ habit, onEditClick, date }: { habit: IHabit; onEditClick: () => void, date: string }) => {
+  ({
+    habit,
+    onEditClick,
+    date,
+  }: {
+    habit: IHabit
+    onEditClick: () => void
+    date: string
+  }) => {
     const { createHabitRecord, deleteHabitRecord } = useMst()
     const editRef = React.useRef<HTMLDivElement>(null)
 
@@ -34,7 +42,7 @@ const Habit = observer(
       else if (records.length < habit.recordsPerDay)
         createHabitRecord({
           habit,
-          date
+          date,
         })
     }
     const Icon = IconsMap[habit.icon]
@@ -87,7 +95,7 @@ const Habits = observer(({ date }: { date: string }) => {
     null,
   )
   const arr = [...habits]
-  arr.sort((b,a) => b.isDone(date) - a.isDone(date))
+  arr.sort((b, a) => b.isDone(date) - a.isDone(date))
   return (
     <React.Fragment>
       <div className={styles.list}>

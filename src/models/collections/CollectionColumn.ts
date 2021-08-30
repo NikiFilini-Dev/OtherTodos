@@ -11,7 +11,7 @@ const CollectionColumn = types
     color: types.optional(types.enumeration("Color", ColorNames), "blue"),
     icon: types.optional(types.enumeration("Icon", IconNames), "lightning"),
     index: types.number,
-    collection: types.reference(Collection)
+    collection: types.reference(Collection),
   })
   .views(self => ({
     get syncable() {
@@ -21,33 +21,36 @@ const CollectionColumn = types
       return "CollectionColumn"
     },
     get syncRename() {
-      return {collection: "collectionId"}
+      return { collection: "collectionId" }
     },
     get cards() {
       const root = getRoot<IRootStore>(self)
-      const cards = [...root.collectionsStore.cards.filter(card => card.column === self)]
-      cards.sort((a,b) => a.index - b.index)
+      const cards = [
+        ...root.collectionsStore.cards.filter(card => card.column === self),
+      ]
+      cards.sort((a, b) => a.index - b.index)
       return cards
-    }
+    },
   }))
   .actions(self => {
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, string[]> = {}
 
-    actions.setName = (val: string) => self.name = val
+    actions.setName = (val: string) => (self.name = val)
     actionsMap.setName = ["name"]
 
-    actions.setColor = (val: ColorName) => self.color = val
+    actions.setColor = (val: ColorName) => (self.color = val)
     actionsMap.setColor = ["color"]
 
-    actions.setIcon = (val: IconName) => self.icon = val
+    actions.setIcon = (val: IconName) => (self.icon = val)
     actionsMap.setIcon = ["icon"]
 
-    actions.setIndex = (val: number) => self.index = val
+    actions.setIndex = (val: number) => (self.index = val)
     actionsMap.setIndex = ["index"]
 
     // @ts-ignore
-    actions.setCollection = (val: string | ICollection) => self.collection = val
+    actions.setCollection = (val: string | ICollection) =>
+      (self.collection = val)
     actionsMap.setCollection = ["collection"]
 
     actions.getActionsMap = () => actionsMap

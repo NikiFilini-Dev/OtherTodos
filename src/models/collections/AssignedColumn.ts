@@ -14,7 +14,7 @@ const AssignedColumn = types
     color: types.optional(types.enumeration("Color", ColorNames), "blue"),
     icon: types.optional(types.enumeration("Icon", IconNames), "lightning"),
     index: types.number,
-    cards: types.array(types.reference(CollectionCard))
+    cards: types.array(types.reference(CollectionCard)),
   })
   .views(self => ({
     get syncable() {
@@ -34,22 +34,25 @@ const AssignedColumn = types
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, string[]> = {}
 
-    actions.setName = (val: string) => self.name = val
+    actions.setName = (val: string) => (self.name = val)
     actionsMap.setName = ["name"]
 
-    actions.setColor = (val: ColorName) => self.color = val
+    actions.setColor = (val: ColorName) => (self.color = val)
     actionsMap.setColor = ["color"]
 
-    actions.setIcon = (val: IconName) => self.icon = val
+    actions.setIcon = (val: IconName) => (self.icon = val)
     actionsMap.setIcon = ["icon"]
 
-    actions.setIndex = (val: number) => self.index = val
+    actions.setIndex = (val: number) => (self.index = val)
     actionsMap.setIndex = ["index"]
 
     actions.insertCard = (cardId: string, index: number) => {
       if (index > self.cards.length) index = self.cards.length
       if (self.cards.find(c => c.id === cardId)) {
-        self.cards.splice(self.cards.findIndex(c => c.id === cardId), 1)
+        self.cards.splice(
+          self.cards.findIndex(c => c.id === cardId),
+          1,
+        )
       }
 
       self.cards.splice(index, 0, cardId)

@@ -91,10 +91,12 @@ const Event = observer(({ event, isDragging }) => {
   }
 
   return (
-    <div className={classNames({
-      [styles.eventAndMenuWrapper]: true,
-      [styles.compact]: event.duration < 60
-    })}>
+    <div
+      className={classNames({
+        [styles.eventAndMenuWrapper]: true,
+        [styles.compact]: event.duration < 60,
+      })}
+    >
       {tagActive && (
         <FloatMenu
           position={"horizontal_left"}
@@ -220,10 +222,9 @@ const Event = observer(({ event, isDragging }) => {
         <span className={styles.name}>
           {event.name}{" "}
           {!event.allDay && event.duration > 50 && (
-            <span className={styles.duration}>({event.formattedDuration})</span>)
-          }
+            <span className={styles.duration}>({event.formattedDuration})</span>
+          )}
         </span>
-
       </div>
     </div>
   )

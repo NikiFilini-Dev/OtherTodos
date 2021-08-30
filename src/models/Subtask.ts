@@ -45,13 +45,13 @@ const Subtask = types
     const actions: Record<string, any> = {}
     const actionsMap: Record<string, (keyof ISubtask)[]> = {}
 
-    actions.setTask = val => self.task = val
+    actions.setTask = val => (self.task = val)
     actionsMap.setTask = ["task"]
 
-    actions.setTaskSilent = val => self.task = val
+    actions.setTaskSilent = val => (self.task = val)
     actionsMap.setTaskSilent = []
 
-    actions.setText = (val: string) => self.text = val
+    actions.setText = (val: string) => (self.text = val)
     actionsMap.setText = ["text"]
 
     actions.setStatus = (val: SubtaskStatus) => {
@@ -60,7 +60,7 @@ const Subtask = types
     }
     actionsMap.setStatus = ["status", "closedAt"]
 
-    actions.setIndex = (val: number) => self.index = val
+    actions.setIndex = (val: number) => (self.index = val)
     actionsMap.setIndex = ["index"]
 
     actions.getActionsMap = () => actionsMap

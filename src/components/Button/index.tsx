@@ -17,7 +17,7 @@ const Button = (
     textColor = "white",
     iconName,
     square = false,
-    size = "32px"
+    size = "32px",
   }: {
     icon?: any
     text?: string
@@ -41,9 +41,15 @@ const Button = (
         [styles.button]: true,
         [styles.secondary]: secondary,
         [styles.activated]: activated,
-        [styles.square]: square
+        [styles.square]: square,
       })}
-      style={{"--color": color, "--textColor": textColor, "--size": size} as CSSProperties}
+      style={
+        {
+          "--color": color,
+          "--textColor": textColor,
+          "--size": size,
+        } as CSSProperties
+      }
       onClick={onClick}
       ref={ref}
     >
@@ -57,10 +63,13 @@ const Button = (
         />
       )}
       {iconName && (
-        <Icon name={iconName} className={classNames({
-          [styles.icon]: true,
-          [styles.awesome]: true,
-        })} />
+        <Icon
+          name={iconName}
+          className={classNames({
+            [styles.icon]: true,
+            [styles.awesome]: true,
+          })}
+        />
       )}
       {text && <span className={styles.text}>{text}</span>}
     </div>

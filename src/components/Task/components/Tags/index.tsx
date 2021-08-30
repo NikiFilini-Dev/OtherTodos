@@ -34,11 +34,12 @@ const Tags = observer(({ task, tags, onDelete }) => {
       })}
     >
       {tags.map(tag => (
-        <Tag tag={tag}
-             key={tag.id}
-             selected={selectedTagId === tag.id}
-             onClick={() => onTagClick(tag)}
-             listed={task.colorTag !== tag}
+        <Tag
+          tag={tag}
+          key={tag.id}
+          selected={selectedTagId === tag.id}
+          onClick={() => onTagClick(tag)}
+          listed={task.colorTag !== tag}
         />
       ))}
     </div>

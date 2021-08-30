@@ -25,7 +25,7 @@ const TagMenu = observer(({ tag, tagId, className, children }: Props) => {
     deleteTag(tag)
   }
 
-  const ref = React.useRef<HTMLDivElement|null>(null)
+  const ref = React.useRef<HTMLDivElement | null>(null)
   useContextMenu(ref, [{ label: "Delete", click: () => onDelete() }])
 
   return (

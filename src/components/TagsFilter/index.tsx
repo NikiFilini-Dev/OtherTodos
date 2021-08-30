@@ -7,9 +7,19 @@ const TagsFilter = observer(({ tags, selected, select }) => {
   tags.sort((a, b) => a.index - b.index)
   return (
     <div className={styles.list}>
-      <Tag tag={{name: "Все"}} selected={selected === null} onClick={() => select(null)} />
+      <Tag
+        tag={{ name: "Все" }}
+        selected={selected === null}
+        onClick={() => select(null)}
+      />
       {tags.map(tag => (
-        <Tag listed={true} key={tag.id} tag={tag} selected={selected === tag} onClick={() => select(tag)} />
+        <Tag
+          listed={true}
+          key={tag.id}
+          tag={tag}
+          selected={selected === tag}
+          onClick={() => select(tag)}
+        />
       ))}
     </div>
   )

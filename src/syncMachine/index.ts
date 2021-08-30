@@ -53,7 +53,7 @@ export default class SyncMachine {
     new CollectionCard(),
     new CollectionSubtask(),
     new CollectionLog(),
-    new AssignedColumn()
+    new AssignedColumn(),
   ]
 
   state = "initial"
@@ -331,7 +331,12 @@ export default class SyncMachine {
 
   hookCreate() {
     onPatch(this.store, patch => {
-      if (patch.path.match(/\/collectionsStore\/assignedColumns\/\d+\/cards\/\d+/gm)) return
+      if (
+        patch.path.match(
+          /\/collectionsStore\/assignedColumns\/\d+\/cards\/\d+/gm,
+        )
+      )
+        return
       // console.warn(patch)
       if (!this.hydrated || this.applying) return
       if (patch.op === "add") {

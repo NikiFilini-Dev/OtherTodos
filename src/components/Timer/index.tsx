@@ -9,8 +9,15 @@ import { onSnapshot } from "mobx-state-tree"
 
 const Timer = observer(() => {
   const store: IRootStore = useMst()
-  const {runningTimerSession, timerStatus,
-    syncTimer, resumeTimer, pauseTimer, stopTimer, completeTimer } = store
+  const {
+    runningTimerSession,
+    timerStatus,
+    syncTimer,
+    resumeTimer,
+    pauseTimer,
+    stopTimer,
+    completeTimer,
+  } = store
   const [seconds, setSeconds] = React.useState(0)
 
   React.useEffect(() => {
@@ -52,28 +59,53 @@ const Timer = observer(() => {
 
   const task = runningTimerSession.task
 
-  return <div className={styles.wrapper}>
-    <div className={styles.timer}>
-      <span>{task.text}</span>
-      <div className={styles.actions}>
-        {timerStatus === "RUNNING" && (
-          <Button color={"white"} iconName={"pause"}
-                  textColor={"var(--brand)"} square onClick={() => pauseTimer(seconds)} />)}
-        {timerStatus === "PAUSE" && (<
-          Button color={"white"} iconName={"play"}
-                 textColor={"var(--brand)"} square onClick={() => resumeTimer()} />)}
-        {(timerStatus === "RUNNING" || timerStatus === "PAUSE") && (
-          <Button color={"white"} iconName={"stop"}
-                  textColor={"var(--brand)"} onClick={() => stopTimer(seconds)} square />)}
-        <Button color={"white"} text={"Готово"} textColor={"var(--brand)"} onClick={() => completeTimer(seconds)} />
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.timer}>
+        <span>{task.text}</span>
+        <div className={styles.actions}>
+          {timerStatus === "RUNNING" && (
+            <Button
+              color={"white"}
+              iconName={"pause"}
+              textColor={"var(--brand)"}
+              square
+              onClick={() => pauseTimer(seconds)}
+            />
+          )}
+          {timerStatus === "PAUSE" && (
+            <Button
+              color={"white"}
+              iconName={"play"}
+              textColor={"var(--brand)"}
+              square
+              onClick={() => resumeTimer()}
+            />
+          )}
+          {(timerStatus === "RUNNING" || timerStatus === "PAUSE") && (
+            <Button
+              color={"white"}
+              iconName={"stop"}
+              textColor={"var(--brand)"}
+              onClick={() => stopTimer(seconds)}
+              square
+            />
+          )}
+          <Button
+            color={"white"}
+            text={"Готово"}
+            textColor={"var(--brand)"}
+            onClick={() => completeTimer(seconds)}
+          />
+        </div>
+        <Icon name={"timer"} className={styles.timerIcon} />
+        <span className={styles.time}>
+          {Duration.fromObject({
+            seconds: runningTimerSession.task.totalTimeSpent + seconds,
+          }).toFormat("hh:mm:ss")}
+        </span>
       </div>
-      <Icon name={"timer"} className={styles.timerIcon} />
-      <span className={styles.time}>
-        {Duration
-          .fromObject({seconds: runningTimerSession.task.totalTimeSpent + seconds})
-          .toFormat("hh:mm:ss")}
-      </span>
     </div>
-  </div>
+  )
 })
 export default Timer

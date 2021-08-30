@@ -36,7 +36,6 @@ import FolderIcon from "assets/customIcons/folder.svg"
 import ImageIcon from "assets/customIcons/image.svg"
 import InfoIcon from "assets/customIcons/info.svg"
 
-
 export const IconsMap = {
   bookmark: BookmarkIcon,
   ship: ShipIcon,
@@ -74,7 +73,7 @@ export const IconsMap = {
   drink: DrinkIcon,
   folder: FolderIcon,
   image: ImageIcon,
-  info: InfoIcon
+  info: InfoIcon,
 }
 
 export type IconName = keyof typeof IconsMap

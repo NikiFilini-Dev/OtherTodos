@@ -29,15 +29,15 @@ const Input = observer(
     })
 
     return (
-        <input
-          className={styles.input}
-          ref={ref}
-          value={value}
-          onChange={onChange}
-          type={type}
-          name={name}
-          placeholder={placeholder}
-        />
+      <input
+        className={styles.input}
+        ref={ref}
+        value={value}
+        onChange={onChange}
+        type={type}
+        name={name}
+        placeholder={placeholder}
+      />
     )
   },
 )

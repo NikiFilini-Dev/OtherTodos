@@ -7,7 +7,7 @@ const Category = types
     name: types.string,
     index: types.number,
     folded: types.boolean,
-    icon: types.optional(types.enumeration("Icons", IconNames), "check_list")
+    icon: types.optional(types.enumeration("Icons", IconNames), "check_list"),
   })
   .views(self => ({
     get tasks() {
@@ -37,16 +37,16 @@ const Category = types
     const actions = {}
     const actionsMap = {}
 
-    actions.setName = name => self.name = name
+    actions.setName = name => (self.name = name)
     actionsMap.setName = ["name"]
 
-    actions.setIndex = val => self.index = val
+    actions.setIndex = val => (self.index = val)
     actionsMap.setIndex = ["index"]
 
-    actions.setFolded = val => self.folded = val
+    actions.setFolded = val => (self.folded = val)
     actionsMap.setFolded = ["folded"]
 
-    actions.setIcon = val => self.icon = val
+    actions.setIcon = val => (self.icon = val)
     actionsMap.setIcon = ["icon"]
 
     actions.getActionsMap = () => actionsMap
