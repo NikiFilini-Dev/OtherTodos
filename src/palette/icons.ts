@@ -35,8 +35,12 @@ import DrinkIcon from "assets/customIcons/drink.svg"
 import FolderIcon from "assets/customIcons/folder.svg"
 import ImageIcon from "assets/customIcons/image.svg"
 import InfoIcon from "assets/customIcons/info.svg"
+import AttachmentIcon from "assets/customIcons/attachment.svg"
+import EditIcon from "assets/customIcons/edit.svg"
 
 export const IconsMap = {
+  attachment: AttachmentIcon,
+  edit: EditIcon,
   bookmark: BookmarkIcon,
   ship: ShipIcon,
   ball: BallIcon,
