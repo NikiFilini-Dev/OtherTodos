@@ -17,6 +17,7 @@ import {
 import EllipsisIcon from "../../../assets/line_awesome/ellipsis-v-solid.svg"
 import ColumnOptions from "../Collection/components/ColumnOptions"
 import AutosizeInput from "react-input-autosize"
+import { useClickOutsideRefs } from "tools/hooks"
 
 type Size = "small" | "medium" | "big"
 
@@ -28,6 +29,7 @@ const Column = observer(({ size, column: c, provided }) => {
   const menuRef = React.useRef(null)
 
   const [menuShown, setMenuShown] = React.useState(false)
+  useClickOutsideRefs([menuRef, triggerRef], () => setMenuShown(false))
 
   return (
     <div
@@ -199,6 +201,7 @@ const CollectionPersonal = observer(() => {
   const [sizeMenuOpen, setSizeMenuOpen] = React.useState(false)
   const sizeTriggerRef = React.useRef(null)
   const sizeMenuRef = React.useRef(null)
+  useClickOutsideRefs([sizeTriggerRef, sizeMenuRef], () => setSizeMenuOpen(false))
 
   const onDragEnd = ({
     draggableId,
