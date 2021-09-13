@@ -100,7 +100,7 @@ export default abstract class SyncType {
         if (index >= 0) {
           list[index] = updatedItem
         } else {
-          console.log("PUSH", updatedItem)
+          // console.log("PUSH", updatedItem)
           list.push(updatedItem)
         }
       })

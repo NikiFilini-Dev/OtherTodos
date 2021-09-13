@@ -78,6 +78,7 @@ export const IconsMap = {
   folder: FolderIcon,
   image: ImageIcon,
   info: InfoIcon,
+  plusCircle: InfoIcon,
 }
 
 export type IconName = keyof typeof IconsMap
