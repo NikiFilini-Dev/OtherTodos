@@ -7,6 +7,7 @@ const client = createClient({
     return {
       headers: { Authorization: token ? `${token}` : "" },
     }
+    // return {}
   },
   exchanges: [fetchExchange],
 })

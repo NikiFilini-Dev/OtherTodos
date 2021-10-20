@@ -1,10 +1,32 @@
 import gqlClient from "../graphql/client"
-import jsonStorage from "tools/jsonStorage"
 import { SnapshotIn } from "mobx-state-tree"
-import { GET_UPDATED_COLLECTIONS } from "../graphql/collection"
 import { size } from "lodash-es"
 
 const syncLogger = createLogger("SYNC")
+
+interface CustomStorage {
+  getItem: (key: any, cb: any) => Promise<any>
+  setItem: (key: any, value: any, cb?: any) => Promise<any>
+}
+
+let jsonStorage: CustomStorage
+
+if (self) {
+  jsonStorage = {
+    getItem(key: any, cb: any) {
+      cb(this[key])
+      return Promise.resolve(this[key])
+    },
+    setItem(key: any, value: any, cb?: any) {
+      this[key] = value
+      return Promise.resolve(value)
+    },
+  }
+} else {
+  import("tools/jsonStorage").then(
+    m => (jsonStorage = (m as unknown) as CustomStorage),
+  )
+}
 
 function setValue(obj, path, value) {
   const a = path.split(".")
@@ -75,20 +97,25 @@ export default abstract class SyncType {
       this.lastLoadAt = now
       const updated = result.data[this.DATA_NAME ?? ""].map(this.preprocess)
       const list = getValue(snapshot, this.PATH)
+      // console.log(oldEntities, list, this.PATH)
       updated.forEach(updatedItem => {
         const index = list.findIndex(i => i.id === updatedItem.id)
         const old = oldEntities.find(i => i.id === updatedItem.id)
         if (updatedItem.id in this.updates) return
-        console.log(updatedItem, old)
+        // console.log(updatedItem, old)
         if (old) {
           let changed = false
           Object.keys(old).forEach(key => {
-            console.log(old[key], updatedItem[key])
-            if (old[key] !== updatedItem[key]) changed = true
+            // console.log(old[key], updatedItem[key])
+            if (old[key] !== updatedItem[key]) {
+              if (JSON.stringify(old[key]) !== JSON.stringify(updatedItem[key]))
+                changed = true
+            }
           })
           if (!changed) return
+          // console.warn("CHANGED")
         }
-        console.log("Updated:", updatedItem)
+        // console.log("Updated:", updatedItem)
 
         if (updatedItem.deletedAt !== "0001-01-01T00:00:00.000Z") {
           if (index < 0) return
@@ -98,6 +125,7 @@ export default abstract class SyncType {
         }
 
         if (index >= 0) {
+          // console.log("INSERT", updatedItem, index)
           list[index] = updatedItem
         } else {
           // console.log("PUSH", updatedItem)
@@ -129,7 +157,7 @@ export default abstract class SyncType {
   }
 
   dumpUpdates() {
-    if (!window.IS_WEB) {
+    if (window && !window.IS_WEB) {
       syncLogger.debug("Dumping updates: %s", JSON.stringify(this.updates))
       jsonStorage.setItem(`syncMachine_updates_${this.name}`, this.updates)
     }

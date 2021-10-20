@@ -90,6 +90,11 @@ module.exports = [
    *
    */
   {
+    test: /\.worker\.(j|t)s$/,
+    loader: "worker-loader",
+    options: { inline: "no-fallback" },
+  },
+  {
     test: /\.tsx?$/,
     exclude: /(node_modules|.webpack)/,
     loaders: [

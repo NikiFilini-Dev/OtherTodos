@@ -6,7 +6,7 @@ import {
   ISimpleType,
   types,
 } from "mobx-state-tree"
-import { CustomRange } from "../global"
+import { CustomRange } from "../custom"
 import { DateTime } from "luxon"
 import { IRootStore } from "./RootStore"
 import { IHabitRecord } from "./HabitRecord"

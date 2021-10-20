@@ -217,7 +217,6 @@ if (!IS_WEB) {
 }
 
 function render() {
-  window.syncMachine.loadAll()
   ReactDOM.render(
     <Provider value={Store}> {App} </Provider>,
     document.querySelector("#app"),

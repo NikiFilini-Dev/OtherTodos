@@ -29,9 +29,12 @@ import User from "./types/user"
 import CardComment from "./types/card_comment"
 import CollectionLog from "./types/collection_log"
 import AssignedColumn from "./types/assigned_column"
+import Worker from "./sync.worker"
 const jwt = require("jsonwebtoken")
 
 const syncLogger = createLogger("SYNC")
+
+const worker = new Worker()
 
 export default class SyncMachine {
   types: SyncType[] = [
@@ -66,9 +69,22 @@ export default class SyncMachine {
   sendTimeout = 1000
 
   loadTimer: NodeJS.Timeout | null = null
-  loadTimeout = 1000
+  loadTimeout = 5000
 
   constructor(Store: IRootStore, waitForHydration = false) {
+    worker.onmessage = e => {
+      if (e.data.snapshot) {
+        this.applying = true
+        let snapshot = e.data.snapshot
+        snapshot = this.healthCheck(snapshot)
+        applySnapshot(Store, snapshot)
+        this.applying = false
+        syncLogger.info("Applied snapshot")
+      }
+      this.resetLoadTimer()
+    }
+    worker.postMessage({ event: "token", data: window.getToken() })
+
     this.store = Store
     this.hydrated = !waitForHydration
 
@@ -118,17 +134,17 @@ export default class SyncMachine {
   healthCheck(snapshot) {
     snapshot.tasks.all.forEach(task => {
       if (task.event && !snapshot.events.find(e => e.id === task.event)) {
-        syncLogger.warn("Task %s has invalid event ref %s", task.id, task.event)
+        // syncLogger.warn("Task %s has invalid event ref %s", task.id, task.event)
         task.event = null
       }
     })
     snapshot.events.forEach(event => {
       if (event.task && !snapshot.tasks.all.find(t => t.id === event.task)) {
-        syncLogger.warn(
-          "Event %s has invalid task ref %s",
-          event.id,
-          event.task,
-        )
+        // syncLogger.warn(
+        //   "Event %s has invalid task ref %s",
+        //   event.id,
+        //   event.task,
+        // )
         event.task = null
       }
     })
@@ -136,11 +152,11 @@ export default class SyncMachine {
     snapshot.subtasks.forEach(subtask => {
       if (!snapshot.tasks.all.find(t => t.id === subtask.task)) {
         if (snapshot.tempTask?.id === subtask.task) return
-        syncLogger.warn(
-          "Subtask %s has invalid task ref %s",
-          subtask.id,
-          subtask.task,
-        )
+        // syncLogger.warn(
+        //   "Subtask %s has invalid task ref %s",
+        //   subtask.id,
+        //   subtask.task,
+        // )
         trash.push(subtask.id)
       }
     })
@@ -154,11 +170,11 @@ export default class SyncMachine {
     trash = []
     snapshot.habitRecords.forEach(record => {
       if (!snapshot.habits.find(h => h.id === record.habit)) {
-        syncLogger.warn(
-          "HabitRecord %s has invalid habit ref %s",
-          record.id,
-          record.habit,
-        )
+        // syncLogger.warn(
+        //   "HabitRecord %s has invalid habit ref %s",
+        //   record.id,
+        //   record.habit,
+        // )
         trash.push(record.id)
       }
     })
@@ -172,11 +188,11 @@ export default class SyncMachine {
     trash = []
     snapshot.timerSessions.forEach(session => {
       if (!snapshot.tasks.all.find(h => h.id === session.task)) {
-        syncLogger.warn(
-          "TimerSession %s has invalid task ref %s",
-          session.id,
-          session.task,
-        )
+        // syncLogger.warn(
+        //   "TimerSession %s has invalid task ref %s",
+        //   session.id,
+        //   session.task,
+        // )
         trash.push(session.id)
       }
     })
@@ -190,11 +206,11 @@ export default class SyncMachine {
     trash = []
     snapshot.collectionsStore.subtasks.forEach(subtask => {
       if (!snapshot.collectionsStore.cards.find(t => t.id === subtask.card)) {
-        syncLogger.warn(
-          "CollectionSubtask %s has invalid card ref %s",
-          subtask.id,
-          subtask.card,
-        )
+        // syncLogger.warn(
+        //   "CollectionSubtask %s has invalid card ref %s",
+        //   subtask.id,
+        //   subtask.card,
+        // )
         trash.push(subtask.id)
       }
     })
@@ -209,62 +225,11 @@ export default class SyncMachine {
   }
 
   loadBase() {
-    if (!window.getToken()) return
-    syncLogger.info("Loading...")
-
-    const promises = this.types.map(type => type.load())
-    this.state = "loading"
-
-    Promise.all(promises).then(
-      results => {
-        let snapshot = JSON.parse(JSON.stringify(getSnapshot(this.store)))
-        results.forEach(func => {
-          snapshot = func(snapshot)
-        })
-        snapshot = this.healthCheck(snapshot)
-        this.applying = true
-        applySnapshot(this.store, snapshot)
-        this.store.healthCheck()
-        this.applying = false
-        this.state = "waiting"
-        syncLogger.info("Loaded.")
-      },
-      reason => console.error(reason),
-    )
+    worker.postMessage({ event: "loadBase", data: getSnapshot(this.store) })
   }
 
   loadAll() {
-    if (!window.getToken()) return
-    // if (this.state) syncLogger.info("Updating...")
-    if (this.state === "loading" || this.state === "updating")
-      return this.resetLoadTimer()
-
-    this.state = "updating"
-    Promise.all(
-      this.types.map(type =>
-        type.loadNew(JSON.parse(JSON.stringify(getSnapshot(this.store)))),
-      ),
-    ).then(
-      newResults => {
-        const oldSnapshot = JSON.stringify(getSnapshot(this.store))
-        let snapshot = JSON.parse(oldSnapshot)
-        newResults.forEach(f => {
-          if (!f) return
-          snapshot = f(snapshot)
-        })
-        snapshot = this.healthCheck(snapshot)
-        this.applying = true
-        applySnapshot(this.store, snapshot)
-        this.store.user.refresh()
-        this.store.healthCheck()
-        this.applying = false
-        this.state = "waiting"
-        if (oldSnapshot !== JSON.stringify(getSnapshot(this.store)))
-          syncLogger.info("Updated.")
-        this.resetLoadTimer()
-      },
-      () => (this.state = "waiting"),
-    )
+    worker.postMessage({ event: "loadNew", data: getSnapshot(this.store) })
   }
 
   updateAll() {
@@ -284,7 +249,6 @@ export default class SyncMachine {
     const type = this.types.find(
       type => type.name.toLowerCase() === typeName.toLowerCase(),
     )
-    console.log(id, typeName, type)
     if (!type) {
       syncLogger.warn("TYPE %s NOT REGISTERED", typeName)
       return
@@ -313,7 +277,6 @@ export default class SyncMachine {
       ignoreFields = [...ignoreFields, ...node.syncIgnore]
     if (node.syncRename !== undefined)
       renameFields = { ...renameFields, ...node.syncRename }
-    console.log("Created", data, Object.keys(data), ignoreFields, renameFields)
     Object.keys(data).forEach(fieldName => {
       const fieldValue = data[fieldName]
       if (ignoreFields.includes(fieldName)) return
@@ -322,7 +285,6 @@ export default class SyncMachine {
         value: fieldValue,
         date: new Date(),
       }
-      console.log(fieldName, "added")
     })
     syncLogger.info("Created fields: %s", JSON.stringify(fields))
     type.registerChange(fields, data.id)
