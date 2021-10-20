@@ -18,6 +18,7 @@ import User from "./types/user"
 import CardComment from "./types/card_comment"
 import CollectionLog from "./types/collection_log"
 import AssignedColumn from "./types/assigned_column"
+import { flatten } from "lodash"
 
 const ctx: Worker = self as any
 
@@ -77,14 +78,16 @@ class SyncMachine {
     this.state = "updating"
     Promise.all(this.types.map(type => type.loadNew(oldSnapshot))).then(
       newResults => {
-        let snapshot = JSON.parse(JSON.stringify(oldSnapshot))
+        const snapshot = JSON.parse(JSON.stringify(oldSnapshot))
+        const patches: any[] = []
         newResults.forEach(f => {
           if (!f) return
-          snapshot = f(snapshot)
+          f(snapshot).forEach(p => patches.push(p))
         })
         this.state = "waiting"
-        if (JSON.stringify(snapshot) !== JSON.stringify(oldSnapshot)) {
-          postMessage({ event: "loadedNew", snapshot })
+        console.log("Patches:", patches)
+        if (patches.length) {
+          postMessage({ event: "loadedNew", patches })
         } else {
           postMessage({ event: "loadedNew" })
         }
@@ -105,12 +108,34 @@ class SyncMachine {
       syncLogger.info("Updates sent.")
     })
   }
+
+  registerDelete(id: string, typeName: string) {
+    const type = this.types.find(
+      type => type.name.toLowerCase() === typeName.toLowerCase(),
+    )
+
+    type?.registerDelete(id)
+  }
+
+  registerChange(id: string, typeName: string, fields: any) {
+    const type = this.types.find(
+      type => type.name.toLowerCase() === typeName.toLowerCase(),
+    )
+
+    type?.registerChange(fields, id)
+  }
 }
 
 const sm = new SyncMachine()
 onmessage = ({ data: { event, data } }) => {
   if (event === "loadNew") sm.loadNew(data)
   if (event === "loadBase") sm.loadBase(data)
+  if (event === "updateAll") sm.updateAll()
+  if (event === "registerDelete") sm.registerDelete(data.id, data.type)
+  if (event === "registerChange")
+    sm.registerChange(data.id, data.type, data.fields)
+  if (event === "registerCreate")
+    sm.registerChange(data.id, data.type, data.fields)
   // @ts-ignore
   if (event === "token") ctx.setToken(data)
 }

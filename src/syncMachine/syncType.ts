@@ -1,5 +1,5 @@
 import gqlClient from "../graphql/client"
-import { SnapshotIn } from "mobx-state-tree"
+import { IJsonPatch, SnapshotIn } from "mobx-state-tree"
 import { size } from "lodash-es"
 
 const syncLogger = createLogger("SYNC")
@@ -59,7 +59,7 @@ export default abstract class SyncType {
   UPDATE_MUTATION: any
   DELETE_MUTATION: any
   GET_UPDATED?: any
-  PATH?: string
+  PATH: string
   DATA_NAME?: string
 
   dumpTimer: NodeJS.Timeout | null
@@ -83,8 +83,7 @@ export default abstract class SyncType {
   abstract preprocess(item: Record<string, any>): Record<string, any>
 
   async loadNew(currentSnapshot) {
-    if (!this.DATA_NAME || !this.PATH || !this.GET_UPDATED)
-      return snapshot => snapshot
+    if (!this.DATA_NAME || !this.PATH || !this.GET_UPDATED) return () => []
 
     const now = new Date()
     const result = await gqlClient
@@ -94,10 +93,12 @@ export default abstract class SyncType {
     const oldEntities = getValue(currentSnapshot, this.PATH)
 
     return snapshot => {
+      if (!this.PATH) return []
       this.lastLoadAt = now
       const updated = result.data[this.DATA_NAME ?? ""].map(this.preprocess)
       const list = getValue(snapshot, this.PATH)
       // console.log(oldEntities, list, this.PATH)
+      const patches: IJsonPatch[] = []
       updated.forEach(updatedItem => {
         const index = list.findIndex(i => i.id === updatedItem.id)
         const old = oldEntities.find(i => i.id === updatedItem.id)
@@ -107,9 +108,22 @@ export default abstract class SyncType {
           let changed = false
           Object.keys(old).forEach(key => {
             // console.log(old[key], updatedItem[key])
+            const path = `/${this.PATH.replace(/\./g, "/")}/${index}/${key}`
             if (old[key] !== updatedItem[key]) {
-              if (JSON.stringify(old[key]) !== JSON.stringify(updatedItem[key]))
+              if (
+                JSON.stringify(old[key]) !== JSON.stringify(updatedItem[key])
+              ) {
                 changed = true
+                if (this.PATH) {
+                  const patch: IJsonPatch = {
+                    op: "replace",
+                    path,
+                    value: updatedItem[key],
+                  }
+                  console.log(patch)
+                  patches.push(patch)
+                }
+              }
             }
           })
           if (!changed) return
@@ -120,20 +134,35 @@ export default abstract class SyncType {
         if (updatedItem.deletedAt !== "0001-01-01T00:00:00.000Z") {
           if (index < 0) return
 
-          list.splice(index, 1)
+          // list.splice(index, 1)
+          const path = `/${this.PATH.replace(/\./g, "/")}/${index}`
+          const patch: IJsonPatch = {
+            op: "remove",
+            path,
+          }
+          console.log(patch)
+          patches.push(patch)
           return
         }
 
         if (index >= 0) {
           // console.log("INSERT", updatedItem, index)
-          list[index] = updatedItem
+          // list[index] = updatedItem
         } else {
           // console.log("PUSH", updatedItem)
-          list.push(updatedItem)
+          // list.push(updatedItem)
+          const path = `/${this.PATH.replace(/\./g, "/")}/${list.length}`
+          const patch: IJsonPatch = {
+            op: "add",
+            path,
+            value: updatedItem,
+          }
+          console.log(patch)
+          patches.push(patch)
         }
       })
-      setValue(snapshot, this.PATH, list)
-      return snapshot
+      // setValue(snapshot, this.PATH, list)
+      return patches
     }
   }
 

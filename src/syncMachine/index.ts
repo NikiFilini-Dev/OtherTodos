@@ -1,6 +1,7 @@
 import type { IRootStore } from "../models/RootStore"
 import {
   addMiddleware,
+  applyPatch,
   applySnapshot,
   getSnapshot,
   onPatch,
@@ -69,10 +70,11 @@ export default class SyncMachine {
   sendTimeout = 1000
 
   loadTimer: NodeJS.Timeout | null = null
-  loadTimeout = 5000
+  loadTimeout = 15000
 
   constructor(Store: IRootStore, waitForHydration = false) {
     worker.onmessage = e => {
+      console.log(e)
       if (e.data.snapshot) {
         this.applying = true
         let snapshot = e.data.snapshot
@@ -80,6 +82,15 @@ export default class SyncMachine {
         applySnapshot(Store, snapshot)
         this.applying = false
         syncLogger.info("Applied snapshot")
+      }
+      if (e.data.patches) {
+        syncLogger.info("Got patch")
+        this.applying = true
+        const patches = e.data.patches
+        console.log(patches)
+        applyPatch(Store, patches)
+        this.applying = false
+        syncLogger.info("Applied patch")
       }
       this.resetLoadTimer()
     }
@@ -134,17 +145,11 @@ export default class SyncMachine {
   healthCheck(snapshot) {
     snapshot.tasks.all.forEach(task => {
       if (task.event && !snapshot.events.find(e => e.id === task.event)) {
-        // syncLogger.warn("Task %s has invalid event ref %s", task.id, task.event)
         task.event = null
       }
     })
     snapshot.events.forEach(event => {
       if (event.task && !snapshot.tasks.all.find(t => t.id === event.task)) {
-        // syncLogger.warn(
-        //   "Event %s has invalid task ref %s",
-        //   event.id,
-        //   event.task,
-        // )
         event.task = null
       }
     })
@@ -152,11 +157,6 @@ export default class SyncMachine {
     snapshot.subtasks.forEach(subtask => {
       if (!snapshot.tasks.all.find(t => t.id === subtask.task)) {
         if (snapshot.tempTask?.id === subtask.task) return
-        // syncLogger.warn(
-        //   "Subtask %s has invalid task ref %s",
-        //   subtask.id,
-        //   subtask.task,
-        // )
         trash.push(subtask.id)
       }
     })
@@ -170,11 +170,6 @@ export default class SyncMachine {
     trash = []
     snapshot.habitRecords.forEach(record => {
       if (!snapshot.habits.find(h => h.id === record.habit)) {
-        // syncLogger.warn(
-        //   "HabitRecord %s has invalid habit ref %s",
-        //   record.id,
-        //   record.habit,
-        // )
         trash.push(record.id)
       }
     })
@@ -188,11 +183,6 @@ export default class SyncMachine {
     trash = []
     snapshot.timerSessions.forEach(session => {
       if (!snapshot.tasks.all.find(h => h.id === session.task)) {
-        // syncLogger.warn(
-        //   "TimerSession %s has invalid task ref %s",
-        //   session.id,
-        //   session.task,
-        // )
         trash.push(session.id)
       }
     })
@@ -206,11 +196,6 @@ export default class SyncMachine {
     trash = []
     snapshot.collectionsStore.subtasks.forEach(subtask => {
       if (!snapshot.collectionsStore.cards.find(t => t.id === subtask.card)) {
-        // syncLogger.warn(
-        //   "CollectionSubtask %s has invalid card ref %s",
-        //   subtask.id,
-        //   subtask.card,
-        // )
         trash.push(subtask.id)
       }
     })
@@ -234,15 +219,7 @@ export default class SyncMachine {
 
   updateAll() {
     if (!window.getToken()) return this.resetSendTimer()
-    this.state = "sending updates"
-    syncLogger.info("Sending updates...")
-    const promises = this.types.map(type => type.sendUpdates())
-    Promise.all(promises).then(() => {
-      if (!IS_WEB) jsonStorage.setItem("synced", { date: new Date() })
-      this.state = "updates send"
-      syncLogger.info("Updates sent.")
-      this.resetLoadTimer()
-    })
+    worker.postMessage({ event: "updateAll" })
   }
 
   registerDelete(id: string, typeName: string) {
@@ -254,7 +231,11 @@ export default class SyncMachine {
       return
     }
 
-    type.registerDelete(id)
+    // type.registerDelete(id)
+    worker.postMessage({
+      event: "registerDelete",
+      data: { id, type: type.name },
+    })
     this.resetSendTimer()
   }
 
@@ -286,8 +267,13 @@ export default class SyncMachine {
         date: new Date(),
       }
     })
-    syncLogger.info("Created fields: %s", JSON.stringify(fields))
-    type.registerChange(fields, data.id)
+
+    // syncLogger.info("Created fields: %s", JSON.stringify(fields))
+    // type.registerChange(fields, data.id)
+    worker.postMessage({
+      event: "registerCreate",
+      data: { fields, id: data.id, type: type.name },
+    })
     this.resetSendTimer()
   }
 
@@ -359,7 +345,15 @@ export default class SyncMachine {
       logger.debug("Actions %s invoked", call.name)
       syncLogger.info("Changed fields: %s", JSON.stringify(fields))
 
-      type.registerChange(fields, call.context.id)
+      worker.postMessage({
+        event: "registerChange",
+        data: { fields, id: call.context.id, type: type.name },
+      })
+      // type.registerChange(fields, call.context.id)
+      worker.postMessage({
+        event: "registerChange",
+        data: { fields, id: call.context.id, type: type.name },
+      })
       this.resetSendTimer()
     }
 
