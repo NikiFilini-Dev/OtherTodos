@@ -338,18 +338,20 @@ export default class SyncMachine {
 
         fields[fieldName] = {
           date: new Date(),
-          value: fieldValue,
+          value: JSON.parse(JSON.stringify(fieldValue)),
         }
       })
 
       logger.debug("Actions %s invoked", call.name)
       syncLogger.info("Changed fields: %s", JSON.stringify(fields))
 
-      worker.postMessage({
-        event: "registerChange",
-        data: { fields, id: call.context.id, type: type.name },
-      })
+      // worker.postMessage({
+      //   event: "registerChange",
+      //   data: { fields, id: call.context.id, type: type.name },
+      // })
       // type.registerChange(fields, call.context.id)
+      // console.log(fields)
+      // syncLogger.info(JSON.stringify(fields))
       worker.postMessage({
         event: "registerChange",
         data: { fields, id: call.context.id, type: type.name },
