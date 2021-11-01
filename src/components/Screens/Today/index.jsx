@@ -100,7 +100,9 @@ const Today = observer(() => {
 
   const initialTaskData = { date: selectedDate }
   if (selectedTag) initialTaskData.tags = [selectedTag]
-  React.useEffect(() => setTempTask(initialTaskData), [])
+  React.useEffect(() => {
+    if (!tempTask) setTempTask(initialTaskData)
+  }, [tempTask])
 
   const setDate = date => {
     if (date === null) return setScreen("INBOX")
