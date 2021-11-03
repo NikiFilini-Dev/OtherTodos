@@ -11,7 +11,7 @@ const Project = types
     index: types.number,
     categories: types.array(types.reference(ProjectCategory)),
     icon: types.optional(types.enumeration("Icons", IconNames), "check_list"),
-    _temp: types.optional(types.boolean, false),
+    _temp: types.maybe(types.boolean),
   })
   .views(self => ({
     get tasks() {

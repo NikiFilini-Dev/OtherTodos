@@ -155,6 +155,7 @@ const App = observer(() => {
         <Top />
       </div>
       <div className={styles.app}>
+        {/* <div>Hello!</div> */}
         <div className={styles.sideBar} ref={sidebarRef}>
           <Sidebar />
         </div>

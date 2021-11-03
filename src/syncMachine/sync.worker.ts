@@ -124,6 +124,10 @@ class SyncMachine {
 
     type?.registerChange(fields, id)
   }
+
+  setLastLoadAt(newDate: Date) {
+    this.types.forEach(t => (t.lastLoadAt = newDate))
+  }
 }
 
 const sm = new SyncMachine()
@@ -138,4 +142,8 @@ onmessage = ({ data: { event, data } }) => {
     sm.registerChange(data.id, data.type, data.fields)
   // @ts-ignore
   if (event === "token") ctx.setToken(data)
+  if (event === "setLastLoadAt") {
+    console.log("Last load at got:", data)
+    sm.setLastLoadAt(new Date(JSON.parse(data.lastLoadAt)))
+  }
 }

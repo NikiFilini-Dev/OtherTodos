@@ -33,7 +33,7 @@ const CollectionCard = types
     comments: types.array(types.maybeNull(commentReference)),
     assigned: types.maybeNull(userReference),
     watchers: types.array(userReference),
-    _temp: types.optional(types.boolean, false),
+    _temp: types.maybe(types.boolean),
   })
   .views(self => ({
     get syncable() {

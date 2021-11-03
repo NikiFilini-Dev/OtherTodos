@@ -180,7 +180,7 @@ const Today = observer(() => {
 
   return (
     <div className={styles.screen}>
-      <Habits date={selectedDate} />
+      {/* <Habits date={selectedDate} /> */}
       <div className={styles.head}>
         <div className={styles.info}>
           <span className={styles.title}>

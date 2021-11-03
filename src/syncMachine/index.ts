@@ -82,6 +82,7 @@ export default class SyncMachine {
         applySnapshot(Store, snapshot)
         this.applying = false
         syncLogger.info("Applied snapshot")
+        localStorage.setItem("root_store", JSON.stringify(snapshot))
       }
       if (e.data.patches) {
         syncLogger.info("Got patch")
@@ -90,21 +91,36 @@ export default class SyncMachine {
         console.log(patches)
         applyPatch(Store, patches)
         this.applying = false
+        localStorage.setItem("root_store", JSON.stringify(getSnapshot(Store)))
         syncLogger.info("Applied patch")
       }
       this.resetLoadTimer()
     }
     worker.postMessage({ event: "token", data: window.getToken() })
+    worker.postMessage({
+      event: "setLastLoadAt",
+      data: {
+        lastLoadAt:
+          localStorage.getItem("lastLoadAt") ?? JSON.stringify(new Date()),
+      },
+    })
 
     this.store = Store
     this.hydrated = !waitForHydration
 
-    this.loadBase()
+    // this.loadAll()
 
-    this.hookCreate()
-    this.hookUpdate()
+    // if (!waitForHydration) {
+    //   this.hookCreate()
+    //   this.hookUpdate()
+    // }
 
     this.initWindowHooks()
+  }
+
+  afterLogin() {
+    worker.postMessage({ event: "token", data: window.getToken() })
+    this.loadBase()
   }
 
   generateToken(auth_id: string, secret: string) {
@@ -125,11 +141,15 @@ export default class SyncMachine {
     return this.types.find(type => type.name === name)
   }
 
-  finishHydration() {
+  finishHydration(fromScratch: boolean) {
+    this.hookCreate()
+    this.hookUpdate()
     Promise.all(this.types.map(type => type.loadUpdates())).then(() => {
       this.hydrated = true
-      syncLogger.debug("Hydration finished")
-      this.resetLoadTimer()
+      syncLogger.info("Hydration finished")
+      // this.resetLoadTimer()
+      if (fromScratch) this.loadBase()
+      else this.loadAll()
     })
   }
 
@@ -210,15 +230,19 @@ export default class SyncMachine {
   }
 
   loadBase() {
+    if (!window.getToken()) return
     worker.postMessage({ event: "loadBase", data: getSnapshot(this.store) })
   }
 
   loadAll() {
+    if (!window.getToken()) return
+    localStorage.setItem("lastLoadAt", JSON.stringify(new Date()))
     worker.postMessage({ event: "loadNew", data: getSnapshot(this.store) })
   }
 
   updateAll() {
     if (!window.getToken()) return this.resetSendTimer()
+    localStorage.setItem("root_store", JSON.stringify(getSnapshot(this.store)))
     worker.postMessage({ event: "updateAll" })
   }
 
@@ -231,7 +255,6 @@ export default class SyncMachine {
       return
     }
 
-    // type.registerDelete(id)
     worker.postMessage({
       event: "registerDelete",
       data: { id, type: type.name },
@@ -268,8 +291,6 @@ export default class SyncMachine {
       }
     })
 
-    // syncLogger.info("Created fields: %s", JSON.stringify(fields))
-    // type.registerChange(fields, data.id)
     worker.postMessage({
       event: "registerCreate",
       data: { fields, id: data.id, type: type.name },
@@ -345,13 +366,6 @@ export default class SyncMachine {
       logger.debug("Actions %s invoked", call.name)
       syncLogger.info("Changed fields: %s", JSON.stringify(fields))
 
-      // worker.postMessage({
-      //   event: "registerChange",
-      //   data: { fields, id: call.context.id, type: type.name },
-      // })
-      // type.registerChange(fields, call.context.id)
-      // console.log(fields)
-      // syncLogger.info(JSON.stringify(fields))
       worker.postMessage({
         event: "registerChange",
         data: { fields, id: call.context.id, type: type.name },

@@ -15,7 +15,7 @@ const Collection = types
     index: types.number,
     users: types.array(userReference),
     userId: userReference,
-    _temp: types.optional(types.boolean, false),
+    _temp: types.maybe(types.boolean),
   })
   .views(self => ({
     get syncable() {

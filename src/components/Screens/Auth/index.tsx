@@ -30,6 +30,7 @@ const Auth = observer(() => {
   const afterLoggingIn = user => {
     setUser(user)
     setScreen("TODAY")
+    window.syncMachine.afterLogin()
   }
 
   const logIn = () => {

@@ -64,7 +64,7 @@ export default abstract class SyncType {
 
   dumpTimer: NodeJS.Timeout | null
 
-  lastLoadAt = new Date(0)
+  lastLoadAt = new Date()
   state = "waiting"
   updates: {
     [key: string]: {
@@ -97,17 +97,14 @@ export default abstract class SyncType {
       this.lastLoadAt = now
       const updated = result.data[this.DATA_NAME ?? ""].map(this.preprocess)
       const list = getValue(snapshot, this.PATH)
-      // console.log(oldEntities, list, this.PATH)
       const patches: IJsonPatch[] = []
       updated.forEach(updatedItem => {
         const index = list.findIndex(i => i.id === updatedItem.id)
         const old = oldEntities.find(i => i.id === updatedItem.id)
         if (updatedItem.id in this.updates) return
-        // console.log(updatedItem, old)
         if (old) {
           let changed = false
           Object.keys(old).forEach(key => {
-            // console.log(old[key], updatedItem[key])
             const path = `/${this.PATH.replace(/\./g, "/")}/${index}/${key}`
             if (old[key] !== updatedItem[key]) {
               if (
@@ -127,14 +124,11 @@ export default abstract class SyncType {
             }
           })
           if (!changed) return
-          // console.warn("CHANGED")
         }
-        // console.log("Updated:", updatedItem)
 
         if (updatedItem.deletedAt !== "0001-01-01T00:00:00.000Z") {
           if (index < 0) return
 
-          // list.splice(index, 1)
           const path = `/${this.PATH.replace(/\./g, "/")}/${index}`
           const patch: IJsonPatch = {
             op: "remove",
@@ -145,12 +139,7 @@ export default abstract class SyncType {
           return
         }
 
-        if (index >= 0) {
-          // console.log("INSERT", updatedItem, index)
-          // list[index] = updatedItem
-        } else {
-          // console.log("PUSH", updatedItem)
-          // list.push(updatedItem)
+        if (index < 0) {
           const path = `/${this.PATH.replace(/\./g, "/")}/${list.length}`
           const patch: IJsonPatch = {
             op: "add",
@@ -161,7 +150,7 @@ export default abstract class SyncType {
           patches.push(patch)
         }
       })
-      // setValue(snapshot, this.PATH, list)
+
       return patches
     }
   }
