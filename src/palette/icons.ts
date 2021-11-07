@@ -40,8 +40,15 @@ import EditIcon from "assets/customIcons/edit.svg"
 import BellIcon from "assets/customIcons/bell.svg"
 import InfinityIcon from "assets/customIcons/infinity.svg"
 import ClockIcon from "assets/customIcons/clock.svg"
+import TimesIcon from "assets/customIcons/times.svg"
+import ChatIcon from "assets/customIcons/chat.svg"
+import SmileysIcon from "assets/customIcons/smileys.svg"
 
 export const IconsMap = {
+  times: TimesIcon,
+  chat: ChatIcon,
+  smileys: SmileysIcon,
+  grid2: GridIcon,
   clock: ClockIcon,
   attachment: AttachmentIcon,
   edit: EditIcon,
