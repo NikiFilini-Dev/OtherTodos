@@ -180,48 +180,7 @@ const Today = observer(() => {
 
   return (
     <div className={styles.screen}>
-      {/* <Habits date={selectedDate} /> */}
       <div className={styles.head}>
-        <div className={styles.info}>
-          <span className={styles.title}>
-            {selectedDate === today ? "Сегодня" : date}
-          </span>
-          {selectedDate === today && (
-            <span className={styles.additional}>{date}</span>
-          )}
-          <div className={styles.actions}>
-            <span
-              onClick={() =>
-                setViewMode(viewMode === "list" ? "projects" : "list")
-              }
-              className={classNames({
-                [styles.viewSwitch]: true,
-                [styles.active]: viewMode === "list",
-              })}
-            >
-              <ListIcon />
-            </span>
-            <span className={styles.calendar} ref={ref}>
-              <CalendarIcon
-                onClick={() => setIsDateSelectorShown(!isDateSelectorShown)}
-              />
-              {isDateSelectorShown && (
-                <DateSelector
-                  right
-                  triggerRef={ref}
-                  onSelect={day => setDate(day.date)}
-                  value={selectedDate}
-                />
-              )}
-            </span>
-            <Button
-              icon={PlusIcon}
-              square
-              activated={isNewTaskShown}
-              onClick={() => onPlusClick()}
-            />
-          </div>
-        </div>
         <TagsFilter
           tags={tags}
           selected={selectedTag}
@@ -233,6 +192,25 @@ const Today = observer(() => {
             setSelectedTag(tag)
           }}
         />
+        <div className={styles.actions}>
+            <span
+              onClick={() =>
+                setViewMode(viewMode === "list" ? "projects" : "list")
+              }
+              className={classNames({
+                [styles.viewSwitch]: true,
+                [styles.active]: viewMode === "list",
+              })}
+            >
+              <ListIcon />
+            </span>
+            <Button
+              icon={PlusIcon}
+              square
+              activated={isNewTaskShown}
+              onClick={() => onPlusClick()}
+            />
+          </div>
       </div>
       <ScrollContext.Provider value={scrollEmitter}>
         <div className={styles.listOfLists} ref={scrollRef}>

@@ -67,30 +67,37 @@
     font-weight 500
 
 .eventMenu
-  padding 24px
+  padding 16px
   font-family SF Pro Display, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif
   display flex
   flex-direction column
   align-items flex-start
+  min-width 280px
 
   .menuAction
-    width 1.1em
-    height 1.1em
+    width 36px
+    height 36px
     display flex
     justify-content center
     align-items center
     cursor pointer
+    background #F6F6F6
+    border-radius 8px
 
     svg
-      width .9em
-      fill #9BABC5
+      height 1.2em
+      fill #FB2B2B
 
-  input
-    padding 0
+  textarea
+    padding 16px 8px
     border 0
-    font-weight 500
-    font-size 1.1em
+    font-weight 400
+    font-size 16px
     font-family SF Pro Display, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif
+    background #F7F7F7
+    border-radius 8.5px
+    width 100%  
+
     &:active,&:focus
       outline none
 
@@ -99,6 +106,12 @@
     display flex
     justify-content space-between
     width 100%
+
+    .times
+      margin-left auto
+      display flex
+      align-items center
+      gap 24px
 
     &:first-child
       margin-top 0
@@ -110,6 +123,10 @@
       color #9BABC5
       font-size 0.95em
       font-weight 300
+      svg
+        height 24px
+        color var(--brand)
+
     .menuItemValue
       color var(--brand)
 

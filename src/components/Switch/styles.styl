@@ -1,0 +1,22 @@
+.wrapper
+  width 32px
+  height calc(14px + 2px * 2)
+  background #9BABC5
+  
+  display flex
+  border-radius 15px
+  padding 2px
+
+  div
+    width 14px
+    height 14px
+    margin-left 0px
+    background white
+    border-radius 50%
+    transition margin-left .2s
+
+  &.checked
+    background var(--color, var(--brand))
+    
+    div
+      margin-left auto

@@ -3,19 +3,38 @@
   display flex
   flex-direction column
   max-height 100%
-  gap 16px
+  gap 16px  
+  overflow-y auto
 
 .currentDate
   display flex
-  align-items flex-end
+  align-items center
+  flex-direction row !important
+
+  .todayButton
+    height 36px
+    padding 0 24px
+    border 1px solid #9babc54a
+    color #9BABC5
+    display flex
+    align-items center
+    justify-content center
+    border-radius 8px
+    margin-left auto
+    cursor pointer
+
+    &.active
+      color white
+      background var(--brand)
+      border-color var(--brand)
 
   .actions
     display flex
     align-items center
 
   .calendarTrigger
-    height 24px
-    width 24px
+    height 1.2em
+    width 1.2em
     margin-left 4px
     margin-right 8px
     cursor pointer
@@ -26,21 +45,14 @@
 
 
     svg
-      height 1em
+      height 1.2em
 
     &.active
       color var(--brand)
 
-  .dayName
-    font-weight 500
-    margin-right auto
-    font-size 22px
-    line-height 1em
-
   .dayDetail
-    font-size 16px
-    color #9BABC5
-    font-weight 200
+    font-size 1.2em
+    font-weight 500
     margin-right 3px
 
   .action

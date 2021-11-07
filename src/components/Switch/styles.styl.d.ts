@@ -1,9 +1,7 @@
 declare namespace StylesStylNamespace {
   export interface IStylesStyl {
-    active: string
-    item: string
-    menu: string
-    name: string
+    checked: string
+    wrapper: string
   }
 }
 

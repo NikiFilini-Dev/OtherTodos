@@ -6,11 +6,13 @@ import styles from "./styles.styl"
 import FloatMenu from "components/FloatMenu"
 import TimeSelector from "components/TimeSelector"
 import TrashIcon from "assets/awesome/regular/trash-alt.svg"
-import Checkbox from "components/Checkbox"
+import Icon from "components/Icon"
 import classNames from "classnames"
 import TagsSelector from "../../TagsSelector"
 import { randomTagColor } from "../../../models/Tag"
 import { ColorsMap } from "../../../palette/colors"
+import Switch from "components/Switch"
+import TextareaAutosize from "react-autosize-textarea"
 
 const padTime = s => {
   if (!s) return "00:00"
@@ -149,20 +151,14 @@ const Event = observer(({ event, isDragging }) => {
         <FloatMenu position={"horizontal_left"} target={ref}>
           <div className={styles.eventMenu} ref={menuRef}>
             <div className={styles.menuItem}>
-              <input
+              <TextareaAutosize
                 value={event.name}
                 onChange={e => event.setName(e.target.value)}
               />
-              <div
-                className={styles.menuAction}
-                onClick={() => deleteEvent(event)}
-              >
-                <TrashIcon />
-              </div>
             </div>
             <div className={styles.menuItem}>
               <span className={styles.menuItemName}>Весь день:</span>
-              <Checkbox checked={event.allDay} onChange={event.setAllDay} />
+              <Switch checked={event.allDay} onChange={event.setAllDay} />
             </div>
             <div
               className={classNames({
@@ -170,29 +166,26 @@ const Event = observer(({ event, isDragging }) => {
                 [styles.disabled]: event.allDay,
               })}
             >
-              <span className={styles.menuItemName}>Начало:</span>{" "}
-              <span
-                className={styles.menuItemValue}
-                ref={startRef}
-                onClick={() => setStartActive(true)}
-              >
-                {padTime(event.start)}
-              </span>
-            </div>
-            <div
-              className={classNames({
-                [styles.menuItem]: true,
-                [styles.disabled]: event.allDay,
-              })}
-            >
-              <span className={styles.menuItemName}>Конец:</span>{" "}
-              <span
-                className={styles.menuItemValue}
-                ref={endRef}
-                onClick={() => setEndActive(true)}
-              >
-                {padTime(event.end)}
-              </span>
+              <span className={styles.menuItemName}>
+                <Icon name="clock" />
+              </span>{" "}
+              <div className={styles.times}>
+                <span
+                  className={styles.menuItemValue}
+                  ref={startRef}
+                  onClick={() => setStartActive(true)}
+                >
+                  {padTime(event.start)}
+                </span>
+                -
+                <span
+                  className={styles.menuItemValue}
+                  ref={endRef}
+                  onClick={() => setEndActive(true)}
+                >
+                  {padTime(event.end)}
+                </span>
+              </div>
             </div>
             <div
               className={classNames({
@@ -208,6 +201,14 @@ const Event = observer(({ event, isDragging }) => {
               >
                 {event.tag ? event.tag.name : "Нет"}
               </span>
+            </div>
+            <div className={styles.menuItem}>
+              <div
+                className={styles.menuAction}
+                onClick={() => deleteEvent(event)}
+              >
+                <TrashIcon />
+              </div>
             </div>
           </div>
         </FloatMenu>

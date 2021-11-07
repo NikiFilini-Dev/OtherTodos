@@ -22,7 +22,7 @@ accent = #FB2B76
 :root
   --brand rgb(28, 59, 241)
   --accent #FB2B76
-  //--topHeight 120px
+  --topHeight 0
 
 
 *
@@ -59,7 +59,7 @@ body
 :global(#app)
   padding 24px
   font-family 'Arimo', Helvetica, Arial, sans-serif
-  height calc(100vh - 36px)
+  height 100vh
   left 0
   bottom 0
   width 100vw
@@ -69,23 +69,60 @@ body
 .app
   display flex
   height 100%
-  max-height: calc(100vh - 36px - 56px - 28px - 56px);
+  max-height: calc(100vh - 36px);
 
 .resizeHandle
   height 100%
   min-width 15px
   cursor col-resize
 
-.sideBar
-  background white
-  padding: 36px 0
+.sideBarWrapper
   width var(--sidebar-width)
   min-width var(--sidebar-width)
-  border-radius 24px
-  overflow-y auto
   margin-right 8px
   position relative
-  border 1px solid rgba(0,0,0,.1)
+  display flex
+  flex-direction column
+  gap 16px
+  
+
+.sideBar
+  border-radius 24px
+  overflow-y auto
+  background white
+  padding: 16px 0
+
+.todayDate
+  border-radius 16px
+  overflow-y auto
+  background white
+  padding: 0 16px
+  height 56px
+  min-height 56px
+  display flex
+  align-items center
+  gap 8px
+
+  .currentDate
+    font-size 22px
+    font-weight 500
+
+  .additionalDate
+    font-size 14px
+    font-weight 300
+    opacity .7
+    margin-top 4px
+
+  .action
+    margin-left auto
+    cursor pointer
+
+    svg
+      height 22px
+      color #9BABC5
+
+    &.active svg
+      color var(--brand)
 
 .timerWrapper
   //min-height var(--topHeight)
@@ -113,6 +150,8 @@ body
   margin 0 8px
   flex-grow 1
   max-width calc(100% - 32px - var(--timeline-width));
+  display flex
+  flex-direction column
 
   &.noSidebar
     max-width 100%
@@ -121,6 +160,30 @@ body
 .timeline
   width var(--timeline-width)
   min-width var(--timeline-width)
+  overflow-y hidden
+  padding 24px
+  border-radius 24px
+  background white
+  display flex
+  flex-direction column
+
+  .tabs
+    min-height 56px
+    display flex
+    align-items center
+    justify-content center
+    gap 24px
+    margin-bottom -24px
+
+    span
+      cursor pointer
+
+      svg
+        height 26px
+        color #9BABC5
+
+      &.active svg
+        color #3552FB
 
 *::-webkit-scrollbar {
   width: 3px;

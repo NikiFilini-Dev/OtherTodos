@@ -105,7 +105,7 @@ window.syncMachine = new SyncMachine(Store, true)
 
 function hydrate(fromScratch = false) {
   const snapshot = localStorage.getItem("root_store")
-  if (snapshot) applySnapshot(Store, JSON.parse(snapshot))
+  if (snapshot) applySnapshot(Store, { ...JSON.parse(snapshot), ...mapUrl() })
   window.syncMachine.finishHydration(fromScratch)
   render()
 }
@@ -119,15 +119,19 @@ const initStorage = async () => {
     hydrate(true)
     return
   } else {
+    let changed = false
     migrations.forEach(migration => {
       if (migration.id <= v._storeVersion) return
       v = migration.up(v)
       console.log(migration)
       v._storeVersion = migration.id
+      changed = true
     })
 
-    v = window.syncMachine.healthCheck(v)
-    await jsonStorage.setItem("root_store", JSON.stringify(v))
+    if (changed) {
+      v = window.syncMachine.healthCheck(v)
+      await jsonStorage.setItem("root_store", JSON.stringify(v))
+    }
     hydrate()
 
     return true

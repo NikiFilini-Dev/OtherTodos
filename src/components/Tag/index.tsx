@@ -24,6 +24,7 @@ const Tag = observer(({ tag, selected, onClick, listed }: Props) => {
         style={{ "--tagColor": ColorsMap[tag.color] } as CSSProperties}
         onClick={() => onClick()}
       >
+        {listed && <span className={styles.dot} />}
         {tag.name}
       </span>
     </TagMenu>

@@ -1,38 +1,10 @@
-.userInfo
-  background white
-  width var(--sidebar-width)
-  border-radius 16px
-  border 1px solid rgba(0,0,0,0.1)
-  display flex
-  align-items center
-  padding 0 16px
-
-  .info
-    display flex
-    flex-direction column
-    margin 0 8px
-
-    .username
-      font-size 16px
-      font-weight 600
-      margin-bottom 2px
-
-    .email
-      font-size 12px
-      color #9BABC5
-
-  .signOut
-    margin-left auto
-    height 24px
-    width 24px
-    fill #9BABC5
-
 
 .menu
   display flex
-  min-height 100%
+  min-height 56px
+  max-height 56px
   align-items stretch
-  margin-left 32px
+  margin-bottom 16px
 
   .item
     min-width 56px
@@ -40,10 +12,9 @@
     display flex
     align-items center
     justify-content center
-    height 100%
+    min-height 100%
     margin-right 8px
     border-radius 16px
-    border 1px solid rgba(0,0,0,0.1)
     cursor pointer
 
     &.active
@@ -60,40 +31,3 @@
       height 28px
       width 28px
       color #9BABC5
-
-.rightPart
-  min-height 100%
-  background white
-  display flex
-  align-items center
-  justify-content center
-  border-radius 16px
-  margin-left auto
-  border 1px solid rgba(0,0,0,0.1)
-  position relative
-
-  .block
-    height 100%
-    width 56px
-    display flex
-    align-items center
-    justify-content center
-    cursor pointer
-
-    .hasNew
-      width 16px
-      height 16px
-      border-radius 50%
-      background red
-      display flex
-      justify-content center
-      align-items center
-      font-size 12px
-      color white
-      font-weight 600
-      position absolute
-      bottom 12px
-      right 12px
-
-    svg
-      width 24px

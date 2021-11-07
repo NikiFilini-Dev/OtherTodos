@@ -10,7 +10,6 @@ declare namespace StylesStylNamespace {
     currentDate: string
     dash: string
     dayDetail: string
-    dayName: string
     eventContainer: string
     eventStretch: string
     hour: string
@@ -20,6 +19,7 @@ declare namespace StylesStylNamespace {
     tabs: string
     timeline: string
     timelineWrapper: string
+    todayButton: string
     wrapper: string
   }
 }

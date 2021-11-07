@@ -1,15 +1,19 @@
+import { toJS } from "mobx"
 import {
   applySnapshot,
   getRoot,
   IAnyModelType,
   Instance,
+  ISimpleType,
   resolveIdentifier,
   resolvePath,
   SnapshotIn,
   types,
 } from "mobx-state-tree"
 
-export const createStorage = <T extends IAnyModelType & { id: string }>(
+export const createStorage = <
+  T extends IAnyModelType & { id: ISimpleType<string> }
+>(
   name: string,
   type: T,
 ) => {
@@ -40,8 +44,8 @@ export const createStorage = <T extends IAnyModelType & { id: string }>(
     }))
 }
 
-const loadData = <T>(syncName, id, initialData, storage, tempEl) =>
-  window.syncMachine
+const loadData = <T>(syncName, id, initialData, storage, tempEl) => {
+  return window.syncMachine
     .getOne<T>(syncName, id)
     .then((data: SnapshotIn<T> | false) => {
       if (!data) return
@@ -53,6 +57,7 @@ const loadData = <T>(syncName, id, initialData, storage, tempEl) =>
       applySnapshot(tempEl, tempElement)
       return [storage, tempElement]
     })
+}
 
 let plans: Record<string, [string, string, any, any, IAnyModelType]> = {}
 const tempElements: Record<string, IAnyModelType> = {}
@@ -61,7 +66,6 @@ let timer
 const loadAll = () => {
   const storages: Record<any, any[]> = {}
   const keys = Object.keys(plans)
-
   const _s = {}
 
   const func = () =>
@@ -74,12 +78,10 @@ const loadAll = () => {
           if (storage.id in storages) storages[storage.id].push(tempElement)
           else storages[storage.id] = [tempElement]
         })
-        // console.log("Loaded 100", storages)
         if (keys.length) func()
         else {
           // @ts-ignore
           Object.keys(storages).forEach(storage => {
-            // console.log(_s, storage, _s[storage])
             _s[storage].addList(storages[storage])
           })
           plans = {}
@@ -90,6 +92,8 @@ const loadAll = () => {
   func()
 }
 
+// setInterval(() => loadAll(), 1000)
+
 export const createStorageReference = <T extends IAnyModelType>(
   storageName: string,
   storageType: IAnyModelType,
@@ -98,7 +102,15 @@ export const createStorageReference = <T extends IAnyModelType>(
 ) => {
   return types.reference(type, {
     get(identifier, parent) {
-      if (tempElements[identifier]) return tempElements[identifier]
+      const root = getRoot(parent)
+      const storage = resolveIdentifier(storageType, root, storageName)
+      const real = storage?.elements.find(
+        (t: Instance<T>) => t.id === identifier,
+      )
+      if (real) {
+        return real
+      }
+      if (identifier in tempElements) return tempElements[identifier]
 
       const tempElement = type.create({
         ...initialData,
@@ -106,18 +118,9 @@ export const createStorageReference = <T extends IAnyModelType>(
       })
       tempElements[identifier] = tempElement
       if (plans[identifier]) return tempElement
-
       if (!parent) {
-        console.log("NO PARENT")
         return null
       }
-      const root = getRoot(parent)
-      const storage = resolveIdentifier(storageType, root, storageName)
-      const real = storage?.elements.find(
-        (t: Instance<T>) => t.id === identifier,
-      )
-      if (real) return real
-
       plans[identifier] = [
         tempElement.syncName,
         identifier as string,

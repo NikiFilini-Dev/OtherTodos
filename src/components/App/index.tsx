@@ -19,8 +19,15 @@ import Timer from "../Timer"
 import classNames from "classnames"
 import CardForm from "../CardForm"
 import UploadView from "../Screens/Collection/components/UploadView"
-import Top from "../Top"
+import UserPanel from "../UserPanel"
 import CollectionPersonal from "../Screens/CollectionPersonal"
+import Top from "components/Top"
+import Icon from "components/Icon"
+import clsx from "clsx"
+import Notifications from "components/Notifications"
+import Habits from "components/Habits"
+import { DateTime } from "luxon"
+import DateSelector from "components/DateSelector"
 
 const App = observer(() => {
   const {
@@ -28,11 +35,16 @@ const App = observer(() => {
     screen,
     setScreen,
     sidebarWidth,
+    selectedDate,
+    selectDate,
     setSidebarWidth,
     timelineWidth,
     setTimelineWidth,
     collectionsStore: { editingCard },
   } = useMst()
+  const [sideTab, setSideTab] = React.useState<
+    "TIMELINE" | "HABITS" | "NOTIFICATIONS"
+  >("TIMELINE")
   let Screen = Today
   switch (screen) {
     case "INBOX":
@@ -139,6 +151,9 @@ const App = observer(() => {
 
   const noSidebar = ["COLLECTION", "COLLECTION_PERSONAL"].includes(screen)
 
+  const [isDateSelectorShown, setIsDateSelectorShown] = React.useState(false)
+  const calendarTriggerRef = React.useRef(null)
+
   return (
     <div
       className={styles.globalWrapper}
@@ -151,13 +166,42 @@ const App = observer(() => {
         } as CSSProperties
       }
     >
-      <div className={styles.topBar}>
-        <Top />
-      </div>
       <div className={styles.app}>
-        {/* <div>Hello!</div> */}
-        <div className={styles.sideBar} ref={sidebarRef}>
-          <Sidebar />
+        <div className={styles.sideBarWrapper} ref={sidebarRef}>
+          {screen === "TODAY" && (
+            <div className={styles.todayDate}>
+              {selectedDate === DateTime.now().toFormat("M/d/yyyy") && (
+                <span className={styles.currentDate}>Сегодня</span>
+              )}
+              <span className={styles.additionalDate}>
+                {DateTime.fromFormat(selectedDate, "M/d/yyyy").toFormat(
+                  "dd.MM",
+                )}
+              </span>
+              <span
+                className={clsx(
+                  styles.action,
+                  isDateSelectorShown && styles.active,
+                )}
+                ref={calendarTriggerRef}
+                onClick={() => setIsDateSelectorShown(!isDateSelectorShown)}
+              >
+                <Icon name="calendar" />
+              </span>
+              {isDateSelectorShown && (
+                <DateSelector
+                  right
+                  triggerRef={calendarTriggerRef}
+                  onSelect={day => selectDate(day.date)}
+                  value={selectedDate}
+                />
+              )}
+            </div>
+          )}
+          <div className={styles.sideBar}>
+            <Sidebar />
+          </div>
+          <UserPanel />
         </div>
         <div
           className={styles.resizeHandle}
@@ -183,6 +227,7 @@ const App = observer(() => {
               <DragDropContext
                 onDragEnd={(...args) => window.onDragEndFunc(...args)}
               >
+                <Top />
                 <Screen />
                 {editingCard !== null && <CardForm cardId={editingCard.id} />}
                 <UploadView />
@@ -197,7 +242,31 @@ const App = observer(() => {
             )}
             {!noSidebar && (
               <div className={styles.timeline} ref={timelineRef}>
-                <Timeline />
+                {sideTab === "TIMELINE" && <Timeline />}
+                {sideTab === "NOTIFICATIONS" && <Notifications />}
+                {sideTab === "HABITS" && <Habits />}
+                <div className={styles.tabs}>
+                  <span
+                    onClick={() => setSideTab("TIMELINE")}
+                    className={clsx(sideTab === "TIMELINE" && styles.active)}
+                  >
+                    <Icon name={"calendar"} />
+                  </span>
+                  <span
+                    className={clsx(sideTab === "HABITS" && styles.active)}
+                    onClick={() => setSideTab("HABITS")}
+                  >
+                    <Icon name={"infinity"} />
+                  </span>
+                  <span
+                    onClick={() => setSideTab("NOTIFICATIONS")}
+                    className={clsx(
+                      sideTab === "NOTIFICATIONS" && styles.active,
+                    )}
+                  >
+                    <Icon name={"bell"} />
+                  </span>
+                </div>
               </div>
             )}
           </div>

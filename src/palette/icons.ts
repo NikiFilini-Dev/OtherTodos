@@ -37,13 +37,19 @@ import ImageIcon from "assets/customIcons/image.svg"
 import InfoIcon from "assets/customIcons/info.svg"
 import AttachmentIcon from "assets/customIcons/attachment.svg"
 import EditIcon from "assets/customIcons/edit.svg"
+import BellIcon from "assets/customIcons/bell.svg"
+import InfinityIcon from "assets/customIcons/infinity.svg"
+import ClockIcon from "assets/customIcons/clock.svg"
 
 export const IconsMap = {
+  clock: ClockIcon,
   attachment: AttachmentIcon,
   edit: EditIcon,
   bookmark: BookmarkIcon,
   ship: ShipIcon,
   ball: BallIcon,
+  infinity: InfinityIcon,
+  bell: BellIcon,
   fire: FireIcon,
   camera: CameraIcon,
   win: WinIcon,

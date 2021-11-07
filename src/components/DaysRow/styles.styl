@@ -1,0 +1,27 @@
+.dateElement
+  display flex
+  flex-direction column
+  gap 8px
+  align-items center
+
+  .name
+    color #9BABC5
+    font-weight 200
+
+  .day
+    width 32px
+    height 32px
+    border-radius 10px
+    font-weight 500
+    display flex
+    justify-content center
+    align-items center
+    cursor pointer
+
+    &.today
+      background #E9EFFF
+      color var(--brand)
+
+.dateElements
+  display flex
+  justify-content space-between

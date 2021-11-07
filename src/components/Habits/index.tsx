@@ -11,6 +11,8 @@ import HabitForm from "../HabitForm"
 import classNames from "classnames"
 import { IconsMap } from "../../palette/icons"
 import { ColorsMap } from "../../palette/colors"
+import { DateTime } from "luxon"
+import DaysRow from "components/DaysRow"
 
 const Habit = observer(
   ({
@@ -89,7 +91,8 @@ const Habit = observer(
   },
 )
 
-const Habits = observer(({ date }: { date: string }) => {
+const Habits = observer(() => {
+  const [date, setDate] = React.useState(DateTime.now().toFormat("M/d/yyyy"))
   const { habits, setTempHabit } = useMst()
   const [editingHabitId, setEditingHabitId] = React.useState<null | string>(
     null,
@@ -98,6 +101,7 @@ const Habits = observer(({ date }: { date: string }) => {
   arr.sort((b, a) => b.isDone(date) - a.isDone(date))
   return (
     <React.Fragment>
+      <DaysRow initialDate={date} onClick={setDate} n={3} />
       <div className={styles.list}>
         {arr
           .filter(habit => habit.hasDate(date))

@@ -12,6 +12,9 @@ import ScrollContext from "../../contexts/scrollContext"
 import classNames from "classnames"
 import DaySelector from "./DaySelector"
 import Icon from "../Icon"
+import clsx from "clsx"
+import propTypes from "prop-types"
+import DaysRow from "components/DaysRow"
 
 const ipc = require("electron").ipcRenderer
 
@@ -204,44 +207,64 @@ const Timeline = observer(() => {
 
   const scrollEmitter = useScrollEmitter(scrollRef)
 
+  const DateElement = ({ diff }) => {
+    let date = DateTime.fromFormat(timelineDate, "M/d/yyyy").plus({
+      days: diff,
+    })
+    date = date.setLocale("ru")
+    return (
+      <div
+        style={{ opacity: 1 - Math.abs(diff) * 0.22 }}
+        onClick={() => setTimelineDate(date.toFormat("M/d/yyyy"))}
+        className={styles.dateElement}
+      >
+        <span className={styles.name}>{date.toFormat("ccc")}</span>
+        <span className={clsx(styles.day, !diff && styles.today)}>
+          {date.toFormat("d")}
+        </span>
+      </div>
+    )
+  }
+
+  DateElement.propTypes = {
+    date: propTypes.objectOf(DateTime),
+    diff: propTypes.number,
+  }
+
   return (
     <div className={styles.wrapper}>
-      <div className={styles.block}>
-        <div className={styles.currentDate}>
-          <span className={styles.dayName}>
-            {timelineDate === DateTime.now().toFormat("M/d/yyyy")
-              ? "Сегодня"
-              : ""}
-          </span>
+      <div className={styles.currentDate}>
+        <span className={styles.dayDetail}>
+          {DateTime.fromFormat(timelineDate, "M/d/yyyy").toFormat("DD")}
+        </span>
 
-          <span className={styles.dayDetail}>
-            {DateTime.fromFormat(timelineDate, "M/d/yyyy").toFormat("DD")}
-          </span>
-          <div className={styles.actions}>
-            <span className={styles.action} onClick={onPrevClick}>
-              <ChevronLeft />
-            </span>
-            <span className={styles.action} onClick={onNextClick}>
-              <ChevronRight />
-            </span>
-            <div
-              className={classNames({
-                [styles.calendarTrigger]: true,
-                [styles.active]: calendarShown,
-              })}
-              onClick={() => setCalendarShown(!calendarShown)}
-            >
-              <Icon name={"calendar"} />
-            </div>
-          </div>
+        <div
+          className={classNames({
+            [styles.calendarTrigger]: true,
+            [styles.active]: calendarShown,
+          })}
+          onClick={() => setCalendarShown(!calendarShown)}
+        >
+          <Icon name={"calendar"} />
         </div>
-        {calendarShown && <DaySelector />}
+
+        <div
+          className={clsx(
+            styles.todayButton,
+            timelineDate !== DateTime.now().toFormat("M/d/yyyy") &&
+              styles.active,
+          )}
+          onClick={() => setTimelineDate(DateTime.now().toFormat("M/d/yyyy"))}
+        >
+          Сегодня
+        </div>
       </div>
-      <div className={classNames(styles.block)} style={{ overflowY: "hidden" }}>
-        {/*<div className={styles.tabs}>*/}
-        {/*  <div className={classNames(styles.tab, styles.active)}>День</div>*/}
-        {/*  <div className={styles.tab}>Неделя</div>*/}
-        {/*</div>*/}
+      {calendarShown && <DaySelector />}
+
+      {!calendarShown && (
+        <DaysRow initialDate={timelineDate} n={3} onClick={setTimelineDate} />
+      )}
+      {!!todayEvents.filter(e => e.allDay).length && (
         <div className={styles.allDayList}>
           {Boolean(todayEvents.filter(t => t.allDay).length) && (
             <div className={styles.allDayName}>Весь день:</div>
@@ -260,67 +283,67 @@ const Timeline = observer(() => {
               )
             })}
         </div>
-        <ScrollContext.Provider value={scrollEmitter}>
-          <div className={styles.timelineWrapper} ref={scrollRef}>
-            <div
-              className={styles.timeline}
-              ref={ref}
-              onDoubleClick={onTimelineClick}
-            >
-              {todayEvents
-                .filter(t => !t.allDay)
-                .map(event => (
-                  <div
-                    ref={eventRefs[event.id] || { current: null }}
-                    key={`event_${event.id}`}
-                    className={styles.eventContainer}
-                    style={{
-                      "--start": `${calcOffset(event.start)}px`,
-                      "--end": `${
-                        ((hourHeight + fontSize) / 60) * event.duration +
-                        calcOffset(event.start)
-                      }px`,
-                    }}
-                    draggable={true}
-                    onDragStart={e => onMoveStart(event, e)}
-                  >
-                    <Event
-                      event={event}
-                      boxRef={eventRefs[event.id]}
-                      isDragging={isDragging}
-                    />
-                    <div
-                      className={styles.eventStretch}
-                      draggable={true}
-                      onDragStart={e => onStretchStart(event, e)}
-                    />
-                  </div>
-                ))}
-              <div
-                className={styles.now}
-                style={{ "--now-offset": `${nowOffset}px` }}
-                ref={nowRef}
-              >
-                <span>{DateTime.now().toFormat("HH:mm")}</span>
-                <div className={styles.line} />
-              </div>
-              {arr.map((i, index) => (
+      )}
+      <ScrollContext.Provider value={scrollEmitter}>
+        <div className={styles.timelineWrapper} ref={scrollRef}>
+          <div
+            className={styles.timeline}
+            ref={ref}
+            onDoubleClick={onTimelineClick}
+          >
+            {todayEvents
+              .filter(t => !t.allDay)
+              .map(event => (
                 <div
-                  key={index}
-                  className={styles.hour}
+                  ref={eventRefs[event.id] || { current: null }}
+                  key={`event_${event.id}`}
+                  className={styles.eventContainer}
                   style={{
-                    "--hour-height": `${hourHeight}px`,
-                    "--font-size": `${fontSize}px`,
+                    "--start": `${calcOffset(event.start)}px`,
+                    "--end": `${
+                      ((hourHeight + fontSize) / 60) * event.duration +
+                      calcOffset(event.start)
+                    }px`,
                   }}
+                  draggable={true}
+                  onDragStart={e => onMoveStart(event, e)}
                 >
-                  <span>{`${i}`.padStart(2, "0")}:00</span>
-                  <div className={styles.dash} />
+                  <Event
+                    event={event}
+                    boxRef={eventRefs[event.id]}
+                    isDragging={isDragging}
+                  />
+                  <div
+                    className={styles.eventStretch}
+                    draggable={true}
+                    onDragStart={e => onStretchStart(event, e)}
+                  />
                 </div>
               ))}
+            <div
+              className={styles.now}
+              style={{ "--now-offset": `${nowOffset}px` }}
+              ref={nowRef}
+            >
+              <span>{DateTime.now().toFormat("HH:mm")}</span>
+              <div className={styles.line} />
             </div>
+            {arr.map((i, index) => (
+              <div
+                key={index}
+                className={styles.hour}
+                style={{
+                  "--hour-height": `${hourHeight}px`,
+                  "--font-size": `${fontSize}px`,
+                }}
+              >
+                <span>{`${i}`.padStart(2, "0")}:00</span>
+                <div className={styles.dash} />
+              </div>
+            ))}
           </div>
-        </ScrollContext.Provider>
-      </div>
+        </div>
+      </ScrollContext.Provider>
     </div>
   )
 })
