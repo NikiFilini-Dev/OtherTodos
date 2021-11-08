@@ -201,7 +201,7 @@ const App = observer(() => {
           <div className={styles.sideBar}>
             <Sidebar />
           </div>
-          <UserPanel />
+          {!!user && <UserPanel />}
         </div>
         <div
           className={styles.resizeHandle}
