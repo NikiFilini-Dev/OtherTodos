@@ -11,6 +11,7 @@ import BakaEditor from "./editor"
 import { noop } from "lodash-es"
 import CollectionsStore from "./models/collections/CollectionsStore"
 import { applySnapshot } from "mobx-state-tree"
+import { merge } from "lodash"
 
 __webpack_public_path__ = "http://localhost:8080/static/"
 
@@ -105,7 +106,7 @@ window.syncMachine = new SyncMachine(Store, true)
 
 function hydrate(fromScratch = false) {
   const snapshot = localStorage.getItem("root_store")
-  if (snapshot) applySnapshot(Store, { ...JSON.parse(snapshot), ...mapUrl() })
+  if (snapshot) applySnapshot(Store, merge(JSON.parse(snapshot), mapUrl()))
   window.syncMachine.finishHydration(fromScratch)
   render()
 }

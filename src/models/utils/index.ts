@@ -117,7 +117,7 @@ export const createStorageReference = <T extends IAnyModelType>(
         id: identifier as string,
       })
       tempElements[identifier] = tempElement
-      if (plans[identifier]) return tempElement
+      if (plans[identifier] || !identifier) return tempElement
       if (!parent) {
         return null
       }

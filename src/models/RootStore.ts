@@ -284,6 +284,10 @@ const RootStore = types
         self.screen = "TODAY"
       }
       self.user = user
+      localStorage.setItem(
+        "root_store",
+        JSON.stringify({ ...getSnapshot(self), user: user }),
+      )
     },
     selectTagType(type) {
       self.selectedTagType = type

@@ -11,7 +11,7 @@ const UserPanel = observer(() => {
   const onSignOutClick = async () => {
     setUser(null)
     location.reload()
-    await backup()
+    // await backup()
     clear()
   }
 
