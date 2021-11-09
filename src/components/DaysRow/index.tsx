@@ -19,7 +19,6 @@ const DateElement = ({
   date = date.setLocale("ru")
   return (
     <div
-      style={{ opacity: 1 - Math.abs(diff) * 0.22 }}
       onClick={() => onClick(date.toFormat("M/d/yyyy"))}
       className={styles.dateElement}
     >
@@ -34,20 +33,21 @@ const DateElement = ({
 const DaysRow = observer(
   ({
     initialDate,
-    n,
     onClick,
   }: {
     initialDate: string
     n: number
     onClick: (date: string) => void
   }) => {
+    const date = DateTime.fromFormat(initialDate, "M/d/yyyy").toJSDate()
+    // 7 - date.getDay()
     const diffs: number[] = []
-    for (let i = 0 - n; i <= n; i++) {
+    for (let i = 0 - date.getDay() + 1; i <= 7 - date.getDay(); i++) {
       diffs.push(i)
     }
     return (
       <div className={styles.dateElements}>
-        {diffs.map(i => (
+        {diffs.map((i, index) => (
           <DateElement
             diff={i}
             initialDate={initialDate}
