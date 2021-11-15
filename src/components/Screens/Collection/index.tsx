@@ -50,23 +50,24 @@ import SizeMenu from "./components/SizeMenu"
 import { noop } from "lodash-es"
 import { ColorsMap } from "../../../palette/colors"
 import DateSelector from "../../DateSelector"
+import { throttle } from "lodash"
 
 type Size = "small" | "medium" | "big"
 
 export type Card = SnapshotOut<typeof CollectionCard>
-export const getCard = id => {
+export const getCard = throttle(id => {
   return gqlClient.query(GET_COLLECTION_CARD, { id }).toPromise()
-}
+})
 
 export type Column = SnapshotOut<typeof CollectionColumn>
-export const getColumn = id => {
+export const getColumn = throttle(id => {
   return gqlClient.query(GET_COLLECTION_COLUMN, { id }).toPromise()
-}
+})
 
 export type Collection = SnapshotOut<typeof Collection>
-export const getCollection = id => {
+export const getCollection = throttle(id => {
   return gqlClient.query(GET_COLLECTION, { id }).toPromise()
-}
+})
 
 export const LogEntry = observer(({ log }: { log: ICollectionLog }) => {
   const { user } = useMst()
