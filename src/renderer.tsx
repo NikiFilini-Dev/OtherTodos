@@ -102,12 +102,13 @@ window.getToken = (): string => {
   return Store.user?.token || ""
 }
 
-window.syncMachine = new SyncMachine(Store, true)
+window.syncMachine = new SyncMachine(Store, false)
 
 function hydrate(fromScratch = false) {
-  const snapshot = localStorage.getItem("root_store")
-  if (snapshot) applySnapshot(Store, merge(JSON.parse(snapshot), mapUrl()))
-  window.syncMachine.finishHydration(fromScratch)
+  // const snapshot = localStorage.getItem("root_store")
+  // if (snapshot) applySnapshot(Store, merge(JSON.parse(snapshot), mapUrl()))
+  // window.syncMachine.finishHydration(fromScratch)
+  window.syncMachine.loadBase()
   render()
 }
 
