@@ -110,10 +110,11 @@ export default class SyncMachine {
 
     // this.loadAll()
 
-    // if (!waitForHydration) {
-    //   this.hookCreate()
-    //   this.hookUpdate()
-    // }
+    if (!waitForHydration) {
+      this.finishHydration(true)
+      //   this.hookCreate()
+      //   this.hookUpdate()
+    }
 
     this.initWindowHooks()
   }
@@ -242,7 +243,7 @@ export default class SyncMachine {
 
   updateAll() {
     if (!window.getToken()) return this.resetSendTimer()
-    localStorage.setItem("root_store", JSON.stringify(getSnapshot(this.store)))
+    // localStorage.setItem("root_store", JSON.stringify(getSnapshot(this.store)))
     worker.postMessage({ event: "updateAll" })
   }
 

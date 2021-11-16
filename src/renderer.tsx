@@ -108,7 +108,7 @@ function hydrate(fromScratch = false) {
   // const snapshot = localStorage.getItem("root_store")
   // if (snapshot) applySnapshot(Store, merge(JSON.parse(snapshot), mapUrl()))
   // window.syncMachine.finishHydration(fromScratch)
-  window.syncMachine.loadBase()
+  // window.syncMachine.loadBase()
   render()
 }
 
